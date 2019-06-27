@@ -137,6 +137,7 @@ export default {
     },
     addData: function() {
       this.loader = true;
+      this.status.error = false;
       net
         .postData(this, "/talent/training-experiences/", this.params)
         .then(
@@ -146,7 +147,7 @@ export default {
           },
           error => {
             console.log(error);
-            if(error.status === 5000){
+            if(error.status === 500){
               this.err_msg = {code: error.status, type: error.statusText, details:[error.statusText]};
             }else{
               this.err_msg = error.body.meta;
@@ -176,7 +177,7 @@ export default {
           },
           error => {
             console.log(error);
-            if(error.status === 5000){
+            if(error.status === 500){
               this.err_msg = {code: error.status, type: error.statusText, details:[error.statusText]};
             }else{
               this.err_msg = error.body.meta;

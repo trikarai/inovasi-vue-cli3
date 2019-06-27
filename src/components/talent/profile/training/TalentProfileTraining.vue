@@ -4,7 +4,7 @@
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
-        {{ $vuetify.t('$vuetify.action.add') }} Entrepreneurship Experiences
+        {{ $vuetify.t('$vuetify.action.add') }} Training Experiences
       </v-btn>
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary" dark>
@@ -44,7 +44,7 @@
       </v-data-table>
     </v-container>
 
-    <EntrepreneurshipForm
+    <TrainingForm
       :data="singleData"
       v-bind:edit="edit"
       v-bind:view="view"
@@ -56,12 +56,12 @@
 </template>
 <script>
 import net from "@/config/httpclient";
-import EntrepreneurshipForm from "./EntrepreneurshipForm";
+import TrainingForm from "./TrainingForm";
 import Notification from "@/components/Notification";
 
 export default {
   components: {
-    EntrepreneurshipForm,
+    TrainingForm,
     "notification-alert": Notification
   },
   data() {
@@ -104,7 +104,7 @@ export default {
       this.status.success = false;
       var app = this;
       net
-        .getData(this, "/talent/entrepreneurship-experiences")
+        .getData(this, "/talent/training-experiences")
         .then(
           res => {
             if (res.data.data) {
@@ -150,7 +150,7 @@ export default {
     },
     deleteData: function(id) {
       net
-        .deleteData(this, "/talent/entrepreneurship-experiences" + id)
+        .deleteData(this, "/talent/training-experiences/" + id)
         .then()
         .catch(function() {})
         .finally(function() {
