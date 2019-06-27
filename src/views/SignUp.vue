@@ -145,23 +145,23 @@ export default {
         total: 0,
         list: []
       },
-      required: [
-        v => !!v || "Required"
-      ],
+      required: [v => !!v || "Required"],
       phoneRules: [
-        (v) => !!v || "Phone Number is required",
-        (v) => /\d/ || "Number Only",
-
+        v => !!v || "Phone Number is required",
+        v => /\d/ || "Number Only"
       ],
       passwordRules: [v => !!v || "Password is required"],
       passwordConfirmationRules: [
-            (v) => !!v || 'Confirmation Password is required',
-            () => (this.cpassword === this.params.password) || 'Password does not match',
+        v => !!v || "Confirmation Password is required",
+        () =>
+          this.cpassword === this.params.password || "Password does not match"
       ],
       email: "",
       emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || "E-mail must be valid"
+        v => !!v || "E-mail is required",
+        v =>
+          /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          "E-mail must be valid"
       ]
     };
   },
@@ -202,10 +202,10 @@ export default {
             this.alert = true;
           }
         )
-        .catch(function(error){
+        .catch(function(error) {
           console.log(error);
-            app.err_msg = error.body.meta;
-            app.alert = true;
+          app.err_msg = error.body.meta;
+          app.alert = true;
         })
         .finally(function() {
           this.loader = false;
@@ -232,10 +232,10 @@ export default {
         .catch(function(error) {
           console.log(error);
           app.err_msg = {
-              error_details: ["API ERROR"],
-              type: "API Error",
-              code: 666
-            };
+            error_details: ["API ERROR"],
+            type: "API Error",
+            code: 666
+          };
           app.alert = true;
         })
         .finally(function() {});

@@ -35,6 +35,8 @@ import TalentProfileWork from "./components/talent/profile/work/TalentProfileWor
 import TalentProfileOrganization from "./components/talent/profile/org/TalentProfileOrganization.vue";
 import TalentProfileEntrepreneurship from "./components/talent/profile/entrepreneurship/TalentProfileEntrepreneurship.vue";
 import TalentProfileTraining from "./components/talent/profile/training/TalentProfileTraining.vue";
+import TalentProfileSkill from "./components/talent/profile/skill/TalentProfileSkill.vue";
+
 import TalentTeam from "./components/talent/TalentTeam.vue";
 import TalentTeamCreate from "./components/talent/team/TalentTeamCreate";
 import TalentTeamDetail from "./components/talent/team/TalentTeamDetail";
@@ -112,6 +114,11 @@ const routes = [
         path: "/talent/training",
         name: "Training Experiences",
         component: TalentProfileTraining
+      },
+      {
+        path: "/talent/skill",
+        name: "Skill",
+        component: TalentProfileSkill
       },
       {
         path: "/talent/team",
