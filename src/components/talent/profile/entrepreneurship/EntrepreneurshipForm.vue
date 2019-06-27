@@ -7,7 +7,6 @@
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
-                <!-- {{error}} -->
                 <v-form v-model="valid" ref="form">
                   <v-text-field
                     label="Business Name"
@@ -148,9 +147,9 @@ export default {
           res => {
             console.log(res);
             this.params = res.data.data;
+            this.params.businessCategory = res.data.data.businessCategory.value;
           },
           error => {
-            console.log(error);
             console.log(error);
             if(error.status === 5000){
               this.err_msg = {code: error.status, type: error.statusText, details:[error.statusText]};
