@@ -39,14 +39,28 @@
         <v-flex xs12 md6>
           <v-list subheader>
             <v-subheader>Customer Segments</v-subheader>
-            <v-list-tile v-for="(item, index) in data.list" :key="item.id" @click="">
+            <v-list-tile v-for="(item, index) in data.list" :key="item.id" @click>
               <v-list-tile-content>
                 <v-list-tile-title>{{item.name}}</v-list-tile-title>
               </v-list-tile-content>
               <v-list-tile-action>
-               <v-btn flat @click="deleteAct(index)" small> <v-icon color="warning" >delete</v-icon></v-btn>
+                <v-btn flat @click="deleteAct(index)" small>
+                  <v-icon color="warning">delete</v-icon>
+                </v-btn>
               </v-list-tile-action>
-              <v-divide></v-divide>
+              <v-expand-x-transition>
+                <div v-show="index == selectedIndex">
+                  <!-- {{ $vuetify.t('$vuetify.action.confirmationtodelete') }} -->
+                  <v-btn small @click="deleteData(item.id)" color="red">
+                    <v-icon></v-icon>
+                    {{ $vuetify.t('$vuetify.action.yes') }}
+                  </v-btn>
+                  <v-btn small @click="deleteAct(null)">
+                    <v-icon></v-icon>
+                    {{ $vuetify.t('$vuetify.action.cancel') }}
+                  </v-btn>
+                </div>
+              </v-expand-x-transition>
             </v-list-tile>
           </v-list>
           <v-btn color="primary" @click="openAdd">
@@ -61,20 +75,19 @@
     </v-container>
 
     <CustomerSegmentForm
-        :data="singleData"
-        v-bind:edit="edit"
-        v-bind:view="view"
-        v-if="dialogForm"
-        @close="dialogForm = false"
-        @refresh="refresh"
-      />
-
+      :data="singleData"
+      v-bind:edit="edit"
+      v-bind:view="view"
+      v-if="dialogForm"
+      @close="dialogForm = false"
+      @refresh="refresh"
+    />
   </div>
 </template>
 <script>
 import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
-import CustomerSegmentForm from "./customersegment/CustomerSegmentForm"
+import CustomerSegmentForm from "./customersegment/CustomerSegmentForm";
 
 export default {
   components: {
@@ -101,7 +114,7 @@ export default {
       selectedIndex: null,
       data: { total: 0, list: [] },
       parentData: "",
-      singleData: { id: "", name: "" },
+      singleData: { id: "", name: "" }
     };
   },
   mounted: function() {
@@ -124,7 +137,7 @@ export default {
         )
         .then(
           res => {
-              this.parentData = res.data.data;
+            this.parentData = res.data.data;
           },
           error => {
             console.log(error);
@@ -204,7 +217,7 @@ export default {
       this.singleData = { id: "", name: "" };
     },
     deleteAct: function(index) {
-      alert(index)
+      // alert(index)
       if (this.selectedIndex == index) {
         this.selectedIndex = null;
       } else {
@@ -215,7 +228,12 @@ export default {
       net
         .deleteData(
           this,
-          "/talent/as-team-member/" + this.$route.params.teamId + "/ideas/" + id
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            id
         )
         .then()
         .catch(function() {})
