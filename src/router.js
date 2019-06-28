@@ -42,6 +42,7 @@ import TalentTeamCreate from "./components/talent/team/TalentTeamCreate";
 import TalentTeamDetail from "./components/talent/team/TalentTeamDetail";
 import TalentTeamIdea from "./components/talent/team/idea/TalentTeamIdea";
 import TalentTeamIdeaDetail from "./components/talent/team/idea/TalentTeamIdeaDetail";
+import TalentTeamIdeaCustomersegment from "./components/talent/team/idea/customersegment/TalentTeamIdeaCustomersegment";
 
 import TalentFeedback from "./components/talent/TalentFeedback.vue";
 import TalentProgrammes from "./components/talent/TalentProgrammes.vue";
@@ -141,6 +142,16 @@ const routes = [
       {
         path: "/talent/team/:teamId/idea/:ideaId",
         name: "Idea Detail",
+        component: TalentTeamIdeaDetail
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId",
+        name: "Customer Segment Detail",
+        component: TalentTeamIdeaCustomersegment
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId",
+        name: "Persona Detail",
         component: TalentTeamIdeaDetail
       },
       {

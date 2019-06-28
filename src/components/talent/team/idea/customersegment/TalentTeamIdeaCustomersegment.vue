@@ -11,39 +11,29 @@
         </v-card>
       </v-dialog>
       <v-layout row wrap>
-        <v-flex xs12 md6 >
+        <v-flex xs12 md6>
           <v-card elevation="1" style="margin:10px">
             <v-card-title>
-              <v-badge v-model="parentData.aMainIdea" left>
-                <template v-slot:badge>
-                  <v-icon small color="yellow">star</v-icon>
-                </template>
-                <h3>{{parentData.name}}</h3>
-              </v-badge>
-              <v-btn fab color="blue" small @click="openEditParent(parentData)"><v-icon>edit</v-icon></v-btn>
+              <h3>{{parentData.name}}</h3>
+              <v-btn color="blue" fab small @click="openEditParent(parentData.id)"><v-icon small>edit</v-icon></v-btn>
             </v-card-title>
             <v-card-text>
               {{parentData.description}}
               <br>
-              {{parentData.targetCustomer}}
+              {{parentData.createdTime}}
               <br>
-              {{parentData.problemConfront}}
-              <br>
-              {{parentData.valueProposed}}
-              <br>
-              {{parentData.revenueModel}}
-              <v-divider/>
-              Initiator : {{parentData.initiator.talent.name}}
             </v-card-text>
           </v-card>
         </v-flex>
         <v-flex xs12 md6>
           <v-list subheader style="margin:10px">
-            <v-subheader>Customer Segments</v-subheader>
-            <v-list-tile v-for="(item, index) in data.list" :key="item.id" >
-              <v-list-tile-avatar>
-                <v-btn fab flat @click="openDetail(item.id)"><v-icon>pageview</v-icon></v-btn>
-              </v-list-tile-avatar>
+            <v-subheader>Persona</v-subheader>
+            <template v-if="data.total != 0">
+            <v-list-tile 
+              v-for="(item, index) in data.list"
+              :key="item.id"
+              @click="openDetail(item.id)"
+            >
               <v-list-tile-content>
                 <v-list-tile-title>{{item.name}}</v-list-tile-title>
               </v-list-tile-content>
@@ -55,17 +45,23 @@
               <v-expand-x-transition>
                 <div v-show="index == selectedIndex">
                   <!-- {{ $vuetify.t('$vuetify.action.confirmationtodelete') }} -->
-                  <v-btn @click="deleteData(item.id)" color="red">
+                  <v-btn small @click="deleteData(item.id)" color="red">
                     <v-icon></v-icon>
                     {{ $vuetify.t('$vuetify.action.yes') }}
                   </v-btn>
-                  <v-btn @click="deleteAct(null)">
+                  <v-btn small @click="deleteAct(null)">
                     <v-icon></v-icon>
                     {{ $vuetify.t('$vuetify.action.cancel') }}
                   </v-btn>
                 </div>
               </v-expand-x-transition>
             </v-list-tile>
+            </template>
+            <template v-else>
+              <v-list-tile>
+                <v-list-tile-title>No Data</v-list-tile-title>
+              </v-list-tile>
+            </template>  
           </v-list>
           <v-btn color="primary" @click="openAdd">
             <v-icon>add</v-icon>
@@ -82,30 +78,30 @@
       :data="singleData"
       v-bind:edit="edit"
       v-bind:view="view"
-      v-if="dialogForm"
-      @close="dialogForm = false"
-      @refresh="refresh"
-    />
-    <IdeaForm
-      :data="singleData"
-      v-bind:edit="edit"
-      v-bind:view="view"
       v-if="dialogFormParent"
       @close="dialogFormParent = false"
       @refresh="refreshParent"
+    />
+    <PersonaForm
+      :data="singleData"
+      v-bind:edit="edit"
+      v-bind:view="view"
+      v-if="dialogForm"
+      @close="dialogForm = false"
+      @refresh="refresh"
     />
   </div>
 </template>
 <script>
 import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
-import CustomerSegmentForm from "./customersegment/CustomerSegmentForm";
-import IdeaForm from "./IdeaForm"
+import CustomerSegmentForm from "./CustomerSegmentForm";
+import PersonaForm from "./persona/PersonaForm"
 
 export default {
   components: {
-    IdeaForm,
     CustomerSegmentForm,
+    PersonaForm,
     "notification-alert": Notification
   },
   data() {
@@ -148,7 +144,9 @@ export default {
           "/talent/as-team-member/" +
             this.$route.params.teamId +
             "/ideas/" +
-            this.$route.params.ideaId
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId
         )
         .then(
           res => {
@@ -192,7 +190,9 @@ export default {
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
-            "/customer-segments"
+            "/customer-segments/" + 
+            this.$route.params.customersegmentId + 
+            "/personas"
         )
         .then(
           res => {
@@ -219,14 +219,28 @@ export default {
           this.loader = false;
         });
     },
-    openDetail: function(id){
-      this.$router.push({path: "/talent/team/" + this.$route.params.teamId + "/idea/" + this.$route.params.ideaId + "/customersegment/" + id})
+    openDetail: function(id) {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/idea/" +
+          this.$route.params.ideaId +
+          "/customersegment/" +
+          id
+      });
     },
-    openEditParent: function(data) {
+    openEditParent: function(index) {
       this.dialogFormParent = true;
       this.view = false;
       this.edit = true;
-      this.singleData = data;
+      this.singleData = this.parentData;
+    },
+    openEdit: function(index) {
+      this.dialogForm = true;
+      this.view = false;
+      this.edit = true;
+      this.singleData = this.data.list[index];
     },
     openAdd: function() {
       this.dialogForm = true;

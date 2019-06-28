@@ -7,7 +7,7 @@
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
-                <!-- {{error}} -->
+                <!-- {{data}} -->
                 <v-form v-model="valid" ref="form">
                   <v-text-field
                     label="Customer Segment Name"
@@ -74,7 +74,7 @@ export default {
       error: "error",
       params: {
         name: "",
-        description: "",
+        description: ""
       },
       nameRules: [
         v => !!v || "Name is required",

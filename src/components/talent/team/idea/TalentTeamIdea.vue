@@ -30,7 +30,7 @@
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
             <v-btn @click="openDetail(props.item.id)" small>
-              <v-icon small>search</v-icon> 
+              <v-icon small>pageview</v-icon> 
               {{ $vuetify.t('$vuetify.action.view') }}
             </v-btn>
             <v-btn small dark color="warning" @click="deleteAct(props.index)">
@@ -102,7 +102,7 @@ export default {
       singleData: { id: "", name: "" },
       headers: [
         {
-          text: "Business Name",
+          text: "Idea Name",
           align: "left",
           sortable: false,
           value: "name"

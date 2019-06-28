@@ -31,8 +31,12 @@
               <v-btn small @click="openIdea(props.item.team.id)">
                 {{$vuetify.t('$vuetify.idea.idea')}}
               </v-btn>
+              <v-btn small>
+                <!-- {{$vuetify.t('$vuetify.idea.idea')}} -->
+                Program Participation
+              </v-btn>
               <v-btn small @click="openDetail(props.item.id)">
-                <v-icon small>search</v-icon>
+                <v-icon small>pageview</v-icon>
                 {{ $vuetify.t('$vuetify.action.view') }}
               </v-btn>
               <v-btn

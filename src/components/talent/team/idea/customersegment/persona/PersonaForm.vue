@@ -10,46 +10,17 @@
                 <!-- {{error}} -->
                 <v-form v-model="valid" ref="form">
                   <v-text-field
-                    label="Idea Name"
+                    label="Persona Name"
                     v-model="params.name"
                     :rules="nameRules"
                     :counter="25"
                     maxlength="25"
                     required
                   ></v-text-field>
-                  <v-text-field
-                    label="Target Customer"
-                    v-model="params.targetCustomer"
-                    :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    label="Problem Confront"
-                    v-model="params.problemConfront"
-                    :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    label="Value Proposed"
-                    v-model="params.valueProposed"
-                    :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    label="Revenue Model"
-                    v-model="params.revenueModel"
-                    :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
-                    required
-                  ></v-text-field>
-                  <v-textarea auto-grow="false" counter label="Elevator Pitch" v-model="params.description"></v-textarea>
+                  
+                  <div>
+                      PLACEHOLDER FOR DYNAMIC FIELDS
+                  </div>    
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"
@@ -101,11 +72,7 @@ export default {
       error: "error",
       params: {
         name: "",
-        description: "",
-        targetCustomer: "",
-        problemConfront: "",
-        valueProposed: "",
-        revenueModel: ""
+        description: ""
       },
       nameRules: [
         v => !!v || "Name is required",
@@ -118,14 +85,14 @@ export default {
   },
   created: function() {},
   mounted: function() {
-    if (this.edit) {
-      this.getSingleData();
-    }
+    // if (this.edit) {
+    //   this.getSingleData();
+    // }
   },
   methods: {
     submit: function() {
       if (this.$refs.form.validate()) {
-        this.addData();
+        // this.addData();
       } else {
         this.$vuetify.goTo(this.$refs.notif, {
           duration: 500,
@@ -136,7 +103,7 @@ export default {
     },
     update: function() {
       if (this.$refs.form.validate()) {
-        this.updateData();
+        // this.updateData();
       } else {
         this.$vuetify.goTo(this.$refs.notif, {
           duration: 500,
@@ -152,6 +119,8 @@ export default {
           "/talent/as-team-member/" +
             this.$route.params.teamId +
             "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
             this.data.id
         )
         .then(
@@ -184,7 +153,11 @@ export default {
       net
         .postData(
           this,
-          "/talent/as-team-member/" + this.$route.params.teamId + "/ideas/",
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/",
           this.params
         )
         .then(
@@ -221,6 +194,8 @@ export default {
           "/talent/as-team-member/" +
             this.$route.params.teamId +
             "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
             this.data.id,
           this.params
         )
@@ -259,5 +234,5 @@ export default {
 };
 </script>
 <style scoped>
-@import "../../../css/modal.css";
+@import "../../../../../css/modal.css";
 </style>
