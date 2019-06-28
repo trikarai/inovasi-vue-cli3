@@ -72,7 +72,7 @@
                         <v-text-field
                           v-model="data.birthDate"
                           :label="$vuetify.t('$vuetify.profile.birthDate')"
-                          prepend-icon="event"
+                          prepend-icon="cake"
                           readonly
                           v-on="on"
                         ></v-text-field>

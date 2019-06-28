@@ -58,6 +58,34 @@
                       :rules="required"
                       required
                     ></v-text-field>
+
+                    <v-flex xs12>
+                      <v-menu
+                        v-model="menu2"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="params.birthDate"
+                            :label="$vuetify.t('$vuetify.profile.birthDate')"
+                            prepend-icon="cake"
+                            readonly
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          :locale="$vuetify.lang.current"
+                          v-model="params.birthDate"
+                          @input="menu2 = false"
+                        ></v-date-picker>
+                      </v-menu>
+                    </v-flex>
                     <v-text-field
                       mask="(###) #### #####"
                       label="Enter your Phone"
