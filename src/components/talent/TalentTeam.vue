@@ -28,6 +28,9 @@
               </v-chip>
             </td>
             <td class="text-xs-right">
+              <v-btn small @click="openIdea(props.item.team.id)">
+                {{$vuetify.t('$vuetify.idea.idea')}}
+              </v-btn>
               <v-btn small @click="openDetail(props.item.id)">
                 <v-icon small>search</v-icon>
                 {{ $vuetify.t('$vuetify.action.view') }}
@@ -141,6 +144,9 @@ export default {
     },
     openDetail: function(id) {
       this.$router.push({path: "/talent/team/"+ id})
+    },
+    openIdea: function(id) {
+      this.$router.push({path: "/talent/team/"+ id + "/idea"})
     },
     openAdd: function() {
       this.dialogForm = true;

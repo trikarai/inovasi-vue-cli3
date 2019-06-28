@@ -40,6 +40,9 @@ import TalentProfileSkill from "./components/talent/profile/skill/TalentProfileS
 import TalentTeam from "./components/talent/TalentTeam.vue";
 import TalentTeamCreate from "./components/talent/team/TalentTeamCreate";
 import TalentTeamDetail from "./components/talent/team/TalentTeamDetail";
+import TalentTeamIdea from "./components/talent/team/idea/TalentTeamIdea";
+import TalentTeamIdeaDetail from "./components/talent/team/idea/TalentTeamIdeaDetail";
+
 import TalentFeedback from "./components/talent/TalentFeedback.vue";
 import TalentProgrammes from "./components/talent/TalentProgrammes.vue";
 
@@ -129,6 +132,16 @@ const routes = [
         path: "/talent/team/:teamId",
         name: "Team",
         component: TalentTeamDetail
+      },
+      {
+        path: "/talent/team/:teamId/idea",
+        name: "Idea",
+        component: TalentTeamIdea
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId",
+        name: "Idea Detail",
+        component: TalentTeamIdeaDetail
       },
       {
         path: "/talent/create/team",

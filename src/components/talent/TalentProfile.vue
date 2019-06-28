@@ -13,8 +13,8 @@
         </v-dialog>
       </v-layout>
 
-      <v-layout pa-3 mb-2>
-        <v-flex xs12 sm4>
+      <v-layout pa-3 mb-2 wrap>
+        <v-flex xs12 md6>
           <v-card>
             <v-form v-model="valid" ref="form">
               <v-card-title primary-title>
@@ -104,7 +104,7 @@
             </v-form>
           </v-card>
         </v-flex>
-        <v-flex xs12 sm4>
+        <v-flex xs12 md6>
           <v-card>
             <v-form v-model="valid2" ref="form2">
               <v-card-title primary-title>
