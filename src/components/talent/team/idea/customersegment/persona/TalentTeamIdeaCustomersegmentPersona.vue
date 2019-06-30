@@ -15,53 +15,58 @@
           <v-card elevation="1" style="margin:10px">
             <v-card-title>
               <h3>{{parentData.name}}</h3>
-              <v-btn color="blue" fab small @click="openEditParent(parentData.id)"><v-icon small>edit</v-icon></v-btn>
+              <!-- <v-btn color="blue" fab small @click="openEditParent(parentData.id)">
+                <v-icon small>edit</v-icon>
+              </v-btn> -->
             </v-card-title>
             <v-card-text>
-              {{parentData.description}}
+              {{parentData.aMainPersona}}
               <br>
               {{parentData.createdTime}}
               <br>
+              {{parentData.form.name}}
+              <br>
+              {{parentData}}
             </v-card-text>
           </v-card>
         </v-flex>
         <v-flex xs12 md6>
           <v-list subheader style="margin:10px">
-            <v-subheader>Persona</v-subheader>
+            <v-subheader>Value Proposition</v-subheader>
             <template v-if="data.total != 0">
-            <v-list-tile 
-              v-for="(item, index) in data.list" :key="item.id">
-              <v-list-tile-avatar>
+              <v-list-tile
+                v-for="(item, index) in data.list" :key="item.id">
+                <v-list-tile-avatar>
                 <v-btn fab flat @click="openDetail(item.id)"><v-icon>pageview</v-icon></v-btn>
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>{{item.name}}</v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-btn flat @click="deleteAct(index)" small>
-                  <v-icon color="warning">delete</v-icon>
-                </v-btn>
-              </v-list-tile-action>
-              <v-expand-x-transition>
-                <div v-show="index == selectedIndex">
-                  <!-- {{ $vuetify.t('$vuetify.action.confirmationtodelete') }} -->
-                  <v-btn small @click="deleteData(item.id)" color="red">
-                    <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.yes') }}
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title>{{item.description}}</v-list-tile-title>
+                </v-list-tile-content>
+                <v-list-tile-action>
+                  <v-btn flat @click="deleteAct(index)" small>
+                    <v-icon color="warning">delete</v-icon>
                   </v-btn>
-                  <v-btn small @click="deleteAct(null)">
-                    <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.cancel') }}
-                  </v-btn>
-                </div>
-              </v-expand-x-transition>
-            </v-list-tile>
+                </v-list-tile-action>
+                <v-expand-x-transition>
+                  <div v-show="index == selectedIndex">
+                    <!-- {{ $vuetify.t('$vuetify.action.confirmationtodelete') }} -->
+                    <v-btn small @click="deleteData(item.id)" color="red">
+                      <v-icon></v-icon>
+                      {{ $vuetify.t('$vuetify.action.yes') }}
+                    </v-btn>
+                    <v-btn small @click="deleteAct(null)">
+                      <v-icon></v-icon>
+                      {{ $vuetify.t('$vuetify.action.cancel') }}
+                    </v-btn>
+                  </div>
+                </v-expand-x-transition>
+              </v-list-tile>
             </template>
             <template v-else>
               <v-list-tile>
                 <v-list-tile-title>No Data</v-list-tile-title>
               </v-list-tile>
-            </template>  
+            </template>
           </v-list>
           <v-btn color="primary" @click="openAdd">
             <v-icon>add</v-icon>
@@ -73,35 +78,14 @@
     <v-container>
       <span v-html="error.body" v-if="status.error"></span>
     </v-container>
-
-    <CustomerSegmentForm
-      :data="singleData"
-      v-bind:edit="edit"
-      v-bind:view="view"
-      v-if="dialogFormParent"
-      @close="dialogFormParent = false"
-      @refresh="refreshParent"
-    />
-    <PersonaForm
-      :data="singleData"
-      v-bind:edit="edit"
-      v-bind:view="view"
-      v-if="dialogForm"
-      @close="dialogForm = false"
-      @refresh="refresh"
-    />
   </div>
 </template>
 <script>
 import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
-import CustomerSegmentForm from "./CustomerSegmentForm";
-import PersonaForm from "./persona/PersonaForm"
 
 export default {
   components: {
-    CustomerSegmentForm,
-    PersonaForm,
     "notification-alert": Notification
   },
   data() {
@@ -146,7 +130,9 @@ export default {
             "/ideas/" +
             this.$route.params.ideaId +
             "/customer-segments/" +
-            this.$route.params.customersegmentId
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId
         )
         .then(
           res => {
@@ -190,9 +176,11 @@ export default {
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
-            "/customer-segments/" + 
-            this.$route.params.customersegmentId + 
-            "/personas"
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions"
         )
         .then(
           res => {
@@ -228,7 +216,10 @@ export default {
           this.$route.params.ideaId +
           "/customersegment/" +
           this.$route.params.customersegmentId +
-          "/persona/" + id
+          "/personas/" +
+          this.$route.params.personaId +
+          "/value-propositions/" +
+          id
       });
     },
     openEditParent: function(index) {
@@ -265,10 +256,16 @@ export default {
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
-            "/customer-segments/" +
+            "/customersegment/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
             id
         )
-        .then()
+        .then(function(res){
+          console.log(res);
+        })
         .catch(function() {})
         .finally(function() {
           this.selectedIndex = null;
