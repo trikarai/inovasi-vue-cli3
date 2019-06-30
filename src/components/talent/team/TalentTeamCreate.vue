@@ -25,6 +25,15 @@
                   required
                 ></v-text-field>
               </v-flex>
+              <v-flex sm4>
+                <v-text-field
+                  position="absolute"
+                  v-model="params.position"
+                  :counter="25"
+                  :label="$vuetify.t('$vuetify.team.position')"
+                  required
+                ></v-text-field>
+              </v-flex>
               <v-flex>
                 {{ $vuetify.t('$vuetify.team.vision')}}
                 <tiptap-vuetify
@@ -100,6 +109,7 @@ export default {
       err_msg: "",
       params: {
         name: "",
+        position: "",
         vision: "",
         mission: "",
         culture: "",
