@@ -229,7 +229,7 @@ export default {
             this.error = error;
           }
         )
-        .catch(function() {
+        .catch(function(error) {
           console.log(error);
           if (error.status !== 200) {
             app.err_msg = {
