@@ -80,10 +80,10 @@ export default {
         info: false,
         warning: false
       },
-      e1: false,
+      e1: true,
       password: "Bismill4h",
       passwordRules: [v => !!v || "Password is required"],
-      email: "talent1",
+      email: "user_1",
       emailRules: [
         v => !!v || "E-mail is required"
         // v =>
