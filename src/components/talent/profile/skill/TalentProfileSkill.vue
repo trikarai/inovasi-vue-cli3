@@ -16,7 +16,8 @@
       </v-dialog>
       <v-data-table dark :headers="headers" :items="data.list" class="elevation-1">
         <template v-slot:items="props">
-          <td>{{ props.item.name }}</td>
+          <td>{{ props.item.skillReferenceName }}</td>
+          <td><v-rating v-model="props.item.score"></v-rating></td>
           <td class="text-xs-right">
             <v-btn @click="openEdit(props.index)" small>
               <v-icon small>edit</v-icon>
@@ -90,6 +91,7 @@ export default {
           sortable: false,
           value: "name"
         },
+        { text: "Score", value: "id",sortable: false, },
         { text: "", value: "id",sortable: false, }
       ]
     };

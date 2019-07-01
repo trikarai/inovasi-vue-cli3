@@ -150,7 +150,7 @@ export default {
     },
     deleteData: function(id) {
       net
-        .deleteData(this, "/talent/working-experiences" + id)
+        .deleteData(this, "/talent/working-experiences/" + id)
         .then()
         .catch(function() {})
         .finally(function() {

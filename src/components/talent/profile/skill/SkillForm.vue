@@ -3,7 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
-          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
+          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -12,7 +12,7 @@
                   <v-autocomplete
                     v-model="params.trackId"
                     label="Track"
-                    :items="dummy"
+                    :items="track.list"
                     item-text="name"
                     item-value="id"
                     required
@@ -21,7 +21,7 @@
                   <v-autocomplete
                     v-model="params.skillReferenceId"
                     label="Skill"
-                    :items="dummy"
+                    :items="skill.list"
                     item-text="name"
                     item-value="id"
                     required
@@ -89,6 +89,8 @@ export default {
         v => !!v || "Name is required",
         v => v.length >= 3 || "Name must be more than 3 characters"
       ],
+      track: {total:0, list:[]},
+      skill: {total:0, list:[]},
       dummy: [
         { name: "dummy 1", id: "id" },
         { name: "dummy 2", id: "id2" },
@@ -101,7 +103,13 @@ export default {
     "notification-alert": notification
   },
   created: function() {},
+  watch: {
+    "params.trackId" : function() {
+      this.getSkill(this.params.trackId);
+    }
+  },
   mounted: function() {
+    this.getTrack();
     if (this.edit) {
       this.getSingleData();
     }
@@ -244,6 +252,48 @@ export default {
         .finally(function() {
           this.loader = false;
         });
+    },
+    getTrack: function() {
+      net.getData(this, "/talent/tracks").then(
+        res => {
+          console.log(res);
+          this.track = res.data.data;
+        },
+        error => {
+          console.log(error);
+          if (error.status >= 400) {
+            this.err_msg = {
+              code: error.status,
+              type: error.statusText,
+              details: [error.statusText]
+            };
+          } else {
+            this.err_msg = error.body.meta;
+          }
+          this.status.error = true;
+        }
+      );
+    },
+    getSkill: function(trackId) {
+      net.getData(this, "/talent/tracks/"+ trackId + "/skill-references").then(
+        res => {
+          console.log(res);
+          this.skill = res.data.data;
+        },
+        error => {
+          console.log(error);
+          if (error.status >= 400) {
+            this.err_msg = {
+              code: error.status,
+              type: error.statusText,
+              details: [error.statusText]
+            };
+          } else {
+            this.err_msg = error.body.meta;
+          }
+          this.status.error = true;
+        }
+      );
     }
   }
 };
