@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
@@ -17,15 +17,15 @@
               <h3>{{parentData.name}}</h3>
               <!-- <v-btn color="blue" fab small @click="openEditParent(parentData.id)">
                 <v-icon small>edit</v-icon>
-              </v-btn> -->
+              </v-btn>-->
             </v-card-title>
             <v-card-text>
               {{parentData.aMainPersona}}
-              <br>
+              <br />
               {{parentData.createdTime}}
-              <br>
+              <br />
               {{parentData.form.name}}
-              <br>
+              <br />
               {{parentData}}
             </v-card-text>
           </v-card>
@@ -34,10 +34,11 @@
           <v-list subheader style="margin:10px">
             <v-subheader>Value Proposition</v-subheader>
             <template v-if="data.total != 0">
-              <v-list-tile
-                v-for="(item, index) in data.list" :key="item.id">
+              <v-list-tile v-for="(item, index) in data.list" :key="item.id">
                 <v-list-tile-avatar>
-                <v-btn fab flat @click="openDetail(item.id)"><v-icon>pageview</v-icon></v-btn>
+                  <v-btn fab flat @click="openDetail(item.id)">
+                    <v-icon>pageview</v-icon>
+                  </v-btn>
                 </v-list-tile-avatar>
                 <v-list-tile-content>
                   <v-list-tile-title>{{item.description}}</v-list-tile-title>
@@ -78,14 +79,25 @@
     <v-container>
       <span v-html="error.body" v-if="status.error"></span>
     </v-container>
+
+    <ValuePropositionForm
+      :data="singleData"
+      v-bind:edit="edit"
+      v-bind:view="view"
+      v-if="dialogForm"
+      @close="dialogForm = false"
+      @refresh="refresh"
+    />
   </div>
 </template>
 <script>
 import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
+import ValuePropositionForm from "./valueproposition/ValuePropositionForm";
 
 export default {
   components: {
+    ValuePropositionForm,
     "notification-alert": Notification
   },
   data() {
@@ -249,6 +261,7 @@ export default {
       }
     },
     deleteData: function(id) {
+      var app = this;
       net
         .deleteData(
           this,
@@ -256,17 +269,30 @@ export default {
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
-            "/customersegment/" +
+            "/customer-segments/" +
             this.$route.params.customersegmentId +
             "/personas/" +
             this.$route.params.personaId +
             "/value-propositions/" +
             id
         )
-        .then(function(res){
+        .then(function(res) {
           console.log(res);
         })
-        .catch(function() {})
+        .catch(function(error) {
+          console.log(error);
+          if (error.status > 400) {
+            app.err_msg = {
+              code: error.status,
+              type: error.statusText,
+              details: [error.statusText]
+            };
+          } else {
+            app.err_msg = error.body.meta;
+          }
+          app.error = error;
+          app.status.error = true;
+        })
         .finally(function() {
           this.selectedIndex = null;
           this.refresh();
