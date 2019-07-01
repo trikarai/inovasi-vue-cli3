@@ -108,7 +108,7 @@
                       <v-radio label="Female" value="p" color="primary"></v-radio>
                     </v-radio-group>
                     <v-autocomplete
-                      v-model="params.Region_id"
+                      v-model="params.regionId"
                       label="Region"
                       :items="region.list"
                       item-text="name"
@@ -152,6 +152,12 @@ export default {
     return {
       loader: false,
       response: "",
+      status: {
+        error : false,
+        success: false,
+        warning: false,
+        info: false
+      },
       valid: false,
       alert: false,
       err_msg: { code: 0, type: "", error_details: [] },
@@ -166,7 +172,7 @@ export default {
         cityOfOrigin: "",
         birthDate: "",
         gender: "",
-        Region_id: ""
+        regionId: ""
       },
       cpassword: "",
       region: {
