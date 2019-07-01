@@ -116,6 +116,14 @@ export default {
         {
           name: "select",
           value: "sel"
+        },
+        {
+          name: "text area",
+          value: "txt"
+        },
+        {
+          name: "attachment",
+          value: "att"
         }
       ]
     };

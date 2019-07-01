@@ -17,8 +17,9 @@
       </v-dialog>
       <v-data-table dark :headers="headers" :items="field.list" class="elevation-1">
         <template v-slot:items="props">
-          <td>{{ props.item.id }}</td>
+          <td>{{ props.item.position }}</td>
           <td>{{ props.item.name }}</td>
+          <td>{{ props.item.type.displayName }}</td>
           <td class="text-xs-right">
             <v-btn @click="openEdit(props.index)" small>
               <v-icon small>edit</v-icon>
@@ -89,8 +90,8 @@ export default {
         {
           text: "position",
           align: "left",
-          sortable: true,
-          value: "order"
+          sortable: false,
+          value: "position"
         },
         {
           text: "Name",
@@ -98,7 +99,8 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "Type", value: "type", sortable: false },
+        { text: "", value: "id", sortable: true }
       ]
     };
   },
