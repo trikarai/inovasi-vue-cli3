@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+    <v-container ref="tabletop">
+      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <!-- {{res}}<br> -->
-      <v-btn v-show="!optionShow" @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Field
       </v-btn>
@@ -32,7 +32,7 @@
               <v-icon>playlist_add</v-icon>
             </v-btn>
           </td>
-          <td class="text-xs-right" >
+          <td class="text-xs-right">
             <v-btn @click="openEdit(props.item.id)" small v-show="!optionShow">
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
@@ -59,15 +59,18 @@
         </template>
       </v-data-table>
     </v-container>
-
-    <v-container v-if="optionShow">
-      <v-btn small @click="optionShow = !optionShow" color="warning">
-        <v-icon>close</v-icon>Close
-      </v-btn>
-      <v-layout>
-        <OptionList :fieldId="fieldId" />
-      </v-layout>
-    </v-container>
+    <transition name="fade">
+      <v-container v-if="optionShow">
+        <v-divider></v-divider>
+        <v-btn small @click="closeOption" color="warning">
+          <v-icon>close</v-icon>Close
+        </v-btn>
+        <v-layout>
+          <OptionList :fieldId="fieldId" />
+        </v-layout>
+      </v-container>
+    </transition>
+    <div ref="scrollBottom"></div>
 
     <FieldForm
       :data="singleData"
@@ -84,6 +87,7 @@ import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
 import FieldForm from "./AddField";
 import OptionList from "./option/AdministratorManageFormFieldOption";
+import { setTimeout } from "timers";
 
 export default {
   components: {
@@ -201,7 +205,29 @@ export default {
     openOption: function(id) {
       this.fieldId = id;
       this.optionShow = true;
+      this.$vuetify.goTo(this.$refs.scrollBottom, {
+        duration: 500,
+        offset: 0,
+        easing: "linear"
+      });
+    },
+    closeOption: function() {
+      this.$vuetify.goTo(this.$refs.tabletop, {
+        duration: 500,
+        offset: 0,
+        easing: "linear"
+      });
+      this.optionShow = false;
     }
   }
 };
 </script>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>
