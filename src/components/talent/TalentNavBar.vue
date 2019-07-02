@@ -114,7 +114,7 @@
         </v-list-tile>
         <v-list-tile>
           <v-list-tile-avatar>
-            <v-icon>moon</v-icon>
+            <v-icon>brightness_4</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-content>Dark Theme</v-list-tile-content>
           <v-list-tile-action>
