@@ -25,13 +25,13 @@
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"
-                      @click.prevent="addSkill"
+                      @click.prevent="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
 
                     <v-btn
                       v-else
-                      @click="updateSkill"
+                      @click="update"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.edit')}}</v-btn>
 
@@ -81,7 +81,29 @@ export default {
     }
   },
   methods: {
-    addSkill: function() {
+    submit: function() {
+      if (this.$refs.form.validate()) {
+        this.addData();
+      } else {
+        this.$vuetify.goTo(this.$refs.notif, {
+          duration: 500,
+          offset: 0,
+          easing: "linear"
+        });
+      }
+    },
+    update: function() {
+      if (this.$refs.form.validate()) {
+        this.updateData();
+      } else {
+        this.$vuetify.goTo(this.$refs.notif, {
+          duration: 500,
+          offset: 0,
+          easing: "linear"
+        });
+      }
+    },
+    addData: function() {
       this.loader = true;
       net
         .postData(this, "/administrator/curriculums/", this.params)
@@ -99,7 +121,7 @@ export default {
           this.loader = false;
         });
     },
-    updateSkill: function() {
+    updateData: function() {
       this.loader = true;
       net
         .putData(

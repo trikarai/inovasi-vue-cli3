@@ -18,12 +18,12 @@
                     ></v-text-field>
                     <v-layout justify-space-between>
                       <v-btn v-if="edit == false"
-                        @click.prevent="addTrack"
+                        @click.prevent="submit"
                         :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                       > {{ $vuetify.t('$vuetify.action.add')}} </v-btn>
 
                        <v-btn v-else
-                        @click="updateTrack"
+                        @click="update"
                         :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                       > {{ $vuetify.t('$vuetify.action.edit')}} </v-btn>
 
@@ -69,6 +69,16 @@ export default {
     this.params.name = this.data.name;
   },
   methods: {
+    submit: function() {
+      if (this.$refs.form.validate()) {
+        this.addTrack();
+      } 
+    },
+    update: function() {
+      if (this.$refs.form.validate()) {
+        this.updateTrack();
+      } 
+    },
     addTrack: function(){
       this.loader = true;
       net.postData(this, '/administrator/tracks', this.params)

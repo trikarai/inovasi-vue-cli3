@@ -19,12 +19,12 @@
                     <v-layout justify-space-between>
 
                       <v-btn v-if="edit == false"
-                        @click.prevent="addRegion"
+                        @click.prevent="submit"
                         :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                       > {{ $vuetify.t('$vuetify.action.add')}} </v-btn>
 
                        <v-btn v-else
-                        @click="updateRegion"
+                        @click="update"
                         :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                       > {{ $vuetify.t('$vuetify.action.edit')}} </v-btn>
 
@@ -70,7 +70,17 @@ export default {
     this.params.name = this.data.name;
   },
   methods: {
-    addRegion: function(){
+    submit: function() {
+      if (this.$refs.form.validate()) {
+        this.addData();
+      } 
+    },
+    update: function() {
+      if (this.$refs.form.validate()) {
+        this.updateData();
+      } 
+    },
+    addData: function(){
       this.loader = true;
       net.postData(this, '/administrator/regions', this.params)
       .then(res=>{
@@ -83,7 +93,7 @@ export default {
         this.loader = false
       })
     },
-    updateRegion: function(){
+    updateData: function(){
       this.loader = true;
       net.putData(this, '/administrator/regions/' + this.data.id , this.params)
       .then(res=>{

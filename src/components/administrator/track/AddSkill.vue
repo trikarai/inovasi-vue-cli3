@@ -25,13 +25,13 @@
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"
-                      @click.prevent="addSkill"
+                      @click.prevent="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
 
                     <v-btn
                       v-else
-                      @click="updateSkill"
+                      @click="update"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.edit')}}</v-btn>
 
@@ -81,6 +81,16 @@ export default {
     }
   },
   methods: {
+    submit: function() {
+      if (this.$refs.form.validate()) {
+        this.addSkill();
+      } 
+    },
+    update: function() {
+      if (this.$refs.form.validate()) {
+        this.updateSkill();
+      } 
+    },
     addSkill: function() {
       this.loader = true;
       net

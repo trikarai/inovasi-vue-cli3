@@ -36,13 +36,13 @@
                   <v-layout justify-space-between v-if="!view">
                     <v-btn
                       v-if="edit == false"
-                      @click.prevent="addData"
+                      @click.prevent="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
 
                     <v-btn
                       v-else
-                      @click="updateData"
+                      @click="update"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.edit')}}</v-btn>
 
@@ -95,6 +95,16 @@ export default {
     this.getCurriculum();
   },
   methods: {
+    submit: function() {
+      if (this.$refs.form.validate()) {
+        this.addData();
+      }
+    },
+    update: function() {
+      if (this.$refs.form.validate()) {
+        this.updateData();
+      }
+    },
     getCurriculum: function() {
       net
         .getData(this, "/administrator/curriculums")

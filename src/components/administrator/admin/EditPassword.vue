@@ -31,7 +31,7 @@
                   ></v-text-field>
                   <v-layout justify-space-between>
                     <v-btn
-                      @click="updateData"
+                      @click="update"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.edit')}}</v-btn>
 
@@ -101,23 +101,10 @@ export default {
     // }
   },
   methods: {
-    addData: function() {
-      this.loader = true;
-      net
-        .postData(this, "/administrator/administrators/", this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally(function() {
-          this.loader = false;
-        });
+    update: function() {
+      if (this.$refs.form.validate()) {
+        this.updateData();
+      }
     },
     updateData: function() {
       this.loader = true;
@@ -140,20 +127,6 @@ export default {
         .finally(function() {
           this.loader = false;
         });
-    },
-    getSingleData: function(id) {
-      net
-        .getData(this, "/administrator/administrators/" + id)
-        .then(
-          res => {
-            this.params = res.data.data;
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally();
     }
   }
 };
