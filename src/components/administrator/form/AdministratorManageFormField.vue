@@ -3,10 +3,12 @@
     <v-container ref="tabletop">
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <!-- {{res}}<br> -->
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
-        <v-icon>add</v-icon>
-        {{ $vuetify.t('$vuetify.action.add') }} Field
-      </v-btn>
+      <transition name="fade">
+        <v-btn @click="openAdd()" color="blue" style="left: -8px" v-if="!optionShow">
+          <v-icon>add</v-icon>
+          {{ $vuetify.t('$vuetify.action.add') }} Field
+        </v-btn>
+      </transition>
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
@@ -32,8 +34,8 @@
               <v-icon>playlist_add</v-icon>
             </v-btn>
           </td>
-          <td class="text-xs-right">
-            <v-btn @click="openEdit(props.item.id)" small v-show="!optionShow">
+          <td class="text-xs-right" v-visible="!optionShow">
+            <v-btn @click="openEdit(props.item.id)" small>
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
