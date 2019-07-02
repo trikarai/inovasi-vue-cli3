@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <button @click="setLang('en')">EN</button> - 
-    <button @click="setLang('id')">ID</button>
+  <div style="padding-top: 25px">
+    <!-- <button @click="setLang('en')">EN</button> - 
+    <button @click="setLang('id')">ID</button>-->
+    <v-select v-model="$vuetify.lang.current" solo label="Language" :items="items" item-text="name" item-value="value"></v-select>
   </div>
 </template>
 
@@ -10,14 +11,23 @@
 export default {
   data() {
     return {
+      items: [
+        {
+          name: "English",
+          value: "en"
+        },
+        {
+          name: "Indonesia",
+          value: "id"
+        }
+      ]
     };
   },
   methods: {
-    setLang: function(lang){
-      this.$vuetify.lang.current = lang
+    setLang: function(lang) {
+      this.$vuetify.lang.current = lang;
     }
   }
-      
 };
 </script>
 

@@ -5,9 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state:{
-    isLoggedIn: !!localStorage.getItem('lbUser')
+    isLoggedIn: !!localStorage.getItem('lbUser'),
+    isDark: false
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    switchTheme (state){
+      state.isDark = !state.isDark
+    }
+  },
+  actions: {
+  },
   getters: {}
 })
