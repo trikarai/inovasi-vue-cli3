@@ -629,9 +629,9 @@ export default {
   }
 }
 
-@import '../components/css/landingpage.css'; 
+/* @import '../components/css/landingpage.css'; 
 @import '../components/css/animate.min.css';
-@import '../components/css/responsive.css';
+@import '../components/css/responsive.css'; */
 
 /* End carousel */
 </style>
