@@ -1,11 +1,10 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-      <!-- {{res}}<br> -->
-      <v-btn v-show="!optionShow" @click="openAdd()" color="blue" style="left: -8px">
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
-        {{ $vuetify.t('$vuetify.action.add') }} Field
+        {{ $vuetify.t('$vuetify.action.add') }} Options
       </v-btn>
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary" dark>
@@ -15,33 +14,19 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      <v-data-table dark :headers="headers" :items="field.list" class="elevation-1">
+      <v-data-table dark :headers="headers" :items="option.list" class="elevation-1">
         <template v-slot:items="props">
           <td>{{ props.item.position }}</td>
           <td>{{ props.item.name }}</td>
-          <td>{{ props.item.type.displayName }}</td>
-          <td>
-            <v-btn
-              @click="openOption(props.item.id)"
-              color="blue"
-              right
-              small
-              fab
-              v-show="props.item.type.value === 'sel'"
-            >
-              <v-icon>playlist_add</v-icon>
-            </v-btn>
-          </td>
-          <td class="text-xs-right" >
-            <v-btn @click="openEdit(props.item.id)" small v-show="!optionShow">
+          <td class="text-xs-right">
+            <v-btn @click="openEdit(props.item.id)" small>
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)" v-show="!optionShow">
+            <v-btn small dark color="warning" @click="deleteAct(props.index)">
               <v-icon small>delete</v-icon>
               {{ $vuetify.t('$vuetify.action.delete') }}
             </v-btn>
-
             <v-expand-transition>
               <div v-show="props.index == selectedIndex">
                 {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
@@ -59,18 +44,9 @@
         </template>
       </v-data-table>
     </v-container>
-
-    <v-container v-if="optionShow">
-      <v-btn small @click="optionShow = !optionShow" color="warning">
-        <v-icon>close</v-icon>Close
-      </v-btn>
-      <v-layout>
-        <OptionList :fieldId="fieldId" />
-      </v-layout>
-    </v-container>
-
-    <FieldForm
+    <OptionForm
       :data="singleData"
+      :fieldId="fieldId"
       :edit="edit"
       :view="view"
       v-if="dialogForm"
@@ -82,19 +58,17 @@
 <script>
 import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
-import FieldForm from "./AddField";
-import OptionList from "./option/AdministratorManageFormFieldOption";
+import OptionForm from "./AddOption";
 
 export default {
+  props: ['fieldId'],
   components: {
     "notification-alert": Notification,
-    FieldForm,
-    OptionList
+     OptionForm
   },
   data() {
     return {
       res: "",
-      optionShow: false,
       status: {
         success: false,
         error: false,
@@ -110,8 +84,7 @@ export default {
       expand: false,
       dataId: "",
       selectedIndex: null,
-      field: { total: 0, list: [] },
-      fieldId: "",
+      option: { total: 0, list: [] },
       singleData: { id: "", name: "" },
       headers: [
         {
@@ -126,8 +99,6 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "Type", value: "type.displayName", sortable: false },
-        { text: "Option", value: "type.value", sortable: false },
         { text: "", value: "id", sortable: false }
       ]
     };
@@ -139,16 +110,13 @@ export default {
     getDataList: function() {
       this.loader = true;
       net
-        .getData(
-          this,
-          "/administrator/forms/" + this.$route.params.formId + "/fields"
-        )
+        .getData(this, "/administrator/forms/" + this.$route.params.formId + "/fields/" + this.fieldId + "/options/")
         .then(
           res => {
-            if (res.data.data) {
-              this.field = res.data.data;
-            } else {
-              this.field.list = [];
+            if(res.data.data){
+              this.option = res.data.data;
+            }else{
+              this.option.list = []; 
             }
           },
           error => {
@@ -157,7 +125,8 @@ export default {
             this.status.error = true;
           }
         )
-        .catch(function() {})
+        .catch(function() {
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -183,10 +152,7 @@ export default {
     },
     deleteData: function(id) {
       net
-        .deleteData(
-          this,
-          "/administrator/fields/" + this.$route.params.formId + "/fields/" + id
-        )
+        .deleteData(this, "/administrator/forms/" + this.$route.params.formId + "/fields/" + this.fieldId + "/options/" + id)
         .then()
         .catch(function() {})
         .finally(function() {
@@ -197,10 +163,6 @@ export default {
     refresh: function() {
       this.dialogForm = false;
       this.getDataList();
-    },
-    openOption: function(id) {
-      this.fieldId = id;
-      this.optionShow = true;
     }
   }
 };
