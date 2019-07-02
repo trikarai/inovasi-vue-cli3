@@ -1,0 +1,213 @@
+<template>
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper" @click="$emit('close')">
+        <div class="modal-container" @click.stop>
+          <v-card elevation="0" width="400">
+            <v-card-text class="pt-4">
+              <div>
+                <!-- {{skillId}} -->
+                <v-form v-model="valid" ref="form">
+                  <v-text-field
+                    :disabled="view"
+                    label="Certificate Name"
+                    v-model="params.name"
+                    :rules="nameRules"
+                    :counter="25"
+                    maxlength="25"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    :disabled="view"
+                    label="Organizer"
+                    v-model="params.organizer"
+                    counter
+                    maxlength="100"
+                    required
+                  ></v-text-field>
+
+                  <v-flex xs12>
+                    <v-menu
+                      v-model="menu1"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="params.issuedDate"
+                          label="Issued Date"
+                          prepend-icon="event"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="params.issuedDate" @input="menu1 = false"></v-date-picker>
+                    </v-menu>
+                  </v-flex>
+
+                  <v-flex xs12>
+                    <v-menu
+                      v-model="menu2"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="params.validUntil"
+                          label="Valid Until"
+                          prepend-icon="event"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="params.validUntil" @input="menu2 = false"></v-date-picker>
+                    </v-menu>
+                  </v-flex>
+
+                  <v-layout justify-space-between v-if="!view">
+                    <v-btn
+                      v-if="edit == false"
+                      @click.prevent="submit"
+                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                    >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
+
+                    <v-btn
+                      v-else
+                      @click="update"
+                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                    >{{ $vuetify.t('$vuetify.action.edit')}}</v-btn>
+
+                    <v-dialog v-model="loader" hide-overlay persistent width="300">
+                      <v-card color="primary" dark>
+                        <v-card-text>
+                          {{ $vuetify.t('$vuetify.info.standby')}}
+                          <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+                        </v-card-text>
+                      </v-card>
+                    </v-dialog>
+                  </v-layout>
+                </v-form>
+              </div>
+            </v-card-text>
+          </v-card>
+        </div>
+      </div>
+    </div>
+  </transition>
+</template>
+<script>
+import net from "@/config/httpclient";
+
+export default {
+  props: ["skillId", "edit", "view", "data"],
+  data: function() {
+    return {
+      valid: false,
+      loader: false,
+      menu1: false,
+      menu2: false,
+      params: {
+        name: "",
+        organizer: "",
+        issuedDate: "",
+        validUntil: ""
+      },
+      nameRules: [
+        v => !!v || "Name is required",
+        v => v.length >= 3 || "Name must be more than 3 characters"
+      ]
+    };
+  },
+  created: function() {
+    this.params.name = this.data.name;
+  },
+  mounted: function() {
+    if (this.edit) {
+      this.getSingleData(this.data.id);
+    }
+  },
+  methods: {
+    submit: function() {
+      if (this.$refs.form.validate()) {
+        this.addData();
+      }
+    },
+    update: function() {
+      if (this.$refs.form.validate()) {
+        this.updateData();
+      }
+    },
+    addData: function() {
+      this.loader = true;
+      net
+        .postData(
+          this,
+          "/talent/skills/" + this.skillId + "/certificates",
+          this.params
+        )
+        .then(
+          res => {
+            console.log(res);
+            this.$emit("refresh");
+          },
+          error => {
+            console.log(error);
+          }
+        )
+        .catch()
+        .finally(function() {
+          this.loader = false;
+        });
+    },
+    updateData: function() {
+      this.loader = true;
+      net
+        .putData(
+          this,
+          "/talent/skills/" + this.skillId + "/certificates/" + this.data.id,
+          this.params
+        )
+        .then(
+          res => {
+            console.log(res);
+            this.$emit("refresh");
+          },
+          error => {
+            console.log(error);
+          }
+        )
+        .catch()
+        .finally(function() {
+          this.loader = false;
+        });
+    },
+    getSingleData: function(id) {
+      net
+        .getData(this, "/talent/skills/" + this.skillId + "/certificates/" + id)
+        .then(
+          res => {
+            this.params = res.data.data;
+          },
+          error => {
+            console.log(error);
+          }
+        )
+        .catch()
+        .finally();
+    }
+  }
+};
+</script>
+<style scoped>
+@import "../../../../css/modal.css";
+</style>

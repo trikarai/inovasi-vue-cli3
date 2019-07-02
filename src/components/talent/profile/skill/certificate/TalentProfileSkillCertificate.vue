@@ -1,13 +1,11 @@
 <template>
   <div>
-    <v-container ref="tabletop">
-      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-      <transition name="fade">
-      <v-btn @click="openAdd()" color="blue" style="left: -8px" v-if="!certificateShow">
+    <v-container>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
-        {{ $vuetify.t('$vuetify.action.add') }} Skills
+        {{ $vuetify.t('$vuetify.action.add') }} {{ $vuetify.t('$vuetify.profile.certificate') }} 
       </v-btn>
-      </transition>
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
@@ -16,20 +14,11 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      <v-data-table :headers="headers" :items="data.list" class="elevation-1">
+      <v-data-table dark :headers="headers" :items="certificate.list" class="elevation-1">
         <template v-slot:items="props">
-          <td>{{ props.item.skillReferenceName }}</td>
-          <td>
-            <v-rating readonly="true" v-model="props.item.score"></v-rating>
-          </td>
-          <td>
-            <v-btn @click="openCertificate(props.item.id)" small>
-              <v-icon small left>card_membership</v-icon>
-              {{ $vuetify.t('$vuetify.profile.certificate') }}
-            </v-btn>
-          </td>
-          <td class="text-xs-right" v-visible="!certificateShow">
-            <v-btn @click="openEdit(props.index)" small>
+          <td>{{ props.item.name }}</td>
+          <td class="text-xs-right">
+            <v-btn @click="openEdit(props.item.id)" small>
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
@@ -54,24 +43,11 @@
         </template>
       </v-data-table>
     </v-container>
-
-    <transition name="fade">
-      <v-container v-if="certificateShow">
-        <v-divider></v-divider>
-        <v-btn small @click="closeCertificate" color="warning">
-          <v-icon>close</v-icon>Close
-        </v-btn>
-        <v-layout>
-          <CertificateComp :skillId="skillId" />
-        </v-layout>
-      </v-container>
-    </transition>
-    <div ref="scrollBottom"></div>
-
-    <SkillForm
+    <CertificateForm
       :data="singleData"
-      v-bind:edit="edit"
-      v-bind:view="view"
+      :skillId="skillId"
+      :edit="edit"
+      :view="view"
       v-if="dialogForm"
       @close="dialogForm = false"
       @refresh="refresh()"
@@ -80,19 +56,18 @@
 </template>
 <script>
 import net from "@/config/httpclient";
-import SkillForm from "./SkillForm";
 import Notification from "@/components/Notification";
-import CertificateComp from "./certificate/TalentProfileSkillCertificate"
+import CertificateForm from "./AddCertificate";
 
 export default {
+  props: ['skillId'],
   components: {
-    SkillForm,
-    CertificateComp,
-    "notification-alert": Notification
+    "notification-alert": Notification,
+     CertificateForm
   },
   data() {
     return {
-      certificateShow: false,
+      res: "",
       status: {
         success: false,
         error: false,
@@ -108,18 +83,15 @@ export default {
       expand: false,
       dataId: "",
       selectedIndex: null,
-      data: { total: 0, list: [] },
+      certificate: { total: 0, list: [] },
       singleData: { id: "", name: "" },
-      skillId: "",
       headers: [
         {
-          text: "Skill",
+          text: "Name",
           align: "left",
           sortable: false,
           value: "name"
         },
-        { text: "Score", value: "id", sortable: false },
-        { text: "Certificate", value: "id", sortable: false },
         { text: "", value: "id", sortable: false }
       ]
     };
@@ -130,17 +102,14 @@ export default {
   methods: {
     getDataList: function() {
       this.loader = true;
-      this.status.error = false;
-      this.status.success = false;
-      var app = this;
       net
-        .getData(this, "/talent/skills")
+        .getData(this, "/talent/skills/" + this.skillId + "/certificates/")
         .then(
           res => {
-            if (res.data.data) {
-              this.data = res.data.data;
-            } else {
-              this.data.list = [];
+            if(res.data.data){
+              this.certificate = res.data.data;
+            }else{
+              this.certificate.list = []; 
             }
           },
           error => {
@@ -149,21 +118,17 @@ export default {
             this.status.error = true;
           }
         )
-        .catch(function(error) {
-          console.log(error);
-          console.log(error);
-          app.err_msg = error.body.meta;
-          app.status.error = true;
+        .catch(function() {
         })
         .finally(function() {
           this.loader = false;
         });
     },
-    openEdit: function(index) {
+    openEdit: function(id) {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.data.list[index];
+      this.singleData.id = id;
     },
     openAdd: function() {
       this.dialogForm = true;
@@ -180,7 +145,7 @@ export default {
     },
     deleteData: function(id) {
       net
-        .deleteData(this, "/talent/skills/" + id)
+        .deleteData(this, "/talent/skills/" + this.skillId + "/certificates/" + id)
         .then()
         .catch(function() {})
         .finally(function() {
@@ -191,33 +156,7 @@ export default {
     refresh: function() {
       this.dialogForm = false;
       this.getDataList();
-    },
-    openCertificate: function(id) {
-      this.skillId = id;
-      this.certificateShow = true;
-      this.$vuetify.goTo(this.$refs.scrollBottom, {
-        duration: 500,
-        offset: 0,
-        easing: "linear"
-      });
-    },
-    closeCertificate: function() {
-      this.$vuetify.goTo(this.$refs.tabletop, {
-        duration: 500,
-        offset: 0,
-        easing: "linear"
-      });
-      this.certificateShow = false;
     }
   }
 };
 </script>
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-</style>
