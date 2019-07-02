@@ -20,8 +20,9 @@
           <td>{{ props.item.position }}</td>
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.type.displayName }}</td>
+          <td><v-btn color="blue" right small fab v-show="props.item.type.value === 'sel'"><v-icon>playlist_add</v-icon></v-btn></td>
           <td class="text-xs-right">
-            <v-btn @click="openEdit(props.index)" small>
+            <v-btn @click="openEdit(props.item.id)" small>
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
@@ -90,7 +91,7 @@ export default {
         {
           text: "position",
           align: "left",
-          sortable: false,
+          sortable: true,
           value: "position"
         },
         {
@@ -99,8 +100,9 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "Type", value: "type", sortable: false },
-        { text: "", value: "id", sortable: true }
+        { text: "Type", value: "type.displayName", sortable: false },
+        { text: "Option", value: "type.value", sortable: false },
+        { text: "", value: "id", sortable: false }
       ]
     };
   },
@@ -132,11 +134,11 @@ export default {
           this.loader = false;
         });
     },
-    openEdit: function(index) {
+    openEdit: function(id) {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.field.list[index];
+      this.singleData.id = id;
     },
     openAdd: function() {
       this.dialogForm = true;
