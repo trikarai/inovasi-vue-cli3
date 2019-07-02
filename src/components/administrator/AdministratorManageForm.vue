@@ -24,7 +24,7 @@
               Section
             </v-btn>
             <v-btn small @click="gotoField(props.item.id)">
-              <v-icon small>extension</v-icon>
+              <v-icon small>art_track</v-icon>
               Field
             </v-btn>
           </td>
