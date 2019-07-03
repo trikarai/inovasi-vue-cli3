@@ -2,11 +2,11 @@
   <transition name="slide" mode="out-in">
     <div>
       <v-container>
-        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
         <!-- <v-btn color="blue" append to="/talent/program/create" style="left: -8px">
           <v-icon>add</v-icon>
           {{ $vuetify.t('$vuetify.action.create') }} {{ $vuetify.t('$vuetify.program.program') }}
-        </v-btn> -->
+        </v-btn>-->
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary" dark>
             <v-card-text>
@@ -16,12 +16,20 @@
           </v-card>
         </v-dialog>
 
+        <v-alert :value="!isTeam" type="info">Please Register in Team Menu</v-alert>
+
         <v-data-table dark :headers="headers" :items="program.list" class="elevation-1">
           <template v-slot:items="props">
             <td>{{ props.item.name }}</td>
+            <td>
+              <v-btn small color="primary" v-if="isTeam" @click="registerProgram(props.item.id)">
+                <v-icon small left>how_to_reg</v-icon>
+                {{ $vuetify.t('$vuetify.action.register') }}
+              </v-btn>
+            </td>
             <td class="text-xs-right">
               <v-btn small @click="openDetail(props.index)">
-                <v-icon small>search</v-icon>
+                <v-icon small left>search</v-icon>
                 {{ $vuetify.t('$vuetify.action.view') }}
               </v-btn>
               <!-- <v-btn
@@ -45,21 +53,20 @@
                     {{ $vuetify.t('$vuetify.action.cancel') }}
                   </v-btn>
                 </div>
-              </v-expand-transition> -->
+              </v-expand-transition>-->
             </td>
           </template>
         </v-data-table>
       </v-container>
 
       <ProgramDetail
-      :data="singleData"
-      :edit="edit"
-      :view="view" 
-      v-if="dialogForm" 
-      @refresh="refresh" 
-      @close="dialogForm = false"
+        :data="singleData"
+        :edit="edit"
+        :view="view"
+        v-if="dialogForm"
+        @refresh="refresh"
+        @close="dialogForm = false"
       />
-
     </div>
   </transition>
 </template>
@@ -81,6 +88,8 @@ export default {
         info: false,
         warning: false
       },
+      teamId: "",
+      isTeam: "false",
       singleData: { id: "", name: "" },
       err_msg: "",
       loader: false,
@@ -97,6 +106,7 @@ export default {
           sortable: false,
           value: "name"
         },
+        { text: "", value: "id", sortable: false },
         { text: "", value: "id", sortable: false }
       ],
       program: {
@@ -105,11 +115,30 @@ export default {
       }
     };
   },
-  created: function() {},
+  created: function() {
+    this.checkTeam();
+  },
+  watch: {
+    $route() {
+      if (this.$route.params.teamId) {
+        this.teamId = this.$route.params.teamId;
+        this.isTeam = true;
+      } else {
+        this.teamId = "";
+        this.isTeam = false;
+      }
+    }
+  },
   mounted: function() {
     this.getDataList();
   },
   methods: {
+    checkTeam: function() {
+      if (this.$route.params.teamId) {
+        this.teamId = this.$route.params.teamId;
+        this.isTeam = true;
+      }
+    },
     getDataList: function() {
       this.loader = true;
       net
@@ -152,11 +181,48 @@ export default {
         this.selectedIndex = id;
       }
     },
-    deleteData: function(id){
-    },
+    deleteData: function(id) {},
     refresh: function() {
       this.dialogForm = false;
       this.getDataList();
+    },
+    registerProgram: function(id) {
+      this.status.error = false;
+      this.status.success = false;
+      this.loader = true;
+      net
+        .postData(
+          this,
+          "/talent/as-team-member/" + this.teamId + "/programme-participations",
+          { programmeId: id }
+        )
+        .then(res => {
+          console.log(res);
+          this.status.success = true;
+          this.err_msg = {
+            code: 0,
+            type: "Success",
+            details: ["Register Success"]
+          };
+        })
+        .catch(error => {
+          console.log(error);
+          if (error.status >= 500) {
+            this.err_msg = {
+              code: error.status,
+              type: error.statusText,
+              details: ["Internal Server Error"]
+            };
+          } else if (error.status >= 400) {
+            this.err_msg = error.body.meta;
+          } else {
+            this.err_msg = error.body.meta;
+          }
+          this.status.error = true;
+        })
+        .finally(function() {
+          this.loader = false;
+        });
     }
   }
 };

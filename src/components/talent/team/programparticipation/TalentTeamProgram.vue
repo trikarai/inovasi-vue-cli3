@@ -3,9 +3,9 @@
     <div>
       <v-container>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
-        <v-btn color="blue" append to="/talent/create/team" style="left: -8px">
+        <v-btn color="blue" append :to="'/talent/team/'+ $route.params.teamId + '/participation/register'" style="left: -8px">
           <v-icon>add</v-icon>
-          {{ $vuetify.t('$vuetify.action.create') }} {{ $vuetify.t('$vuetify.team.team') }}
+          Register a Program
         </v-btn>
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary" dark>
@@ -16,27 +16,30 @@
           </v-card>
         </v-dialog>
 
-        <v-data-table dark :headers="headers" :items="team.list" class="elevation-1">
+        <v-data-table dark :headers="headers" :items="program.list" class="elevation-1">
           <template v-slot:items="props">
-            <td>{{ props.item.team.name }}</td>
+            <td>{{ props.item.programme.name }}</td>
             <td>
               <v-chip color="teal" text-color="white">
                 <v-avatar>
                   <v-icon>check_circle</v-icon>
                 </v-avatar>
-                {{ props.item.status.displayName }}
+                {{ props.item.status }}
               </v-chip>
             </td>
             <td class="text-xs-right">
-              <v-btn small @click="openIdea(props.item.team.id)">
-                {{$vuetify.t('$vuetify.idea.idea')}}
-              </v-btn>
-              <v-btn small @click="openParticipation(props.item.team.id)">
-                {{$vuetify.t('$vuetify.team.programParticipation')}}
-              </v-btn>
               <v-btn small @click="openDetail(props.item.id)">
                 <v-icon small>pageview</v-icon>
                 {{ $vuetify.t('$vuetify.action.view') }}
+              </v-btn>
+              <v-btn
+                small
+                dark
+                color="warning"
+                @click="deleteAct(props.index)"
+              >
+                <v-icon small>outlined_flag</v-icon>
+                {{ $vuetify.t('$vuetify.action.cancel') }}
               </v-btn>
               <v-btn
                 small
@@ -65,23 +68,23 @@
         </v-data-table>
       </v-container>
 
-      <TeamForm
+      <!-- <TeamForm
         :data="singleData"
         v-bind:edit="edit"
         v-bind:view="view"
         v-if="dialogForm"
         @close="dialogForm = false"
-      />
+      /> -->
     </div>
   </transition>
 </template>
 <script>
 import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
-import TeamForm from "@/components/talent/team/TeamForm";
+// import TeamForm from "@/components/talent/program/TeamForm";
 export default {
   components: {
-    TeamForm,
+    // TeamForm,
     "notification-alert": Notification
   },
   data() {
@@ -103,7 +106,7 @@ export default {
       selectedIndex: null,
       headers: [
         {
-          text: "Team Name",
+          text: "Program Name",
           align: "left",
           sortable: false,
           value: "name"
@@ -111,7 +114,7 @@ export default {
         { text: "Status", value: "status", sortable: true },
         { text: "", value: "id", sortable: false }
       ],
-      team: {
+      program: {
         total: 0,
         list: []
       }
@@ -125,13 +128,13 @@ export default {
     getDataList: function() {
       this.loader = true;
       net
-        .getData(this, "/talent/team-memberships")
+        .getData(this, "/talent/as-team-member/"+ this.$route.params.teamId + "/programme-participations")
         .then(
           res => {
             if (res.data.data) {
-              this.team = res.data.data;
+              this.program = res.data.data;
             } else {
-              this.team.list = [];
+              this.program.list = [];
             }
           },
           error => {
@@ -146,13 +149,7 @@ export default {
         });
     },
     openDetail: function(id) {
-      this.$router.push({path: "/talent/team/"+ id})
-    },
-    openParticipation: function(id){
-      this.$router.push({path: "/talent/team/"+ id + "/participation"})
-    },
-    openIdea: function(id) {
-      this.$router.push({path: "/talent/team/"+ id + "/idea"})
+      // this.$router.push({path: "/talent/program/"+ id})
     },
     openAdd: function() {
       this.dialogForm = true;
@@ -171,7 +168,7 @@ export default {
       var app = this;
       this.status.error = false;
       this.status.info = false;
-      net.putData(this, "/talent/team-memberships/" + id + "/quit")
+      net.putData(this, "/talent/program-memberships/" + id + "/quit")
       .then(function(res){
         app.status.info = true;
         app.err_msg = {code:0, type: "info", details:["Quit Successfull"]};
