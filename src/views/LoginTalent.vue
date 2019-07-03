@@ -123,16 +123,18 @@ export default {
             this.$store.state.isLoggedIn = true;
             window.localStorage.setItem("lbUser", JSON.stringify(authUser));
             this.$router.replace("/talent/dashboard");
-          },
-          error => {
-            console.log(error)
-            this.err_msg = error.body.meta;
-            this.status.error = true;
           }
         )
-        .catch(function(error){
-          this.err_msg = {code: 0, type:"undefined", details:["sasa"]};
-          this.status.error = true;
+        .catch(error=>{
+          console.log(error);
+            if(!error.response){
+              this.err_msg = {code: 0, type: "Connection", details:["Connection Error"]};
+            }else if(error.status >= 500){
+              this.err_msg = {code: error.status, type: error.statusText, details:["Internal Server Error"]}
+            }else{
+              this.err_msg = error.body.meta;
+            }
+            this.status.error = true;
         })
         .finally(function() {
           this.loader = false;
