@@ -4,6 +4,7 @@ import Home from "./views/Home.vue";
 import LoginAdmin from "./views/LoginAdmin.vue";
 import LoginTalent from "./views/LoginTalent.vue";
 import SignUp from "./views/SignUp.vue";
+import ForgotPassword from "./views/ForgotPassword.vue";
 import NotFoundComponent from "./views/404.vue";
 
 import Administrator from "./views/Administrator.vue";
@@ -69,6 +70,11 @@ const routes = [
       description: "Talent"
     },
     component: LoginTalent
+  },
+  {
+    path: "/forgot-password",
+    name: "Forgot Password",
+    component: ForgotPassword
   },
   {
     path: "/mentor/login/",

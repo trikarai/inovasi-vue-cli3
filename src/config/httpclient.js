@@ -71,6 +71,9 @@ export default {
     putData: function(context, path, params){
         return context.$http.put(config.APIENDPOINT + path, params, {headers: auth.getAuthHeaders()})
     },
+    putDataPublic: function(context, path, params){
+        return context.$http.put(config.APIENDPOINT + path, params)
+    },
     deleteData: function(context, path){
         return context.$http.delete(config.APIENDPOINT + path, {headers: auth.getAuthHeaders()})
     }
