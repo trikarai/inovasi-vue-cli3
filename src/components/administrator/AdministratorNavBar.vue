@@ -16,10 +16,12 @@
         <span class>Mikti</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <LocaleSwitcher/>
-      <v-btn flat @click="logout">
+      <!-- <v-btn flat @click="logout">
         <span>{{ $vuetify.t('$vuetify.action.signout') }}</span>
         <v-icon right>exit_to_app</v-icon>
+      </v-btn> -->
+      <v-btn flat @click="rightDrawer =! rightDrawer">
+        <v-icon>settings</v-icon>
       </v-btn>
     </v-toolbar>
 
@@ -27,7 +29,6 @@
       app
       v-model="drawer"
       :mini-variant.sync="miniVariant"
-      class="accent"
     >
       <v-list class="pa-0" style="height: 49px;!important">
         <v-list-tile avatar>
@@ -51,6 +52,40 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+
+    <v-navigation-drawer temporary right v-model="rightDrawer" fixed>
+      <v-list>
+        <v-list-tile>
+          <v-list-tile-avatar>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-content></v-list-tile-content>
+          <v-list-tile-action>
+            <v-btn color="red" @click="logout" v-if="checkLogin">
+              <span>{{ $vuetify.t('$vuetify.action.signout') }}</span>
+            </v-btn>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-avatar>
+            <v-icon>language</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-content></v-list-tile-content>
+          <v-list-tile-action>
+            <LocaleSwitcher />
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-avatar>
+            <v-icon>brightness_4</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-content>Dark Theme</v-list-tile-content>
+          <v-list-tile-action>
+            <v-switch color="black" @change="switchTheme"></v-switch>
+          </v-list-tile-action>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
   </nav>
 </template>
 <script>
@@ -60,6 +95,7 @@ export default {
   data: function() {
     return {
       drawer: true,
+      rightDrawer: false,
       miniVariant: true,
       clipped: true,
       fixed: false,
@@ -120,6 +156,9 @@ export default {
       localStorage.removeItem("lbUser");
       app.$router.replace({ path: "/administrator/login" });
       app.$store.state.isLoggedIn = false;
+    },
+    switchTheme: function(){
+      this.$store.commit("switchTheme");
     }
   }
 };
