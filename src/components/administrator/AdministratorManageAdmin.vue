@@ -59,6 +59,7 @@
         v-bind:edit="edit"
         v-bind:view="view"
         v-if="dialogForm"
+        @refresh="refresh"
         @close="dialogForm = false"
       />
       <PasswordForm
@@ -66,6 +67,7 @@
         v-bind:edit="edit"
         v-bind:view="view"
         v-if="dialogPassword"
+        @refresh="refresh"
         @close="dialogPassword = false"
       />
     </div>
@@ -192,6 +194,7 @@ export default {
     },
     refresh: function() {
       this.dialogForm = false;
+      this.dialogPassword = false;
       this.getDataList();
     }
   }

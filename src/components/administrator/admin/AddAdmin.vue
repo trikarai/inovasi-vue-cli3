@@ -37,7 +37,7 @@
                   ></v-text-field>
                   <template v-if="!edit">
                   <v-text-field v-if="!view"
-                    v-model="password"
+                    v-model="params.password"
                     :append-icon="show1 ? 'visibility' : 'visibility_off'"
                     :rules="[rules.required, rules.min]"
                     :type="show1 ? 'text' : 'password'"
