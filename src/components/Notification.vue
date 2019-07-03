@@ -12,7 +12,7 @@
       dismissible
       type="info"
       :value="status.info"
-    >info.</v-alert>
+    >{{err_msg.code}}  {{err_msg.details[0]}}</v-alert>
 
     <v-alert
       transition="scale-transition"
