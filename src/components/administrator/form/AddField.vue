@@ -40,20 +40,29 @@
                     type="number"
                     required
                   ></v-text-field>
-                  <v-text-field
-                    :disabled="view"
-                    label="min Value"
-                    v-model="params.minValue"
-                    type="number"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    :disabled="view"
-                    label="max Value"
-                    v-model="params.maxValue"
-                    type="number"
-                    required
-                  ></v-text-field>
+                  <template v-if="minmax">
+                    <v-text-field
+                      :disabled="view"
+                      label="min Value"
+                      v-model="params.minValue"
+                      type="number"
+                      required
+                    ></v-text-field>
+                    <v-text-field
+                      :disabled="view"
+                      label="max Value"
+                      v-model="params.maxValue"
+                      type="number"
+                      required
+                    ></v-text-field>
+                  </template>
+                  <template v-if="params.type === 'sel'">
+                    <v-checkbox
+                      v-model="checkbox"
+                      color="primary"
+                      :label="`Multiple: ${checkbox.toString()}`"
+                    ></v-checkbox>
+                  </template>
 
                   <v-layout justify-space-between v-if="!view">
                     <v-btn
@@ -95,10 +104,14 @@ export default {
     return {
       valid: false,
       loader: false,
+      checkbox: false,
       params: {
         name: "",
         description: "",
-        curriculum_id: ""
+        type: "",
+        position: "",
+        minValue: 0,
+        maxValue: 0
       },
       nameRules: [
         v => !!v || "Name is required",
@@ -134,6 +147,40 @@ export default {
   mounted: function() {
     if (this.edit) {
       this.getSingleData(this.data.id);
+    }
+  },
+  computed: {
+    minmax: function() {
+      var condition = true;
+      if (
+        this.params.type === "sel" ||
+        this.params.type === "txt" ||
+        this.params.type === "att"
+      ) {
+        condition = false;
+      }
+      return condition;
+    }
+  },
+  watch: {
+    "params.type": function() {
+      if (this.params.type === "sel") {
+        this.params.minValue = 1;
+        this.params.maxValue = 1;
+        this.checkbox = false;
+      } else {
+        this.params.minValue = 0;
+        this.params.maxValue = 0;
+      }
+    },
+    checkbox: function() {
+      if (this.checkbox) {
+        this.params.minValue = 0;
+        this.params.maxValue = 0;
+      } else {
+        this.params.minValue = 1;
+        this.params.maxValue = 1;
+      }
     }
   },
   methods: {
