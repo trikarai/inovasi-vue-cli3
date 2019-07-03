@@ -5,6 +5,7 @@ import LoginAdmin from "./views/LoginAdmin.vue";
 import LoginTalent from "./views/LoginTalent.vue";
 import SignUp from "./views/SignUp.vue";
 import ForgotPassword from "./views/ForgotPassword.vue";
+import ResetPassword from "./views/ResetPassword.vue";
 import NotFoundComponent from "./views/404.vue";
 
 import Administrator from "./views/Administrator.vue";
@@ -75,6 +76,11 @@ const routes = [
     path: "/forgot-password",
     name: "Forgot Password",
     component: ForgotPassword
+  },
+  {
+    path: "/reset-password/:email/:resetPasswordCode",
+    name: "Reset Password",
+    component: ResetPassword
   },
   {
     path: "/mentor/login/",
