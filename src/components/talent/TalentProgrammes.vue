@@ -3,10 +3,6 @@
     <div>
       <v-container>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-        <!-- <v-btn color="blue" append to="/talent/program/create" style="left: -8px">
-          <v-icon>add</v-icon>
-          {{ $vuetify.t('$vuetify.action.create') }} {{ $vuetify.t('$vuetify.program.program') }}
-        </v-btn>-->
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary" dark>
             <v-card-text>
@@ -24,36 +20,14 @@
             <td>
               <v-btn small color="primary" v-if="isTeam" @click="registerProgram(props.item.id)">
                 <v-icon small left>how_to_reg</v-icon>
-                {{ $vuetify.t('$vuetify.action.register') }}
+                {{ $vuetify.t("$vuetify.action.register") }}
               </v-btn>
             </td>
             <td class="text-xs-right">
               <v-btn small @click="openDetail(props.index)">
                 <v-icon small left>search</v-icon>
-                {{ $vuetify.t('$vuetify.action.view') }}
+                {{ $vuetify.t("$vuetify.action.view") }}
               </v-btn>
-              <!-- <v-btn
-                small
-                dark
-                color="warning"
-                @click="deleteAct(props.index)"
-              >
-                <v-icon small>outlined_flag</v-icon>
-                {{ $vuetify.t('$vuetify.team.resign') }}
-              </v-btn>
-              <v-expand-transition>
-                <div v-show="props.index == selectedIndex">
-                  {{ $vuetify.t('$vuetify.action.confirmationtoresign') }}
-                  <v-btn @click="deleteData(props.item.id)" color="red">
-                    <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.yes') }}
-                  </v-btn>
-                  <v-btn @click="deleteAct(null)">
-                    <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.cancel') }}
-                  </v-btn>
-                </div>
-              </v-expand-transition>-->
             </td>
           </template>
         </v-data-table>
@@ -120,13 +94,7 @@ export default {
   },
   watch: {
     $route() {
-      if (this.$route.params.teamId) {
-        this.teamId = this.$route.params.teamId;
-        this.isTeam = true;
-      } else {
-        this.teamId = "";
-        this.isTeam = false;
-      }
+      this.checkTeam()
     }
   },
   mounted: function() {
@@ -137,6 +105,9 @@ export default {
       if (this.$route.params.teamId) {
         this.teamId = this.$route.params.teamId;
         this.isTeam = true;
+      } else {
+        this.teamId = "";
+        this.isTeam = false;
       }
     },
     getDataList: function() {
@@ -181,7 +152,7 @@ export default {
         this.selectedIndex = id;
       }
     },
-    deleteData: function(id) {},
+    deleteData: function() {},
     refresh: function() {
       this.dialogForm = false;
       this.getDataList();
