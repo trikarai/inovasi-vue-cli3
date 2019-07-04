@@ -14,9 +14,11 @@ export default {
         context.status.error = true;
     },
     showInfo: function (context, res) {
+        console.log(res);
         context.status.info = true;
     },
     showWarning: function (context, res) {
+        console.log(res);
         context.status.warning = true;
     },
     showSuccess: function (context, res, details) {
