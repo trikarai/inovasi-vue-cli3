@@ -34,34 +34,54 @@
           <v-list subheader style="margin:10px">
             <v-subheader>Value Proposition</v-subheader>
             <template v-if="data.total != 0">
-              <v-list-tile v-for="(item, index) in data.list" :key="item.id">
-                <v-list-tile-avatar>
-                  <v-btn fab flat @click="openDetail(item.id)">
-                    <v-icon>pageview</v-icon>
-                  </v-btn>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{item.description}}</v-list-tile-title>
-                </v-list-tile-content>
-                <v-list-tile-action>
-                  <v-btn flat @click="deleteAct(index)" small>
-                    <v-icon color="warning">delete</v-icon>
-                  </v-btn>
-                </v-list-tile-action>
-                <v-expand-x-transition>
-                  <div v-show="index == selectedIndex">
-                    <!-- {{ $vuetify.t('$vuetify.action.confirmationtodelete') }} -->
-                    <v-btn small @click="deleteData(item.id)" color="red">
-                      <v-icon></v-icon>
-                      {{ $vuetify.t('$vuetify.action.yes') }}
+              <v-list-group v-for="(item, index) in data.list" :key="item.id" no-action>
+                <template v-slot:activator>
+                  <v-list-tile>
+                    <v-list-tile-avatar>
+                      <v-btn fab flat>
+                        <v-icon>pageview</v-icon>
+                      </v-btn>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ item.description }}</v-list-tile-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action></v-list-tile-action>
+                  </v-list-tile>
+                </template>
+
+                <v-list-tile three-line>
+                  <v-list-tile-content>
+                    <v-expand-transition>
+                      <div v-show="index == selectedIndex">
+                        <!-- {{ $vuetify.t('$vuetify.action.confirmationtodelete') }} -->
+                        <v-btn small @click="deleteData(item.id)" color="red">
+                          <v-icon></v-icon>
+                          {{ $vuetify.t('$vuetify.action.yes') }}
+                        </v-btn>
+                        <v-btn small @click="deleteAct(null)">
+                          <v-icon></v-icon>
+                          {{ $vuetify.t('$vuetify.action.cancel') }}
+                        </v-btn>
+                      </div>
+                    </v-expand-transition>
+                    <v-expand-x-transition>
+                      <div v-show="index != selectedIndex">
+                        <v-btn small>
+                          <v-icon>business_center</v-icon><span class="hidden-sm-and-down"> Analysis</span>
+                        </v-btn>
+                        <v-btn small>
+                          <v-icon>category</v-icon><span class="hidden-sm-and-down"> Experiment</span>
+                        </v-btn>
+                      </div>
+                    </v-expand-x-transition>
+                  </v-list-tile-content>
+                  <v-list-tile-action>
+                    <v-btn flat @click="deleteAct(index)" small>
+                      <v-icon color="warning">delete</v-icon>
                     </v-btn>
-                    <v-btn small @click="deleteAct(null)">
-                      <v-icon></v-icon>
-                      {{ $vuetify.t('$vuetify.action.cancel') }}
-                    </v-btn>
-                  </div>
-                </v-expand-x-transition>
-              </v-list-tile>
+                  </v-list-tile-action>
+                </v-list-tile>
+              </v-list-group>
             </template>
             <template v-else>
               <v-list-tile>
