@@ -66,10 +66,10 @@
                     </v-expand-transition>
                     <v-expand-x-transition>
                       <div v-show="index != selectedIndex">
-                        <v-btn small>
+                        <v-btn small @click="gotoBusinessAnalysis(item.id)">
                           <v-icon>business_center</v-icon><span class="hidden-sm-and-down"> Analysis</span>
                         </v-btn>
-                        <v-btn small>
+                        <v-btn small @click="gotoExperiment(item.id)">
                           <v-icon>category</v-icon><span class="hidden-sm-and-down"> Experiment</span>
                         </v-btn>
                       </div>
@@ -149,6 +149,9 @@ export default {
     this.getDataList();
   },
   methods: {
+    gotoBusinessAnalysis: function(id){
+      this.$router.push({path: "/talent/team/"+this.$route.params.teamId+"/idea/"+this.$route.params.ideaId+"/customersegment/"+this.$route.params.customersegmentId+"/persona/"+this.$route.params.personaId+"/vp/"+id+"/analysis"})
+    },
     getParentData: function() {
       this.loader = true;
       // this.status.error = false;
