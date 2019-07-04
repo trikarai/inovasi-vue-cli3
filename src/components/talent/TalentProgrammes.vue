@@ -46,6 +46,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import alert from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import ProgramDetail from "./program/ProgramDetail";
 
@@ -169,27 +170,12 @@ export default {
         )
         .then(res => {
           console.log(res);
-          this.status.success = true;
-          this.err_msg = {
-            code: 0,
-            type: "Success",
-            details: ["Register Success"]
-          };
+          var details = ["Register Success"];
+          alert.showSuccess(this, res, details)
         })
         .catch(error => {
           console.log(error);
-          if (error.status >= 500) {
-            this.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: ["Internal Server Error"]
-            };
-          } else if (error.status >= 400) {
-            this.err_msg = error.body.meta;
-          } else {
-            this.err_msg = error.body.meta;
-          }
-          this.status.error = true;
+          alert.showError(this, error)
         })
         .finally(function() {
           this.loader = false;
