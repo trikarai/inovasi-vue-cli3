@@ -10,12 +10,10 @@
       <tbody>
         <tr>
           <td>
-            <!-- <span v-html="text"></span> -->
-            sasas
+            <span v-html="text"></span>
           </td>
           <td>
-            <!-- <span v-html="text"></span> -->
-            sasasa
+            <span v-html="text"></span>
           </td>
         </tr>
       </tbody>
@@ -31,12 +29,10 @@
       <tbody>
         <tr>
           <td>
-            <!-- <span v-html="text"></span> -->
-            sasasa
+            <span v-html="text"></span>
           </td>
           <td>
-            <!-- <span v-html="text"></span> -->
-            sasas
+            <span v-html="text"></span>
           </td>
         </tr>
       </tbody>
@@ -46,7 +42,9 @@
 <script>
 export default {
   data: function() {
-    text: "fucking text";
+    return {
+      text: "<i> lopem ipsum is fucking text </i>"
+    };
   }
 };
 </script>

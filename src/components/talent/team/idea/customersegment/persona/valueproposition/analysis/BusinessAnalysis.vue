@@ -108,11 +108,17 @@
         role="tabpanel"
         aria-labelledby="home-tab"
       >Value Proposition</div>
-      <div class="tab-pane fade" id="LeanCanvas" role="tabpanel" aria-labelledby="profile-tab">Lean Canvas</div>
-      <div class="tab-pane fade" id="BusinessModelCanvas" role="tabpanel" aria-labelledby="contact-tab">BMC</div>
+      <div class="tab-pane fade" id="LeanCanvas" role="tabpanel" aria-labelledby="profile-tab">
+        <bs-leancanvas />
+      </div>
+      <div class="tab-pane fade" id="BusinessModelCanvas" role="tabpanel" aria-labelledby="contact-tab">
+        <bs-businessmodelcanvas />
+      </div>
       <div class="tab-pane fade" id="MarketSize" role="tabpanel" aria-labelledby="contact-tab">Market Size</div>
       <div class="tab-pane fade" id="MarketAnalysis" role="tabpanel" aria-labelledby="contact-tab">Market Analysis</div>
-      <div class="tab-pane fade" id="Competitor" role="tabpanel" aria-labelledby="contact-tab">Competitor</div>
+      <div class="tab-pane fade" id="Competitor" role="tabpanel" aria-labelledby="contact-tab">
+        <bs-competitor />
+      </div>
       <div class="tab-pane fade" id="ValueCurve" role="tabpanel" aria-labelledby="contact-tab">Value Curve</div>
       <div class="tab-pane fade" id="Swot" role="tabpanel" aria-labelledby="contact-tab">
         <BsSwot />
@@ -125,11 +131,17 @@
 <script>
 import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
-import BsSwot from "./BsSwot";
+import BsSwot from "./components/BsSwot";
+import BsCompetitor from "./components/BsCompetitor";
+import BsBusinessmodelcanvas from "./components/BsBusinessmodelcanvas"
+import BsLeancanvas from "./components/BsLeancanvas"
 
 export default {
   components: {
     BsSwot,
+    BsCompetitor,
+    BsBusinessmodelcanvas,
+    BsLeancanvas,
     "notification-alert": Notification
   },
   data() {
