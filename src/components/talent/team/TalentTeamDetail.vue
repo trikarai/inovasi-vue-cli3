@@ -39,19 +39,6 @@ export default {
         info: false,
         warning: false
       },
-      params: {
-        id: "",
-        team: {
-          id: "",
-          name: ""
-        },
-        position: "",
-        status: {
-          value: "",
-          displayName: ""
-        },
-        joinTime: ""
-      },
       err_msg: "",
       params: {},
       loader: false,

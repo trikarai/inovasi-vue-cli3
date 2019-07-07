@@ -19,6 +19,7 @@
         <v-data-table dark :headers="headers" :items="team.list" class="elevation-1">
           <template v-slot:items="props">
             <td>{{ props.item.team.name }}</td>
+            <td>{{ props.item.position }}</td>
             <td>
               <v-chip color="teal" text-color="white">
                 <v-avatar>
@@ -108,7 +109,8 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "Status", value: "status", sortable: true },
+        { text: "Position", value: "positon", sortable: false },
+        { text: "Status", value: "status", sortable: false },
         { text: "", value: "id", sortable: false }
       ],
       team: {

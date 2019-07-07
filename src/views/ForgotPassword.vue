@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     getEmailDomain: function() {
-      return this.domain = this.params.email.replace(/.*@/, "");
+      return this.params.email.replace(/.*@/, "");
     }
   },
   methods: {
