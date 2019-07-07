@@ -12,12 +12,12 @@ import NotFoundComponent from "./views/404.vue";
 import Administrator from "./views/Administrator.vue";
 import AdministratorDashboard from "./components/administrator/AdministratorDashboard";
 import AdministratorManageAdmin from "./components/administrator/AdministratorManageAdmin";
-import AdministratorManagePersonnel from "./components/administrator/AdministratorManagePersonnel";
 import AdministratorManageProgram from "./components/administrator/AdministratorManageProgram";
 import AdministratorManageProgramPhase from "./components/administrator/program/AdministratorProgramPhase";
 import AdministratorManageProgramRegistration from "./components/administrator/program/registration/AdministratorProgramRegistration";
 import AdministratorManageProgramCoordinator from "./components/administrator/program/AdministratorManageProgramCoordinator";
 import AdministratorManageProgramMentor from "./components/administrator/program/AdministratorManageProgramMentor";
+import AdministratorManageProgramTalentSearch from "./components/administrator/program/personnel/AdministratorTalentList";
 
 import AdministratorManageCurriculum from "./components/administrator/AdministratorManageCurriculum";
 import AdministratorCurriculumPhase from "./components/administrator/curriculum/AdministratorCurriculumPhase";
@@ -234,11 +234,6 @@ const routes = [
         meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
-        name: "Manage Personnel",
-        path: "/administrator/personnel",
-        component: AdministratorManagePersonnel
-      },
-      {
         name: "Manage Program",
         path: "/administrator/program",
         component: AdministratorManageProgram
@@ -262,6 +257,16 @@ const routes = [
         name: "View Program Coordinator",
         path: "/administrator/program/:programId/coordinator",
         component: AdministratorManageProgramCoordinator
+      },
+      {
+        name: "Coordinator Search",
+        path: "/administrator/program/:programId/coordinator/search",
+        component: AdministratorManageProgramTalentSearch
+      },
+      {
+        name: "Mentor Search",
+        path: "/administrator/program/:programId/mentor/search",
+        component: AdministratorManageProgramTalentSearch
       },
       {
         name: "Manage Curriculum",
