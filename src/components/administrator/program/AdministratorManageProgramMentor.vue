@@ -130,10 +130,7 @@ export default {
       this.singleData = this.coordinator.list[index];
     },
     openAdd: function() {
-      this.dialogForm = true;
-      this.view = false;
-      this.edit = false;
-      this.singleData = { id: "", name: "" };
+      this.$router.push({path: "/administrator/program/" + this.$route.params.programId + "/mentor/search"})
     },
     deleteAct: function(id) {
       if (this.selectedIndex == id) {
