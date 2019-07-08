@@ -2,7 +2,7 @@
   <transition name="slide" mode="out-in">
     <div>
       <v-container>
-        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary">
@@ -19,6 +19,14 @@
           <v-flex>{{params.position}}</v-flex>
           <v-flex>{{params.status.displayName}}</v-flex>
         </v-layout>
+
+        <v-layout>
+          <v-btn @click="openSearch()">
+            <v-icon>add</v-icon>Add Members
+          </v-btn>
+          <br />
+          {{memberlist}}
+        </v-layout>
       </v-container>
     </div>
   </transition>
@@ -26,6 +34,7 @@
 <script>
 import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
+import { setTimeout } from "timers";
 export default {
   components: {
     "notification-alert": Notification
@@ -41,6 +50,7 @@ export default {
       },
       err_msg: "",
       params: {},
+      memberlist: { total: 0, list: [] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -54,6 +64,9 @@ export default {
   created: function() {},
   mounted: function() {
     this.getSingleData();
+    setTimeout(() => {
+      this.getMemberList();
+    }, 1000);
   },
   methods: {
     getSingleData: function() {
@@ -61,7 +74,10 @@ export default {
       this.status.error = false;
       this.loader = !this.loader;
       net
-        .getData(this, "/talent/team-memberships/" + this.$route.params.teamId)
+        .getData(
+          this,
+          "/talent/team-memberships/" + this.$route.params.membershipId
+        )
         .then(function(res) {
           console.log(res);
           this.params = res.data.data;
@@ -74,6 +90,32 @@ export default {
         .finally(function() {
           app.loader = false;
         });
+    },
+    getMemberList: function() {
+      this.loader = true;
+      net
+        .getData(
+          this,
+          "/talent/as-team-member/" + this.params.team.id + "/members/"
+        )
+        .then(res => {
+          console.log(res);
+          if (res.data) {
+            this.memberlist = res.data.data;
+          } else {
+            this.memberlist = { total: 0, list: [] };
+          }
+        })
+        .catch(error=>{
+          console.log(error);
+        }).finally(function(){
+          this.loader = false;
+        });
+    },
+    openSearch: function() {
+      this.$router.push({
+        path: "/talent/team/" + this.params.team.id + "/search"
+      });
     }
   }
 };
