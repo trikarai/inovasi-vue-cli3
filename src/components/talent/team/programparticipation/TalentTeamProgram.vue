@@ -28,8 +28,13 @@
               </v-chip>
             </td>
             <td class="text-xs-right">
+              <v-btn small @click="openMentoring(props.item.id)">
+                <v-icon small left>today</v-icon>
+                <!-- {{ $vuetify.t('$vuetify.action.view') }} -->
+                Mentoring Session
+              </v-btn>
               <v-btn small @click="openDetail(props.item.id)">
-                <v-icon small>pageview</v-icon>
+                <v-icon small left>pageview</v-icon>
                 {{ $vuetify.t('$vuetify.action.view') }}
               </v-btn>
               <v-btn
@@ -150,6 +155,9 @@ export default {
     },
     openDetail: function(id) {
       // this.$router.push({path: "/talent/program/"+ id})
+    },
+    openMentoring: function(id) {
+      this.$router.push({path: "/talent/team/"+ this.$route.params.teamId +"/participation/"+ id + "/mentoring/"})
     },
     openAdd: function() {
       this.dialogForm = true;
