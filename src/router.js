@@ -57,6 +57,12 @@ import BusinessAnalysis from "./components/talent/team/idea/customersegment/pers
 import TalentFeedback from "./components/talent/TalentFeedback.vue";
 import TalentProgrammes from "./components/talent/TalentProgrammes.vue";
 
+import Coordinator from "./views/Coordinator.vue";
+import CoordinatorDashboard from "./components/personnel/coordinator/CoordinatorDashboard";
+import CoordinatorProgram from "./components/personnel/coordinator/CoordinatorProgram";
+import CoordinatorProgramParticipant from "./components/personnel/coordinator/CoordinatorProgramParticipant";
+
+
 Vue.use(Router);
 
 const routes = [
@@ -319,6 +325,33 @@ const routes = [
         name: "Manage Form Section",
         path: "/administrator/form/:formId/section",
         component: AdministratorManageFormSection
+      },
+    ]
+  },
+  {
+    path: "/coordinator",
+    name: "Coordinator",
+    component: Coordinator,
+    children: [
+      {
+        path: "/coordinator/dashboard",
+        name: "Coordinator Dashboard",
+        component: CoordinatorDashboard
+      },
+      {
+        path: "/coordinator/profile",
+        name: "Coordinator Profile",
+        component: TalentProfile
+      },
+      {
+        path: "/coordinator/program",
+        name: "Coordinator Program",
+        component: CoordinatorProgram
+      },
+      {
+        path: "/coordinator/program/:programId/participant",
+        name: "Coordinator Program Participant",
+        component: CoordinatorProgramParticipant
       },
     ]
   },
