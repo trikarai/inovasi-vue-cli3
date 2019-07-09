@@ -98,7 +98,7 @@
           </v-list-tile-avatar>
           <v-list-tile-content></v-list-tile-content>
           <v-list-tile-action>
-            <v-btn color="red" @click="logout" v-if="checkLogin">
+            <v-btn small color="red" @click="logout" v-if="checkLogin">
               <span>{{ $vuetify.t('$vuetify.action.signout') }}</span>
             </v-btn>
           </v-list-tile-action>
@@ -119,6 +119,24 @@
           <v-list-tile-content>Dark Theme</v-list-tile-content>
           <v-list-tile-action>
             <v-switch color="black" @change="switchTheme"></v-switch>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile v-if="checkProgramCoordinatoship">
+          <v-list-tile-avatar>
+            <v-icon>pages</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-content>Coordinator Menu</v-list-tile-content>
+          <v-list-tile-action>
+            <v-btn router to="/coordinator/dashboard" small flat color="blue"><v-icon small>forward</v-icon></v-btn>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile v-if="checkProgramMentorship">
+          <v-list-tile-avatar>
+            <v-icon>pages</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-content>Mentor Menu</v-list-tile-content>
+          <v-list-tile-action>
+            <v-btn router to="/mentor/dashboard" small flat color="blue"><v-icon small>forward</v-icon></v-btn>
           </v-list-tile-action>
         </v-list-tile>
       </v-list>
@@ -219,6 +237,24 @@ export default {
   computed: {
     checkLogin() {
       return this.$store.state.isLoggedIn;
+    },
+    checkProgramCoordinatoship() {
+      var check;
+      if(this.user.data.programmeCoordinatorships){
+        check = true;
+      }else{
+        check = false;
+      }
+      return check;
+    },
+    checkProgramMentorship() {
+      var check;
+      if(this.user.data.programmeMentorships){
+        check = true;
+      }else{
+        check = false;
+      }
+      return check;
     }
   },
   methods: {
