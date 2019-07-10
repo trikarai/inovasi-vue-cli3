@@ -142,7 +142,6 @@ export default {
       dialog: false,
       edit: false,
       view: false,
-      expand: false,
       selectedIndex: null,
       selectedIndexAcc: null,
       selectedIndexRej: null,
