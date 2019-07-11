@@ -12,9 +12,10 @@
           </v-card>
         </v-dialog>
 
-        <v-data-table :headers="headers" :items="programmeCoordinatorships" class="elevation-1">
+        <v-data-table :headers="headers" :items="programmeCoordinatorships.list" class="elevation-1">
           <template v-slot:items="props">
             <td>{{ props.item.programme.name }}</td>
+            <td>{{ props.item.programme.curriculum.name }}</td>
             <td class="text-xs-right">
               <v-btn small @click="openParticipant(props.item.programme.id)">
                 <v-icon small left>people_outline</v-icon>
@@ -62,37 +63,40 @@ export default {
           sortable: false,
           value: "name"
         },
+        { text: "Curriculum", value: "curriculum", sortable: false },
         { text: "", value: "id", sortable: false }
       ],
       program: {
         total: 0,
         list: []
       },
-      programmeCoordinatorships: []
+      programmeCoordinatorships: {
+        total: 0,
+        list: []
+      }
     };
   },
   created: function() {
-    this.user = JSON.parse(auth.getAuthData());
+    // this.user = JSON.parse(auth.getAuthData());
   },
   mounted: function() {
-    // this.getDataList();
-    this.programmeCoordinatorships = this.user.data.programmeCoordinatorships;
+    this.getDataList();
+    // this.programmeCoordinatorships = this.user.data.programmeCoordinatorships;
   },
   methods: {
     getDataList: function() {
       this.loader = true;
+      this.status.error = false;
       net
         .getData(
           this,
-          "/talent/as-programme-coordinator/" +
-            this.coordinatorId +
-            "/programme-participations"
+          "/talent/programme-coordinatorships"
         )
         .then(res => {
           if (res.data.data) {
-            this.program = res.data.data;
+            this.programmeCoordinatorships = res.data.data;
           } else {
-            this.program.list = [];
+            this.programmeCoordinatorships = {total:0, list:[]};
           }
         })
         .catch(error => {
