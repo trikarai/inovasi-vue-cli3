@@ -2,10 +2,14 @@
   <transition name="slide" mode="out-in">
     <div>
       <v-container>
-        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
-        <v-btn color="blue" append :to="'/talent/team/'+ $route.params.teamId + '/participation/register'" style="left: -8px">
-          <v-icon>add</v-icon>
-          Register a Program
+        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+        <v-btn
+          color="blue"
+          append
+          :to="'/talent/team/'+ $route.params.teamId + '/participation/register'"
+          style="left: -8px"
+        >
+          <v-icon>add</v-icon>Register a Program
         </v-btn>
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary" dark>
@@ -16,7 +20,43 @@
           </v-card>
         </v-dialog>
 
-        <v-data-table dark :headers="headers" :items="program.list" class="elevation-1">
+        <v-flex xs12 md4>
+          <v-combobox
+            v-model="select"
+            :items="items"
+            item-text="displayName"
+            label="Status"
+            multiple
+            chips
+            clearable
+          >
+            <template v-slot:selection="data">
+              <v-chip
+                :key="JSON.stringify(data.item)"
+                :selected="data.selected"
+                :disabled="data.disabled"
+                class="v-chip--select-multi"
+                @input="data.parent.selectItem(data.item)"
+              >
+                <v-avatar
+                  class="primary white--text"
+                  v-text="data.item.value.slice(0, 1).toUpperCase()"
+                ></v-avatar>
+                {{ data.item.displayName }}
+              </v-chip>
+            </template>
+          </v-combobox>
+        </v-flex>
+        {{querypage}} {{queryurl}}
+        <v-divider></v-divider>
+        <v-data-table
+          dark
+          :headers="headers"
+          :items="program.list"
+          :pagination.sync="pagination"
+          :total-items="program.total"
+          class="elevation-1"
+        >
           <template v-slot:items="props">
             <td>{{ props.item.programme.name }}</td>
             <td>
@@ -37,21 +77,11 @@
                 <v-icon small left>pageview</v-icon>
                 {{ $vuetify.t('$vuetify.action.view') }}
               </v-btn>
-              <v-btn
-                small
-                dark
-                color="warning"
-                @click="deleteAct(props.index)"
-              >
+              <v-btn small dark color="warning" @click="deleteAct(props.index)">
                 <v-icon small>outlined_flag</v-icon>
                 {{ $vuetify.t('$vuetify.action.cancel') }}
               </v-btn>
-              <v-btn
-                small
-                dark
-                color="warning"
-                @click="deleteAct(props.index)"
-              >
+              <v-btn small dark color="warning" @click="deleteAct(props.index)">
                 <v-icon small>outlined_flag</v-icon>
                 {{ $vuetify.t('$vuetify.team.quit') }}
               </v-btn>
@@ -79,7 +109,7 @@
         v-bind:view="view"
         v-if="dialogForm"
         @close="dialogForm = false"
-      /> -->
+      />-->
     </div>
   </transition>
 </template>
@@ -116,24 +146,74 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "Status", value: "status", sortable: true },
+        { text: "Status", value: "status", sortable: false },
         { text: "", value: "id", sortable: false }
       ],
       program: {
         total: 0,
         list: []
-      }
+      },
+      select: "",
+      queryurl: "",
+      querypage: "",
+      items: [
+        { displayName: "Applied", value: "app" },
+        { displayName: "Canceled", value: "can" },
+        { displayName: "Rejected", value: "rej" }
+      ],
+      pagination: {}
     };
   },
-  created: function() {},
+  created: function() {
+    // page=1&pageSize=10
+    this.pagination.page = 1;
+    this.pagination.rowsPerPage = 10;
+  },
+  watch: {
+    select: "buildQueryUrl",
+    pagination: "buildQueryPage"
+  },
   mounted: function() {
+    this.querypage =
+      "?page=" +
+      this.pagination.page +
+      "&pageSize=" +
+      this.pagination.rowsPerPage;
     this.getDataList();
   },
   methods: {
+    buildQueryPage: function() {
+      this.querypage =
+        "?page=" +
+        this.pagination.page +
+        "&pageSize=" +
+        this.pagination.rowsPerPage;
+      this.getDataList();
+    },
+    buildQueryUrl: function() {
+      this.queryurl = "";
+      if (this.select.length === 0) {
+        this.queryurl = "";
+      } else if (this.select.length === 1) {
+        this.queryurl = "&statuses[]=" + this.select[0].value;
+      } else if (this.select.length > 1) {
+        for (var i = 0; i < this.select.length; i++) {
+          this.queryurl += "&statuses[]=" + this.select[i].value;
+        }
+      }
+      this.getDat
+      this.getDataList();
+    },
     getDataList: function() {
       this.loader = true;
       net
-        .getData(this, "/talent/as-team-member/"+ this.$route.params.teamId + "/programme-participations")
+        .getData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/programme-participations/" +
+            this.querypage + this.queryurl
+        )
         .then(
           res => {
             if (res.data.data) {
@@ -157,7 +237,14 @@ export default {
       // this.$router.push({path: "/talent/program/"+ id})
     },
     openMentoring: function(id) {
-      this.$router.push({path: "/talent/team/"+ this.$route.params.teamId +"/participation/"+ id + "/mentoring/"})
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/participation/" +
+          id +
+          "/mentoring/"
+      });
     },
     openAdd: function() {
       this.dialogForm = true;
@@ -172,22 +259,27 @@ export default {
         this.selectedIndex = id;
       }
     },
-    deleteData: function(id){
+    deleteData: function(id) {
       var app = this;
       this.status.error = false;
       this.status.info = false;
-      net.putData(this, "/talent/program-memberships/" + id + "/quit")
-      .then(function(res){
-        app.status.info = true;
-        app.err_msg = {code:0, type: "info", details:["Quit Successfull"]};
-      })
-      .catch(function(error){
-        app.status.error = true;
-        app.err_msg = error.body.meta;
-      })
-      .finally(function(){
-        app.refresh();
-      })
+      net
+        .putData(this, "/talent/program-memberships/" + id + "/quit")
+        .then(function(res) {
+          app.status.info = true;
+          app.err_msg = {
+            code: 0,
+            type: "info",
+            details: ["Quit Successfull"]
+          };
+        })
+        .catch(function(error) {
+          app.status.error = true;
+          app.err_msg = error.body.meta;
+        })
+        .finally(function() {
+          app.refresh();
+        });
     },
     refresh: function() {
       this.dialogForm = false;
