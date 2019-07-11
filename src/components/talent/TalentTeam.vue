@@ -44,32 +44,43 @@
           </v-combobox>
         </v-flex>
         <v-divider></v-divider>
-        <v-data-table dark :headers="headers" :items="team.list" class="elevation-1">
+        <v-data-table :headers="headers" :items="team.list" class="elevation-1">
           <template v-slot:items="props">
             <td>{{ props.item.team.name }}</td>
             <td>{{ props.item.position }}</td>
             <td>
-              <v-chip color="teal" text-color="white">
+              <v-chip :color="colorStatus(props.item.status.value)" text-color="white">
                 <v-avatar>
-                  <v-icon>check_circle</v-icon>
+                  <v-icon>{{iconStatus(props.item.status.value)}}</v-icon>
                 </v-avatar>
                 {{ props.item.status.displayName }}
               </v-chip>
             </td>
             <td class="text-xs-right">
               <v-btn
+                v-if="ifShow(props.item.status.value)"
                 small
                 @click="openIdea(props.item.team.id)"
               >{{$vuetify.t('$vuetify.idea.idea')}}</v-btn>
               <v-btn
+                v-if="ifShow(props.item.status.value)"
                 small
                 @click="openParticipation(props.item.team.id)"
               >{{$vuetify.t('$vuetify.team.programParticipation')}}</v-btn>
-              <v-btn small @click="openDetail(props.item.id)">
+              <v-btn
+                small
+                @click="openDetail(props.item.id)"
+                v-if="ifShow(props.item.status.value)"
+              >
                 <v-icon small>pageview</v-icon>
                 {{ $vuetify.t('$vuetify.action.view') }}
               </v-btn>
-              <v-btn small dark color="warning" @click="deleteAct(props.index)">
+              <v-btn
+                small
+                color="warning"
+                @click="deleteAct(props.index)"
+                v-if="ifShow(props.item.status.value)"
+              >
                 <v-icon small>outlined_flag</v-icon>
                 {{ $vuetify.t('$vuetify.team.quit') }}
               </v-btn>
@@ -81,6 +92,55 @@
                     {{ $vuetify.t('$vuetify.action.yes') }}
                   </v-btn>
                   <v-btn @click="deleteAct(null)">
+                    <v-icon></v-icon>
+                    {{ $vuetify.t('$vuetify.action.cancel') }}
+                  </v-btn>
+                </div>
+              </v-expand-transition>
+
+              <v-btn
+                small
+                color="primary"
+                @click="acceptAct(props.index)"
+                v-if="props.item.status.value === 'inv'"
+              >
+                <v-icon small>check_circle</v-icon>
+                <!-- {{ $vuetify.t('$vuetify.team.quit') }} -->
+                Accept
+              </v-btn>
+
+              <v-btn
+                small
+                color="red"
+                @click="rejectAct(props.index)"
+                v-if="props.item.status.value === 'inv'"
+              >
+                <v-icon small>close</v-icon>
+                <!-- {{ $vuetify.t('$vuetify.team.quit') }} -->
+                Reject
+              </v-btn>
+
+              <v-expand-transition>
+                <div v-show="props.index == selectedIndexAcc">
+                  <!-- {{ $vuetify.t('$vuetify.action.confirmationtoquit') }} -->
+                  <v-btn @click="acceptInvitation(props.item.id)" color="blue">
+                    <v-icon></v-icon>
+                    {{ $vuetify.t('$vuetify.action.yes') }}
+                  </v-btn>
+                  <v-btn @click="acceptAct(null)">
+                    <v-icon></v-icon>
+                    {{ $vuetify.t('$vuetify.action.cancel') }}
+                  </v-btn>
+                </div>
+              </v-expand-transition>
+              <v-expand-transition>
+                <div v-show="props.index == selectedIndexRej">
+                  <!-- {{ $vuetify.t('$vuetify.action.confirmationtoquit') }} -->
+                  <v-btn @click="rejectInvitation(props.item.id)" color="red">
+                    <v-icon></v-icon>
+                    {{ $vuetify.t('$vuetify.action.yes') }}
+                  </v-btn>
+                  <v-btn @click="rejectAct(null)">
                     <v-icon></v-icon>
                     {{ $vuetify.t('$vuetify.action.cancel') }}
                   </v-btn>
@@ -103,6 +163,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import TeamForm from "@/components/talent/team/TeamForm";
 export default {
@@ -129,6 +190,8 @@ export default {
       view: false,
       expand: false,
       selectedIndex: null,
+      selectedIndexAcc: null,
+      selectedIndexRej: null,
       headers: [
         {
           text: "Team Name",
@@ -153,11 +216,45 @@ export default {
   watch: {
     select: "buildQueryUrl"
   },
+  computed: {},
   created: function() {},
   mounted: function() {
     this.getDataList();
   },
   methods: {
+    colorStatus: function(status) {
+      var color = "accent";
+      if (status === "act") {
+        color = "green";
+      } else if (status === "inv") {
+        color = "blue";
+      } else {
+        color = "red";
+      }
+      return color;
+    },
+    iconStatus: function(status) {
+      var icon = "check";
+      if (status === "act") {
+        icon = "check_circle";
+      } else if (status === "inv") {
+        icon = "email";
+      }else{
+        icon = "outlined_flag";
+      }
+      return icon;
+    },
+    ifShow: function(status) {
+      var visible = true;
+      if (status === "act") {
+        visible = true;
+      } else if (status === "inv") {
+        visible = false;
+      } else {
+        visible = false;
+      }
+      return visible;
+    },
     buildQueryUrl: function() {
       this.queryurl = "";
       if (this.select.length === 0) {
@@ -176,21 +273,16 @@ export default {
       this.loader = true;
       net
         .getData(this, "/talent/team-memberships" + this.queryurl)
-        .then(
-          res => {
-            if (res.data.data) {
-              this.team = res.data.data;
-            } else {
-              this.team.list = [];
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.team = res.data.data;
+          } else {
+            this.team.list = [];
           }
-        )
-        .catch()
+        })
+        .catch(error => {
+          notif.showErrow(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -211,10 +303,30 @@ export default {
       this.singleData = { id: "", name: "" };
     },
     deleteAct: function(id) {
+      this.selectedIndexAcc = null;
+      this.selectedIndexRej = null;
       if (this.selectedIndex == id) {
         this.selectedIndex = null;
       } else {
         this.selectedIndex = id;
+      }
+    },
+    acceptAct: function(id) {
+      this.selectedIndex = null;
+      this.selectedIndexRej = null;
+      if (this.selectedIndexAcc == id) {
+        this.selectedIndexAcc = null;
+      } else {
+        this.selectedIndexAcc = id;
+      }
+    },
+    rejectAct: function(id) {
+      this.selectedIndexAcc = null;
+      this.selectedIndex = null;
+      if (this.selectedIndexRej == id) {
+        this.selectedIndexRej = null;
+      } else {
+        this.selectedIndexRej = id;
       }
     },
     deleteData: function(id) {
@@ -223,20 +335,44 @@ export default {
       this.status.info = false;
       net
         .putData(this, "/talent/team-memberships/" + id + "/quit")
-        .then(function(res) {
-          app.status.info = true;
-          app.err_msg = {
-            code: 0,
-            type: "info",
-            details: ["Quit Successfull"]
-          };
+        .then(res => {
+          notif.showInfo(this, res);
         })
-        .catch(function(error) {
-          app.status.error = true;
-          app.err_msg = error.body.meta;
+        .catch(error => {
+          notif.showErrow(this, error);
         })
         .finally(function() {
           app.refresh();
+        });
+    },
+    acceptInvitation: function(id) {
+      this.status.error = false;
+      this.status.info = false;
+      net
+        .putData(this, "/talent/team-memberships/" + id + "/accept-invitation")
+        .then(res => {
+          notif.showInfo(this, res);
+        })
+        .catch(error => {
+          notif.showErrow(this, error);
+        })
+        .finally(function() {
+          this.refresh();
+        });
+    },
+    rejectInvitation: function(id) {
+      this.status.error = false;
+      this.status.info = false;
+      net
+        .putData(this, "/talent/team-memberships/" + id + "/reject-invitation")
+        .then(res => {
+          notif.showInfo(this, res);
+        })
+        .catch(error => {
+          notif.showErrow(this, error);
+        })
+        .finally(function() {
+          this.refresh();
         });
     },
     refresh: function() {
