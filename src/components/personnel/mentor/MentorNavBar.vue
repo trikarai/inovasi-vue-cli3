@@ -130,13 +130,13 @@
             <v-btn router to="/talent/dashboard" small flat color="blue"><v-icon small>forward</v-icon></v-btn>
           </v-list-tile-action>
         </v-list-tile>
-        <v-list-tile>
+        <v-list-tile v-if="checkProgramCoordinatoship">
           <v-list-tile-avatar>
             <v-icon>pages</v-icon>
           </v-list-tile-avatar>
-          <v-list-tile-content>Mentor Menu</v-list-tile-content>
+          <v-list-tile-content>Coordinator Menu</v-list-tile-content>
           <v-list-tile-action>
-            <v-btn router to="/mentor/dashboard" small flat color="blue"><v-icon small>forward</v-icon></v-btn>
+            <v-btn router to="/coordinator/dashboard" small flat color="blue"><v-icon small>forward</v-icon></v-btn>
           </v-list-tile-action>
         </v-list-tile>
       </v-list>
@@ -213,7 +213,16 @@ export default {
     },
     switchTheme: function(){
       this.$store.commit("switchTheme");
-    }
+    },
+    checkProgramCoordinatoship() {
+      var check;
+      if(this.user.data.programmeCoordinatorships){
+        check = true;
+      }else{
+        check = false;
+      }
+      return check;
+    },
   }
 };
 </script>
