@@ -15,6 +15,14 @@
         <v-data-table :headers="headers" :items="participants.list" class="elevation-1">
           <template v-slot:items="props">
             <td>{{ props.item.team.name }}</td>
+            <td>
+               <v-chip color="teal" text-color="white">
+                <v-avatar>
+                  <v-icon>check_circle</v-icon>
+                </v-avatar>
+                {{ props.item.status }}
+              </v-chip>
+            </td>
             <td class="text-xs-right">
               <v-btn round small @click.stop="openDetail(props.item.id)">
                 <v-icon small>search</v-icon>
@@ -153,6 +161,7 @@ export default {
           sortable: false,
           value: "name"
         },
+        { text: "Status", value: "status", sortable: false },
         { text: "", value: "id", sortable: false }
       ],
       participants: {
