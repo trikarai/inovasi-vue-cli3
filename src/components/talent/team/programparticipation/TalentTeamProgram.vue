@@ -51,6 +51,7 @@
         <v-divider></v-divider>
         <v-data-table
           dark
+          :loading="loader"
           :headers="headers"
           :items="program.list"
           :pagination.sync="pagination"

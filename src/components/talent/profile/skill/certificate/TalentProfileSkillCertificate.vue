@@ -6,15 +6,8 @@
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} {{ $vuetify.t('$vuetify.profile.certificate') }} 
       </v-btn>
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-data-table dark :headers="headers" :items="certificate.list" class="elevation-1">
+     
+      <v-data-table dark :headers="headers" :items="certificate.list" :loading="loader" class="elevation-1">
         <template v-slot:items="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">

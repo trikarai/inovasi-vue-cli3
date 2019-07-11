@@ -8,15 +8,7 @@
         {{ $vuetify.t('$vuetify.action.add') }} Skills
       </v-btn>
       </transition>
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-data-table :headers="headers" :items="data.list" class="elevation-1">
+      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
         <template v-slot:items="props">
           <td>{{ props.item.skillReferenceName }}</td>
           <td>
