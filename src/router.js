@@ -64,7 +64,7 @@ import CoordinatorProgramParticipant from "./components/personnel/coordinator/Co
 
 import Mentor from "./views/Mentor.vue";
 import MentorDashboard from "./components/personnel/mentor/MentorDashboard";
-
+import MentorProgram from "./components/personnel/mentor/MentorProgram";
 
 Vue.use(Router);
 
@@ -348,7 +348,7 @@ const routes = [
       },
       {
         path: "/coordinator/program",
-        name: "Coordinator Program",
+        name: "Coordinatorship Program",
         component: CoordinatorProgram
       },
       {
@@ -372,6 +372,11 @@ const routes = [
         path: "/mentor/profile",
         name: "Mentor Profile",
         component: TalentProfile
+      },
+      {
+        path: "/mentor/program",
+        name: "Mentorship Program",
+        component: MentorProgram
       },
     ]
   },
