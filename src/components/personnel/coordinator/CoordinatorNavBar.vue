@@ -130,7 +130,7 @@
             <v-btn router to="/talent/dashboard" small flat color="blue"><v-icon small>forward</v-icon></v-btn>
           </v-list-tile-action>
         </v-list-tile>
-        <v-list-tile>
+        <v-list-tile v-if="checkProgramMentorship">
           <v-list-tile-avatar>
             <v-icon>pages</v-icon>
           </v-list-tile-avatar>
@@ -213,6 +213,15 @@ export default {
     },
     switchTheme: function(){
       this.$store.commit("switchTheme");
+    },
+    checkProgramMentorship() {
+      var check;
+      if(this.user.data.programmeMentorships){
+        check = true;
+      }else{
+        check = false;
+      }
+      return check;
     }
   }
 };
