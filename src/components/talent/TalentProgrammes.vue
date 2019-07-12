@@ -4,7 +4,7 @@
       <v-container>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
         <v-dialog v-model="loader" hide-overlay persistent width="300">
-          <v-card color="primary" dark>
+          <v-card color="primary">
             <v-card-text>
               {{ $vuetify.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
