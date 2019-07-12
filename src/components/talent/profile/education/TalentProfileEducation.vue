@@ -6,7 +6,7 @@
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Education
       </v-btn>
-      <v-data-table dark :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
+      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
         <template v-slot:items="props">
           <td>{{ props.item.institution }}</td>
           <td>{{ props.item.phase }}</td>
@@ -15,7 +15,7 @@
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
+            <v-btn small color="warning" @click="deleteAct(props.index)">
               <v-icon small>delete</v-icon>
               {{ $vuetify.t('$vuetify.action.delete') }}
             </v-btn>

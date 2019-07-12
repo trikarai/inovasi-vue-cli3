@@ -12,7 +12,7 @@
           <v-icon>add</v-icon>Register a Program
         </v-btn>
         <v-dialog v-model="loader" hide-overlay persistent width="300">
-          <v-card color="primary" dark>
+          <v-card color="primary">
             <v-card-text>
               {{ $vuetify.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
@@ -47,10 +47,9 @@
             </template>
           </v-combobox>
         </v-flex>
-        {{querypage}} {{queryurl}}
+
         <v-divider></v-divider>
         <v-data-table
-          dark
           :loading="loader"
           :headers="headers"
           :items="program.list"

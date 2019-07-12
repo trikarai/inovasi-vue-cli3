@@ -7,14 +7,14 @@
         {{ $vuetify.t('$vuetify.action.add') }} {{$vuetify.t('$vuetify.idea.idea')}}
       </v-btn>
       <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
+        <v-card color="primary">
           <v-card-text>
             {{ $vuetify.t('$vuetify.info.standby') }}
             <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
-      <v-data-table dark :headers="headers" :items="data.list" class="elevation-1">
+      <v-data-table :headers="headers" :items="data.list" class="elevation-1">
         <template v-slot:items="props">
           <td>
             {{ props.item.name }}
@@ -33,7 +33,7 @@
               <v-icon small>pageview</v-icon> 
               {{ $vuetify.t('$vuetify.action.view') }}
             </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
+            <v-btn small color="warning" @click="deleteAct(props.index)">
               <v-icon small>delete</v-icon>
               {{ $vuetify.t('$vuetify.action.delete') }}
             </v-btn>

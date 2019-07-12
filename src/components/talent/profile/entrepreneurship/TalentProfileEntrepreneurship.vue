@@ -7,7 +7,7 @@
         {{ $vuetify.t('$vuetify.action.add') }} Entrepreneurship Experiences
       </v-btn>
 
-      <v-data-table dark :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
+      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
         <template v-slot:items="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
@@ -15,7 +15,7 @@
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
+            <v-btn small color="warning" @click="deleteAct(props.index)">
               <v-icon small>delete</v-icon>
               {{ $vuetify.t('$vuetify.action.delete') }}
             </v-btn>

@@ -14,7 +14,7 @@
 
         <v-alert :value="!isTeam" type="info">Please Register in Team Menu</v-alert>
 
-        <v-data-table dark :headers="headers" :items="program.list" class="elevation-1">
+        <v-data-table :headers="headers" :items="program.list" class="elevation-1">
           <template v-slot:items="props">
             <td>{{ props.item.name }}</td>
             <td>

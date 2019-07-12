@@ -7,7 +7,7 @@
         {{ $vuetify.t('$vuetify.action.add') }} Working Experiences
       </v-btn>
       
-      <v-data-table dark :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
+      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
         <template v-slot:items="props">
           <td>{{ props.item.companyName }}</td>
           <td class="text-xs-right">
