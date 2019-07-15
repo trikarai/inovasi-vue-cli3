@@ -2,16 +2,7 @@
   <div>
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-
-      <v-card>
+      <v-card v-visible="!loader">
         <v-card-title>
           <v-spacer></v-spacer>
           <v-text-field
@@ -25,6 +16,7 @@
       </v-card>
       <v-data-table
         dark
+        :loading="loader"
         :headers="headers"
         :items="talents.list"
         :search="search"
