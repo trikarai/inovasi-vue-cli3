@@ -3,6 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
+          <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -30,8 +31,7 @@
                     :items="curriculum.list"
                     item-text="name"
                     item-value="id"
-                  >
-                  </v-autocomplete>
+                  ></v-autocomplete>
 
                   <v-layout justify-space-between v-if="!view">
                     <v-btn
@@ -66,6 +66,8 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
+import Notification from "@/components/Notification";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -74,6 +76,13 @@ export default {
       valid: false,
       loader: false,
       curriculum: "",
+      status: {
+        error: false,
+        success: false,
+        info: false,
+        warning: false
+      },
+      err_msg: "",
       params: {
         name: "",
         description: "",
@@ -84,6 +93,9 @@ export default {
         v => v.length >= 3 || "Name must be more than 3 characters"
       ]
     };
+  },
+  components: {
+    "notification-alert": Notification
   },
   created: function() {
     this.params.name = this.data.name;
@@ -108,20 +120,18 @@ export default {
     getCurriculum: function() {
       net
         .getData(this, "/administrator/curriculums")
-        .then(
-          res => {
-            console.log(res);
-            if (res.data.data) {
-              this.curriculum = res.data.data;
-            } else {
-              this.curriculum.list = [];
-            }
-          },
-          error => {
-            console.log(error);
+        .then(function(res) {
+          console.log(res);
+          if (res.data.data) {
+            this.curriculum = res.data.data;
+          } else {
+            this.curriculum.list = [];
           }
-        )
-        .catch()
+        })
+        .catch(function(res) {
+          console.log(error);
+          notif.showError(this, res);
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -130,16 +140,14 @@ export default {
       this.loader = true;
       net
         .postData(this, "/administrator/programmes/", this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .then(function(res) {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(function(res) {
+          console.log(error);
+          notif.showError(this, res);
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -148,16 +156,14 @@ export default {
       this.loader = true;
       net
         .putData(this, "/administrator/programmes/" + this.data.id, this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .then(function(res) {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -165,16 +171,14 @@ export default {
     getSingleData: function(id) {
       net
         .getData(this, "/administrator/programmes/" + id)
-        .then(
-          res => {
-            this.params = res.data.data;
-            this.params.curriculum_id = res.data.data.curriculum.id
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .then(function(res) {
+          this.params = res.data.data;
+          this.params.curriculum_id = res.data.data.curriculum.id;
+        })
+        .catch(function(res) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally();
     }
   }
