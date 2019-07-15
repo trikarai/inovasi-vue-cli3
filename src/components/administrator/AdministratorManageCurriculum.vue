@@ -1,27 +1,27 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Curriculum
       </v-btn>
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-data-table dark :headers="headers" :items="curriculum.list" class="elevation-1">
+
+      <v-data-table
+        dark
+        :headers="headers"
+        :loading="loader"
+        :items="curriculum.list"
+        class="elevation-1"
+      >
         <template v-slot:items="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
             <v-btn small append="true" @click="goto(props.item.id)">
               <v-icon small>extension</v-icon>
-              <!-- {{ $vuetify.t('$vuetify.profile.skill') }} -->Phase
+              <!-- {{ $vuetify.t('$vuetify.profile.skill') }} -->
+              Phase
             </v-btn>
           </td>
           <td class="text-xs-right">
@@ -63,6 +63,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import CurriculumForm from "./curriculum/AddCurriculum";
 import Notification from "@/components/Notification";
 
@@ -106,28 +107,26 @@ export default {
     this.getDataList();
   },
   methods: {
-    goto: function(id){
-      this.$router.push({ path: "/administrator/curriculum/"+id+"/phase-plan"})
+    goto: function(id) {
+      this.$router.push({
+        path: "/administrator/curriculum/" + id + "/phase-plan"
+      });
     },
     getDataList: function() {
       this.loader = true;
       net
         .getData(this, "/administrator/curriculums")
-        .then(
-          res => {
-            if(res.data.data){
-              this.curriculum = res.data.data;
-            }else{
-              this.curriculum.list = []; 
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .then(function(res) {
+          if (res.data.data) {
+            this.curriculum = res.data.data;
+          } else {
+            this.curriculum.list = [];
           }
-        )
-        .catch(function() {})
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -155,7 +154,10 @@ export default {
       net
         .deleteData(this, "/administrator/curriculums/" + id)
         .then()
-        .catch(function() {})
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.selectedIndex = null;
           this.refresh();

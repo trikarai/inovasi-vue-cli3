@@ -3,6 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
+          <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -32,13 +33,13 @@
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"
-                      @click.prevent="addSkill"
+                      @click.prevent="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
 
                     <v-btn
                       v-else
-                      @click="updateSkill"
+                      @click="update"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.edit')}}</v-btn>
 
@@ -62,6 +63,8 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
+import Notification from "@/components/Notification";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -69,6 +72,13 @@ export default {
     return {
       valid: false,
       loader: false,
+      status: {
+        error: false,
+        success: false,
+        info: false,
+        warning: false
+      },
+      err_msg: "",
       params: {
         name: "",
         description: "",
@@ -84,6 +94,9 @@ export default {
       ]
     };
   },
+  components: {
+    "notification-alert": Notification
+  },
   created: function() {
     this.params.name = this.data.name;
   },
@@ -93,7 +106,17 @@ export default {
     }
   },
   methods: {
-    addSkill: function() {
+    submit: function() {
+      if (this.$refs.form.validate()) {
+        this.addData();
+      }
+    },
+    update: function() {
+      if (this.$refs.form.validate()) {
+        this.updateData();
+      }
+    },
+    addData: function() {
       this.loader = true;
       net
         .postData(
@@ -103,21 +126,19 @@ export default {
             "/phase-plans",
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .then(function(res) {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
     },
-    updateSkill: function() {
+    updateData: function() {
       this.loader = true;
       net
         .putData(
@@ -128,16 +149,14 @@ export default {
             this.data.id,
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .then(function(res) {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -151,15 +170,13 @@ export default {
             "/phase-plans/" +
             id
         )
-        .then(
-          res => {
-            this.params = res.data.data;
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .then(function(res) {
+          this.params = res.data.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally();
     }
   }

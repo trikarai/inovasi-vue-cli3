@@ -1,21 +1,20 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       <!-- {{res}}<br> -->
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Phase
       </v-btn>
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-data-table dark :headers="headers" :items="phase.list" class="elevation-1">
+
+      <v-data-table
+        dark
+        :headers="headers"
+        :loading="loader"
+        :items="phase.list"
+        class="elevation-1"
+      >
         <template v-slot:items="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
@@ -57,12 +56,13 @@
 <script>
 import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
+import notif from "@/config/alerthandling";
 import PhaseForm from "./AddPhase";
 
 export default {
   components: {
     "notification-alert": Notification,
-     PhaseForm
+    PhaseForm
   },
   data() {
     return {
@@ -102,22 +102,22 @@ export default {
     getDataList: function() {
       this.loader = true;
       net
-        .getData(this, "/administrator/curriculums/" + this.$route.params.curriculumId + "/phase-plans")
-        .then(
-          res => {
-            if(res.data.data){
-              this.phase = res.data.data;
-            }else{
-              this.phase.list = []; 
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
-          }
+        .getData(
+          this,
+          "/administrator/curriculums/" +
+            this.$route.params.curriculumId +
+            "/phase-plans"
         )
-        .catch(function() {
+        .then(function(res) {
+          if (res.data.data) {
+            this.phase = res.data.data;
+          } else {
+            this.phase.list = [];
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
         })
         .finally(function() {
           this.loader = false;
@@ -144,9 +144,18 @@ export default {
     },
     deleteData: function(id) {
       net
-        .deleteData(this, "/administrator/curriculums/" + this.$route.params.curriculumId + "/phase-plans/" + id)
+        .deleteData(
+          this,
+          "/administrator/curriculums/" +
+            this.$route.params.curriculumId +
+            "/phase-plans/" +
+            id
+        )
         .then()
-        .catch(function() {})
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.selectedIndex = null;
           this.refresh();
