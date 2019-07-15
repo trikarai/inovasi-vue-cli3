@@ -110,7 +110,7 @@ export default {
         {
           text: "Name",
           align: "left",
-          sortable: true,
+          sortable: false,
           value: "name"
         },
         { text: "", value: "id", sortable: false }
