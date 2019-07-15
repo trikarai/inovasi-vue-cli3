@@ -8,6 +8,8 @@ export default {
             };
         } else if (res.status >= 400) {
             context.err_msg = res.body.meta;
+        } else if (res.status >= 300) {
+            context.err_msg = res.body.meta;
         } else {
             context.err_msg = res.body.meta;
         }
