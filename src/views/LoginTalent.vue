@@ -14,9 +14,9 @@
               <!-- </v-toolbar-items> -->
             </v-toolbar>
             <v-card>
-              <v-card-text class="pt-4">
+              <v-card-text style="pa-4">
                 <div>
-                  <v-form v-model="valid" ref="form">
+                  <v-form v-model="valid" ref="form" pa-1>
                     <v-text-field
                       label="Enter your username"
                       v-model="email"
@@ -33,6 +33,7 @@
                       :rules="passwordRules"
                       counter
                       required
+                      v-on:keyup.enter="submit"
                     ></v-text-field>
                     <v-layout justify-space-between>
                       <v-btn
