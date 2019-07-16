@@ -161,7 +161,7 @@ export default {
     addData: function() {
       this.loader = true;
       net
-        .postData(this, "/talent/educational-backgrounds/", this.params)
+        .postData(this, "/talent/educational-backgrounds", this.params)
         .then(
           res => {
             console.log(res);

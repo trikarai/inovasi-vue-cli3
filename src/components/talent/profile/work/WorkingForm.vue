@@ -131,7 +131,7 @@ export default {
     addData: function() {
       this.loader = true;
       net
-        .postData(this, "/talent/working-experiences/", this.params)
+        .postData(this, "/talent/working-experiences", this.params)
         .then(
           res => {
             console.log(res);

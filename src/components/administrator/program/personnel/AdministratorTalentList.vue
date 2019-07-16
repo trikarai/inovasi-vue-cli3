@@ -91,7 +91,7 @@ export default {
     getDataList: function() {
       this.loader = true;
       net
-        .getData(this, "/administrator/talents/")
+        .getData(this, "/administrator/talents")
         .then(res => {
           if (res.data.data) {
             this.talents = res.data.data;

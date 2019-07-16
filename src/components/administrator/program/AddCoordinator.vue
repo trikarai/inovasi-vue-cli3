@@ -118,7 +118,7 @@ export default {
     addData: function() {
       this.loader = true;
       net
-        .postData(this, "/administrator/programmes/", this.params)
+        .postData(this, "/administrator/programmes", this.params)
         .then(
           res => {
             console.log(res);

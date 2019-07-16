@@ -116,7 +116,7 @@ export default {
     updateData: function() {
       this.loader = true;
       net
-        .putData(this, "/administrator/profile/change-password/", this.password)
+        .putData(this, "/administrator/profile/change-password", this.password)
         .then(res => {
           console.log(res);
           this.$emit("refresh");

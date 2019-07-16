@@ -118,7 +118,7 @@ export default {
       net
         .getData(
           this,
-          "/administrator/programmes/" + this.$route.params.programId + "/registrations/"
+          "/administrator/programmes/" + this.$route.params.programId + "/registrations"
         )
         .then(
           res => {
