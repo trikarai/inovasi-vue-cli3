@@ -147,7 +147,7 @@ export default {
     addData: function() {
       this.loader = true;
       net
-        .postData(this, "/administrator/administrators/", this.params)
+        .postData(this, "/administrator/administrators", this.params)
         .then(
           res => {
             console.log(res);
@@ -165,7 +165,7 @@ export default {
     updateData: function() {
       this.loader = true;
       net
-        .putData(this, "/administrator/profile/update/", this.params)
+        .putData(this, "/administrator/profile/update", this.params)
         .then(res => {
           console.log("Responese : " + res);
           if (res.status >= 300) {

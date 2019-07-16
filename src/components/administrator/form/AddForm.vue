@@ -125,7 +125,7 @@ export default {
     addData: function() {
       this.loader = true;
       net
-        .postData(this, "/administrator/forms/", this.params)
+        .postData(this, "/administrator/forms", this.params)
         .then(
           res => {
             console.log(res);

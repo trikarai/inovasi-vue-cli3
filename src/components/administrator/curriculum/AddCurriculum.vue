@@ -129,7 +129,7 @@ export default {
     addData: function() {
       this.loader = true;
       net
-        .postData(this, "/administrator/curriculums/", this.params)
+        .postData(this, "/administrator/curriculums", this.params)
         .then(function(res) {
           console.log(res);
           this.$emit("refresh");
