@@ -16,10 +16,10 @@
                 <v-icon small>search</v-icon>
                 {{ $vuetify.t('$vuetify.action.view') }}
               </v-btn>
-              <v-btn @click="openEdit(props.index)" small v-if="props.item.name == authData.data.name">
+              <!-- <v-btn @click="openEdit(props.index)" small v-if="props.item.name == authData.data.name">
                 <v-icon small>edit</v-icon>
                 {{ $vuetify.t('$vuetify.action.edit') }} {{ $vuetify.t('$vuetify.profile.profile') }}
-              </v-btn>
+              </v-btn> -->
               <v-btn @click="openPassword(props.index)" small v-if="props.item.name == authData.data.name">
                 <v-icon small>edit</v-icon>
                 {{ $vuetify.t('$vuetify.action.edit') }} {{ $vuetify.t('$vuetify.profile.password') }}
