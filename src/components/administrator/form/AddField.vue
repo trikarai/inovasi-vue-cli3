@@ -3,6 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
+          <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -97,6 +98,8 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
+import Notification from "@/components/Notification";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -105,6 +108,13 @@ export default {
       valid: false,
       loader: false,
       checkbox: false,
+      status: {
+        error: false,
+        success: false,
+        info: false,
+        warning: false
+      },
+      err_msg: "",
       params: {
         name: "",
         description: "",
@@ -140,6 +150,9 @@ export default {
         }
       ]
     };
+  },
+  components: {
+    "notification-alert": Notification
   },
   created: function() {
     this.params.name = this.data.name;
@@ -209,6 +222,7 @@ export default {
           },
           error => {
             console.log(error);
+            notif.showError(this, error);
           }
         )
         .catch()
@@ -234,6 +248,7 @@ export default {
           },
           error => {
             console.log(error);
+            notif.showError(this, error);
           }
         )
         .catch()
