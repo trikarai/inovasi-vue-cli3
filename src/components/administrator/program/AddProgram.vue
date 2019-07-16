@@ -26,7 +26,7 @@
                     required
                   ></v-text-field>
                   <v-autocomplete
-                    v-model="params.curriculum_id"
+                    v-model="params.curriculumId"
                     label="Curriculum"
                     :items="curriculum.list"
                     item-text="name"
@@ -86,7 +86,7 @@ export default {
       params: {
         name: "",
         description: "",
-        curriculum_id: ""
+        curriculumId: ""
       },
       nameRules: [
         v => !!v || "Name is required",
@@ -139,7 +139,7 @@ export default {
     addData: function() {
       this.loader = true;
       net
-        .postData(this, "/administrator/programmes/", this.params)
+        .postData(this, "/administrator/programmes", this.params)
         .then(function(res) {
           console.log(res);
           this.$emit("refresh");
@@ -173,7 +173,7 @@ export default {
         .getData(this, "/administrator/programmes/" + id)
         .then(function(res) {
           this.params = res.data.data;
-          this.params.curriculum_id = res.data.data.curriculum.id;
+          this.params.curriculumId = res.data.data.curriculum.id;
         })
         .catch(function(res) {
           console.log(error);
