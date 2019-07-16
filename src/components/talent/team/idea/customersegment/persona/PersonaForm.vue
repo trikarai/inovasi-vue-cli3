@@ -3,24 +3,35 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
-          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
-          <v-card elevation="0" width="400">
-            <v-card-text class="pt-4">
+          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
+          <v-card elevation="0" width="550" style="top:50px">
+            <v-card-text class="pt-4" >
               <div>
+                <v-flex xs12>
+                  <v-select
+                    :loading="loadingPersona"
+                    v-model="personaForm"
+                    :items="personaList.list"
+                    hint="Select Persona Form"
+                    item-text="name"
+                    item-value="id"
+                    label="Select Persona Form"
+                    persistent-hint
+                    return-object
+                    single-line
+                  ></v-select>
+                </v-flex>
+                <v-divider></v-divider>
                 <!-- {{error}} -->
+                {{formTemplate.name}}
+
                 <v-form v-model="valid" ref="form">
-                  <v-text-field
-                    label="Persona Name"
-                    v-model="params.name"
-                    :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
-                    required
-                  ></v-text-field>
-                  
                   <div>
-                      PLACEHOLDER FOR DYNAMIC FIELDS
-                  </div>    
+                    <template v-for="field in formTemplate.fields">
+                      <field-modul v-bind:fields="field" :key="field.id"></field-modul> 
+                    </template>
+                    
+                    </div>
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"
@@ -54,7 +65,10 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import notification from "@/components/Notification";
+
+import FieldModul from "@/components/field/field";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -74,6 +88,10 @@ export default {
         name: "",
         description: ""
       },
+      personaForm: "",
+      loadingPersona: false,
+      personaList: { total: 0, list: [] },
+      formTemplate: "form template",
       nameRules: [
         v => !!v || "Name is required",
         v => v.length >= 3 || "Name must be more than 3 characters"
@@ -81,15 +99,55 @@ export default {
     };
   },
   components: {
-    "notification-alert": notification
+    "notification-alert": notification,
+    "field-modul": FieldModul
   },
   created: function() {},
+  watch: {
+    personaForm: "getForm"
+  },
   mounted: function() {
-    // if (this.edit) {
-    //   this.getSingleData();
-    // }
+    this.getPersonaFormList();
   },
   methods: {
+    getPersonaFormList: function() {
+      this.loadingPersona = true;
+      net
+        .getData(this, "/talent/forms?types[]=per")
+        .then(function(res) {
+          if (res.data.data) {
+            this.personaList = res.data.data;
+          } else {
+            this.personaList = { total: 0, list: [] };
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(function() {
+          this.loadingPersona = false;
+        });
+    },
+    getForm: function() {
+      this.loader = true;
+      net
+        .getData(this, "/talent/forms/id/" + this.personaForm.id)
+        .then(function(res) {
+          if (res.data.data) {
+            this.formTemplate = res.data.data;
+          } else {
+            this.formTemplate = "";
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(function() {
+          this.loader = false;
+        });
+    },
     submit: function() {
       if (this.$refs.form.validate()) {
         // this.addData();
