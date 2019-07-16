@@ -97,16 +97,6 @@ export default {
     submit: function() {
       if (this.$refs.form.validate()) {
         this.addData();
-      }
-    },
-    update: function() {
-      if (this.$refs.form.validate()) {
-        this.updateData();
-      }
-    },
-    submit: function() {
-      if (this.$refs.form.validate()) {
-        this.addData();
       } else {
         this.$vuetify.goTo(this.$refs.notif, {
           duration: 500,
