@@ -184,7 +184,7 @@ export default {
       net
         .postData(
           this,
-          "/talent/as-team-member/" + this.$route.params.teamId + "/ideas/",
+          "/talent/as-team-member/" + this.$route.params.teamId + "/ideas",
           this.params
         )
         .then(

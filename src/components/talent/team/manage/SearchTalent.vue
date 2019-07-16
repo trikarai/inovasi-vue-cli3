@@ -142,7 +142,7 @@ export default {
       net
         .postData(
           this,
-          "/talent/as-team-member/" + this.$route.params.membershipId + "/members/",
+          "/talent/as-team-member/" + this.$route.params.membershipId + "/members",
           {
             talentId: this.talent.id,
             position: this.position

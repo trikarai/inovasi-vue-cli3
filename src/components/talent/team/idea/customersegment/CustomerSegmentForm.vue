@@ -159,7 +159,7 @@ export default {
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
-            "/customer-segments/",
+            "/customer-segments",
           this.params
         )
         .then(
