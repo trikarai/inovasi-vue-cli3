@@ -2,7 +2,7 @@
   <div>
     <v-flex xs12 sm12 v-if="field.minValue === 1">
       {{field.name}}
-      <v-radio-group v-model="select">
+      <v-radio-group v-model="value">
         <v-radio
           color="primary"
           v-for="option in field.options"
@@ -14,7 +14,7 @@
     </v-flex>
     <v-flex xs12 sm12 v-else>
       <v-select
-        v-model="select"
+        v-model="value"
         :label="field.name"
         :items="field.options"
         item-text="name"
@@ -28,13 +28,15 @@
   </div>
 </template>
 <script>
+import bus from "@/bus";
+
 export default {
   props: ["field"],
   components: {},
   data: function() {
     return {
       clearable: true,
-      select: "",
+      value: "",
       rules: [
         v => !!v || "This field is required",
         v =>
@@ -45,6 +47,18 @@ export default {
           "Max " + this.field.maxValue + " characters"
       ]
     };
+  },
+  watch: {
+    value: function() {
+      var params = ""
+      if (this.field.minValue === 1) {
+        var arr = new Array(this.value);
+        params = { id: this.field.id, value: arr };
+      } else {
+        params = { id: this.field.id, value: this.value };
+      }
+      bus.$emit("getValue", params, this.field.position - 1);
+    }
   }
 };
 </script>

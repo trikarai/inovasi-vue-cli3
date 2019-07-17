@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-flex xs12 sm12>
-      <tiptap-vuetify :placeholder="field.name" :extensions="extensions" />
+      <tiptap-vuetify v-model="value" :placeholder="field.name" :extensions="extensions" />
     </v-flex>
     <!-- <v-flex xs12 sm12>
       <v-textarea
@@ -17,6 +17,7 @@
   </div>
 </template>
 <script>
+import bus from "@/bus";
 import { TiptapVuetify, OrderedList, ListItem, History } from "tiptap-vuetify";
 
 export default {
@@ -26,6 +27,7 @@ export default {
   },
   data: function() {
     return {
+      value: "",
       rules: [
         v => !!v || "This field is required",
         v =>
@@ -42,6 +44,12 @@ export default {
         new History()
       ]
     };
+  },
+  watch: {
+    value: function(){
+      var params = { id: this.field.id , value: this.value }
+      bus.$emit("getValue", params, this.field.position - 1)
+    }
   }
 };
 </script>
