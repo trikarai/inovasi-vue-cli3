@@ -7,6 +7,7 @@
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
+                check : {{params}}
                 <v-form v-model="valid" ref="form">
                   <v-text-field
                     :disabled="view"
@@ -27,6 +28,7 @@
                   ></v-text-field>
 
                   <v-autocomplete
+                    :disabled="edit"
                     v-model="params.type"
                     label="Field Type"
                     :items="type"
@@ -115,6 +117,7 @@ export default {
         warning: false
       },
       err_msg: "",
+      response: "",
       params: {
         name: "",
         description: "",
@@ -180,10 +183,6 @@ export default {
       if (this.params.type === "sel") {
         this.params.minValue = 1;
         this.params.maxValue = 1;
-        this.checkbox = false;
-      } else {
-        this.params.minValue = 0;
-        this.params.maxValue = 0;
       }
     },
     checkbox: function() {
@@ -265,6 +264,12 @@ export default {
         .then(
           res => {
             this.params = res.data.data;
+            this.params.type = res.data.data.type.value;
+            if(this.params.minValue === 1){
+              this.checkbox = false;
+            }else{
+              this.checkbox = true;
+            }
           },
           error => {
             console.log(error);
