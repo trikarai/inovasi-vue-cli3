@@ -5,9 +5,13 @@
         <div class="modal-container" @click.stop>
           <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="550" style="top:50px">
-            <v-card-text class="pt-4" >
+            <v-card-text class="pt-4">
+              <!-- {{params}}  -->
+              <!-- <v-divider></v-divider>
+              {{formTemplate}} -->
               <div>
                 <v-flex xs12>
+                  <!-- {{errors}} -->
                   <v-select
                     :loading="loadingPersona"
                     v-model="personaForm"
@@ -24,26 +28,20 @@
                 <v-divider></v-divider>
                 <!-- {{error}} -->
                 {{formTemplate.name}}
-
                 <v-form v-model="valid" ref="form">
                   <div>
                     <template v-for="field in formTemplate.fields">
-                      <field-modul v-bind:fields="field" :key="field.id"></field-modul> 
+                      <field-modul v-bind:fields="field" :key="field.id"></field-modul>
                     </template>
-                    
-                    </div>
+                  </div>
                   <v-layout justify-space-between>
+                                  {{params}} 
+
+                    <!-- <v-btn @click.prevent="testBus" color="red">Validate</v-btn> -->
                     <v-btn
-                      v-if="edit == false"
                       @click.prevent="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
-
-                    <v-btn
-                      v-else
-                      @click="update"
-                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
-                    >{{ $vuetify.t('$vuetify.action.update')}}</v-btn>
 
                     <v-dialog v-model="loader" hide-overlay persistent width="300">
                       <v-card color="primary" dark>
@@ -64,6 +62,7 @@
   </transition>
 </template>
 <script>
+import bus from "@/bus";
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import notification from "@/components/Notification";
@@ -84,9 +83,10 @@ export default {
       },
       err_msg: { code: 666, type: "", details: [] },
       error: "error",
+      errors: [],
       params: {
-        name: "",
-        description: ""
+        date: "",
+        fieldEntries: []
       },
       personaForm: "",
       loadingPersona: false,
@@ -102,7 +102,12 @@ export default {
     "notification-alert": notification,
     "field-modul": FieldModul
   },
-  created: function() {},
+  created: function() {
+    bus.$on("getValue", (params, position)=>{
+      this.params.fieldEntries.splice(position, 1, params);
+
+    })
+  },
   watch: {
     personaForm: "getForm"
   },
@@ -136,6 +141,7 @@ export default {
         .then(function(res) {
           if (res.data.data) {
             this.formTemplate = res.data.data;
+            this.setFormJSONTemplate(res.data.data);
           } else {
             this.formTemplate = "";
           }
@@ -147,6 +153,16 @@ export default {
         .finally(function() {
           this.loader = false;
         });
+    },
+    setFormJSONTemplate: function(data){
+      var array = []
+      for(var i = 0 ; i < data.fields.length; i++){
+        array.push(new Object({id: data.fields[i].id, value: ""}))
+      }
+      this.params.fieldEntries = array;
+    },
+    testBus: function() {
+      // bus.$emit("validateChild");
     },
     submit: function() {
       if (this.$refs.form.validate()) {
