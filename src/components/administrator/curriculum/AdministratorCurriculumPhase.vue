@@ -7,9 +7,6 @@
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Phase
       </v-btn>
-
-      {{phase}}
-
       <v-data-table
         dark
         :headers="headers"
