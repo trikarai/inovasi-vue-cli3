@@ -20,12 +20,21 @@
           <v-flex>{{params.status.displayName}}</v-flex>
         </v-layout>
 
-        <v-layout>
-          <v-btn @click="openSearch()">
-            <v-icon>add</v-icon>Add Members
-          </v-btn>
-          <br />
-          {{memberlist}}
+        <v-layout align-start justify-start column fill-height>
+          <v-flex xs12>
+            <v-btn @click="openSearch()">
+              <v-icon>add</v-icon>Add Members
+            </v-btn>
+          </v-flex>
+          <v-divider></v-divider>
+          <v-flex xs12>
+            <!-- {{memberlist.list}} -->
+            <v-data-table :loading="loader" :headers="headers" :items="memberlist.list" class="elevation-1">
+              <template v-slot:items="props">
+                <td>{{ props.item.talent.name }}</td>
+              </template>
+            </v-data-table>
+          </v-flex>
         </v-layout>
       </v-container>
     </div>
@@ -57,7 +66,15 @@ export default {
       edit: false,
       view: false,
       expand: false,
-      selectedIndex: null
+      selectedIndex: null,
+      headers: [
+        {
+          text: "Name",
+          align: "left",
+          sortable: false,
+          value: "name"
+        }
+      ]
     };
   },
   components: {},
@@ -106,9 +123,10 @@ export default {
             this.memberlist = { total: 0, list: [] };
           }
         })
-        .catch(error=>{
+        .catch(error => {
           console.log(error);
-        }).finally(function(){
+        })
+        .finally(function() {
           this.loader = false;
         });
     },
