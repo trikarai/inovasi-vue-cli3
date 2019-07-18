@@ -20,6 +20,7 @@
     "tiptap-vuetify": "^1.4.1",
     "vue": "^2.6.10",
     "vue-i18n": "^8.12.0",
+    "vue-lodash": "^2.0.2",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.7",
     "vue-visible": "^1.0.2",

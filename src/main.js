@@ -12,9 +12,9 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css"; // Ensure you are using css-loader
-import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
-import 'tiptap-vuetify/dist/main.css'
-import VueVisible from "vue-visible"
+import { TiptapVuetifyPlugin } from "tiptap-vuetify";
+import 'tiptap-vuetify/dist/main.css';
+import VueVisible from "vue-visible";
 
 //Translation 
 import en from 'vuetify/es5/locale/en'
