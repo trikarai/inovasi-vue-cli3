@@ -2,18 +2,27 @@
   <div>
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-card v-visible="!loader">
+      <v-card>
         <v-card-title>
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="searchEmail"
+            append-icon="search"
+            label="Synchronous search by email"
+            hide-details
+            @input="isTyping = true"
+          ></v-text-field>
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
             append-icon="search"
-            label="Search"
-            single-line
+            label="Search talent on table"
             hide-details
+            clearable="clearable"
           ></v-text-field>
         </v-card-title>
       </v-card>
+
       <v-data-table
         dark
         :loading="loader"
@@ -37,14 +46,21 @@
       </v-data-table>
     </v-container>
 
-    <personnel-form v-if="dialogForm" :data="singleData" @close="dialogForm = false"  @oke="oke" />
+    <personnel-form v-if="dialogForm" :data="singleData" @close="dialogForm = false" @oke="oke" />
   </div>
 </template>
 <script>
+import Vue from 'vue'
+import VueLodash from 'vue-lodash'
+const options = { name: 'lodash' } // customize the way you want to call it
+
 import net from "@/config/httpclient";
 import alert from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import PersonnelForm from "./PersonnelForm";
+
+Vue.use(VueLodash, options) // options is optional
+
 export default {
   components: {
     PersonnelForm,
@@ -53,6 +69,8 @@ export default {
   data() {
     return {
       res: "",
+      isTyping : false,
+      clearable: true,
       status: {
         success: false,
         error: false,
@@ -71,6 +89,7 @@ export default {
       talents: { total: 0, list: [] },
       singleData: { id: "", name: "" },
       search: "",
+      searchEmail: "",
       headers: [
         {
           text: "Name",
@@ -84,10 +103,47 @@ export default {
       ]
     };
   },
+  watch: {
+    searchEmail: Vue._.debounce(function() {
+      this.isTyping = false;
+    }, 1000),
+    isTyping: function(value) {
+      if (!value) {
+        this.getTalent();
+      }
+    }
+    
+  },
   mounted: function() {
     this.getDataList();
   },
   methods: {
+    getTalentTimeOut: function() {
+      this.loader = true;
+      setTimeout(() => {
+        this.getTalent();
+      }, 3000);
+    },
+    getTalent: function() {
+      this.loader = true;
+      net
+        .getData(this, "/administrator/talents?email=" + encodeURI(this.searchEmail))
+        .then(res => {
+          console.log(res);
+          if (res.data.data) {
+            this.talents = res.data.data;
+          } else {
+            this.talents.list = [];
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.talents.list = [];
+        })
+        .finally(function() {
+          this.loader = false;
+        });
+    },
     getDataList: function() {
       this.loader = true;
       net
@@ -117,8 +173,8 @@ export default {
       this.dialogForm = false;
       this.getDataList();
     },
-    oke: function(res){
-      alert.showInfo(this, res)
+    oke: function(res) {
+      alert.showInfo(this, res);
     }
   }
 };

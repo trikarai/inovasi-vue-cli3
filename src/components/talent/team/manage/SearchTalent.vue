@@ -18,7 +18,7 @@
               v-model="search"
               append-icon="search"
               label="Search Talent by email"
-              single-line
+              @input="isTyping = true"
               hide-details
             ></v-text-field>
           </v-card-title>
@@ -72,9 +72,15 @@
   </v-container>
 </template>
 <script>
+import Vue from 'vue'
+import VueLodash from 'vue-lodash'
+const options = { name: 'lodash' } // customize the way you want to call it
+
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
+
+Vue.use(VueLodash, options) // options is optional
 
 export default {
   components: {
@@ -83,6 +89,7 @@ export default {
   data() {
     return {
       loader: false,
+      isTyping: false,
       status: {
         success: false,
         error: false,
@@ -99,7 +106,14 @@ export default {
     };
   },
   watch: {
-    search: "getTalentTimeOut"
+    search: Vue._.debounce(function() {
+      this.isTyping = false;
+    }, 1000),
+    isTyping: function(value) {
+      if (!value) {
+        this.getTalent();
+      }
+    }
   },
   methods: {
     getTalentTimeOut: function() {
@@ -142,7 +156,9 @@ export default {
       net
         .postData(
           this,
-          "/talent/as-team-member/" + this.$route.params.membershipId + "/members",
+          "/talent/as-team-member/" +
+            this.$route.params.membershipId +
+            "/members",
           {
             talentId: this.talent.id,
             position: this.position
