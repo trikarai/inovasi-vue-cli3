@@ -7,7 +7,6 @@
           <v-icon>add</v-icon>
           {{ $vuetify.t('$vuetify.action.add') }} Administrator
         </v-btn>
-        
         <v-data-table dark :headers="headers" :loading="loader" :items="admin.list" class="elevation-1">
           <template v-slot:items="props">
             <td>{{ props.item.name }}</td>
@@ -16,15 +15,15 @@
                 <v-icon small>search</v-icon>
                 {{ $vuetify.t('$vuetify.action.view') }}
               </v-btn>
-              <!-- <v-btn @click="openEdit(props.index)" small v-if="props.item.name == authData.data.name">
+              <v-btn @click="openEdit(props.index)" small v-if="props.item.id == authData.data.id">
                 <v-icon small>edit</v-icon>
                 {{ $vuetify.t('$vuetify.action.edit') }} {{ $vuetify.t('$vuetify.profile.profile') }}
-              </v-btn> -->
-              <v-btn @click="openPassword(props.index)" small v-if="props.item.name == authData.data.name">
+              </v-btn>
+              <v-btn @click="openPassword(props.index)" small v-if="props.item.id == authData.data.id">
                 <v-icon small>edit</v-icon>
                 {{ $vuetify.t('$vuetify.action.edit') }} {{ $vuetify.t('$vuetify.profile.password') }}
               </v-btn>
-              <v-btn small dark color="warning" @click="deleteAct(props.index)" v-if="props.item.name != authData.data.name">
+              <v-btn small dark color="warning" @click="deleteAct(props.index)" v-if="props.item.id != authData.data.id">
                 <v-icon small>delete</v-icon>
                 {{ $vuetify.t('$vuetify.action.delete') }}
               </v-btn>
