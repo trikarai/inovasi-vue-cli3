@@ -8,6 +8,8 @@
         {{ $vuetify.t('$vuetify.action.add') }} Phase
       </v-btn>
 
+      {{phase}}
+
       <v-data-table
         dark
         :headers="headers"
@@ -16,6 +18,7 @@
         class="elevation-1"
       >
         <template v-slot:items="props">
+          <td>{{ props.item.order }}</td>
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
             <v-btn @click="openEdit(props.index)" small>
@@ -85,6 +88,12 @@ export default {
       phase: { total: 0, list: [] },
       singlePhase: { id: "", name: "" },
       headers: [
+        {
+          text: "Order",
+          align: "left",
+          sortable: true,
+          value: "order"
+        },
         {
           text: "Name",
           align: "left",
