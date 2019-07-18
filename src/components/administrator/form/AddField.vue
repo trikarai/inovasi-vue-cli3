@@ -7,7 +7,6 @@
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
-                check : {{params}}
                 <v-form v-model="valid" ref="form">
                   <v-text-field
                     :disabled="view"
