@@ -76,12 +76,5 @@ export default {
     },
     deleteData: function(context, path){
         return context.$http.delete(config.APIENDPOINT + path, {headers: auth.getAuthHeaders()})
-    },
-    uploadFileTalent: function(context, path, file, filename){
-        var headers = {};
-        headers["Content-Type"] = "image/jpeg";
-        headers["file-name"] = filename;
-        headers["Authorization"] = auth.getAuthHeaders;
-        return context.$http.post(config.APIENDPOINT + path, file, headers)
     }
 }
