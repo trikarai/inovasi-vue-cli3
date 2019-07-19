@@ -3,6 +3,7 @@
     <!-- https://jsfiddle.net/meyubaraj/fLbe7r72/ -->
     <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+      {{response}}
       <!-- <v-progress-linear v-if="progressShow" color="red" v-model="valueDeterminate"></v-progress-linear> -->
       <v-expand-x-transition>
         <v-progress-circular
@@ -40,7 +41,9 @@
         v-model="imageName"
         prepend-icon="attach_file"
       ></v-text-field>
-      <v-text-field style="display: none" label="Path" v-model="value"></v-text-field>
+      <select v-if="fileInfo.filePath" style="display:none" v-model="value" multiple>
+        <option :value="fileInfo.id" selected>{{ fileInfo.filePath }}</option>
+      </select>
       <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked" />
     </v-flex>
   </div>
@@ -58,6 +61,7 @@ export default {
   components: {},
   data: function() {
     return {
+      response: "",
       status: {
         success: false,
         error: false,
@@ -68,20 +72,21 @@ export default {
       clearable: true,
       readonly: true,
       valueDeterminate: 0,
-      value: "ID IMAGE",
+      value: [],
       imageName: "",
       imageUrl: "",
       imageFile: "",
       headers: {},
       progressShow: false,
-      uploaded: false
+      uploaded: false,
+      fileInfo: { id: "", filePath: "" }
     };
   },
   components: {
     "notification-alert": Notification
   },
   watch: {
-    value: function() {
+    fileInfo: function() {
       var params = { id: this.field.id, value: this.value };
       bus.$emit("getValue", params, this.field.position - 1);
     }
@@ -114,7 +119,7 @@ export default {
     },
     uploadFile: function() {
       this.progressShow = true;
-      let data = JSON.parse(window.localStorage.getItem('lbUser'))
+      let data = JSON.parse(window.localStorage.getItem("lbUser"));
       this.headers["Content-Type"] = "image/*";
       this.headers["Authorization"] = "Bearer " + data.token;
       var app = this;
@@ -137,7 +142,8 @@ export default {
         )
         .then(res => {
           console.log(res);
-          this.value = res.data.data.fileInfo.id;
+          this.value[0] = res.data.data.fileInfo.id;
+          this.fileInfo = res.data.data.fileInfo;
           this.uploaded = true;
         })
         .catch(error => {
