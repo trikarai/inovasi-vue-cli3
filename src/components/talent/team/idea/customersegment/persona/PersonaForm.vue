@@ -3,12 +3,12 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
-          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
+                <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="550" style="top:50px">
             <v-card-text class="pt-4">
               <!-- {{params}}  -->
               <!-- <v-divider></v-divider>
-              {{formTemplate}} -->
+              {{formTemplate}}-->
               <div>
                 <v-flex xs12>
                   <!-- {{errors}} -->
@@ -27,18 +27,31 @@
                 </v-flex>
                 <v-divider></v-divider>
                 <!-- {{error}} -->
-                {{formTemplate.name}}
+                <!-- {{formTemplate.name}} -->
                 <v-form v-model="valid" ref="form">
                   <div>
+                    <v-flex xs12 sm12>
+                      <v-text-field
+                        v-if="params.formId"
+                        v-model="params.name"
+                        id="field.id"
+                        name="persona_name"
+                        label="Persona Name"
+                        hint="Persona Name"
+                        counter="25"
+                        maxlength="25"
+                        :rules="rules"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-divider></v-divider>
                     <template v-for="field in formTemplate.fields">
                       <field-modul v-bind:fields="field" :key="field.id"></field-modul>
                     </template>
                   </div>
                   <v-layout justify-space-between>
-                                  {{params}} 
-
-                    <!-- <v-btn @click.prevent="testBus" color="red">Validate</v-btn> -->
+                    {{params}}
                     <v-btn
+                      v-if="params.formId"
                       @click.prevent="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
@@ -73,6 +86,12 @@ export default {
   props: ["id", "edit", "view", "data"],
   data: function() {
     return {
+      rules: [
+        v => !!v || "This field is required",
+        v => v.length >= 3 || "Min 3 characters long",
+        v => v.length <= 25 || "Max 25 characters long"
+      ],
+      clearable: true,
       valid: false,
       loader: false,
       status: {
@@ -85,7 +104,8 @@ export default {
       error: "error",
       errors: [],
       params: {
-        date: "",
+        formId: "",
+        name: "",
         fieldEntries: []
       },
       personaForm: "",
@@ -103,10 +123,9 @@ export default {
     "field-modul": FieldModul
   },
   created: function() {
-    bus.$on("getValue", (params, position)=>{
+    bus.$on("getValue", (params, position) => {
       this.params.fieldEntries.splice(position, 1, params);
-
-    })
+    });
   },
   watch: {
     personaForm: "getForm"
@@ -136,6 +155,7 @@ export default {
     },
     getForm: function() {
       this.loader = true;
+      this.params.formId = this.personaForm.id;
       net
         .getData(this, "/talent/forms/id/" + this.personaForm.id)
         .then(function(res) {
@@ -154,10 +174,10 @@ export default {
           this.loader = false;
         });
     },
-    setFormJSONTemplate: function(data){
-      var array = []
-      for(var i = 0 ; i < data.fields.length; i++){
-        array.push(new Object({id: data.fields[i].id, value: ""}))
+    setFormJSONTemplate: function(data) {
+      var array = [];
+      for (var i = 0; i < data.fields.length; i++) {
+        array.push(new Object({ id: data.fields[i].id, value: "" }));
       }
       this.params.fieldEntries = array;
     },
@@ -166,7 +186,7 @@ export default {
     },
     submit: function() {
       if (this.$refs.form.validate()) {
-        // this.addData();
+        this.addData();
       } else {
         this.$vuetify.goTo(this.$refs.notif, {
           duration: 500,
@@ -231,29 +251,21 @@ export default {
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
-            "/customer-segments/",
+            "/customer-segments/" + 
+            this.$route.params.customersegmentId + 
+            "/personas",
           this.params
         )
         .then(
           res => {
             console.log(res);
             this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
+          }            
         )
-        .catch()
+        .catch(error=>{
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
