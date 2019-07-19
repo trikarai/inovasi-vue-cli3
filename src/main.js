@@ -15,12 +15,14 @@ import "vuetify/dist/vuetify.min.css"; // Ensure you are using css-loader
 import { TiptapVuetifyPlugin } from "tiptap-vuetify";
 import 'tiptap-vuetify/dist/main.css';
 import VueVisible from "vue-visible";
+import UUID from 'vue-uuid';
 
 //Translation 
 import en from 'vuetify/es5/locale/en'
 import id from 'vuetify/es5/locale/id'
 
 // Vue.prototype.$axios = axios;
+Vue.use(UUID);
 Vue.use(VueResource);
 Vue.use(VueVisible);
 Vue.use(Vuetify, {

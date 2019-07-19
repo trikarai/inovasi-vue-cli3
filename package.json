@@ -23,6 +23,7 @@
     "vue-lodash": "^2.0.2",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.7",
+    "vue-uuid": "^1.1.1",
     "vue-visible": "^1.0.2",
     "vuebar": "0.0.20",
     "vuelidate": "^0.7.4",
