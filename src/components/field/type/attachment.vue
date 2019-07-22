@@ -57,7 +57,7 @@ import { uuid } from "vue-uuid";
 import notif from "@/config/alerthandling";
 
 export default {
-  props: ["field"],
+  props: ["field", "index"],
   components: {},
   data: function() {
     return {
@@ -88,7 +88,7 @@ export default {
   watch: {
     fileInfo: function() {
       var params = { id: this.field.id, value: this.value };
-      bus.$emit("getValue", params, this.field.position - 1);
+      bus.$emit("getValue", params, this.index);
     }
   },
   mounted() {},

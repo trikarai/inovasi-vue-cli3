@@ -21,7 +21,7 @@ import bus from "@/bus";
 import { TiptapVuetify, OrderedList, ListItem, History } from "tiptap-vuetify";
 
 export default {
-  props: ["field"],
+  props: ["field", "index"],
   components: {
     TiptapVuetify
   },
@@ -48,7 +48,7 @@ export default {
   watch: {
     value: function(){
       var params = { id: this.field.id , value: this.value }
-      bus.$emit("getValue", params, this.field.position - 1)
+      bus.$emit("getValue", params, this.index)
     }
   }
 };

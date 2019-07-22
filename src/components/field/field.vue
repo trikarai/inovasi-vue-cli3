@@ -1,10 +1,10 @@
 <template>
   <div>
-    <string-field  v-bind:field="fields" v-if="fields.type.value === 'str'"></string-field>
-    <text-field  v-bind:field="fields" v-if="fields.type.value === 'txt'"></text-field>
-    <integer-field  v-bind:field="fields" v-if="fields.type.value === 'int'"></integer-field>
-    <select-field  v-bind:field="fields" v-if="fields.type.value === 'sel'"></select-field>
-    <attachment-field  v-bind:field="fields" v-if="fields.type.value === 'att'"></attachment-field>
+    <string-field  v-bind:index="index" v-bind:field="fields" v-if="fields.type.value === 'str'"></string-field>
+    <text-field  v-bind:index="index" v-bind:field="fields" v-if="fields.type.value === 'txt'"></text-field>
+    <integer-field  v-bind:index="index" v-bind:field="fields" v-if="fields.type.value === 'int'"></integer-field>
+    <select-field  v-bind:index="index" v-bind:field="fields" v-if="fields.type.value === 'sel'"></select-field>
+    <attachment-field  v-bind:index="index" v-bind:field="fields" v-if="fields.type.value === 'att'"></attachment-field>
   </div>
 </template>
 
@@ -23,7 +23,7 @@
       'select-field': select,
       'attachment-field': attachment
     },
-    props: ['fields'],
+    props: ["fields", "index"],
     data: function () {
       return {
         show: false,

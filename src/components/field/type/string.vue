@@ -19,7 +19,7 @@
 import bus from "@/bus";
 
 export default {
-  props: ["field"],
+  props: ["field", "index"],
   components: {},
   data: function() {
     return {
@@ -35,7 +35,7 @@ export default {
   watch: {
     value: function(){
       var params = { id: this.field.id , value: this.value }
-      bus.$emit("getValue", params, this.field.position - 1)
+      bus.$emit("getValue", params, this.index)
     }
   }
 };
