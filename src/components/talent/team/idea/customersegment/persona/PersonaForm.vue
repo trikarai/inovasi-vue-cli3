@@ -44,8 +44,8 @@
                       ></v-text-field>
                     </v-flex>
                     <v-divider></v-divider>
-                    <template v-for="field in formTemplate.fields">
-                      <field-modul v-bind:fields="field" :key="field.id"></field-modul>
+                    <template v-for="(field, index) in formTemplate.fields">
+                      <field-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></field-modul>
                     </template>
                   </div>
                   <v-layout justify-space-between>
@@ -123,8 +123,8 @@ export default {
     "field-modul": FieldModul
   },
   created: function() {
-    bus.$on("getValue", (params, position) => {
-      this.params.fieldEntries.splice(position, 1, params);
+    bus.$on("getValue", (params, index) => {
+      this.params.fieldEntries.splice(index, 1, params);
     });
   },
   watch: {
