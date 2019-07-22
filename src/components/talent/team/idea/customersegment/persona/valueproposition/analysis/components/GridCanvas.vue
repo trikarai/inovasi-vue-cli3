@@ -10,15 +10,18 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <v-btn @click="openBusinessForm" color="primary">
+        <v-icon left>add</v-icon>
+        {{canvas.name}}
+      </v-btn>
     </v-container>
     <v-container style="display: grid" class="pa-0">
       <template v-for="field in canvas.fields">
         <div
           :key="field.id"
           :style="'border: 1px solid grey; grid-area:' + field.position + '; background-color: grey'"
-          class="pt-1 pr-2 pb-2"
         >
-          <v-card elevation="2" :hover="hover" height="100%" class="mt-1 ml-2 pa-0">
+          <v-card elevation="2" :hover="hover" height="100%" class="ma-1 pa-0">
             <v-card-text>
               <v-textarea :label="field.name" auto-grow :value="lorem"></v-textarea>
             </v-card-text>
@@ -26,6 +29,8 @@
         </div>
       </template>
     </v-container>
+
+    <business-form v-if="dialogForm" @close="dialogForm = false" @refresh="refresh"></business-form>
   </div>
 </template>
 <script>
@@ -33,12 +38,15 @@ import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 
+import BusinessForm from "./BusinessForm";
+
 export default {
   data: function() {
     return {
       canvas: "",
       loader: false,
       hover: false,
+      dialogForm: false,
       status: {
         success: false,
         error: false,
@@ -47,6 +55,9 @@ export default {
       },
       err_msg: ""
     };
+  },
+  components: {
+    BusinessForm
   },
   mounted: function() {
     this.getCanvas();
@@ -65,7 +76,11 @@ export default {
         .finally(() => {
           this.loader = false;
         });
-    }
+    },
+    openBusinessForm: function() {
+      this.dialogForm = true;
+    },
+    refresh: function() {}
   }
 };
 </script>
