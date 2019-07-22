@@ -39,7 +39,6 @@
                     :disabled="view"
                     label="Position"
                     v-model="params.position"
-                    type="number"
                     required
                   ></v-text-field>
                   <template v-if="minmax">
