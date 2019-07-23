@@ -3,7 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
-          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
+          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -49,7 +49,12 @@
                     maxlength="25"
                     required
                   ></v-text-field>
-                  <v-textarea auto-grow="false" counter label="Elevator Pitch" v-model="params.description"></v-textarea>
+                  <v-textarea
+                    :auto-grow="grow"
+                    counter
+                    label="Elevator Pitch"
+                    v-model="params.description"
+                  ></v-textarea>
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"
@@ -83,12 +88,14 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import notification from "@/components/Notification";
 
 export default {
   props: ["id", "edit", "view", "data"],
   data: function() {
     return {
+      grow: false,
       valid: false,
       loader: false,
       status: {
@@ -224,32 +231,13 @@ export default {
             this.data.id,
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch(function(error) {
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.status.error = true;
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          console.log("Log Error : " + error);
+          notif.showError(this, error);
         })
         .finally(function() {
           this.loader = false;
