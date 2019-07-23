@@ -63,7 +63,7 @@
           </v-list-tile-content>
         </v-list-tile>
         <!-- profile-->
-        <v-list-group prepend-icon="account_circle" value="true" no-action>
+        <v-list-group prepend-icon="account_circle" :value="group" no-action>
           <template v-slot:activator>
             <v-list-tile>
               <v-list-tile-title>Profile</v-list-tile-title>
@@ -149,6 +149,7 @@ import LocaleSwitcher from "../LocaleSwitcher";
 export default {
   data: function() {
     return {
+      group: false,
       drawer: true,
       rightDrawer: false,
       miniVariant: true,
