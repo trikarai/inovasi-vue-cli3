@@ -152,6 +152,9 @@ export default {
     gotoBusinessAnalysis: function(id){
       this.$router.push({path: "/talent/team/"+this.$route.params.teamId+"/idea/"+this.$route.params.ideaId+"/customersegment/"+this.$route.params.customersegmentId+"/persona/"+this.$route.params.personaId+"/vp/"+id+"/analysis"})
     },
+    gotoExperiment: function(id){
+      this.$router.push({path: "/talent/team/"+this.$route.params.teamId+"/idea/"+this.$route.params.ideaId+"/customersegment/"+this.$route.params.customersegmentId+"/persona/"+this.$route.params.personaId+"/vp/"+id+"/experiment"})
+    },
     getParentData: function() {
       this.loader = true;
       // this.status.error = false;
