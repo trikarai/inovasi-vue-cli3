@@ -55,6 +55,10 @@ import TalentTeamIdeaCustomersegmentPersona from "./components/talent/team/idea/
 import BusinessAnalysis from "./components/talent/team/idea/customersegment/persona/valueproposition/analysis/BusinessAnalysisList";
 import BusinessAnalysisCanvas from "./components/talent/team/idea/customersegment/persona/valueproposition/analysis/components/GridCanvas";
 
+import ExperimentFormList from "./components/talent/team/idea/customersegment/persona/valueproposition/experiment/ExperimentFormList";
+import ExperimentDataList from "./components/talent/team/idea/customersegment/persona/valueproposition/experiment/ExperimentDataList";
+import ExperimentDetail from "./components/talent/team/idea/customersegment/persona/valueproposition/experiment/ExperimentDetail";
+
 import TalentFeedback from "./components/talent/TalentFeedback.vue";
 import TalentProgrammes from "./components/talent/TalentProgrammes.vue";
 
@@ -218,6 +222,21 @@ const routes = [
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/analysis/:formId",
         name: "Business Analysis Canvas",
         component: BusinessAnalysisCanvas
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/experiment",
+        name: "Experiment Form",
+        component: ExperimentFormList
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/experiment/:formId",
+        name: "Experiment Data",
+        component: ExperimentDataList
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/experiment-detail/:experimentId",
+        name: "Experiment Detail",
+        component: ExperimentDetail
       },
       {
         path: "/talent/create/team",
