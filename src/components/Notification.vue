@@ -34,13 +34,6 @@ export default {
   props: ["err_msg", "status"],
   data: function() {
     return {
-      // err_msg: { code: 0, type: "", details: [] },
-      // status: {
-      //   success: false,
-      //   error: false,
-      //   info: false,
-      //   warning: false
-      // }
     };
   }
 };
