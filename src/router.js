@@ -15,6 +15,7 @@ import AdministratorManageAdmin from "./components/administrator/AdministratorMa
 import AdministratorManageProgram from "./components/administrator/AdministratorManageProgram";
 import AdministratorManageProgramPhase from "./components/administrator/program/AdministratorProgramPhase";
 import AdministratorManageProgramRegistration from "./components/administrator/program/registration/AdministratorProgramRegistration";
+import AdministratorManageProgramMentoring from "./components/administrator/program/AdministratorManageProgramMentoring";
 import AdministratorManageProgramCoordinator from "./components/administrator/program/AdministratorManageProgramCoordinator";
 import AdministratorManageProgramMentor from "./components/administrator/program/AdministratorManageProgramMentor";
 import AdministratorManageProgramTalentSearch from "./components/administrator/program/personnel/AdministratorTalentList";
@@ -288,6 +289,11 @@ const routes = [
         name: "View Program Phase",
         path: "/administrator/program/:programId/phase-plan",
         component: AdministratorManageProgramPhase
+      },
+      {
+        name: "View Program Mentoring",
+        path: "/administrator/program/:programId/mentoring",
+        component: AdministratorManageProgramMentoring
       },
       {
         name: "View Program Registration",
