@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
@@ -20,12 +20,10 @@
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
             <v-btn small @click="gotoSection(props.item.id)">
-              <v-icon small>extension</v-icon>
-              Section
+              <v-icon small>extension</v-icon>Section
             </v-btn>
             <v-btn small @click="gotoField(props.item.id)">
-              <v-icon small>art_track</v-icon>
-              Field
+              <v-icon small>art_track</v-icon>Field
             </v-btn>
           </td>
           <td class="text-xs-right">
@@ -67,6 +65,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import TemplateForm from "./form/AddForm";
 import Notification from "@/components/Notification";
 
@@ -110,31 +109,27 @@ export default {
     this.getDataList();
   },
   methods: {
-    gotoField: function(id){
-      this.$router.push({ path: "/administrator/form/"+id+"/field"})
+    gotoField: function(id) {
+      this.$router.push({ path: "/administrator/form/" + id + "/field" });
     },
-    gotoSection: function(id){
-      this.$router.push({ path: "/administrator/form/"+id+"/section"})
+    gotoSection: function(id) {
+      this.$router.push({ path: "/administrator/form/" + id + "/section" });
     },
     getDataList: function() {
       this.loader = true;
       net
         .getData(this, "/administrator/forms")
-        .then(
-          res => {
-            if(res.data.data){
-              this.form = res.data.data;
-            }else{
-              this.form.list = []; 
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.form = res.data.data;
+          } else {
+            this.form.list = [];
           }
-        )
-        .catch(function() {})
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
