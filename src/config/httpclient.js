@@ -65,6 +65,9 @@ export default {
     postData: function(context, path, params){
         return context.$http.post(config.APIENDPOINT + path, params, {headers: auth.getAuthHeaders()})
     },
+    patchData: function(context, path, params){
+        return context.$http.patch(config.APIENDPOINT + path, params, {headers: auth.getAuthHeaders()})
+    },
     postDataPublic: function(context, path, params){
         return context.$http.post(config.APIENDPOINT + path, params)
     },
