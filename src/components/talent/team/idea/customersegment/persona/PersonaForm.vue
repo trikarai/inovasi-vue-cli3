@@ -6,12 +6,8 @@
                 <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="550" style="top:50px">
             <v-card-text class="pt-4">
-              <!-- {{params}}  -->
-              <!-- <v-divider></v-divider>
-              {{formTemplate}}-->
               <div>
                 <v-flex xs12>
-                  <!-- {{errors}} -->
                   <v-select
                     :loading="loadingPersona"
                     v-model="personaForm"
@@ -26,8 +22,6 @@
                   ></v-select>
                 </v-flex>
                 <v-divider></v-divider>
-                <!-- {{error}} -->
-                <!-- {{formTemplate.name}} -->
                 <v-form v-model="valid" ref="form">
                   <div>
                     <v-flex xs12 sm12>
