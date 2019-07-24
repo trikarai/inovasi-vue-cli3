@@ -228,7 +228,7 @@ export default {
           "/talent/as-team-member/" +
             this.$route.params.teamId +
             "/ideas/" +
-            this.data.id,
+            this.data.id + "/update-profile",
           this.params
         )
         .then(res => {
