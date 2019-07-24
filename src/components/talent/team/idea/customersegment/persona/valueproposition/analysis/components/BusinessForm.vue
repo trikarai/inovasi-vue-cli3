@@ -6,8 +6,6 @@
           <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="550" style="top:50px">
             <v-card-text class="pt-4">
-                        {{error}}
-
               <div>
                 <v-form v-model="valid" ref="form">
                   <div>
@@ -16,12 +14,10 @@
                     </template>
                   </div>
                   <v-layout justify-space-between>
-                    {{params}}
                     <v-btn
                       @click.prevent="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
-
                     <v-dialog v-model="loader" hide-overlay persistent width="300">
                       <v-card color="primary" dark>
                         <v-card-text>
@@ -181,7 +177,7 @@ export default {
       this.loader = true;
       this.status.error = false;
       net
-        .postData(
+        .patchData(
           this,
           "/talent/as-team-member/" +
             this.$route.params.teamId +
@@ -191,7 +187,7 @@ export default {
             this.$route.params.customersegmentId +
             "/personas/" +
             this.$route.params.personaId +
-            "/value-propositions/" + 
+            "/value-propositions/" +
             this.$route.params.valuepropositionId +
             "/business-canvases",
           this.params
