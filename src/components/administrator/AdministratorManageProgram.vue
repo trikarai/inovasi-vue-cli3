@@ -17,7 +17,10 @@
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
             <v-btn small @click="gotoRegistration(props.item.id)">
-              <v-icon small>event</v-icon>Registration
+              <v-icon small>schedule</v-icon>Registration
+            </v-btn>
+            <v-btn small @click="gotoMentoring(props.item.id)">
+              <v-icon small>event</v-icon>Mentoring
             </v-btn>
             <v-btn small @click="gotoPhase(props.item.id)">
               <v-icon small>extension</v-icon>Phase
@@ -32,16 +35,16 @@
             </v-btn>
           </td>
           <td class="text-xs-right">
-            <v-btn @click="openEdit(props.index)" small>
+            <v-btn @click="openEdit(props.item.id)" small>
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
+            <v-btn small dark color="warning" @click="deleteAct(props.item.id)">
               <v-icon small>delete</v-icon>
               {{ $vuetify.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
+              <div v-show="props.item.id == selectedIndex">
                 {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
                 <v-btn @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
@@ -122,6 +125,11 @@ export default {
     gotoRegistration: function(id) {
       this.$router.push({
         path: "/administrator/program/" + id + "/registration"
+      });
+    },
+    gotoMentoring: function(id) {
+      this.$router.push({
+        path: "/administrator/program/" + id + "/mentoring"
       });
     },
     gotoMentor: function(id) {
