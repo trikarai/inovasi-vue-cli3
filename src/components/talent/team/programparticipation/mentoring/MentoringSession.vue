@@ -2,16 +2,26 @@
   <div>
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-      <!-- <v-btn color="blue" append :to="'/talent/team/'+ $route.params.teamId + '/'" style="left: -8px">
-          <v-icon>add</v-icon>
-          Propose a Mentoring
-      </v-btn>-->
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
+
+      <v-dialog v-model="loader2" hide-overlay persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
             {{ $vuetify.t('$vuetify.info.standby') }}
             <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
           </v-card-text>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="dialogDetail" max-width="350">
+        <v-card>
+          <v-card-title class="headline">Mentoring Detail</v-card-title>
+
+          <v-card-text>{{mentoringDetail}}</v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn small fab color="red" text @click="dialogDetail = false"><v-icon>close</v-icon></v-btn>
+          </v-card-actions>
         </v-card>
       </v-dialog>
 
@@ -49,7 +59,12 @@
 
       <v-layout hidden-sm-and-down>
         <v-flex md12>
-          <v-data-table :headers="headers" :items="mentoring.list" class="elevation-1">
+          <v-data-table
+            :loading="loader"
+            :headers="headers"
+            :items="mentoring.list"
+            class="elevation-1"
+          >
             <template v-slot:items="props">
               <td>{{ props.item.startTime }}</td>
               <td>{{ props.item.endTime }}</td>
@@ -67,7 +82,8 @@
                   <v-icon small left>pageview</v-icon>
                   {{ $vuetify.t('$vuetify.action.view') }}
                 </v-btn>
-                <v-btn small color="green">
+
+                <v-btn @click="acceptAct(props.item.id)" small color="green">
                   <v-icon small left>done</v-icon>
                   {{ $vuetify.t('$vuetify.mentoring.accept') }}
                 </v-btn>
@@ -77,19 +93,33 @@
                   {{ $vuetify.t('$vuetify.mentoring.reschedule') }}
                 </v-btn>
 
-                <v-btn small color="red">
+                <v-btn @click="cancelAct(props.item.id)" small color="red">
                   <v-icon small left>cancel</v-icon>
                   {{ $vuetify.t('$vuetify.mentoring.cancel') }}
                 </v-btn>
 
                 <v-expand-transition>
-                  <div v-show="props.index == selectedIndex">
-                    {{ $vuetify.t('$vuetify.action.confirmationtoquit') }}
-                    <v-btn @click="deleteData(props.item.id)" color="red">
+                  <div v-if="props.item.id == selectedAcc">
+                    {{ $vuetify.t('$vuetify.mentoring.confirmationtoaccept') }}
+                    <v-btn @click="acceptMentoring(props.items.id)" color="primary">
                       <v-icon></v-icon>
                       {{ $vuetify.t('$vuetify.action.yes') }}
                     </v-btn>
-                    <v-btn @click="deleteAct(null)">
+                    <v-btn @click="selectedAcc = null">
+                      <v-icon></v-icon>
+                      {{ $vuetify.t('$vuetify.action.cancel') }}
+                    </v-btn>
+                  </div>
+                </v-expand-transition>
+
+                <v-expand-transition>
+                  <div v-if="props.item.id == selectedCan">
+                    {{ $vuetify.t('$vuetify.mentoring.confirmationtocancel') }}
+                    <v-btn @click="cancelMentoring(props.items.id)" color="red">
+                      <v-icon></v-icon>
+                      {{ $vuetify.t('$vuetify.action.yes') }}
+                    </v-btn>
+                    <v-btn @click="selectedCan = null">
                       <v-icon></v-icon>
                       {{ $vuetify.t('$vuetify.action.cancel') }}
                     </v-btn>
@@ -102,7 +132,7 @@
       </v-layout>
 
       <v-layout hidden-md-and-up>
-        <v-carousel height="auto" :cycle="false">
+        <v-carousel height="355px" :cycle="false">
           <v-carousel-item v-for="data in mentoring.list" :key="data.id">
             <v-card height="100%" class="pl-4">
               <v-card-title>{{data.startTime}}</v-card-title>
@@ -112,10 +142,11 @@
               </v-card-text>
 
               <v-card-actions>
-                <v-btn small fab @click="openDetail(props.item.id)">
+                <v-btn small fab @click="openDetail(data.id)">
                   <v-icon small>pageview</v-icon>
                 </v-btn>
-                <v-btn small fab color="green">
+
+                <v-btn @click="acceptAct(data.id)" small fab color="green">
                   <v-icon small>done</v-icon>
                 </v-btn>
 
@@ -123,10 +154,42 @@
                   <v-icon small>history</v-icon>
                 </v-btn>
 
-                <v-btn small fab color="red">
+                <v-btn @click="cancelAct(data.id)" small fab color="red">
                   <v-icon small>cancel</v-icon>
                 </v-btn>
               </v-card-actions>
+
+              <v-card-actions>
+                <v-scale-transition>
+                  <div v-if="data.id == selectedAcc">
+                    {{ $vuetify.t('$vuetify.mentoring.confirmationtoaccept') }}
+                    <br />
+                    <v-btn @click="acceptMentoring(data.id)" color="primary">
+                      <v-icon></v-icon>
+                      {{ $vuetify.t('$vuetify.action.yes') }}
+                    </v-btn>
+                    <v-btn @click="selectedAcc = null">
+                      <v-icon></v-icon>
+                      {{ $vuetify.t('$vuetify.action.cancel') }}
+                    </v-btn>
+                  </div>
+                </v-scale-transition>
+                <v-scale-transition>
+                  <div v-if="data.id == selectedCan">
+                    {{ $vuetify.t('$vuetify.mentoring.confirmationtocancel') }}
+                    <br />
+                    <v-btn @click="cancelMentoring(data.id)" color="red">
+                      <v-icon></v-icon>
+                      {{ $vuetify.t('$vuetify.action.yes') }}
+                    </v-btn>
+                    <v-btn @click="selectedCan = null">
+                      <v-icon></v-icon>
+                      {{ $vuetify.t('$vuetify.action.cancel') }}
+                    </v-btn>
+                  </div>
+                </v-scale-transition>
+              </v-card-actions>
+
               <v-card-actions style="visibility:hidden">
                 <v-btn small fab color="red">
                   <v-icon small>cancel</v-icon>
@@ -156,12 +219,16 @@ export default {
       singleData: { id: "", name: "" },
       err_msg: { details: ["0"] },
       loader: false,
+      loader2: false,
       dialogDel: false,
       dialogForm: false,
+      dialogDetail: false,
       edit: false,
       view: false,
       expand: false,
-      selectedIndex: null,
+      selectedAcc: null,
+      selectedCan: null,
+      selectedRes: null,
       headers: [
         {
           text: "Start Time",
@@ -178,15 +245,16 @@ export default {
         total: 0,
         list: []
       },
+      mentoringDetail: "",
       items: [
         { displayName: "Proposed", value: "pro" },
         { displayName: "Accepted", value: "acc" },
         { displayName: "Cancelled", value: "can" },
-        { displayName: "Scheduled", value: "sch" },
-        { displayName: "Off", value: "off" }
+        { displayName: "Offered", value: "off" }
       ],
       select: [{ displayName: "Proposed", value: "pro" }],
-      queryurl: ""
+      queryurl: "",
+      selectedIndex: null
     };
   },
   components: {
@@ -219,16 +287,15 @@ export default {
       net
         .getData(
           this,
-          // "/talent/as-team-member/" +
-          //   this.$route.params.teamId +
-          //   "/programme-participations/" +
-          //   this.$route.params.participationId +
-          //   "/mentoring-sessions" + this.queryurl
-          "/talent/mentoring-sessions"
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/programme-participations/" +
+            this.$route.params.participationId +
+            "/mentoring-sessions" +
+            this.queryurl
         )
         .then(res => {
           if (res.data.data) {
-            console.log("Ini Mock : " + res);
             this.mentoring = res.data.data;
           } else {
             this.mentoring.list = [];
@@ -243,20 +310,116 @@ export default {
         });
     },
     openDetail: function(id) {
-      // this.$router.push({path: "/talent/program/"+ id})
+      this.dialogDetail = true;
+      // this.getSingleData(id);
     },
+    getSingleData: function(id){
+      net
+        .getData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/programme-participations/" +
+            this.$route.params.participationId +
+            "/mentoring-sessions/" + id
+        )
+        .then(res => {
+          if (res.data.data) {
+            this.mentoringDetail = res.data.data;
+          } else {
+            this.mentoringDetail = null;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          alert.showError(this, error);
+        })
+        .finally(function() {
+          this.loader = false;
+        });
+    },
+    acceptAct: function(id) {
+      this.selectedCan = null;
+      this.selectedRes = null;
+      if (this.selectedAcc === id) {
+        this.selectedAcc = null;
+      } else {
+        this.selectedAcc = id;
+      }
+    },
+    acceptMentoring: function(id) {
+      this.loader2 = true;
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/programme-participations/" +
+            this.$route.params.participationId +
+            "/mentoring-sessions/" +
+            id +
+            "/accept"
+        )
+        .then(res => {
+          this.refresh();
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader2 = false;
+        });
+    },
+    cancelAct: function(id) {
+      this.selectedAcc = null;
+      this.selectedRes = null;
+      if (this.selectedCan === id) {
+        this.selectedCan = null;
+      } else {
+        this.selectedCan = id;
+      }
+    },
+    cancelMentoring: function(id) {
+      this.loader2 = true;
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/programme-participations/" +
+            this.$route.params.participationId +
+            "/mentoring-sessions/" +
+            id +
+            "/cancel"
+        )
+        .then(res => {
+          this.refresh();
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader2 = false;
+        });
+    },
+    rescheduleMentoring: function() {},
     colorStatus: function(status) {
       var colorStatus = "grey";
       if (status === "accepted") {
         colorStatus = "green";
       } else if (status === "cancelled") {
         colorStatus = "grey";
-      } else if (status === "scheduled") {
-        colorStatus = "warning";
       } else if (status === "proposed") {
+        colorStatus = "blue";
+      } else if (status === "offered") {
         colorStatus = "blue";
       }
       return colorStatus;
+    },
+    refresh: function() {
+      this.getDataList();
     }
   }
 };
