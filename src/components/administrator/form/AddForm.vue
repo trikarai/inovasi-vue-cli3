@@ -3,6 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
+          <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -30,8 +31,7 @@
                     :items="type"
                     item-text="name"
                     item-value="value"
-                  >
-                  </v-autocomplete>
+                  ></v-autocomplete>
 
                   <v-layout justify-space-between v-if="!view">
                     <v-btn
@@ -66,6 +66,9 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
+
+import Notification from "@/components/Notification";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -80,16 +83,16 @@ export default {
           value: "exp"
         },
         {
-          name : "business canvas",
+          name: "business canvas",
           value: "can"
         },
         {
-          name : "persona aspect",
+          name: "persona aspect",
           value: "per"
         },
         {
-          name : "mentoring feedback",
-          value: "men"
+          name: "mentoring feedback",
+          value: "mfb"
         }
       ],
       params: {
@@ -100,8 +103,18 @@ export default {
       nameRules: [
         v => !!v || "Name is required",
         v => v.length >= 3 || "Name must be more than 3 characters"
-      ]
+      ],
+      status: {
+        success: false,
+        error: false,
+        info: false,
+        warning: false
+      },
+      err_msg: { details: [''] }
     };
+  },
+  components: {
+    "notification-alert": Notification
   },
   created: function() {
     this.params.name = this.data.name;
@@ -130,12 +143,11 @@ export default {
           res => {
             console.log(res);
             this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
+          }          
         )
-        .catch()
+        .catch(error=>{
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -164,7 +176,7 @@ export default {
         .then(
           res => {
             this.params = res.data.data;
-            this.params.type = res.data.data.type.value
+            this.params.type = res.data.data.type.value;
           },
           error => {
             console.log(error);
