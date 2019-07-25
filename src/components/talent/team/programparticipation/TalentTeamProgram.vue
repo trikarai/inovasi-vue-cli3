@@ -54,7 +54,7 @@
           :headers="headers"
           :items="program.list"
           :pagination.sync="pagination"
-          :total-items="program.total"
+          :server-items-length="program.total"
           class="elevation-1"
         >
           <template v-slot:items="props">
