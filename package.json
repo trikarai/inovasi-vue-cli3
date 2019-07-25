@@ -27,7 +27,7 @@
     "vue-visible": "^1.0.2",
     "vuebar": "0.0.20",
     "vuelidate": "^0.7.4",
-    "vuetify": "^2.0.0",
+    "vuetify": "^1.5.16",
     "vuex": "^3.0.1",
     "wowjs": "^1.1.3"
   },
