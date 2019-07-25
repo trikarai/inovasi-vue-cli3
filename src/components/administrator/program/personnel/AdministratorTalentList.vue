@@ -22,13 +22,17 @@
           ></v-text-field>
         </v-card-title>
       </v-card>
-
+      <!-- {{querypage}} -->
+      <!-- {{talents}} -->
       <v-data-table
         dark
         :loading="loader"
+        loading-text="Loading... Please wait"
         :headers="headers"
         :items="talents.list"
         :search="search"
+        :pagination.sync="pagination"
+        :server-items-length="talents.total"
         class="elevation-1"
       >
         <template v-slot:items="props">
@@ -50,16 +54,16 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
-import VueLodash from 'vue-lodash'
-const options = { name: 'lodash' } // customize the way you want to call it
+import Vue from "vue";
+import VueLodash from "vue-lodash";
+const options = { name: "lodash" }; // customize the way you want to call it
 
 import net from "@/config/httpclient";
 import alert from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import PersonnelForm from "./PersonnelForm";
 
-Vue.use(VueLodash, options) // options is optional
+Vue.use(VueLodash, options); // options is optional
 
 export default {
   components: {
@@ -69,7 +73,7 @@ export default {
   data() {
     return {
       res: "",
-      isTyping : false,
+      isTyping: false,
       clearable: true,
       status: {
         success: false,
@@ -100,7 +104,9 @@ export default {
         { text: "username", value: "username", sortable: false },
         { text: "email", value: "email", sortable: false },
         { text: "", value: "id", sortable: false }
-      ]
+      ],
+      pagination: {},
+      querypage: ""
     };
   },
   watch: {
@@ -111,10 +117,19 @@ export default {
       if (!value) {
         this.getTalent();
       }
-    }
-    
+    },
+    pagination: "buildQueryPage"
+  },
+  created: function() {
+    this.pagination.page = 1;
+    this.pagination.rowsPerPage = 5;
   },
   mounted: function() {
+    this.querypage =
+      "?page=" +
+      this.pagination.page +
+      "&pageSize=" +
+      this.pagination.rowsPerPage;
     this.getDataList();
   },
   methods: {
@@ -124,10 +139,21 @@ export default {
         this.getTalent();
       }, 3000);
     },
+    buildQueryPage: function() {
+      this.querypage =
+        "?page=" +
+        this.pagination.page +
+        "&pageSize=" +
+        this.pagination.rowsPerPage;
+      this.getDataList();
+    },
     getTalent: function() {
       this.loader = true;
       net
-        .getData(this, "/administrator/talents?email=" + encodeURI(this.searchEmail))
+        .getData(
+          this,
+          "/administrator/talents?email=" + encodeURI(this.searchEmail)
+        )
         .then(res => {
           console.log(res);
           if (res.data.data) {
@@ -147,7 +173,7 @@ export default {
     getDataList: function() {
       this.loader = true;
       net
-        .getData(this, "/administrator/talents")
+        .getData(this, "/administrator/talents" + this.querypage)
         .then(res => {
           if (res.data.data) {
             this.talents = res.data.data;
