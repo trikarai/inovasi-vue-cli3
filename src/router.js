@@ -65,12 +65,13 @@ import TalentProgrammes from "./components/talent/TalentProgrammes.vue";
 
 import Coordinator from "./views/Coordinator.vue";
 import CoordinatorDashboard from "./components/personnel/coordinator/CoordinatorDashboard";
-import CoordinatorProgram from "./components/personnel/coordinator/CoordinatorProgram";
-import CoordinatorProgramParticipant from "./components/personnel/coordinator/CoordinatorProgramParticipant";
+import CoordinatorProgram from "./components/personnel/coordinator/program/CoordinatorProgram";
+import CoordinatorProgramParticipant from "./components/personnel/coordinator/program/participant/CoordinatorProgramParticipant";
 
 import Mentor from "./views/Mentor.vue";
 import MentorDashboard from "./components/personnel/mentor/MentorDashboard";
-import MentorProgram from "./components/personnel/mentor/MentorProgram";
+import MentorProgram from "./components/personnel/mentor/program/MentorProgram";
+import MentorProgramMentoring from "./components/personnel/mentor/program/mentoring/MentorProgramMentoring";
 
 Vue.use(Router);
 
@@ -408,6 +409,11 @@ const routes = [
         path: "/mentor/program",
         name: "Mentorship Program",
         component: MentorProgram
+      },
+      {
+        path: "/mentor/program/:programId/mentoring",
+        name: "Mentoring Session",
+        component: MentorProgramMentoring
       },
     ]
   },
