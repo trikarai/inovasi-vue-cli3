@@ -217,7 +217,7 @@ export default {
         warning: false
       },
       singleData: { id: "", name: "" },
-      err_msg: { details: ["0"] },
+      err_msg: {details:[""]},
       loader: false,
       loader2: false,
       dialogDel: false,

@@ -21,7 +21,7 @@
                 <div>
                   <h3 class="headline mb-0">{{ $vuetify.t('$vuetify.profile.profileInformation') }}</h3>
                   <v-text-field
-                    disabled="true"
+                    :disabled="true"
                     :label="$vuetify.t('$vuetify.profile.username')"
                     v-model="data.username"
                     :rules="nameRules"
@@ -162,7 +162,7 @@ import Notification from "@/components/Notification";
 export default {
   data: function() {
     return {
-      error_msg: "",
+      err_msg: {details:[""]},
       status: {
         success: false,
         error: false,
@@ -172,6 +172,7 @@ export default {
       view: false,
       show1: false,
       show2: false,
+      menu2: false,
       loader: false,
       dialogForm: false,
       dialogPassword: false,
