@@ -4,6 +4,16 @@
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
           <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+
+          <v-dialog v-model="loader" hide-overlay persistent width="300">
+            <v-card color="primary">
+              <v-card-text>
+                {{ $vuetify.t('$vuetify.info.standby') }}
+                <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -82,7 +92,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: { details: [""] },
       params: {
         name: "",
         description: "",
@@ -118,9 +128,10 @@ export default {
       }
     },
     getCurriculum: function() {
+      this.loader = true;
       net
         .getData(this, "/administrator/curriculums")
-        .then(function(res) {
+        .then(res => {
           console.log(res);
           if (res.data.data) {
             this.curriculum = res.data.data;
@@ -128,11 +139,11 @@ export default {
             this.curriculum.list = [];
           }
         })
-        .catch(function(res) {
+        .catch(error => {
           console.log(error);
           notif.showError(this, res);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -140,15 +151,15 @@ export default {
       this.loader = true;
       net
         .postData(this, "/administrator/programmes", this.params)
-        .then(function(res) {
+        .then(res=> {
           console.log(res);
           this.$emit("refresh");
         })
-        .catch(function(res) {
+        .catch(error=> {
           console.log(error);
           notif.showError(this, res);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -169,17 +180,21 @@ export default {
         });
     },
     getSingleData: function(id) {
+      this.loader = true;
       net
         .getData(this, "/administrator/programmes/" + id)
-        .then(function(res) {
+        .then(res => {
           this.params = res.data.data;
           this.params.curriculumId = res.data.data.curriculum.id;
         })
-        .catch(function(res) {
+        .catch(error => {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally();
+        .finally(() => {
+          console.log("OK");
+          this.loader = false;
+        });
     }
   }
 };
