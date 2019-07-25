@@ -35,7 +35,7 @@
             </v-btn>
           </td>
           <td class="text-xs-right">
-            <v-btn @click="openEdit(props.item.id)" small>
+            <v-btn @click="openEdit(props.item)" small>
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
@@ -90,7 +90,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: {details:[""]},
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -161,11 +161,11 @@ export default {
           this.loader = false;
         });
     },
-    openEdit: function(index) {
+    openEdit: function(data) {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.program.list[index];
+      this.singleData = data;
     },
     openAdd: function() {
       this.dialogForm = true;
