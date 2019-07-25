@@ -16,7 +16,7 @@
           <template v-slot:items="props">
             <td>{{ props.item.team.name }}</td>
             <td>
-               <v-chip color="teal" text-color="white">
+              <v-chip color="teal" text-color="white">
                 <v-avatar>
                   <v-icon>check_circle</v-icon>
                 </v-avatar>
@@ -55,7 +55,7 @@
                 <v-expand-transition>
                   <div v-show="props.index == selectedIndexRej" style="white-space: nowrap">
                     Confirm to Reject!
-                    <v-btn color="green" @click="rejectParticipant"> 
+                    <v-btn color="green" @click="rejectParticipant">
                       <v-icon>check</v-icon>
                     </v-btn>
                     <v-btn color="red" @click="selectedIndexRej = null">
@@ -177,6 +177,7 @@ export default {
   methods: {
     getDataList: function() {
       this.loader = true;
+      this.status.error = false;
       net
         .getData(
           this,
@@ -199,7 +200,8 @@ export default {
           this.loader = false;
         });
     },
-    getSingleData: function() {
+    getSingleData: function(id) {
+      this.status.error = false;
       this.loaderDialog = true;
       net
         .getData(
@@ -207,7 +209,7 @@ export default {
           "/talent/as-programme-coordinator/" +
             this.$route.params.programId +
             "/participants/" +
-            this.participantId
+            id
         )
         .then(res => {
           if (res.data.data) {
@@ -219,6 +221,7 @@ export default {
         .catch(error => {
           console.log(error);
           notif.showError(this, error);
+          this.dialog = false;
         })
         .finally(function() {
           this.loaderDialog = false;
@@ -228,7 +231,7 @@ export default {
       this.participantId = id;
       this.dialog = true;
       this.loaderDialog = true;
-      this.getSingleData();
+      this.getSingleData(id);
     },
     acceptAct: function(index) {
       this.selectedIndexRej = null;
@@ -242,22 +245,26 @@ export default {
     acceptParticipant: function() {
       this.loader = true;
       this.status.error = false;
-      net.putData(
-        this,
-        "/talent/as-programme-coordinator/" + this.$route.params.programId + 
-        "/participants/" +
-        this.participants.list[this.selectedIndexAcc].id +
-        "/accept"
-      ).then(res=>{
-        console.log(res);
-        this.refresh();
-      }).catch(error=>{
-        console.log(error);
-        notif.showError(this, error)
-      })
-      .finally(function(){
-        this.loader = false;
-      });
+      net
+        .putData(
+          this,
+          "/talent/as-programme-coordinator/" +
+            this.$route.params.programId +
+            "/participants/" +
+            this.participants.list[this.selectedIndexAcc].id +
+            "/accept"
+        )
+        .then(res => {
+          console.log(res);
+          this.refresh();
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(function() {
+          this.loader = false;
+        });
     },
     rejectAct: function(index) {
       this.selectedIndexAcc = null;
@@ -271,22 +278,26 @@ export default {
     rejectParticipant: function() {
       this.loader = true;
       this.status.error = false;
-      net.putData(
-        this,
-        "/talent/as-programme-coordinator/" + this.$route.params.programId + 
-        "/participants/" +
-        this.participants.list[this.selectedIndexAcc].id +
-        "/reject"
-      ).then(res=>{
-        console.log(res);
-        this.refresh();
-      }).catch(error=>{
-        console.log(error);
-        notif.showError(this, error)
-      })
-      .finally(function(){
-        this.loader = false;
-      });
+      net
+        .putData(
+          this,
+          "/talent/as-programme-coordinator/" +
+            this.$route.params.programId +
+            "/participants/" +
+            this.participants.list[this.selectedIndexAcc].id +
+            "/reject"
+        )
+        .then(res => {
+          console.log(res);
+          this.refresh();
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(function() {
+          this.loader = false;
+        });
     },
     expellAct: function(index) {
       this.selectedIndexRej = null;
@@ -300,22 +311,26 @@ export default {
     expellParticipant: function() {
       this.loader = true;
       this.status.error = false;
-      net.putData(
-        this,
-        "/talent/as-programme-coordinator/" + this.$route.params.programId + 
-        "/participants/" +
-        this.participants.list[this.selectedIndexAcc].id +
-        "/expell"
-      ).then(res=>{
-        console.log(res);
-        this.refresh();
-      }).catch(error=>{
-        console.log(error);
-        notif.showError(this, error)
-      })
-      .finally(function(){
-        this.loader = false;
-      });
+      net
+        .putData(
+          this,
+          "/talent/as-programme-coordinator/" +
+            this.$route.params.programId +
+            "/participants/" +
+            this.participants.list[this.selectedIndexAcc].id +
+            "/expell"
+        )
+        .then(res => {
+          console.log(res);
+          this.refresh();
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(function() {
+          this.loader = false;
+        });
     },
     refresh: function() {
       // this.dialogForm = false;
