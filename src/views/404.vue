@@ -11,7 +11,7 @@
             Luckily, we know the way back.
           </v-card-text>
           <v-card-actions>
-            <v-btn flat class="red darken-3 white--text" to="/">Back</v-btn>
+            <v-btn flat class="red darken-3 white--text" @click="goto()">Back</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -20,5 +20,10 @@
 </template>
 <script>
 export default {
+  methods: {
+    goto: function(){
+      this.$router.go(-1);
+    }
+  }
 }
 </script>
