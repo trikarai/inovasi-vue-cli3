@@ -65,7 +65,9 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: {
+        details: [""]
+      },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -89,9 +91,9 @@ export default {
           sortable: false,
           value: "phase"
         },
-        { text: "", value: "id",sortable: false, }
+        { text: "", value: "id",sortable: false}
       ]
-    };
+    }
   },
   mounted: function() {
     this.getDataList();
