@@ -182,7 +182,7 @@ export default {
       select: "",
       queryurl: "",
       singleData: { id: "", name: "" },
-      err_msg: "",
+      err_msg: {details:[""]},
       loader: false,
       dialogDel: false,
       dialogForm: false,
