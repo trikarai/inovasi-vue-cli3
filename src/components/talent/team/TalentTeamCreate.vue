@@ -2,7 +2,7 @@
   <transition name="slide" mode="out-in">
     <div>
       <v-container>
-        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary">
             <v-card-text>
@@ -90,12 +90,11 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import { TiptapVuetify, OrderedList, ListItem, History } from "tiptap-vuetify";
+
 export default {
-  components: {
-    "notification-alert": Notification
-  },
   data() {
     return {
       valid: false,
@@ -106,7 +105,7 @@ export default {
         warning: false
       },
       singleData: { id: "", name: "" },
-      err_msg: "",
+      err_msg: { details: [""] },
       params: {
         name: "",
         position: "",
@@ -135,7 +134,8 @@ export default {
     };
   },
   components: {
-    TiptapVuetify
+    TiptapVuetify,
+    "notification-alert": Notification
   },
   created: function() {},
   mounted: function() {},
@@ -143,12 +143,12 @@ export default {
     validateTeam: function() {
       if (this.$refs.form.validate()) {
         this.createTeam();
-      }else{
+      } else {
         this.$vuetify.goTo(this.$refs.form, {
-            duration: 500,
-            offset: 0,
-            easing: "linear"
-          });
+          duration: 500,
+          offset: 0,
+          easing: "linear"
+        });
       }
     },
     createTeam: function() {

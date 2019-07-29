@@ -54,7 +54,7 @@ export default {
         { text: "", value: "", sortable: false },
         { text: "", value: "", sortable: false }
       ],
-      err_msg: "",
+      err_msg: {details:[""]},
       error: "error",
       loader: false,
       selectedIndex: null,

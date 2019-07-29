@@ -66,7 +66,7 @@ export default {
       teamId: "",
       isTeam: "false",
       singleData: { id: "", name: "" },
-      err_msg: "",
+      err_msg: {details:[""]},
       loader: false,
       dialogDel: false,
       dialogForm: false,
