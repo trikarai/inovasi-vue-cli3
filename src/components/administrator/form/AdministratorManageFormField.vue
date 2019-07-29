@@ -191,7 +191,7 @@ export default {
       net
         .deleteData(
           this,
-          "/administrator/fields/" + this.$route.params.formId + "/fields/" + id
+          "/administrator/forms/" + this.$route.params.formId + "/fields/" + id
         )
         .then()
         .catch(function() {})

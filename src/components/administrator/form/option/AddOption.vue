@@ -108,7 +108,7 @@ export default {
             this.$route.params.formId +
             "/fields/" +
             this.fieldId +
-            "/options/",
+            "/options",
           this.params
         )
         .then(

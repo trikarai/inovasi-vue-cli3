@@ -3,6 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
+          <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -26,6 +27,7 @@
                   ></v-text-field>
 
                   <v-autocomplete
+                    :disabled="edit"
                     v-model="params.type"
                     label="Field Type"
                     :items="type"
@@ -37,7 +39,6 @@
                     :disabled="view"
                     label="Position"
                     v-model="params.position"
-                    type="number"
                     required
                   ></v-text-field>
                   <template v-if="minmax">
@@ -97,6 +98,8 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
+import Notification from "@/components/Notification";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -105,6 +108,14 @@ export default {
       valid: false,
       loader: false,
       checkbox: false,
+      status: {
+        error: false,
+        success: false,
+        info: false,
+        warning: false
+      },
+      err_msg: "",
+      response: "",
       params: {
         name: "",
         description: "",
@@ -141,6 +152,9 @@ export default {
       ]
     };
   },
+  components: {
+    "notification-alert": Notification
+  },
   created: function() {
     this.params.name = this.data.name;
   },
@@ -167,10 +181,6 @@ export default {
       if (this.params.type === "sel") {
         this.params.minValue = 1;
         this.params.maxValue = 1;
-        this.checkbox = false;
-      } else {
-        this.params.minValue = 0;
-        this.params.maxValue = 0;
       }
     },
     checkbox: function() {
@@ -209,6 +219,7 @@ export default {
           },
           error => {
             console.log(error);
+            notif.showError(this, error);
           }
         )
         .catch()
@@ -234,6 +245,7 @@ export default {
           },
           error => {
             console.log(error);
+            notif.showError(this, error);
           }
         )
         .catch()
@@ -250,6 +262,12 @@ export default {
         .then(
           res => {
             this.params = res.data.data;
+            this.params.type = res.data.data.type.value;
+            if(this.params.minValue === 1){
+              this.checkbox = false;
+            }else{
+              this.checkbox = true;
+            }
           },
           error => {
             console.log(error);

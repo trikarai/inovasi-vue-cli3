@@ -3,6 +3,17 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
+          <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+
+          <v-dialog v-model="loader" hide-overlay persistent width="300">
+            <v-card color="primary">
+              <v-card-text>
+                {{ $vuetify.t('$vuetify.info.standby') }}
+                <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -25,13 +36,12 @@
                     required
                   ></v-text-field>
                   <v-autocomplete
-                    v-model="params.curriculum_id"
+                    v-model="params.curriculumId"
                     label="Curriculum"
                     :items="curriculum.list"
                     item-text="name"
                     item-value="id"
-                  >
-                  </v-autocomplete>
+                  ></v-autocomplete>
 
                   <v-layout justify-space-between v-if="!view">
                     <v-btn
@@ -66,6 +76,8 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
+import Notification from "@/components/Notification";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -74,16 +86,26 @@ export default {
       valid: false,
       loader: false,
       curriculum: "",
+      status: {
+        error: false,
+        success: false,
+        info: false,
+        warning: false
+      },
+      err_msg: { details: [""] },
       params: {
         name: "",
         description: "",
-        curriculum_id: ""
+        curriculumId: ""
       },
       nameRules: [
         v => !!v || "Name is required",
         v => v.length >= 3 || "Name must be more than 3 characters"
       ]
     };
+  },
+  components: {
+    "notification-alert": Notification
   },
   created: function() {
     this.params.name = this.data.name;
@@ -106,41 +128,38 @@ export default {
       }
     },
     getCurriculum: function() {
+      this.loader = true;
       net
         .getData(this, "/administrator/curriculums")
-        .then(
-          res => {
-            console.log(res);
-            if (res.data.data) {
-              this.curriculum = res.data.data;
-            } else {
-              this.curriculum.list = [];
-            }
-          },
-          error => {
-            console.log(error);
+        .then(res => {
+          console.log(res);
+          if (res.data.data) {
+            this.curriculum = res.data.data;
+          } else {
+            this.curriculum.list = [];
           }
-        )
-        .catch()
-        .finally(function() {
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, res);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
     addData: function() {
       this.loader = true;
       net
-        .postData(this, "/administrator/programmes/", this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally(function() {
+        .postData(this, "/administrator/programmes", this.params)
+        .then(res=> {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(error=> {
+          console.log(error);
+          notif.showError(this, res);
+        })
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -148,34 +167,34 @@ export default {
       this.loader = true;
       net
         .putData(this, "/administrator/programmes/" + this.data.id, this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .then(function(res) {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
     },
     getSingleData: function(id) {
+      this.loader = true;
       net
         .getData(this, "/administrator/programmes/" + id)
-        .then(
-          res => {
-            this.params = res.data.data;
-            this.params.curriculum_id = res.data.data.curriculum.id
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally();
+        .then(res => {
+          this.params = res.data.data;
+          this.params.curriculumId = res.data.data.curriculum.id;
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          console.log("OK");
+          this.loader = false;
+        });
     }
   }
 };

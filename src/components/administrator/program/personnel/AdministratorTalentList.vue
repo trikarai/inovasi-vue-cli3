@@ -2,32 +2,37 @@
   <div>
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-
       <v-card>
         <v-card-title>
           <v-spacer></v-spacer>
           <v-text-field
+            v-model="searchEmail"
+            append-icon="search"
+            label="Synchronous search by email"
+            hide-details
+            @input="isTyping = true"
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          <v-text-field
             v-model="search"
             append-icon="search"
-            label="Search"
-            single-line
+            label="Search talent on table"
             hide-details
+            clearable="clearable"
           ></v-text-field>
         </v-card-title>
       </v-card>
+      <!-- {{querypage}} -->
+      <!-- {{talents}} -->
       <v-data-table
         dark
+        :loading="loader"
+        loading-text="Loading... Please wait"
         :headers="headers"
         :items="talents.list"
         :search="search"
+        :pagination.sync="pagination"
+        :server-items-length="talents.total"
         class="elevation-1"
       >
         <template v-slot:items="props">
@@ -45,14 +50,21 @@
       </v-data-table>
     </v-container>
 
-    <personnel-form v-if="dialogForm" :data="singleData" @close="dialogForm = false"  @oke="oke" />
+    <personnel-form v-if="dialogForm" :data="singleData" @close="dialogForm = false" @oke="oke" />
   </div>
 </template>
 <script>
+import Vue from "vue";
+import VueLodash from "vue-lodash";
+const options = { name: "lodash" }; // customize the way you want to call it
+
 import net from "@/config/httpclient";
 import alert from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import PersonnelForm from "./PersonnelForm";
+
+Vue.use(VueLodash, options); // options is optional
+
 export default {
   components: {
     PersonnelForm,
@@ -61,6 +73,8 @@ export default {
   data() {
     return {
       res: "",
+      isTyping: false,
+      clearable: true,
       status: {
         success: false,
         error: false,
@@ -79,6 +93,7 @@ export default {
       talents: { total: 0, list: [] },
       singleData: { id: "", name: "" },
       search: "",
+      searchEmail: "",
       headers: [
         {
           text: "Name",
@@ -89,17 +104,76 @@ export default {
         { text: "username", value: "username", sortable: false },
         { text: "email", value: "email", sortable: false },
         { text: "", value: "id", sortable: false }
-      ]
+      ],
+      pagination: {},
+      querypage: ""
     };
   },
+  watch: {
+    searchEmail: Vue._.debounce(function() {
+      this.isTyping = false;
+    }, 1000),
+    isTyping: function(value) {
+      if (!value) {
+        this.getTalent();
+      }
+    },
+    pagination: "buildQueryPage"
+  },
+  created: function() {
+    this.pagination.page = 1;
+    this.pagination.rowsPerPage = 5;
+  },
   mounted: function() {
+    this.querypage =
+      "?page=" +
+      this.pagination.page +
+      "&pageSize=" +
+      this.pagination.rowsPerPage;
     this.getDataList();
   },
   methods: {
+    getTalentTimeOut: function() {
+      this.loader = true;
+      setTimeout(() => {
+        this.getTalent();
+      }, 3000);
+    },
+    buildQueryPage: function() {
+      this.querypage =
+        "?page=" +
+        this.pagination.page +
+        "&pageSize=" +
+        this.pagination.rowsPerPage;
+      this.getDataList();
+    },
+    getTalent: function() {
+      this.loader = true;
+      net
+        .getData(
+          this,
+          "/administrator/talents?email=" + encodeURI(this.searchEmail)
+        )
+        .then(res => {
+          console.log(res);
+          if (res.data.data) {
+            this.talents = res.data.data;
+          } else {
+            this.talents.list = [];
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.talents.list = [];
+        })
+        .finally(function() {
+          this.loader = false;
+        });
+    },
     getDataList: function() {
       this.loader = true;
       net
-        .getData(this, "/administrator/talents/")
+        .getData(this, "/administrator/talents" + this.querypage)
         .then(res => {
           if (res.data.data) {
             this.talents = res.data.data;
@@ -125,8 +199,8 @@ export default {
       this.dialogForm = false;
       this.getDataList();
     },
-    oke: function(res){
-      alert.showInfo(this, res)
+    oke: function(res) {
+      alert.showInfo(this, res);
     }
   }
 };

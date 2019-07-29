@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
@@ -11,7 +11,7 @@
         </v-card>
       </v-dialog>
       <v-layout row wrap>
-        <v-flex xs12 md6 >
+        <v-flex xs12 md6>
           <v-card elevation="1" style="margin:10px">
             <v-card-title>
               <v-badge v-model="parentData.aMainIdea" left>
@@ -20,19 +20,21 @@
                 </template>
                 <h3>{{parentData.name}}</h3>
               </v-badge>
-              <v-btn fab color="blue" small @click="openEditParent(parentData)"><v-icon>edit</v-icon></v-btn>
+              <v-btn fab color="blue" small @click="openEditParent(parentData)">
+                <v-icon>edit</v-icon>
+              </v-btn>
             </v-card-title>
             <v-card-text>
               {{parentData.description}}
-              <br>
+              <br />
               {{parentData.targetCustomer}}
-              <br>
+              <br />
               {{parentData.problemConfront}}
-              <br>
+              <br />
               {{parentData.valueProposed}}
-              <br>
+              <br />
               {{parentData.revenueModel}}
-              <v-divider/>
+              <v-divider />
               Initiator : {{parentData.initiator.talent.name}}
             </v-card-text>
           </v-card>
@@ -40,9 +42,11 @@
         <v-flex xs12 md6>
           <v-list subheader style="margin:10px">
             <v-subheader>Customer Segments</v-subheader>
-            <v-list-tile v-for="(item, index) in data.list" :key="item.id" >
+            <v-list-tile v-for="(item, index) in data.list" :key="item.id">
               <v-list-tile-avatar>
-                <v-btn fab flat @click="openDetail(item.id)"><v-icon>pageview</v-icon></v-btn>
+                <v-btn fab flat @click="openDetail(item.id)">
+                  <v-icon>pageview</v-icon>
+                </v-btn>
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title>{{item.name}}</v-list-tile-title>
@@ -98,9 +102,10 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import CustomerSegmentForm from "./customersegment/CustomerSegmentForm";
-import IdeaForm from "./IdeaForm"
+import IdeaForm from "./IdeaForm";
 
 export default {
   components: {
@@ -116,7 +121,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: { details: [""] },
       error: "error",
       loader: false,
       dialogDel: false,
@@ -128,7 +133,23 @@ export default {
       dataId: "",
       selectedIndex: null,
       data: { total: 0, list: [] },
-      parentData: "",
+      parentData: {
+        id: "",
+        name: "",
+        description: "",
+        targetCustomer: "",
+        problemConfront: "",
+        valueProposed: "",
+        revenueModel: "",
+        initiator: {
+          id: "",
+          talent: {
+            id: "",
+            name: ""
+          }
+        },
+        aMainIdea: false
+      },
       singleData: { id: "", name: "" }
     };
   },
@@ -139,9 +160,8 @@ export default {
   methods: {
     getParentData: function() {
       this.loader = true;
-      // this.status.error = false;
-      // this.status.success = false;
-      var app = this;
+      this.status.error = false;
+      this.status.success = false;
       net
         .getData(
           this,
@@ -150,36 +170,14 @@ export default {
             "/ideas/" +
             this.$route.params.ideaId
         )
-        .then(
-          res => {
-            this.parentData = res.data.data;
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.error = error;
-            this.status.error = true;
-          }
-        )
-        .catch(function(error) {
-          console.log(error);
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.error = error;
-          app.status.error = true;
+        .then(res => {
+          this.parentData = res.data.data;
         })
-        .finally(function() {
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -194,33 +192,29 @@ export default {
             this.$route.params.ideaId +
             "/customer-segments"
         )
-        .then(
-          res => {
-            if (res.data.data) {
-              this.data = res.data.data;
-            }
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.error = error;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.data = res.data.data;
           }
-        )
-        .finally(function() {
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
-    openDetail: function(id){
-      this.$router.push({path: "/talent/team/" + this.$route.params.teamId + "/idea/" + this.$route.params.ideaId + "/customersegment/" + id})
+    openDetail: function(id) {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/idea/" +
+          this.$route.params.ideaId +
+          "/customersegment/" +
+          id
+      });
     },
     openEditParent: function(data) {
       this.dialogFormParent = true;
@@ -254,8 +248,11 @@ export default {
             id
         )
         .then()
-        .catch(function() {})
-        .finally(function() {
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });
@@ -273,38 +270,12 @@ export default {
             id +
             "/set_as_main_idea"
         )
-        .then(
-          res => {
-            console.log(res);
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-            this.error = error;
-          }
-        )
-        .catch(function(error) {
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
           console.log(error);
-          if (error.status !== 200) {
-            app.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            app.err_msg = error.body.meta;
-          }
-          app.error = error;
-          app.status.error = true;
+          notif.showError(this, error);
         })
         .finally(function() {
           this.selectedIndex = null;

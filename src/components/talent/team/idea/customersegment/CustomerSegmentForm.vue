@@ -70,7 +70,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: { code: 666, type: "", details: [] },
+      err_msg: {details: [""]},
       error: "error",
       params: {
         name: "",
@@ -159,7 +159,7 @@ export default {
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
-            "/customer-segments/",
+            "/customer-segments",
           this.params
         )
         .then(

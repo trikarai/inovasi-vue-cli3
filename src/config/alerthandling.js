@@ -6,7 +6,15 @@ export default {
                 type: res.statusText,
                 details: ["Internal Server Error"]
             };
+        } else if (res.status === 405) {
+            context.err_msg = {
+                code: res.status,
+                type: res.statusText,
+                details: ["Method Not Allowed"]
+            };
         } else if (res.status >= 400) {
+            context.err_msg = res.body.meta;
+        } else if (res.status >= 300) {
             context.err_msg = res.body.meta;
         } else {
             context.err_msg = res.body.meta;

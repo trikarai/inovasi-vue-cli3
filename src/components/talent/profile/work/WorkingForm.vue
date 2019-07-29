@@ -67,7 +67,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: { code: 666, type: "", details: [] },
+      err_msg: {details:[""]},
       params: {
         companyName: "",
         position: "",
@@ -131,7 +131,7 @@ export default {
     addData: function() {
       this.loader = true;
       net
-        .postData(this, "/talent/working-experiences/", this.params)
+        .postData(this, "/talent/working-experiences", this.params)
         .then(
           res => {
             console.log(res);

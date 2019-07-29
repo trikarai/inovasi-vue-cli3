@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container grid-list-md>
-      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-layout>
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary" dark>
@@ -21,7 +21,7 @@
                 <div>
                   <h3 class="headline mb-0">{{ $vuetify.t('$vuetify.profile.profileInformation') }}</h3>
                   <v-text-field
-                    disabled="true"
+                    :disabled="true"
                     :label="$vuetify.t('$vuetify.profile.username')"
                     v-model="data.username"
                     :rules="nameRules"
@@ -41,7 +41,7 @@
                   <v-text-field
                     :disabled="view"
                     :label="$vuetify.t('$vuetify.profile.email')"
-                    :rules="[rules.required, rules.email]"
+                    :rules="emailRules"
                     v-model="data.email"
                     required
                   ></v-text-field>
@@ -116,9 +116,10 @@
                   <v-text-field
                     v-model="password.previousPassword"
                     :append-icon="show1 ? 'visibility' : 'visibility_off'"
-                    :rules="[rules.required, rules.min]"
                     :type="show1 ? 'text' : 'password'"
                     name="Previous Password"
+                    :rules="passwordRules"
+                    autocomplete="current-password"
                     :label="$vuetify.t('$vuetify.profile.previousPassword')"
                     hint="At least 8 characters"
                     counter
@@ -127,9 +128,10 @@
                   <v-text-field
                     v-model="password.newPassword"
                     :append-icon="show2 ? 'visibility' : 'visibility_off'"
-                    :rules="[rules.required, rules.min]"
                     :type="show2 ? 'text' : 'password'"
                     name="New Password"
+                    :rules="passwordRules"
+                    autocomplete="new-password"
                     :label="$vuetify.t('$vuetify.profile.newPassword')"
                     hint="At least 8 characters"
                     counter
@@ -156,13 +158,14 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import auth from "@/config/auth";
 import Notification from "@/components/Notification";
 
 export default {
   data: function() {
     return {
-      error_msg: "",
+      err_msg: { details: [""] },
       status: {
         success: false,
         error: false,
@@ -172,6 +175,7 @@ export default {
       view: false,
       show1: false,
       show2: false,
+      menu2: false,
       loader: false,
       dialogForm: false,
       dialogPassword: false,
@@ -198,18 +202,14 @@ export default {
         v => !!v || "Name is required",
         v => v.length >= 3 || "Name must be more than 3 characters"
       ],
-      rules: {
-        required: value => !!value || "Required.",
-        // counter: value => value.length <= 25 || "Max 25 characters",
-        email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        }
-      },
-      passwordRules: {
-        required: value => !!value || "Password Required.",
-        min: v => v.length >= 8 || "Min 8 characters"
-      },
+      emailRules: [
+        v => !!v || "E-mail is required",
+        v => /.+@.+/.test(v) || "E-mail must be valid"
+      ],
+      passwordRules: [
+        v => !!v || "Password Required",
+        v => v.length >= 8 || "Min 8 characters"
+      ],
       type: [
         {
           name: "Male",
@@ -230,25 +230,21 @@ export default {
       this.loader = true;
       net
         .getData(this, "/talent/profile")
-        .then(
-          res => {
-            this.data = res.data.data;
-          },
-          error => {
-            console.log(error);
-            this.error_msg = error.body.meta;
-          }
-        )
-        .catch(function(error) {})
-        .finally(function() {
+        .then(res => {
+          this.data = res.data.data;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
-    validateProfile () {
-        if (this.$refs.form.validate()) {
-          this.updateProfile();
-        }
-      },
+    validateProfile() {
+      if (this.$refs.form.validate()) {
+        this.updateProfile();
+      }
+    },
     updateProfile: function() {
       this.loader = true;
       this.status.error = false;
@@ -256,25 +252,14 @@ export default {
       var app = this;
       net
         .putData(this, "/talent/profile/update", this.data)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-            this.err_msg = {
-              code: res.code,
-              type: res.type,
-              details: ["Profile Updated"]
-            };
-            this.status.success = true;
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          this.$emit("refresh");
+          notif.showSuccess(this, res);
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           app.loader = false;
           app.$vuetify.goTo(app.$refs.notif, {
             duration: 10000,
@@ -283,36 +268,31 @@ export default {
           });
         });
     },
-    validatePassword () {
-        if (this.$refs.form2.validate()) {
-          this.updatePassword();
-        }
-      },
+    validatePassword() {
+      if (this.$refs.form2.validate()) {
+        this.updatePassword();
+      }
+    },
     updatePassword: function() {
       this.loader = true;
       this.status.error = false;
       this.status.success = false;
       net
         .putData(this, "/talent/profile/change-password/", this.password)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-            this.err_msg = {
-              code: res.code,
-              type: res.type,
-              details: ["Password Updated"]
-            };
-            this.status.success = true;
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
+          this.err_msg = {
+            code: res.code,
+            type: res.type,
+            details: ["Password Updated"]
+          };
+          this.status.success = true;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
           this.password.previousPassword = "";
           this.password.newPassword = "";

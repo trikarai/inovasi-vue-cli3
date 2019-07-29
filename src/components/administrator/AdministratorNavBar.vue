@@ -112,27 +112,16 @@ export default {
           route: "/administrator/admin"
         },
         {
-          icon: "school",
-          text: "Program",
-          route: "/administrator/program",
-          item: [
-            {
-              icon: "",
-              text: "Registration",
-              route: "/administrator/program/:programId/registration"
-            },
-            {
-              icon: "",
-              text: "Phase",
-              route: "/administrator/program/:programId/phase"
-            }
-          ]
-        },
-        {
           icon: "local_library",
           text: "Curriculum",
           route: "/administrator/curriculum"
         },
+        {
+          icon: "school",
+          text: "Program",
+          route: "/administrator/program",
+        },
+        
         { icon: "map", text: "Region", route: "/administrator/region" },
         { icon: "layers", text: "Track", route: "/administrator/track" },
         { icon: "note_add", text: "Form", route: "/administrator/form" }

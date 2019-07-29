@@ -1,8 +1,8 @@
-<template functional>
-  <v-container grid-list-md>
-    <v-layout row wrap>
-      <v-flex xs12>
-        <v-card>
+<template>
+  <v-container>
+    <v-layout>
+      <v-flex>
+        <v-card xs12>
           <v-card-title class="red darken-3 white--text subheading" primary-title>
             <span class="title">Oops!</span>
           </v-card-title>
@@ -11,7 +11,7 @@
             Luckily, we know the way back.
           </v-card-text>
           <v-card-actions>
-            <v-btn flat class="red darken-3 white--text" to="/">Back</v-btn>
+            <v-btn flat class="red darken-3 white--text" @click="goback()"><v-icon left>history</v-icon>Back</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -20,5 +20,11 @@
 </template>
 <script>
 export default {
-}
+  methods: {
+    goback: function() {
+      this.$router.go(-1);
+    }
+  }
+};
 </script>
+

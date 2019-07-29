@@ -16,10 +16,10 @@
           <template v-slot:items="props">
             <td>{{ props.item.programme.name }}</td>
             <td class="text-xs-right">
-              <v-btn small @click="openParticipant(props.item.programme.id)">
-                <v-icon small left>people_outline</v-icon>
+              <v-btn small @click="gotoMentoring(props.item.programme.id)">
+                <v-icon small left>today</v-icon>
                 <!-- {{ $vuetify.t('$vuetify.action.view') }} -->
-                Participants
+                Mentoring
               </v-btn>
             </td>
           </template>
@@ -29,7 +29,6 @@
   </transition>
 </template>
 <script>
-import auth from "@/config/auth";
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
@@ -47,7 +46,7 @@ export default {
         warning: false
       },
       singleData: { id: "", name: "" },
-      err_msg: "",
+      err_msg: {details:[""]},
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -75,11 +74,9 @@ export default {
     };
   },
   created: function() {
-    // this.user = JSON.parse(auth.getAuthData());
   },
   mounted: function() {
     this.getDataList();
-    // this.programmeMentorship = this.user.data.programmeMentorship;
   },
   methods: {
     getDataList: function() {
@@ -105,9 +102,9 @@ export default {
           this.loader = false;
         });
     },
-    openParticipant: function(id) {
+    gotoMentoring: function(id) {
       this.$router.push({
-        path: "/mentor/program/" + id + "/participant"
+        path: "/mentor/program/" + id + "/mentoring"
       });
     },
     refresh: function() {

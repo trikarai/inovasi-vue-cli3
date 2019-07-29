@@ -15,6 +15,7 @@ import AdministratorManageAdmin from "./components/administrator/AdministratorMa
 import AdministratorManageProgram from "./components/administrator/AdministratorManageProgram";
 import AdministratorManageProgramPhase from "./components/administrator/program/AdministratorProgramPhase";
 import AdministratorManageProgramRegistration from "./components/administrator/program/registration/AdministratorProgramRegistration";
+import AdministratorManageProgramMentoring from "./components/administrator/program/AdministratorManageProgramMentoring";
 import AdministratorManageProgramCoordinator from "./components/administrator/program/AdministratorManageProgramCoordinator";
 import AdministratorManageProgramMentor from "./components/administrator/program/AdministratorManageProgramMentor";
 import AdministratorManageProgramTalentSearch from "./components/administrator/program/personnel/AdministratorTalentList";
@@ -52,19 +53,25 @@ import TalentTeamIdea from "./components/talent/team/idea/TalentTeamIdea";
 import TalentTeamIdeaDetail from "./components/talent/team/idea/TalentTeamIdeaDetail";
 import TalentTeamIdeaCustomersegment from "./components/talent/team/idea/customersegment/TalentTeamIdeaCustomersegment";
 import TalentTeamIdeaCustomersegmentPersona from "./components/talent/team/idea/customersegment/persona/TalentTeamIdeaCustomersegmentPersona";
-import BusinessAnalysis from "./components/talent/team/idea/customersegment/persona/valueproposition/analysis/BusinessAnalysis";
+import BusinessAnalysis from "./components/talent/team/idea/customersegment/persona/valueproposition/analysis/BusinessAnalysisList";
+import BusinessAnalysisCanvas from "./components/talent/team/idea/customersegment/persona/valueproposition/analysis/components/GridCanvas";
+
+import ExperimentFormList from "./components/talent/team/idea/customersegment/persona/valueproposition/experiment/ExperimentFormList";
+import ExperimentDataList from "./components/talent/team/idea/customersegment/persona/valueproposition/experiment/ExperimentDataList";
+import ExperimentDetail from "./components/talent/team/idea/customersegment/persona/valueproposition/experiment/ExperimentDetail";
 
 import TalentFeedback from "./components/talent/TalentFeedback.vue";
 import TalentProgrammes from "./components/talent/TalentProgrammes.vue";
 
 import Coordinator from "./views/Coordinator.vue";
 import CoordinatorDashboard from "./components/personnel/coordinator/CoordinatorDashboard";
-import CoordinatorProgram from "./components/personnel/coordinator/CoordinatorProgram";
-import CoordinatorProgramParticipant from "./components/personnel/coordinator/CoordinatorProgramParticipant";
+import CoordinatorProgram from "./components/personnel/coordinator/program/CoordinatorProgram";
+import CoordinatorProgramParticipant from "./components/personnel/coordinator/program/participant/CoordinatorProgramParticipant";
 
 import Mentor from "./views/Mentor.vue";
 import MentorDashboard from "./components/personnel/mentor/MentorDashboard";
-import MentorProgram from "./components/personnel/mentor/MentorProgram";
+import MentorProgram from "./components/personnel/mentor/program/MentorProgram";
+import MentorProgramMentoring from "./components/personnel/mentor/program/mentoring/MentorProgramMentoring";
 
 Vue.use(Router);
 
@@ -121,112 +128,239 @@ const routes = [
         path: "/talent/dashboard",
         name: "Dashboard",
         component: TalentDashboard,
-        meta: { requiresAuth: true, talentAuth: true, adminAuth: false },
+        meta: {
+          requiresAuth: true, talentAuth: true, adminAuth: false,
+          level: 0,
+          text: "Dashboard"
+        },
       },
       {
         path: "/talent/profile",
         name: "My Profile",
-        component: TalentProfile
+        component: TalentProfile,
+        meta: {
+          requiresAuth: true, talentAuth: true, adminAuth: false,
+          level: 1,
+          text: "Profile"
+        },
       },
       {
         path: "/talent/education",
         name: "Education",
-        component: TalentProfileEducation
+        component: TalentProfileEducation,
+        meta: {
+          level: 1,
+          text: "Education"
+        }
       },
       {
         path: "/talent/work",
         name: "Working Experiences",
-        component: TalentProfileWork
+        component: TalentProfileWork,
+        meta: {
+          level: 1,
+          text: "Work"
+        }
       },
       {
         path: "/talent/organization",
         name: "Working Experiences",
-        component: TalentProfileOrganization
+        component: TalentProfileOrganization,
+        meta: {
+          level: 1,
+          text: "Organization"
+        }
       },
       {
         path: "/talent/entrepreneurship",
         name: "Entrepreneurship Experiences",
-        component: TalentProfileEntrepreneurship
+        component: TalentProfileEntrepreneurship,
+        meta: {
+          level: 1,
+          text: "Entrepreneurship"
+        }
       },
       {
         path: "/talent/training",
         name: "Training Experiences",
-        component: TalentProfileTraining
+        component: TalentProfileTraining,
+        meta: {
+          level: 1,
+          text: "Training"
+        }
       },
       {
         path: "/talent/skill",
         name: "Skill",
-        component: TalentProfileSkill
+        component: TalentProfileSkill,
+        meta: {
+          level: 1,
+          text: "Skill"
+        }
       },
       {
         path: "/talent/team",
         name: "Team",
-        component: TalentTeam
+        component: TalentTeam,
+        meta: {
+          level: 1,
+          text: "Team"
+        }
       },
       {
         path: "/talent/team/:membershipId",
         name: "Team",
-        component: TalentTeamDetail
+        component: TalentTeamDetail,
+        meta: {
+          requiresAuth: true, talentAuth: true, adminAuth: false,
+          level: 2,
+          text: "Team Detail"
+        }
       },
       {
         path: "/talent/team/:membershipId/search",
         name: "Talent Search",
-        component: TalentTeamSearch
+        component: TalentTeamSearch,
+        meta: {
+          requiresAuth: true, talentAuth: true, adminAuth: false,
+          level: 3,
+          text: "Search Talent"
+        }
       },
       {
         path: "/talent/team/:teamId/participation",
         name: "Team Program Participation",
-        component: TalentTeamProgram
+        component: TalentTeamProgram,
+        meta: {
+          level: 2,
+          text: "Participation"
+        }
       },
       {
         path: "/talent/team/:teamId/participation/register",
         name: "Team Program Participation",
-        component: TalentTeamProgramRegister
+        component: TalentTeamProgramRegister,
+        meta: {
+          level: 3,
+          text: "Program List"
+        }
       },
       {
         path: "/talent/team/:teamId/participation/:participationId/mentoring",
         name: "Team Mentoring Session",
-        component: TalentTeamProgramMentoring
+        component: TalentTeamProgramMentoring,
+        meta: {
+          level: 3,
+          text: "Mentoring List"
+        }
       },
       {
         path: "/talent/team/:teamId/idea",
         name: "Idea",
-        component: TalentTeamIdea
+        component: TalentTeamIdea,
+        meta: {
+          level: 2,
+          text: "Idea List"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId",
         name: "Idea Detail",
-        component: TalentTeamIdeaDetail
+        component: TalentTeamIdeaDetail,
+        meta: {
+          level: 3,
+          text: "Idea"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId",
         name: "Customer Segment Detail",
-        component: TalentTeamIdeaCustomersegment
+        component: TalentTeamIdeaCustomersegment,
+        meta: {
+          level: 4,
+          text: "Customer Segment"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId",
         name: "Persona Detail",
-        component: TalentTeamIdeaCustomersegmentPersona
+        component: TalentTeamIdeaCustomersegmentPersona,
+        meta: {
+          level: 5,
+          text: "Persona"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/analysis",
         name: "Business Analysis",
-        component: BusinessAnalysis
+        component: BusinessAnalysis,
+        meta: {
+          level: 6,
+          text: "Business Analysis"
+        }
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/analysis/:formId",
+        name: "Business Analysis Canvas",
+        component: BusinessAnalysisCanvas,
+        meta: {
+          level: 7,
+          text: "Canvas"
+        }
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/experiment",
+        name: "Experiment Form",
+        component: ExperimentFormList,
+        meta: {
+          level: 6,
+          text: "Experiment Form"
+        }
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/experiment/:formId",
+        name: "Experiment Data",
+        component: ExperimentDataList,
+        meta: {
+          level: 7,
+          text: "Experiment List"
+        }
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/experiment-detail/:experimentId",
+        name: "Experiment Detail",
+        component: ExperimentDetail,
+        meta: {
+          level: 8,
+          text: "Experiment Detail"
+        }
       },
       {
         path: "/talent/create/team",
         name: "Create Team",
-        component: TalentTeamCreate
+        component: TalentTeamCreate,
+        meta: {
+          level: 2,
+          text: "Create Team"
+        }
       },
       {
         path: "/talent/program",
         name: "Feedback",
-        component: TalentProgrammes
+        component: TalentProgrammes,
+        meta: {
+          level: 1,
+          text: "Program"
+        }
       },
       {
         path: "/talent/feedback",
         name: "Feedback",
-        component: TalentFeedback
+        component: TalentFeedback,
+        meta: {
+          level: 1,
+          text: "Feedback"
+        }
       }
 
     ]
@@ -263,6 +397,11 @@ const routes = [
         name: "View Program Phase",
         path: "/administrator/program/:programId/phase-plan",
         component: AdministratorManageProgramPhase
+      },
+      {
+        name: "View Program Mentoring",
+        path: "/administrator/program/:programId/mentoring",
+        component: AdministratorManageProgramMentoring
       },
       {
         name: "View Program Registration",
@@ -378,6 +517,11 @@ const routes = [
         name: "Mentorship Program",
         component: MentorProgram
       },
+      {
+        path: "/mentor/program/:programId/mentoring",
+        name: "Mentoring Session",
+        component: MentorProgramMentoring
+      },
     ]
   },
   { path: '*', component: NotFoundComponent }
@@ -385,6 +529,7 @@ const routes = [
 
 const router = new Router({
   routes,
+  mode: "history",
   base: process.env.BASE_URL,
 })
 

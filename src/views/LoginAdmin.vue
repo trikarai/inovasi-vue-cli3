@@ -31,6 +31,7 @@
                       :append-icon-cb="() => (e1 = !e1)"
                       :type="e1 ? 'password' : 'text'"
                       :rules="passwordRules"
+                      v-on:keyup.enter="submit"
                       counter
                       required
                     ></v-text-field>

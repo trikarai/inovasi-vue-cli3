@@ -2,6 +2,7 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
+        <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
         <div class="modal-container" @click.stop>
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
@@ -55,6 +56,8 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
+import Notification from "@/components/Notification";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -64,6 +67,13 @@ export default {
       loader: false,
       show1: false,
       show2: false,
+      status: {
+        error : false,
+        success: false,
+        info: false,
+        warning : false
+      },
+      err_msg: "",
       params: {
         name: "",
         username: "",
@@ -71,8 +81,8 @@ export default {
         password: ""
       },
       password: {
-        previousPassword:"",
-        newPassword:""
+        previousPassword: "",
+        newPassword: ""
       },
       nameRules: [
         v => !!v || "Name is required",
@@ -87,19 +97,16 @@ export default {
         }
       },
       passwordRules: {
-          required: value => !!value || 'Password Required.',
-          min: v => v.length >= 8 || 'Min 8 characters'
-        }
+        required: value => !!value || "Password Required.",
+        min: v => v.length >= 8 || "Min 8 characters"
+      }
     };
   },
-  created: function() {
-    // this.params.name = this.data.name;
+  components: {
+    "notification-alert": Notification
   },
-  mounted: function() {
-    // if (this.edit) {
-    //   this.getSingleData(this.data.id);
-    // }
-  },
+  created: function() {},
+  mounted: function() {},
   methods: {
     update: function() {
       if (this.$refs.form.validate()) {
@@ -109,21 +116,15 @@ export default {
     updateData: function() {
       this.loader = true;
       net
-        .putData(
-          this,
-          "/administrator/profile/change-password/",
-          this.password
-        )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .putData(this, "/administrator/profile/change-password", this.password)
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });

@@ -1,48 +1,50 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
-
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} program
       </v-btn>
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-data-table dark :headers="headers" :items="program.list" class="elevation-1">
+      <v-data-table
+        dark
+        :headers="headers"
+        :loading="loader"
+        :items="program.list"
+        class="elevation-1"
+      >
         <template v-slot:items="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
             <v-btn small @click="gotoRegistration(props.item.id)">
-              <v-icon small>event</v-icon>Registration
+              <v-icon small>schedule</v-icon>Registration
+            </v-btn>
+            <v-btn small @click="gotoMentoring(props.item.id)">
+              <v-icon small>event</v-icon>Mentoring
             </v-btn>
             <v-btn small @click="gotoPhase(props.item.id)">
               <v-icon small>extension</v-icon>Phase
             </v-btn>
             <v-btn small @click="gotoCoordinator(props.item.id)">
-              <v-icon left small>person_add</v-icon>{{$vuetify.t('$vuetify.personnel.coordinator')}}
+              <v-icon left small>person_add</v-icon>
+              {{$vuetify.t('$vuetify.personnel.coordinator')}}
             </v-btn>
             <v-btn small @click="gotoMentor(props.item.id)">
-              <v-icon left small>person_add</v-icon>{{$vuetify.t('$vuetify.personnel.mentor')}}
+              <v-icon left small>person_add</v-icon>
+              {{$vuetify.t('$vuetify.personnel.mentor')}}
             </v-btn>
           </td>
           <td class="text-xs-right">
-            <v-btn @click="openEdit(props.index)" small>
+            <v-btn @click="openEdit(props.item)" small>
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
+            <v-btn small dark color="warning" @click="deleteAct(props.item.id)">
               <v-icon small>delete</v-icon>
               {{ $vuetify.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
+              <div v-show="props.item.id == selectedIndex">
                 {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
                 <v-btn @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
@@ -71,6 +73,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import ProgramForm from "./program/AddProgram";
 import Notification from "@/components/Notification";
 
@@ -87,7 +90,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: {details:[""]},
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -124,6 +127,11 @@ export default {
         path: "/administrator/program/" + id + "/registration"
       });
     },
+    gotoMentoring: function(id) {
+      this.$router.push({
+        path: "/administrator/program/" + id + "/mentoring"
+      });
+    },
     gotoMentor: function(id) {
       this.$router.push({
         path: "/administrator/program/" + id + "/mentor"
@@ -138,30 +146,26 @@ export default {
       this.loader = true;
       net
         .getData(this, "/administrator/programmes")
-        .then(
-          res => {
-            if (res.data.data) {
-              this.program = res.data.data;
-            } else {
-              this.program.list = [];
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .then(function(res) {
+          if (res.data.data) {
+            this.program = res.data.data;
+          } else {
+            this.program.list = [];
           }
-        )
-        .catch(function() {})
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
     },
-    openEdit: function(index) {
+    openEdit: function(data) {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.program.list[index];
+      this.singleData = data;
     },
     openAdd: function() {
       this.dialogForm = true;

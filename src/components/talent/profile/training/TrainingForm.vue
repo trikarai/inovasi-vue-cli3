@@ -139,7 +139,7 @@ export default {
       this.loader = true;
       this.status.error = false;
       net
-        .postData(this, "/talent/training-experiences/", this.params)
+        .postData(this, "/talent/training-experiences", this.params)
         .then(
           res => {
             console.log(res);

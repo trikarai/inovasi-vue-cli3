@@ -12,7 +12,7 @@
         <template v-slot:items="props">
           <td>{{ props.item.skillReferenceName }}</td>
           <td>
-            <v-rating readonly="true" v-model="props.item.score"></v-rating>
+            <v-rating :readonly="true" v-model="props.item.score"></v-rating>
           </td>
           <td>
             <v-btn @click="openCertificate(props.item.id)" small>
@@ -91,7 +91,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: {details:[""]},
       loader: false,
       dialogDel: false,
       dialogForm: false,

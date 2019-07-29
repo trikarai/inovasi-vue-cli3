@@ -63,6 +63,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import auth from "@/config/auth";
 import Notification from "@/components/Notification";
 
@@ -74,7 +75,7 @@ export default {
       response: "",
       valid: false,
       alert: false,
-      err_msg: { code: 0, type: "", details: [] },
+      err_msg: { code: 0, type: "", details: [""] },
       status: {
         success: false,
         error: false,
@@ -128,16 +129,7 @@ export default {
         )
         .catch(error=>{
           console.log(error);
-            if(!error.response){
-              this.err_msg = {code: 0, type: "Connection", details:["Connection Error"]};
-            }else if(error.status >= 500){
-              this.err_msg = {code: error.status, type: error.statusText, details:["Internal Server Error"]}
-            }else if(error.status >= 400){
-              this.err_msg = {code: error.status, type: error.statusText, details:[error.statusText]}
-            }else{
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
+          notif.showError(this, error);
         })
         .finally(function() {
           this.loader = false;

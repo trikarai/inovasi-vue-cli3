@@ -1,21 +1,20 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       <!-- {{res}}<br> -->
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} {{ $vuetify.t('$vuetify.personnel.coordinator') }}
       </v-btn>
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-data-table dark :headers="headers" :items="coordinator.list" class="elevation-1">
+
+      <v-data-table
+        dark
+        :headers="headers"
+        :loading="loader"
+        :items="coordinator.list"
+        class="elevation-1"
+      >
         <template v-slot:items="props">
           <td>{{ props.item.talent.name }}</td>
           <td class="text-xs-right">
@@ -44,25 +43,16 @@
         </template>
       </v-data-table>
     </v-container>
-    <!-- <PhaseForm
-      :data="singleData"
-      :edit="edit"
-      :view="view"
-      v-if="dialogForm"
-      @close="dialogForm = false"
-      @refresh="refresh()"
-    /> -->
   </div>
 </template>
 <script>
 import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
-// import PhaseForm from "./AddPhase";
+import notif from "@/config/alerthandling";
 
 export default {
   components: {
-    "notification-alert": Notification,
-    //  PhaseForm
+    "notification-alert": Notification
   },
   data() {
     return {
@@ -102,22 +92,22 @@ export default {
     getDataList: function() {
       this.loader = true;
       net
-        .getData(this, "/administrator/programmes/" + this.$route.params.programId + "/coordinators")
-        .then(
-          res => {
-            if(res.data.data){
-              this.coordinator = res.data.data;
-            }else{
-              this.coordinator.list = []; 
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
-          }
+        .getData(
+          this,
+          "/administrator/programmes/" +
+            this.$route.params.programId +
+            "/coordinators"
         )
-        .catch(function() {
+        .then(function(res) {
+          if (res.data.data) {
+            this.coordinator = res.data.data;
+          } else {
+            this.coordinator.list = [];
+          }
+        })
+        .catch(error => {
+          console.log("Error : " + error);
+          notif.showError(this, error);
         })
         .finally(function() {
           this.loader = false;
@@ -130,7 +120,12 @@ export default {
       this.singleData = this.coordinator.list[index];
     },
     openAdd: function() {
-      this.$router.push({path: "/administrator/program/" + this.$route.params.programId + "/coordinator/search"})
+      this.$router.push({
+        path:
+          "/administrator/program/" +
+          this.$route.params.programId +
+          "/coordinator/search"
+      });
     },
     deleteAct: function(id) {
       if (this.selectedIndex == id) {
@@ -141,9 +136,18 @@ export default {
     },
     deleteData: function(id) {
       net
-        .deleteData(this, "/administrator/programmes/" + this.$route.params.programId + "/coordinators/" + id)
+        .deleteData(
+          this,
+          "/administrator/programmes/" +
+            this.$route.params.programId +
+            "/coordinators/" +
+            id
+        )
         .then()
-        .catch(function() {})
+        .catch(error => {
+          console.log("Error : " + error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.selectedIndex = null;
           this.refresh();

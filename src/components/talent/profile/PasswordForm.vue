@@ -32,7 +32,7 @@
                   ></v-text-field>
                   <v-layout justify-space-between>
                     <v-btn
-                      @click="updateData"
+                      @click="update"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.edit')}}</v-btn>
 
@@ -107,6 +107,11 @@ export default {
   created: function() {},
   mounted: function() {},
   methods: {
+    update: function() {
+      if (this.$refs.form.validate()) {
+        this.updateData();
+      }
+    },
     updateData: function() {
       this.loader = true;
       this.status.error = false;

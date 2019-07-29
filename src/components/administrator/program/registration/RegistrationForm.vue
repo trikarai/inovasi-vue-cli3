@@ -205,7 +205,7 @@ export default {
       net
         .postData(
           this,
-          "/administrator/programmes/" + this.$route.params.programId + "/registrations/",
+          "/administrator/programmes/" + this.$route.params.programId + "/registrations",
           this.params
         )
         .then(

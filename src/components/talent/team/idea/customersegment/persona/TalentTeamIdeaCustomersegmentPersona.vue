@@ -67,10 +67,12 @@
                     <v-expand-x-transition>
                       <div v-show="index != selectedIndex">
                         <v-btn small @click="gotoBusinessAnalysis(item.id)">
-                          <v-icon>business_center</v-icon><span class="hidden-sm-and-down"> Analysis</span>
+                          <v-icon>business_center</v-icon>
+                          <span class="hidden-sm-and-down">Analysis</span>
                         </v-btn>
                         <v-btn small @click="gotoExperiment(item.id)">
-                          <v-icon>category</v-icon><span class="hidden-sm-and-down"> Experiment</span>
+                          <v-icon>category</v-icon>
+                          <span class="hidden-sm-and-down">Experiment</span>
                         </v-btn>
                       </div>
                     </v-expand-x-transition>
@@ -128,7 +130,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: { details: [""] },
       error: "error",
       loader: false,
       dialogDel: false,
@@ -140,7 +142,12 @@ export default {
       dataId: "",
       selectedIndex: null,
       data: { total: 0, list: [] },
-      parentData: "",
+      parentData: {
+        name: "",
+        aMainPersona: "",
+        createdTime: "",
+        form: { name: "" }
+      },
       singleData: { id: "", name: "" }
     };
   },
@@ -149,8 +156,37 @@ export default {
     this.getDataList();
   },
   methods: {
-    gotoBusinessAnalysis: function(id){
-      this.$router.push({path: "/talent/team/"+this.$route.params.teamId+"/idea/"+this.$route.params.ideaId+"/customersegment/"+this.$route.params.customersegmentId+"/persona/"+this.$route.params.personaId+"/vp/"+id+"/analysis"})
+    gotoBusinessAnalysis: function(id) {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/idea/" +
+          this.$route.params.ideaId +
+          "/customersegment/" +
+          this.$route.params.customersegmentId +
+          "/persona/" +
+          this.$route.params.personaId +
+          "/vp/" +
+          id +
+          "/analysis"
+      });
+    },
+    gotoExperiment: function(id) {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/idea/" +
+          this.$route.params.ideaId +
+          "/customersegment/" +
+          this.$route.params.customersegmentId +
+          "/persona/" +
+          this.$route.params.personaId +
+          "/vp/" +
+          id +
+          "/experiment"
+      });
     },
     getParentData: function() {
       this.loader = true;
@@ -169,36 +205,14 @@ export default {
             "/personas/" +
             this.$route.params.personaId
         )
-        .then(
-          res => {
-            this.parentData = res.data.data;
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.error = error;
-            this.status.error = true;
-          }
-        )
-        .catch(function(error) {
-          console.log(error);
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.error = error;
-          app.status.error = true;
+        .then(res => {
+          this.parentData = res.data.data;
         })
-        .finally(function() {
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -217,28 +231,16 @@ export default {
             this.$route.params.personaId +
             "/value-propositions"
         )
-        .then(
-          res => {
-            if (res.data.data) {
-              this.data = res.data.data;
-            }
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.error = error;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.data = res.data.data;
           }
-        )
-        .finally(function() {
+        })
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -299,24 +301,14 @@ export default {
             "/value-propositions/" +
             id
         )
-        .then(function(res) {
+        .then(res => {
           console.log(res);
         })
-        .catch(function(error) {
+        .catch(error => {
           console.log(error);
-          if (error.status > 400) {
-            app.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            app.err_msg = error.body.meta;
-          }
-          app.error = error;
-          app.status.error = true;
+          notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });
@@ -334,40 +326,14 @@ export default {
             id +
             "/set_as_main_idea"
         )
-        .then(
-          res => {
-            console.log(res);
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-            this.error = error;
-          }
-        )
-        .catch(function(error) {
-          console.log(error);
-          if (error.status !== 200) {
-            app.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            app.err_msg = error.body.meta;
-          }
-          app.error = error;
-          app.status.error = true;
+        .then(res => {
+          console.log(res);
         })
-        .finally(function() {
+        .catch(error => {
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });

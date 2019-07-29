@@ -3,6 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
+          <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -55,6 +56,8 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
+import Notification from "@/components/Notification";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -62,6 +65,13 @@ export default {
     return {
       valid: false,
       loader: false,
+      status: {
+        error: false,
+        success: false,
+        info: false,
+        warning: false
+      },
+      err_msg: "",
       params: {
         name: "",
         description: ""
@@ -71,6 +81,9 @@ export default {
         v => v.length >= 3 || "Name must be more than 3 characters"
       ]
     };
+  },
+  components: {
+    "notification-alert": Notification
   },
   created: function() {
     this.params.name = this.data.name;
@@ -106,17 +119,15 @@ export default {
     addData: function() {
       this.loader = true;
       net
-        .postData(this, "/administrator/curriculums/", this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .postData(this, "/administrator/curriculums", this.params)
+        .then(function(res) {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -129,16 +140,14 @@ export default {
           "/administrator/curriculums/" + this.data.id,
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .then(function(res) {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -146,15 +155,13 @@ export default {
     getSingleData: function(id) {
       net
         .getData(this, "/administrator/curriculums/" + id)
-        .then(
-          res => {
-            this.params = res.data.data;
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .then(function(res) {
+          this.params = res.data.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+          notif.showError(this, error);
+        })
         .finally();
     }
   }
