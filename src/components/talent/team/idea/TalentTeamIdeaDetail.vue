@@ -33,7 +33,7 @@
               <br>
               {{parentData.revenueModel}}
               <v-divider/>
-              Initiator : {{parentData.initiator.talent.name}}
+              <!-- Initiator : {{parentData.initiator.talent.name}} -->
             </v-card-text>
           </v-card>
         </v-flex>
@@ -98,6 +98,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import CustomerSegmentForm from "./customersegment/CustomerSegmentForm";
 import IdeaForm from "./IdeaForm"
@@ -116,7 +117,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: {details:[""]},
       error: "error",
       loader: false,
       dialogDel: false,
@@ -139,9 +140,8 @@ export default {
   methods: {
     getParentData: function() {
       this.loader = true;
-      // this.status.error = false;
-      // this.status.success = false;
-      var app = this;
+      this.status.error = false;
+      this.status.success = false;
       net
         .getData(
           this,
@@ -153,33 +153,13 @@ export default {
         .then(
           res => {
             this.parentData = res.data.data;
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.error = error;
-            this.status.error = true;
           }
         )
-        .catch(function(error) {
+        .catch(error=> {
           console.log(error);
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.error = error;
-          app.status.error = true;
+          notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -199,23 +179,12 @@ export default {
             if (res.data.data) {
               this.data = res.data.data;
             }
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.error = error;
-            this.status.error = true;
           }
-        )
-        .finally(function() {
+        ).catch(error=>{
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -254,8 +223,11 @@ export default {
             id
         )
         .then()
-        .catch(function() {})
-        .finally(function() {
+        .catch(error=>{
+          console.log(error);
+          notif.showError(this, error);
+        })
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });
@@ -276,35 +248,11 @@ export default {
         .then(
           res => {
             console.log(res);
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-            this.error = error;
           }
         )
-        .catch(function(error) {
+        .catch(error=> {
           console.log(error);
-          if (error.status !== 200) {
-            app.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            app.err_msg = error.body.meta;
-          }
-          app.error = error;
-          app.status.error = true;
+          notif.showError(this, error);
         })
         .finally(function() {
           this.selectedIndex = null;
