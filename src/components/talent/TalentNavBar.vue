@@ -25,10 +25,15 @@
       </v-btn>
     </v-toolbar>
 
-    <!-- <div>
-      <v-breadcrumbs :items="items" divider=">"></v-breadcrumbs>
-    </div>-->
-
+    <div>
+      <v-breadcrumbs :items="$store.state.breads.item" divider=" > ">
+        <template v-slot:item="props">
+          <router-link :to="props.item.path" :class="{disabled : props.item.disabled}">{{props.item.text}}</router-link>
+        </template>
+      </v-breadcrumbs>
+    </div>
+    Vuex pos : {{$store.state.breads.pos}} | path level : {{$route.meta.level}}
+    <v-divider></v-divider>
     <v-navigation-drawer app v-model="drawer" :mini-variant.sync="miniVariant">
       <!-- list head-->
       <v-list class="pa-1">
@@ -127,7 +132,9 @@
           </v-list-tile-avatar>
           <v-list-tile-content>Coordinator Menu</v-list-tile-content>
           <v-list-tile-action>
-            <v-btn router to="/coordinator/dashboard" small flat color="blue"><v-icon small>forward</v-icon></v-btn>
+            <v-btn router to="/coordinator/dashboard" small flat color="blue">
+              <v-icon small>forward</v-icon>
+            </v-btn>
           </v-list-tile-action>
         </v-list-tile>
         <v-list-tile v-if="checkProgramMentorship">
@@ -136,7 +143,9 @@
           </v-list-tile-avatar>
           <v-list-tile-content>Mentor Menu</v-list-tile-content>
           <v-list-tile-action>
-            <v-btn router to="/mentor/dashboard" small flat color="blue"><v-icon small>forward</v-icon></v-btn>
+            <v-btn router to="/mentor/dashboard" small flat color="blue">
+              <v-icon small>forward</v-icon>
+            </v-btn>
           </v-list-tile-action>
         </v-list-tile>
       </v-list>
@@ -210,30 +219,22 @@ export default {
           route: "/talent/feedback"
         }
       ],
-      items: [
-        {
-          text: "Dashboard",
-          disabled: false,
-          to: "breadcrumbs_dashboard"
-        },
-        {
-          text: "Link 1",
-          disabled: false,
-          to: "breadcrumbs_link_1"
-        },
-        {
-          text: "Link 2",
-          disabled: true,
-          to: "breadcrumbs_link_2"
-        }
-      ]
+      items: []
     };
   },
   components: {
     LocaleSwitcher
   },
+  watch: {
+    $route: function() {
+      this.buildBreadcrumbs();
+    }
+  },
   created: function() {
     this.user = JSON.parse(auth.getAuthData());
+  },
+  mounted: function() {
+    this.buildBreadcrumbs();
   },
   computed: {
     checkLogin() {
@@ -241,18 +242,18 @@ export default {
     },
     checkProgramCoordinatoship() {
       var check;
-      if(this.user.data.programmeCoordinatorships){
+      if (this.user.data.programmeCoordinatorships) {
         check = true;
-      }else{
+      } else {
         check = false;
       }
       return check;
     },
     checkProgramMentorship() {
       var check;
-      if(this.user.data.programmeMentorships){
+      if (this.user.data.programmeMentorships) {
         check = true;
-      }else{
+      } else {
         check = false;
       }
       return check;
@@ -265,12 +266,27 @@ export default {
       app.$router.replace({ path: "/login" });
       app.$store.state.isLoggedIn = false;
     },
-    switchTheme: function(){
+    switchTheme: function() {
       this.$store.commit("switchTheme");
+    },
+    buildBreadcrumbs: function() {
+      var payload = {
+        level: this.$route.meta.level,
+        to: {
+          text: this.$route.meta.text,
+          path: this.$route.path,
+          disabled: false
+        }
+      };
+      this.$store.commit("breadcrumb", payload);
     }
   }
 };
 </script>
 <style scoped>
+.disabled {
+  color: grey;
+  pointer-events: none;
+}
 </style>
 

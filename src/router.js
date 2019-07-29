@@ -128,57 +128,99 @@ const routes = [
         path: "/talent/dashboard",
         name: "Dashboard",
         component: TalentDashboard,
-        meta: { requiresAuth: true, talentAuth: true, adminAuth: false },
+        meta: {
+          requiresAuth: true, talentAuth: true, adminAuth: false,
+          level: 0,
+          text: "Dashboard"
+        },
       },
       {
         path: "/talent/profile",
         name: "My Profile",
-        component: TalentProfile
+        component: TalentProfile,
+        meta: {
+          requiresAuth: true, talentAuth: true, adminAuth: false,
+          level: 1,
+          text: "Profile"
+        },
       },
       {
         path: "/talent/education",
         name: "Education",
-        component: TalentProfileEducation
+        component: TalentProfileEducation,
+        meta: {
+          level: 1,
+          text: "Education"
+        }
       },
       {
         path: "/talent/work",
         name: "Working Experiences",
-        component: TalentProfileWork
+        component: TalentProfileWork,
+        meta: {
+          level: 1,
+          text: "Work"
+        }
       },
       {
         path: "/talent/organization",
         name: "Working Experiences",
-        component: TalentProfileOrganization
+        component: TalentProfileOrganization,
+        meta: {
+          level: 1,
+          text: "Organization"
+        }
       },
       {
         path: "/talent/entrepreneurship",
         name: "Entrepreneurship Experiences",
-        component: TalentProfileEntrepreneurship
+        component: TalentProfileEntrepreneurship,
+        meta: {
+          level: 1,
+          text: "Entrepreneurship"
+        }
       },
       {
         path: "/talent/training",
         name: "Training Experiences",
-        component: TalentProfileTraining
+        component: TalentProfileTraining,
+        meta: {
+          level: 1,
+          text: "Training"
+        }
       },
       {
         path: "/talent/skill",
         name: "Skill",
-        component: TalentProfileSkill
+        component: TalentProfileSkill,
+        meta: {
+          level: 1,
+          text: "Skill"
+        }
       },
       {
         path: "/talent/team",
         name: "Team",
-        component: TalentTeam
+        component: TalentTeam,
+        meta: {
+          level: 1,
+          text: "Team"
+        }
       },
       {
         path: "/talent/team/:membershipId",
         name: "Team",
-        component: TalentTeamDetail
+        component: TalentTeamDetail,
+        meta: {
+          requiresAuth: true, talentAuth: true, adminAuth: false,
+          level: 1,
+          text: "Profile"
+        }
       },
       {
         path: "/talent/team/:membershipId/search",
         name: "Talent Search",
-        component: TalentTeamSearch
+        component: TalentTeamSearch,
       },
       {
         path: "/talent/team/:teamId/participation",
@@ -198,12 +240,20 @@ const routes = [
       {
         path: "/talent/team/:teamId/idea",
         name: "Idea",
-        component: TalentTeamIdea
+        component: TalentTeamIdea,
+        meta: {
+          level: 2,
+          text: "Idea List"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId",
         name: "Idea Detail",
-        component: TalentTeamIdeaDetail
+        component: TalentTeamIdeaDetail,
+        meta: {
+          level: 3,
+          text: "Idea"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId",
