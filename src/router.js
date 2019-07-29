@@ -213,29 +213,46 @@ const routes = [
         component: TalentTeamDetail,
         meta: {
           requiresAuth: true, talentAuth: true, adminAuth: false,
-          level: 1,
-          text: "Profile"
+          level: 2,
+          text: "Team Detail"
         }
       },
       {
         path: "/talent/team/:membershipId/search",
         name: "Talent Search",
         component: TalentTeamSearch,
+        meta: {
+          requiresAuth: true, talentAuth: true, adminAuth: false,
+          level: 3,
+          text: "Search Talent"
+        }
       },
       {
         path: "/talent/team/:teamId/participation",
         name: "Team Program Participation",
-        component: TalentTeamProgram
+        component: TalentTeamProgram,
+        meta: {
+          level: 2,
+          text: "Participation"
+        }
       },
       {
         path: "/talent/team/:teamId/participation/register",
         name: "Team Program Participation",
-        component: TalentTeamProgramRegister
+        component: TalentTeamProgramRegister,
+        meta: {
+          level: 3,
+          text: "Program List"
+        }
       },
       {
         path: "/talent/team/:teamId/participation/:participationId/mentoring",
         name: "Team Mentoring Session",
-        component: TalentTeamProgramMentoring
+        component: TalentTeamProgramMentoring,
+        meta: {
+          level: 3,
+          text: "Mentoring List"
+        }
       },
       {
         path: "/talent/team/:teamId/idea",
@@ -258,52 +275,92 @@ const routes = [
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId",
         name: "Customer Segment Detail",
-        component: TalentTeamIdeaCustomersegment
+        component: TalentTeamIdeaCustomersegment,
+        meta: {
+          level: 4,
+          text: "Customer Segment"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId",
         name: "Persona Detail",
-        component: TalentTeamIdeaCustomersegmentPersona
+        component: TalentTeamIdeaCustomersegmentPersona,
+        meta: {
+          level: 5,
+          text: "Persona"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/analysis",
         name: "Business Analysis",
-        component: BusinessAnalysis
+        component: BusinessAnalysis,
+        meta: {
+          level: 6,
+          text: "Business Analysis"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/analysis/:formId",
         name: "Business Analysis Canvas",
-        component: BusinessAnalysisCanvas
+        component: BusinessAnalysisCanvas,
+        meta: {
+          level: 7,
+          text: "Canvas"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/experiment",
         name: "Experiment Form",
-        component: ExperimentFormList
+        component: ExperimentFormList,
+        meta: {
+          level: 6,
+          text: "Experiment Form"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/experiment/:formId",
         name: "Experiment Data",
-        component: ExperimentDataList
+        component: ExperimentDataList,
+        meta: {
+          level: 7,
+          text: "Experiment List"
+        }
       },
       {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/experiment-detail/:experimentId",
         name: "Experiment Detail",
-        component: ExperimentDetail
+        component: ExperimentDetail,
+        meta: {
+          level: 8,
+          text: "Experiment Detail"
+        }
       },
       {
         path: "/talent/create/team",
         name: "Create Team",
-        component: TalentTeamCreate
+        component: TalentTeamCreate,
+        meta: {
+          level: 2,
+          text: "Create Team"
+        }
       },
       {
         path: "/talent/program",
         name: "Feedback",
-        component: TalentProgrammes
+        component: TalentProgrammes,
+        meta: {
+          level: 1,
+          text: "Program"
+        }
       },
       {
         path: "/talent/feedback",
         name: "Feedback",
-        component: TalentFeedback
+        component: TalentFeedback,
+        meta: {
+          level: 1,
+          text: "Feedback"
+        }
       }
 
     ]
