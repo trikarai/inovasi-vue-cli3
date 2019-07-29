@@ -32,7 +32,7 @@
         </template>
       </v-breadcrumbs>
     </div>
-    Vuex pos : {{$store.state.breads.pos}} | path level : {{$route.meta.level}}
+    <!-- Vuex pos : {{$store.state.breads.pos}} | path level : {{$route.meta.level}} -->
     <v-divider></v-divider>
     <v-navigation-drawer app v-model="drawer" :mini-variant.sync="miniVariant">
       <!-- list head-->
