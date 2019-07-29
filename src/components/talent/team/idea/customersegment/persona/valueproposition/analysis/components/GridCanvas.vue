@@ -12,18 +12,22 @@
       </v-dialog>
       <v-btn @click="openBusinessForm" color="primary">
         <v-icon left>add</v-icon>
-        {{canvas.name}}
+        <!-- {{canvas.form.name}} -->
       </v-btn>
     </v-container>
+
+    <!-- <v-container>
+      <pre>{{ canvas }}</pre>
+    </v-container> -->
     <v-container style="display: grid" class="pa-0">
-      <template v-for="field in canvas.fields">
+      <template v-for="field in canvas.textAreaFieldRecords">
         <div
           :key="field.id"
-          :style="'border: 1px solid grey; grid-area:' + field.position + '; background-color: grey'"
+          :style="'border: 1px solid grey; grid-area:' + field.field.position + '; background-color: grey'"
         >
           <v-card elevation="2" :hover="hover" height="100%" class="ma-1 pa-0">
             <v-card-text>
-              <v-textarea :label="field.name" auto-grow :value="lorem"></v-textarea>
+              {{field.value}}
             </v-card-text>
           </v-card>
         </div>
@@ -53,11 +57,12 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: ""
+      err_msg: {details:[""]}
     };
   },
   components: {
-    BusinessForm
+    BusinessForm,
+    "notification-alert": Notification
   },
   mounted: function() {
     this.getCanvas();
@@ -66,7 +71,22 @@ export default {
     getCanvas: function() {
       this.loader = true;
       net
-        .getData(this, "/talent/forms/id/" + this.$route.params.formId)
+        // .getData(this, "/talent/forms/id/" + this.$route.params.formId)
+        .getData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/business-canvases/" +
+            this.$route.params.formId
+        )
         .then(res => {
           this.canvas = res.data.data;
         })
