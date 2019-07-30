@@ -3,7 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
-          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
+          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -16,7 +16,7 @@
                     maxlength="25"
                     required
                   ></v-text-field>
-                  <v-text-field label="Position" v-model="params.position"></v-text-field>
+                  <v-text-field label="Position" :rules="nameRules" v-model="params.position"></v-text-field>
                   <v-text-field label="Role" v-model="params.role"></v-text-field>
                   <v-text-field label="Start Year" maxlength="4" v-model="params.startYear"></v-text-field>
                   <v-text-field maxlength="4" label="End Year" v-model="params.endYear"></v-text-field>
@@ -68,7 +68,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       params: {
         companyName: "",
         position: "",
@@ -77,18 +77,17 @@ export default {
         endYear: ""
       },
       nameRules: [
-        v => !!v || "Name is required",
-        v => v.length >= 3 || "Name must be more than 3 characters"
+        v => !!v || "Field is required",
+        v => v.length >= 2 || "Name must be more than 2 characters"
       ]
     };
   },
   components: {
     "notification-alert": notification
   },
-  created: function() {
-  },
+  created: function() {},
   mounted: function() {
-     this.getSingleData()
+    this.getSingleData();
   },
   methods: {
     submit: function() {
@@ -114,7 +113,8 @@ export default {
       }
     },
     getSingleData: function() {
-      net.getData(this, "/talent/working-experiences/" + this.data.id)
+      net
+        .getData(this, "/talent/working-experiences/" + this.data.id)
         .then(
           res => {
             console.log(res);
