@@ -59,9 +59,9 @@
           <template v-slot:items="props">
             <td>{{ props.item.programme.name }}</td>
             <td>
-              <v-chip color="teal" text-color="white">
+              <v-chip :color="setColor(props.item.status)" text-color="white">
                 <v-avatar>
-                  <v-icon>check_circle</v-icon>
+                  <v-icon>{{setIcon(props.item.status)}}</v-icon>
                 </v-avatar>
                 {{ props.item.status }}
               </v-chip>
@@ -178,8 +178,10 @@ export default {
       querypage: "",
       items: [
         { displayName: "Applied", value: "app" },
+        { displayName: "Active ", value: "act" },
         { displayName: "Canceled", value: "can" },
-        { displayName: "Rejected", value: "rej" }
+        { displayName: "Rejected", value: "rej" },
+        { displayName: "Quit", value: "qui" }
       ],
       pagination: {}
     };
@@ -202,6 +204,38 @@ export default {
     this.getDataList();
   },
   methods: {
+    setColor: function(status) {
+      var color = "grey";
+      if (status === "active") {
+        color = "green";
+      } else if (status === "applied") {
+        color = "blue";
+      } else if (status === "quit") {
+        color = "red";
+      } else if (status === "cancelled") {
+        color = "warning";
+      } else if (status === "rejected") {
+        color = "red";
+      } else {
+      }
+      return color;
+    },
+    setIcon: function(status) {
+      var icon = "check";
+      if (status === "active") {
+        icon = "check_circle";
+      } else if (status === "applied") {
+        icon = "hourglass_empty";
+      } else if (status === "quit") {
+        icon = "flag";
+      } else if (status === "cancelled") {
+        icon = "cancel";
+      } else if (status === "rejected") {
+        icon = "remove_circle";
+      } else {
+      }
+      return icon;
+    },
     buildQueryPage: function() {
       this.querypage =
         "?page=" +
