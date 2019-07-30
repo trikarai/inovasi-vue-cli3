@@ -47,7 +47,6 @@
             </template>
           </v-combobox>
         </v-flex>
-
         <v-divider></v-divider>
         <v-data-table
           :loading="loader"
@@ -73,26 +72,44 @@
                 <!-- {{ $vuetify.t('$vuetify.action.view') }} -->
                 Mentoring Session
               </v-btn>
-              <v-btn small @click="openDetail(props.item.id)">
+
+              <!-- <v-btn small @click="openDetail(props.item.id)">
                 <v-icon small left>pageview</v-icon>
                 {{ $vuetify.t('$vuetify.action.view') }}
-              </v-btn>
-              <v-btn small dark color="warning" @click="deleteAct(props.index)">
+              </v-btn>-->
+
+              <v-btn small dark color="warning" @click="cancelAct(props.item.id)">
                 <v-icon small>outlined_flag</v-icon>
                 {{ $vuetify.t('$vuetify.action.cancel') }}
               </v-btn>
-              <v-btn small dark color="warning" @click="deleteAct(props.index)">
+
+              <v-btn small dark color="warning" @click="quitAct(props.item.id)">
                 <v-icon small>outlined_flag</v-icon>
                 {{ $vuetify.t('$vuetify.team.quit') }}
               </v-btn>
+
               <v-expand-transition>
-                <div v-show="props.index == selectedIndex">
+                <div v-show="props.item.id == selectedQui">
                   {{ $vuetify.t('$vuetify.action.confirmationtoquit') }}
-                  <v-btn @click="deleteData(props.item.id)" color="red">
+                  <v-btn @click="quitData(props.item.id)" color="red">
                     <v-icon></v-icon>
                     {{ $vuetify.t('$vuetify.action.yes') }}
                   </v-btn>
-                  <v-btn @click="deleteAct(null)">
+                  <v-btn @click="quitAct(null)">
+                    <v-icon></v-icon>
+                    {{ $vuetify.t('$vuetify.action.cancel') }}
+                  </v-btn>
+                </div>
+              </v-expand-transition>
+
+              <v-expand-transition>
+                <div v-show="props.item.id == selectedCan">
+                  {{ $vuetify.t('$vuetify.action.confirmationtocancel') }}
+                  <v-btn @click="cancelData(props.item.id)" color="red">
+                    <v-icon></v-icon>
+                    {{ $vuetify.t('$vuetify.action.yes') }}
+                  </v-btn>
+                  <v-btn @click="cancelAct(null)">
                     <v-icon></v-icon>
                     {{ $vuetify.t('$vuetify.action.cancel') }}
                   </v-btn>
@@ -115,6 +132,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 // import TeamForm from "@/components/talent/program/TeamForm";
 export default {
@@ -131,7 +149,7 @@ export default {
         warning: false
       },
       singleData: { id: "", name: "" },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -139,6 +157,8 @@ export default {
       view: false,
       expand: false,
       selectedIndex: null,
+      selectedCan: null,
+      selectedQui: null,
       headers: [
         {
           text: "Program Name",
@@ -201,7 +221,6 @@ export default {
           this.queryurl += "&statuses[]=" + this.select[i].value;
         }
       }
-      this.getDat
       this.getDataList();
     },
     getDataList: function() {
@@ -212,23 +231,19 @@ export default {
           "/talent/as-team-member/" +
             this.$route.params.teamId +
             "/programme-participations/" +
-            this.querypage + this.queryurl
+            this.querypage +
+            this.queryurl
         )
-        .then(
-          res => {
-            if (res.data.data) {
-              this.program = res.data.data;
-            } else {
-              this.program.list = [];
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.program = res.data.data;
+          } else {
+            this.program.list = [];
           }
-        )
-        .catch()
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
@@ -243,7 +258,7 @@ export default {
           this.$route.params.teamId +
           "/participation/" +
           id +
-          "/mentoring/"
+          "/mentoring"
       });
     },
     openAdd: function() {
@@ -252,33 +267,64 @@ export default {
       this.edit = false;
       this.singleData = { id: "", name: "" };
     },
-    deleteAct: function(id) {
-      if (this.selectedIndex == id) {
-        this.selectedIndex = null;
+    quitAct: function(id) {
+      this.selectedCan = null;
+      if (this.selectedQui == id) {
+        this.selectedQui = null;
       } else {
-        this.selectedIndex = id;
+        this.selectedQui = id;
       }
     },
-    deleteData: function(id) {
-      var app = this;
-      this.status.error = false;
-      this.status.info = false;
+    cancelAct: function(id) {
+      this.selectedQui = null;
+      if (this.selectedCan == id) {
+        this.selectedCan = null;
+      } else {
+        this.selectedCan = id;
+      }
+    },
+    quitData: function(id) {
+      this.loader = true;
+      notif.reset(this);
       net
-        .putData(this, "/talent/program-memberships/" + id + "/quit")
-        .then(function(res) {
-          app.status.info = true;
-          app.err_msg = {
-            code: 0,
-            type: "info",
-            details: ["Quit Successfull"]
-          };
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/programme-participations/" +
+            id +
+            "/quit"
+        )
+        .then(res => {
+          notif.showInfo(this, res, ["Successfully Quit Program"]);
         })
-        .catch(function(error) {
-          app.status.error = true;
-          app.err_msg = error.body.meta;
+        .catch(error => {
+          notif.showError(this, error);
         })
-        .finally(function() {
-          app.refresh();
+        .finally(() => {
+          this.refresh();
+        });
+    },
+    cancelData: function(id) {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/programme-participations/" +
+            id +
+            "/cancel-registration"
+        )
+        .then(res => {
+          notif.showInfo(this, res, ["Successfully Cancel Program"]);
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.refresh();
         });
     },
     refresh: function() {
