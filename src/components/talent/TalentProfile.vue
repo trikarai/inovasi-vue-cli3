@@ -137,6 +137,18 @@
                     counter
                     @click:append="show2 = !show2"
                   ></v-text-field>
+                  <v-text-field
+                    label="Confirm New Password"
+                    v-model="cpassword"
+                    min="8"
+                    :append-icon="e2 ? 'visibility' : 'visibility_off'"
+                    @click:append="e2 = !e2"
+                    :type="e2 ? 'text' : 'password'"
+                    :rules="passwordConfirmationRules"
+                    autocomplete="new-password"
+                    counter
+                    required
+                  ></v-text-field>
                 </div>
               </v-card-title>
 
@@ -173,6 +185,7 @@ export default {
         warning: false
       },
       view: false,
+      e2: false,
       show1: false,
       show2: false,
       menu2: false,
@@ -196,6 +209,7 @@ export default {
         previousPassword: "",
         newPassword: ""
       },
+      cpassword: "",
       valid: false,
       valid2: false,
       nameRules: [
@@ -209,6 +223,12 @@ export default {
       passwordRules: [
         v => !!v || "Password Required",
         v => v.length >= 8 || "Min 8 characters"
+      ],
+      passwordConfirmationRules: [
+        v => !!v || "Confirmation Password is required",
+        () =>
+          this.cpassword === this.password.newPassword ||
+          "Password does not match"
       ],
       type: [
         {
@@ -254,7 +274,7 @@ export default {
         .putData(this, "/talent/profile/update", this.data)
         .then(res => {
           this.$emit("refresh");
-          notif.showSuccess(this, res);
+          notif.showInfo(this, res, ["Profile Change Success"]);
         })
         .catch(error => {
           notif.showError(this, error);
@@ -262,7 +282,7 @@ export default {
         .finally(() => {
           app.loader = false;
           app.$vuetify.goTo(app.$refs.notif, {
-            duration: 10000,
+            duration: 1000,
             offset: 0,
             easing: "easeInOutCubic"
           });
@@ -275,27 +295,19 @@ export default {
     },
     updatePassword: function() {
       this.loader = true;
-      this.status.error = false;
-      this.status.success = false;
+      notif.reset(this);
       net
-        .putData(this, "/talent/profile/change-password/", this.password)
+        .putData(this, "/talent/profile/change-password", this.password)
         .then(res => {
-          console.log(res);
-          this.$emit("refresh");
-          this.err_msg = {
-            code: res.code,
-            type: res.type,
-            details: ["Password Updated"]
-          };
-          this.status.success = true;
+          notif.showInfo(this, res, ["Password Change Success"]);
+          this.$refs.form2.reset();
+          this.$refs.form2.resetValidation();
         })
         .catch(error => {
           notif.showError(this, error);
         })
         .finally(() => {
           this.loader = false;
-          this.password.previousPassword = "";
-          this.password.newPassword = "";
         });
     },
     editProfile: function() {

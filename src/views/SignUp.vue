@@ -19,6 +19,7 @@
                     <v-text-field
                       label="Enter your username"
                       v-model="params.username"
+                      autocomplete="username"
                       append-icon="vpn_key"
                       :rules="required"
                     ></v-text-field>
@@ -26,6 +27,7 @@
                       label="Enter your email"
                       v-model="params.email"
                       :rules="emailRules"
+                      autocomplete="email"
                       append-icon="email"
                       required
                     ></v-text-field>
@@ -33,8 +35,9 @@
                       label="Enter your password"
                       v-model="params.password"
                       min="8"
+                      autocomplete="new-password"
                       :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                      :append-icon-cb="() => (e1 = !e1)"
+                      @click:append="e1 = !e1"
                       :type="e1 ? 'password' : 'text'"
                       :rules="passwordRules"
                       counter
@@ -44,8 +47,9 @@
                       label="Confirm password"
                       v-model="cpassword"
                       min="8"
+                      autocomplete="new-password"
                       :append-icon="e2 ? 'visibility' : 'visibility_off'"
-                      :append-icon-cb="() => (e2 = !e2)"
+                      @click:append="e2 = !e2"
                       :type="e2 ? 'password' : 'text'"
                       :rules="passwordConfirmationRules"
                       counter
@@ -53,6 +57,7 @@
                     ></v-text-field>
                     <v-text-field
                       label="Enter your Name"
+                      autocomplete="name"
                       v-model="params.name"
                       append-icon="person"
                       :rules="required"
@@ -73,6 +78,7 @@
                         <template v-slot:activator="{ on }">
                           <v-text-field
                             v-model="params.birthDate"
+                            autocomplete="bday"
                             :label="$vuetify.t('$vuetify.profile.birthDate')"
                             prepend-icon="cake"
                             readonly
@@ -90,6 +96,7 @@
                       mask="(###) #### #####"
                       label="Enter your Phone"
                       v-model="params.phone"
+                      autocomplete="tel-local"
                       append-icon="phone"
                       :rules="phoneRules"
                       persistent-hint
