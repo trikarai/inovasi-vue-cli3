@@ -53,7 +53,7 @@
                   <v-layout justify-space-between v-if="!view">
                     <v-btn
                       v-if="edit == false"
-                      @click.prevent="submit"
+                      @click.once="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
                     <v-btn
@@ -93,10 +93,10 @@ export default {
       loader: false,
       show1: false,
       status: {
-        error : false,
+        error: false,
         success: false,
         info: false,
-        warning : false
+        warning: false
       },
       err_msg: "",
       params: {
@@ -117,8 +117,8 @@ export default {
         }
       ],
       passwordRules: [
-         value => !!value || "Password Required.",
-         v => v.length >= 8 || "Min 8 characters"
+        value => !!value || "Password Required.",
+        v => v.length >= 8 || "Min 8 characters"
       ]
     };
   },
@@ -148,17 +148,14 @@ export default {
       this.loader = true;
       net
         .postData(this, "/administrator/administrators", this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -167,18 +164,13 @@ export default {
       net
         .putData(this, "/administrator/profile/update", this.params)
         .then(res => {
-          console.log("Responese : " + res);
-          if (res.status >= 300) {
-            notif.showError(this, res)
-          } else {
-            this.$emit("refresh");
-          }
+          this.$emit("refresh");
         })
         .catch(error => {
           console.log("Error : " + error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -188,12 +180,11 @@ export default {
         .then(
           res => {
             this.params = res.data.data;
-          },
-          error => {
-            console.log(error);
           }
         )
-        .catch()
+        .catch(error=>{
+          notif.showError(this, error);
+        })
         .finally();
     }
   }

@@ -32,7 +32,7 @@
                   ></v-text-field>
                   <v-layout justify-space-between>
                     <v-btn
-                      @click="update"
+                      @click.once="update"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.edit')}}</v-btn>
 
@@ -73,7 +73,7 @@ export default {
         info: false,
         warning : false
       },
-      err_msg: "",
+      err_msg: {details:[""]},
       params: {
         name: "",
         username: "",
@@ -125,7 +125,7 @@ export default {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     }

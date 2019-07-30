@@ -33,13 +33,13 @@
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"
-                      @click.prevent="submit"
+                      @click.once="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
 
                     <v-btn
                       v-else
-                      @click="update"
+                      @click.once="update"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.edit')}}</v-btn>
 
@@ -78,7 +78,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: {details:[""]},
       params: {
         name: "",
         description: "",
