@@ -21,13 +21,17 @@ export default {
         }
         context.status.error = true;
     },
-    showInfo: function (context, res) {
-        console.log(res);
+    showInfo: function (context, res, details) {
+        context.err_msg = {
+            code: res.status,
+            type: res.statusText,
+            details: details
+        };
         context.status.info = true;
     },
     showWarning: function (context, res) {
-        console.log(res);
         context.status.warning = true;
+        context.err_msg = res.body.meta;
     },
     showSuccess: function (context, res, details) {
         context.err_msg = {
@@ -37,12 +41,12 @@ export default {
         };
         context.status.success = true;
     },
-    reset: function(context){
+    reset: function (context) {
         context.status = {
-         success: false,
-         error: false,
-         info: false,
-         warning: false
+            success: false,
+            error: false,
+            info: false,
+            warning: false
         }
     }
 }

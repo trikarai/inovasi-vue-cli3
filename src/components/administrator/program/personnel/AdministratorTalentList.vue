@@ -2,6 +2,7 @@
   <div>
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+
       <v-card>
         <v-card-title>
           <v-spacer></v-spacer>
@@ -59,7 +60,7 @@ import VueLodash from "vue-lodash";
 const options = { name: "lodash" }; // customize the way you want to call it
 
 import net from "@/config/httpclient";
-import alert from "@/config/alerthandling";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import PersonnelForm from "./PersonnelForm";
 
@@ -78,7 +79,7 @@ export default {
       status: {
         success: false,
         error: false,
-        info: false,
+        info: true,
         warning: false
       },
       err_msg: "",
@@ -149,13 +150,13 @@ export default {
     },
     getTalent: function() {
       this.loader = true;
+      notif.reset(this);
       net
         .getData(
           this,
           "/administrator/talents?email=" + encodeURI(this.searchEmail)
         )
         .then(res => {
-          console.log(res);
           if (res.data.data) {
             this.talents = res.data.data;
           } else {
@@ -163,15 +164,16 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
           this.talents.list = [];
+          notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
     getDataList: function() {
       this.loader = true;
+      notif.reset(this);
       net
         .getData(this, "/administrator/talents" + this.querypage)
         .then(res => {
@@ -183,9 +185,9 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          alert.showError(this, error);
+          notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -199,8 +201,10 @@ export default {
       this.dialogForm = false;
       this.getDataList();
     },
-    oke: function(res) {
-      alert.showInfo(this, res);
+    oke: function(res, details) {
+      notif.showInfo(this, res, details);
+      this.res = res;
+      this.dialogForm = false;
     }
   }
 };
