@@ -146,18 +146,18 @@ export default {
       this.loader = true;
       net
         .getData(this, "/administrator/programmes")
-        .then(function(res) {
+        .then(res=> {
           if (res.data.data) {
             this.program = res.data.data;
           } else {
             this.program.list = [];
           }
         })
-        .catch(function(error) {
+        .catch(error=> {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -181,11 +181,14 @@ export default {
       }
     },
     deleteData: function(id) {
+      notif.reset(this);
       net
         .deleteData(this, "/administrator/programmes/" + id)
         .then()
-        .catch(function() {})
-        .finally(function() {
+        .catch(error=> {
+          notif.showError(this, error);
+        })
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });
