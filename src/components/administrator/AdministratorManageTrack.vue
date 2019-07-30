@@ -12,7 +12,7 @@
         <template v-slot:items="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
-            <v-btn small append="true" @click="gotoskill(props.item.id)">
+            <v-btn small @click="gotoskill(props.item.id)">
               <v-icon small>extension</v-icon>
               {{ $vuetify.t('$vuetify.profile.skill') }}
             </v-btn>
@@ -72,7 +72,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: {details: [""]},
       loader: false,
       dialogDel: false,
       dialogForm: false,
