@@ -7,7 +7,6 @@
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
-                <!-- {{error}} -->
                 <v-form v-model="valid" ref="form">
                   <v-autocomplete
                     v-model="params.trackId"
@@ -17,7 +16,6 @@
                     item-value="id"
                     required
                   ></v-autocomplete>
-
                   <v-autocomplete
                     v-model="params.skillReferenceId"
                     label="Skill"
@@ -28,13 +26,13 @@
                   ></v-autocomplete>
                   <span class="grey--text">Score : ({{ params.score}})</span>
                   <div class="text-xs-left">
-                    <v-rating color="primary" v-model="params.score" clearable="true"></v-rating>
+                    <v-rating color="primary" v-model="params.score"></v-rating>
                   </div>
 
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"
-                      @click.prevent="submit"
+                      @click.once="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
 
@@ -64,6 +62,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import notification from "@/components/Notification";
 
 export default {
@@ -78,38 +77,33 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: { code: 666, type: "", details: [] },
+      err_msg: { code: 666, type: "", details: [""] },
       error: "error",
       params: {
         trackId: "",
         skillReferenceId: "",
-        score: "5"
+        score: 0
       },
       nameRules: [
         v => !!v || "Name is required",
         v => v.length >= 3 || "Name must be more than 3 characters"
       ],
-      track: {total:0, list:[]},
-      skill: {total:0, list:[]},
-      dummy: [
-        { name: "dummy 1", id: "id" },
-        { name: "dummy 2", id: "id2" },
-        { name: "dummy 3", id: "id3" },
-        { name: "dummy 4", id: "id4" }
-      ]
+      track: { total: 0, list: [] },
+      skill: { total: 0, list: [] }
     };
   },
   components: {
     "notification-alert": notification
   },
-  created: function() {},
+  created: function() {
+    this.getTrack();
+  },
   watch: {
-    "params.trackId" : function() {
+    "params.trackId": function() {
       this.getSkill(this.params.trackId);
     }
   },
   mounted: function() {
-    this.getTrack();
     if (this.edit) {
       this.getSingleData();
     }
@@ -138,162 +132,81 @@ export default {
       }
     },
     getSingleData: function() {
-      var app = this;
-      this.status.error = false;
-      this.status.success = false;
+      notif.reset(this);
+      this.loader = true;
       net
         .getData(this, "/talent/skills/" + this.data.id)
-        .then(
-          res => {
-            console.log(res);
-            this.params = res.data.data;
-          },
-          error => {
-            console.log(error);
-            if (error.status >= 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch(function(error) {
-          console.log(error);
-          if (error.status >= 400) {
-            app.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            app.err_msg = error.body.meta;
-          }
-          app.status.error = true;
+        .then(res => {
+          this.params = res.data.data;
+          this.getTrack(this.params.trackId);
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
     addData: function() {
+      notif.reset(this);
       this.loader = true;
-      var app = this;
-      this.status.error = false;
-      this.status.success = false;
       net
-        .postData(this, "/talent/skills/", this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch()
-        .finally(function() {
+        .postData(this, "/talent/skills", this.params)
+        .then(res => {
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
     updateData: function() {
-      var app = this;
+      notif.reset(this);
       this.loader = true;
-      this.status.error = false;
-      this.status.success = false;
       net
-        .putData(this, "/talent/skills/" + this.data.id, this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-            if (error.status >= 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch(function(error) {
-          console.log(error);
-          if (error.status >= 400) {
-            app.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            app.err_msg = error.body.meta;
-          }
-          app.status.error = true;
+        .putData(this, "/talent/skills" + this.data.id, this.params)
+        .then(res => {
+          this.$emit("refresh");
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
     getTrack: function() {
-      net.getData(this, "/talent/tracks").then(
-        res => {
-          console.log(res);
+      notif.reset(this);
+      this.loader = true;
+      net
+        .getData(this, "/talent/tracks")
+        .then(res => {
           this.track = res.data.data;
-        },
-        error => {
-          console.log(error);
-          if (error.status >= 400) {
-            this.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            this.err_msg = error.body.meta;
-          }
-          this.status.error = true;
-        }
-      );
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
     },
     getSkill: function(trackId) {
-      net.getData(this, "/talent/tracks/"+ trackId + "/skill-references").then(
-        res => {
+      notif.reset(this);
+      this.loader = true;
+      net
+        .getData(this, "/talent/tracks/" + trackId + "/skill-references")
+        .then(res => {
           console.log(res);
           this.skill = res.data.data;
-        },
-        error => {
-          console.log(error);
-          if (error.status >= 400) {
-            this.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            this.err_msg = error.body.meta;
-          }
-          this.status.error = true;
-        }
-      );
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
     }
   }
 };
