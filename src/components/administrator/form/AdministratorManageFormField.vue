@@ -9,19 +9,12 @@
           {{ $vuetify.t('$vuetify.action.add') }} Field
         </v-btn>
       </transition>
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-data-table dark :headers="headers" :items="field.list" class="elevation-1">
+
+      <v-data-table :loading="loader" :headers="headers" :items="field.list">
         <template v-slot:items="props">
-          <td>{{ props.item.position }}</td>
-          <td>{{ props.item.name }}</td>
-          <td>{{ props.item.type.displayName }}</td>
+          <td>{{props.item.position}}</td>
+          <td>{{props.item.name}}</td>
+          <td>{{props.item.type.displayName}}</td>
           <td>
             <v-btn
               @click="openOption(props.item.id)"
@@ -39,13 +32,13 @@
               <v-icon small>edit</v-icon>
               {{ $vuetify.t('$vuetify.action.edit') }}
             </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)" v-show="!optionShow">
+            <v-btn small dark color="warning" @click="deleteAct(props.item.id)" v-show="!optionShow">
               <v-icon small>delete</v-icon>
               {{ $vuetify.t('$vuetify.action.delete') }}
             </v-btn>
 
             <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
+              <div v-show="props.item.id == selectedIndex">
                 {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
                 <v-btn @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
@@ -86,10 +79,10 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import FieldForm from "./AddField";
 import OptionList from "./option/AdministratorManageFormFieldOption";
-import { setTimeout } from "timers";
 
 export default {
   components: {
@@ -107,7 +100,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -149,22 +142,17 @@ export default {
           this,
           "/administrator/forms/" + this.$route.params.formId + "/fields"
         )
-        .then(
-          res => {
-            if (res.data.data) {
-              this.field = res.data.data;
-            } else {
-              this.field.list = [];
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.field = res.data.data;
+          } else {
+            this.field.list = [];
           }
-        )
-        .catch(function() {})
-        .finally(function() {
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -194,8 +182,10 @@ export default {
           "/administrator/forms/" + this.$route.params.formId + "/fields/" + id
         )
         .then()
-        .catch(function() {})
-        .finally(function() {
+        .catch(error=>{
+          notif.showError(this, error);
+        })
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });
