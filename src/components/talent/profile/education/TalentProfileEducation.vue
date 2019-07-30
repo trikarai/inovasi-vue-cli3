@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Education
@@ -49,6 +49,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import EducationForm from "./EducationForm";
 import Notification from "@/components/Notification";
 
@@ -65,9 +66,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {
-        details: [""]
-      },
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -91,9 +90,9 @@ export default {
           sortable: false,
           value: "phase"
         },
-        { text: "", value: "id",sortable: false}
+        { text: "", value: "id", sortable: false }
       ]
-    }
+    };
   },
   mounted: function() {
     this.getDataList();
@@ -101,32 +100,20 @@ export default {
   methods: {
     getDataList: function() {
       this.loader = true;
-      this.status.error = false;
-      this.status.success = false;
-      var app = this;
+      notif.reset(this);
       net
         .getData(this, "/talent/educational-backgrounds")
-        .then(
-          res => {
-            if (res.data.data) {
-              this.data = res.data.data;
-            } else {
-              this.data.list = [];
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.data = res.data.data;
+          } else {
+            this.data.list = [];
           }
-        )
-        .catch(function(error) {
-          console.log(error);
-          console.log(error);
-          app.err_msg = error.body.meta;
-          app.status.error = true;
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -150,11 +137,14 @@ export default {
       }
     },
     deleteData: function(id) {
+      notif.reset(this);
       net
-        .deleteData(this, "/talent/educational-backgrounds" + id)
+        .deleteData(this, "/talent/educational-backgrounds/" + id)
         .then()
-        .catch(function() {})
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });

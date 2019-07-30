@@ -101,6 +101,7 @@ export default {
   methods: {
     getDataList: function() {
       this.loader = true;
+      notif.reset(this);
       net
         .getData(this, "/talent/skills/" + this.skillId + "/certificates")
         .then(res => {
@@ -137,6 +138,7 @@ export default {
       }
     },
     deleteData: function(id) {
+      notif.reset(this);
       net
         .deleteData(
           this,

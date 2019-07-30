@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Organizational Experiences
       </v-btn>
-      <v-data-table :headers="headers" :items="data.list"  :loading="loader" class="elevation-1">
+      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
         <template v-slot:items="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
@@ -48,6 +48,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import OrgForm from "./OrgForm";
 import Notification from "@/components/Notification";
 
@@ -64,7 +65,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -82,7 +83,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id",sortable: false, }
+        { text: "", value: "id", sortable: false }
       ]
     };
   },
@@ -92,30 +93,18 @@ export default {
   methods: {
     getDataList: function() {
       this.loader = true;
-      this.status.error = false;
-      this.status.success = false;
-      var app = this;
+      notif.reset(this);
       net
         .getData(this, "/talent/organizational-experiences")
-        .then(
-          res => {
-            if (res.data.data) {
-              this.data = res.data.data;
-            } else {
-              this.data.list = [];
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.data = res.data.data;
+          } else {
+            this.data.list = [];
           }
-        )
-        .catch(function(error) {
-          console.log(error);
-          console.log(error);
-          app.err_msg = error.body.meta;
-          app.status.error = true;
+        })
+        .catch(error => {
+          notif.showError(this, error);
         })
         .finally(function() {
           this.loader = false;
@@ -142,10 +131,12 @@ export default {
     },
     deleteData: function(id) {
       net
-        .deleteData(this, "/talent/organizational-experiences" + id)
+        .deleteData(this, "/talent/organizational-experiences/" + id)
         .then()
-        .catch(function() {})
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });
