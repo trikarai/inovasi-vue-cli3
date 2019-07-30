@@ -3,6 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
+          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -107,6 +108,8 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
+import notification from "@/components/Notification";
 
 export default {
   props: ["skillId", "edit", "view", "data"],
@@ -116,6 +119,13 @@ export default {
       loader: false,
       menu1: false,
       menu2: false,
+      status: {
+        success: false,
+        error: false,
+        info: false,
+        warning: false
+      },
+      err_msg: { code: 666, type: "", details: [""] },
       params: {
         name: "",
         organizer: "",
@@ -127,6 +137,9 @@ export default {
         v => v.length >= 3 || "Name must be more than 3 characters"
       ]
     };
+  },
+  components: {
+    "notification-alert": notification
   },
   created: function() {
     this.params.name = this.data.name;
@@ -155,55 +168,49 @@ export default {
           "/talent/skills/" + this.skillId + "/certificates",
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
         .finally(function() {
           this.loader = false;
         });
     },
     updateData: function() {
       this.loader = true;
+      notif.reset(this);
       net
         .putData(
           this,
           "/talent/skills/" + this.skillId + "/certificates/" + this.data.id,
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
     getSingleData: function(id) {
       net
         .getData(this, "/talent/skills/" + this.skillId + "/certificates/" + id)
-        .then(
-          res => {
-            this.params = res.data.data;
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally();
+        .then(res => {
+          this.params = res.data.data;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
     }
   }
 };

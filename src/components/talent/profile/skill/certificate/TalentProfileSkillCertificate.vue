@@ -1,13 +1,18 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
-        {{ $vuetify.t('$vuetify.action.add') }} {{ $vuetify.t('$vuetify.profile.certificate') }} 
+        {{ $vuetify.t('$vuetify.action.add') }} {{ $vuetify.t('$vuetify.profile.certificate') }}
       </v-btn>
-     
-      <v-data-table :headers="headers" :items="certificate.list" :loading="loader" class="elevation-1">
+
+      <v-data-table
+        :headers="headers"
+        :items="certificate.list"
+        :loading="loader"
+        class="elevation-1"
+      >
         <template v-slot:items="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
@@ -49,14 +54,15 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import CertificateForm from "./AddCertificate";
 
 export default {
-  props: ['skillId'],
+  props: ["skillId"],
   components: {
     "notification-alert": Notification,
-     CertificateForm
+    CertificateForm
   },
   data() {
     return {
@@ -67,7 +73,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -96,24 +102,18 @@ export default {
     getDataList: function() {
       this.loader = true;
       net
-        .getData(this, "/talent/skills/" + this.skillId + "/certificates/")
-        .then(
-          res => {
-            if(res.data.data){
-              this.certificate = res.data.data;
-            }else{
-              this.certificate.list = []; 
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .getData(this, "/talent/skills/" + this.skillId + "/certificates")
+        .then(res => {
+          if (res.data.data) {
+            this.certificate = res.data.data;
+          } else {
+            this.certificate.list = [];
           }
-        )
-        .catch(function() {
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -138,10 +138,15 @@ export default {
     },
     deleteData: function(id) {
       net
-        .deleteData(this, "/talent/skills/" + this.skillId + "/certificates/" + id)
+        .deleteData(
+          this,
+          "/talent/skills/" + this.skillId + "/certificates/" + id
+        )
         .then()
-        .catch(function() {})
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });
