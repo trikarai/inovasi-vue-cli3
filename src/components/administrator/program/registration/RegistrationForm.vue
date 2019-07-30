@@ -3,7 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
-          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
+          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -17,7 +17,7 @@
                     maxlength="25"
                     required
                   ></v-text-field>
-            
+
                   <v-flex xs12>
                     <v-menu
                       v-model="menu1"
@@ -72,8 +72,7 @@
                       ></v-date-picker>
                     </v-menu>
                   </v-flex>
-                  
-                  
+
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"
@@ -107,6 +106,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import notification from "@/components/Notification";
 
 export default {
@@ -128,6 +128,8 @@ export default {
         startDate: "",
         endDate: ""
       },
+      menu1: false,
+      menu2: false,
       nameRules: [
         v => !!v || "Name is required",
         v => v.length >= 3 || "Name must be more than 3 characters"
@@ -167,6 +169,7 @@ export default {
       }
     },
     getSingleData: function() {
+      notif.reset(this);
       net
         .getData(
           this,
@@ -175,67 +178,42 @@ export default {
             "/registrations/" +
             this.data.id
         )
-        .then(
-          res => {
-            console.log(res);
-            this.params = res.data.data;
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          console.log(res);
+          this.params = res.data.data;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
     addData: function() {
+      notif.reset(this);
       this.loader = true;
-      this.status.error = false;
       net
         .postData(
           this,
-          "/administrator/programmes/" + this.$route.params.programId + "/registrations",
+          "/administrator/programmes/" +
+            this.$route.params.programId +
+            "/registrations",
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-            if (error.status < 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
     updateData: function() {
-      var app = this;
       this.loader = true;
-      this.status.error = false;
+      notif.reset(this);
       net
         .putData(
           this,
@@ -245,34 +223,14 @@ export default {
             this.data.id,
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-            if (error.status < 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch(function(error) {
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.status.error = true;
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     }
