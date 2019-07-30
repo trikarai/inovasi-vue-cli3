@@ -36,5 +36,13 @@ export default {
             details: details
         };
         context.status.success = true;
+    },
+    reset: function(context){
+        context.status = {
+         success: false,
+         error: false,
+         info: false,
+         warning: false
+        }
     }
 }
