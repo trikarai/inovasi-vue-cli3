@@ -1,24 +1,21 @@
 <template>
   <div>
     <v-container>
-      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Registration
       </v-btn>
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-data-table dark :headers="headers" :items="data.list" class="elevation-1">
+
+      <v-data-table
+        dark
+        :headers="headers"
+        :loading="loader"
+        :items="data.list"
+        class="elevation-1"
+      >
         <template v-slot:items="props">
-          <td>
-            {{ props.item.name }}
-          </td>
+          <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
             <v-btn @click="openEdit(props.index)" small>
               <v-icon small>edit</v-icon>
@@ -27,13 +24,13 @@
             <!-- <v-btn @click="openDetail(props.item.id)" small>
               <v-icon small>pageview</v-icon> 
               {{ $vuetify.t('$vuetify.action.view') }}
-            </v-btn> -->
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
+            </v-btn>-->
+            <v-btn small dark color="warning" @click="deleteAct(props.item.id)">
               <v-icon small>delete</v-icon>
               {{ $vuetify.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
+              <div v-show="props.item.id == selectedIndex">
                 {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
                 <v-btn @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
@@ -48,8 +45,7 @@
           </td>
         </template>
       </v-data-table>
-      <br>
-
+      <br />
     </v-container>
 
     <RegistrationForm
@@ -61,12 +57,13 @@
       @refresh="refresh()"
     />
     <v-container>
-    <span v-html="error.body" v-if="status.error"></span>
+      <span v-html="error.body" v-if="status.error"></span>
     </v-container>
   </div>
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import RegistrationForm from "./RegistrationForm";
 import Notification from "@/components/Notification";
 
@@ -83,7 +80,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: { details: [""] },
       error: "error",
       loader: false,
       dialogDel: false,
@@ -111,53 +108,30 @@ export default {
   },
   methods: {
     getDataList: function() {
+      notif.reset(this);
       this.loader = true;
-      // this.status.error = false;
-      // this.status.success = false;
-      var app = this;
       net
         .getData(
           this,
-          "/administrator/programmes/" + this.$route.params.programId + "/registrations"
+          "/administrator/programmes/" +
+            this.$route.params.programId +
+            "/registrations"
         )
-        .then(
-          res => {
-            if (res.data.data) {
-              this.data = res.data.data;
-            } else {
-              this.data.list = [];
-            }
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.error = error;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.data = res.data.data;
+          } else {
+            this.data.list = [];
           }
-        )
-        .catch(function(error) {
-          console.log(error);
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.error = error;
-          app.status.error = true;
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
-    openDetail: function(id){
+    openDetail: function(id) {
       // this.$router.push({path: "/talent/team/"+ this.$route.params.teamId + "/idea/" + id})
     },
     openEdit: function(index) {
@@ -180,65 +154,20 @@ export default {
       }
     },
     deleteData: function(id) {
+      notif.reset(this);
       net
         .deleteData(
           this,
-          "/administrator/programmes/" + this.$route.params.teamId + "/registrations/" + id
+          "/administrator/programmes/" +
+            this.$route.params.programId +
+            "/registrations/" +
+            id
         )
         .then()
-        .catch(function() {})
-        .finally(function() {
-          this.selectedIndex = null;
-          this.refresh();
-        });
-    },
-    setMain: function(id) {
-      var app = this;
-      this.status.error = false;
-      this.status.success = false;
-      net
-        .putData(
-          this,
-          "/administrator/programmes/" +
-            this.$route.params.teamId +
-            "/registrations/" +
-            id +
-            "/set_as_main_idea"
-        )
-        .then(
-          res => {
-            console.log(res);
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-            this.error = error;
-          }
-        )
-        .catch(function() {
-          console.log(error);
-          if (error.status !== 200) {
-            app.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            app.err_msg = error.body.meta;
-          }
-          app.error = error;
-          app.status.error = true;
+        .catch(error => {
+          notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });
