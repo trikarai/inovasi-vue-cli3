@@ -115,17 +115,13 @@ export default {
     getSingleData: function() {
       net
         .getData(this, "/talent/working-experiences/" + this.data.id)
-        .then(
-          res => {
-            console.log(res);
-            this.params = res.data.data;
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          this.params = res.data.data;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -133,17 +129,14 @@ export default {
       this.loader = true;
       net
         .postData(this, "/talent/working-experiences", this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -155,17 +148,13 @@ export default {
           "/talent/working-experiences/" + this.data.id,
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     }

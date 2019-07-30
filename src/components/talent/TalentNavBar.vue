@@ -177,7 +177,7 @@ export default {
         },
         {
           icon: "work",
-          text: "Working",
+          text: "Work",
           route: "/talent/work"
         },
         {
