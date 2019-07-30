@@ -69,8 +69,7 @@
             <td class="text-xs-right">
               <v-btn small @click="openMentoring(props.item.id)">
                 <v-icon small left>today</v-icon>
-                <!-- {{ $vuetify.t('$vuetify.action.view') }} -->
-                Mentoring Session
+                {{ $vuetify.t('$vuetify.mentoring.mentoringsession') }}
               </v-btn>
 
               <!-- <v-btn small @click="openDetail(props.item.id)">
@@ -78,12 +77,12 @@
                 {{ $vuetify.t('$vuetify.action.view') }}
               </v-btn>-->
 
-              <v-btn small dark color="warning" @click="cancelAct(props.item.id)">
+              <v-btn v-if="props.item.status == applied" small dark color="warning" @click="cancelAct(props.item.id)">
                 <v-icon small>outlined_flag</v-icon>
                 {{ $vuetify.t('$vuetify.action.cancel') }}
               </v-btn>
 
-              <v-btn small dark color="warning" @click="quitAct(props.item.id)">
+              <v-btn v-if="props.item.status == active"  small dark color="red" @click="quitAct(props.item.id)">
                 <v-icon small>outlined_flag</v-icon>
                 {{ $vuetify.t('$vuetify.team.quit') }}
               </v-btn>
@@ -336,6 +335,8 @@ export default {
           notif.showError(this, error);
         })
         .finally(() => {
+          this.selectedQui = null;
+          this.selectedCan = null;
           this.refresh();
         });
     },
@@ -358,6 +359,8 @@ export default {
           notif.showError(this, error);
         })
         .finally(() => {
+          this.selectedQui = null;
+          this.selectedCan = null;
           this.refresh();
         });
     },
