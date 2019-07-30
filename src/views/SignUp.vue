@@ -2,7 +2,7 @@
   <div id="app">
     <v-app>
       <v-layout align-center justify-center>
-        <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
+        <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       </v-layout>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
@@ -144,6 +144,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 
 export default {
@@ -153,14 +154,16 @@ export default {
       loader: false,
       response: "",
       status: {
-        error : false,
+        error: false,
         success: false,
         warning: false,
         info: false
       },
       valid: false,
       alert: false,
-      err_msg: { code: 0, type: "", error_details: [] },
+      err_msg: { code: 0, type: "", error_details: [""] },
+      menu1: false,
+      menu2: false,
       e1: false,
       e2: false,
       params: {
@@ -219,29 +222,22 @@ export default {
       }
     },
     submitData: function() {
-      var app = this;
+      notif.reset(this);
       this.loader = true;
-      this.status.error = false;
-      this.status.success = false;
       net
         .postDataPublic(this, "/talent-signup", this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$router.push({ path: "/login" });
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.alert = true;
-          }
-        )
-        .catch(function(error) {
-          console.log(error);
-          app.err_msg = error.body.meta;
-          app.alert = true;
+        .then(res => {
+          this.$router.push({ path: "/login" });
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+          this.$vuetify.goTo(this.$refs.notif, {
+            duration: 500,
+            offset: 0,
+            easing: "linear"
+          });
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -249,30 +245,17 @@ export default {
       var app = this;
       net
         .getDataPublic(this, "/regions")
-        .then(
-          res => {
-            if (res.data.data) {
-              this.region = res.data.data;
-            } else {
-              this.region.list = [];
-            }
-          },
-          error => {
-            console.log(error);
-            app.err_msg = error.body.meta;
-            app.alert = true;
+        .then(res => {
+          if (res.data.data) {
+            this.region = res.data.data;
+          } else {
+            this.region.list = [];
           }
-        )
-        .catch(function(error) {
-          console.log(error);
-          app.err_msg = {
-            error_details: ["API ERROR"],
-            type: "API Error",
-            code: 666
-          };
-          app.alert = true;
         })
-        .finally(function() {});
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {});
     },
     clear() {
       this.$refs.form.reset();
