@@ -241,7 +241,7 @@ export default {
     },
     checkProgramCoordinatoship() {
       var check;
-      if (this.user.data.programmeCoordinatorships) {
+      if (this.user.data.programmeCoordinatorships.length !== 0) {
         check = true;
       } else {
         check = false;
@@ -250,7 +250,7 @@ export default {
     },
     checkProgramMentorship() {
       var check;
-      if (this.user.data.programmeMentorships) {
+      if (this.user.data.programmeMentorships.length !== 0) {
         check = true;
       } else {
         check = false;
