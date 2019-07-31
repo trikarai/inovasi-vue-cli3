@@ -78,14 +78,14 @@
               <v-btn
                 small
                 color="warning"
-                @click="deleteAct(props.index)"
+                @click="deleteAct(props.item.id)"
                 v-if="ifShow(props.item.status.value)"
               >
                 <v-icon small>outlined_flag</v-icon>
                 {{ $vuetify.t('$vuetify.team.quit') }}
               </v-btn>
               <v-expand-transition>
-                <div v-show="props.index == selectedIndex">
+                <div v-show="props.item.id == selectedQuit">
                   {{ $vuetify.t('$vuetify.action.confirmationtoquit') }}
                   <v-btn @click="deleteData(props.item.id)" color="red">
                     <v-icon></v-icon>
@@ -182,7 +182,7 @@ export default {
       select: "",
       queryurl: "",
       singleData: { id: "", name: "" },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -190,6 +190,7 @@ export default {
       view: false,
       expand: false,
       selectedIndex: null,
+      selectedQuit: null,
       selectedIndexAcc: null,
       selectedIndexRej: null,
       headers: [
@@ -239,7 +240,9 @@ export default {
         icon = "check_circle";
       } else if (status === "inv") {
         icon = "email";
-      }else{
+      } else if (status === "rem") {
+        icon = "block";
+      } else {
         icon = "outlined_flag";
       }
       return icon;
@@ -305,13 +308,14 @@ export default {
     deleteAct: function(id) {
       this.selectedIndexAcc = null;
       this.selectedIndexRej = null;
-      if (this.selectedIndex == id) {
-        this.selectedIndex = null;
+      if (this.selectedQuit == id) {
+        this.selectedQuit = null;
       } else {
-        this.selectedIndex = id;
+        this.selectedQuit = id;
       }
     },
     acceptAct: function(id) {
+      this.selectedQuit = null;
       this.selectedIndex = null;
       this.selectedIndexRej = null;
       if (this.selectedIndexAcc == id) {
@@ -323,6 +327,7 @@ export default {
     rejectAct: function(id) {
       this.selectedIndexAcc = null;
       this.selectedIndex = null;
+      this.selectedQuit = null;
       if (this.selectedIndexRej == id) {
         this.selectedIndexRej = null;
       } else {
@@ -330,9 +335,7 @@ export default {
       }
     },
     deleteData: function(id) {
-      var app = this;
-      this.status.error = false;
-      this.status.info = false;
+      notif.reset(this);
       net
         .putData(this, "/talent/team-memberships/" + id + "/quit")
         .then(res => {
@@ -341,13 +344,13 @@ export default {
         .catch(error => {
           notif.showErrow(this, error);
         })
-        .finally(function() {
-          app.refresh();
+        .finally(() => {
+          this.selectedQuit = null;
+          this.refresh();
         });
     },
     acceptInvitation: function(id) {
-      this.status.error = false;
-      this.status.info = false;
+      notif.reset(this);
       net
         .putData(this, "/talent/team-memberships/" + id + "/accept-invitation")
         .then(res => {
@@ -356,13 +359,13 @@ export default {
         .catch(error => {
           notif.showErrow(this, error);
         })
-        .finally(function() {
+        .finally(() => {
+          this.selectedIndexAcc = null;
           this.refresh();
         });
     },
     rejectInvitation: function(id) {
-      this.status.error = false;
-      this.status.info = false;
+      notif.reset(this);
       net
         .putData(this, "/talent/team-memberships/" + id + "/reject-invitation")
         .then(res => {
@@ -371,7 +374,8 @@ export default {
         .catch(error => {
           notif.showErrow(this, error);
         })
-        .finally(function() {
+        .finally(() => {
+          this.selectedIndexRej = null;
           this.refresh();
         });
     },
