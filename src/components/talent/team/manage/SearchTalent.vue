@@ -97,7 +97,7 @@ export default {
         warning: false
       },
       async: false,
-      err_msg: "",
+      err_msg: {details:[""]},
       search: "",
       talent: null,
       position: "",
