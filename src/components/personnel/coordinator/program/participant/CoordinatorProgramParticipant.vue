@@ -359,7 +359,7 @@ export default {
         this.selectedIndexExp = index;
       }
     },
-    expellParticipant: function() {
+    expellParticipant: function(id) {
       this.loader = true;
       notif.reset(this);
       net
