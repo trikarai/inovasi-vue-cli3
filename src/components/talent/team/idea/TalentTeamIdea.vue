@@ -21,7 +21,7 @@
             <v-icon color="yellow" small v-if="props.item.aMainIdea">start</v-icon>
           </td>
           <td class="text-xs-right">
-            <v-btn @click="setMain(props.index)" small v-if="!props.item.aMainIdea">
+            <v-btn @click="setMain(props.item.id)" small v-if="!props.item.aMainIdea">
               <v-icon small>swap_calls</v-icon>
               {{ $vuetify.t('$vuetify.idea.setMainIdea') }}
             </v-btn>
@@ -208,7 +208,7 @@ export default {
             this.$route.params.teamId +
             "/ideas/" +
             id +
-            "/set_as_main_idea"
+            "/assign-as-main-idea"
         )
         .then(
           res => {
