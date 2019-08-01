@@ -61,6 +61,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import auth from "@/config/auth";
 import Notification from "@/components/Notification";
 
@@ -119,35 +120,14 @@ export default {
           this.params
         )
         .then(res => {
-          console.log(res);
-          this.err_msg = {
-            code: res.data.meta.code,
-            type: res.data.meta.type,
-            details: ["Success"]
-          };
-          this.status.success = true;
+                   notif.showSuccess(this, res, ["Reset Code Sent"])
+
         })
         .catch(error => {
-          console.log(error);
-          if (error.status >= 500) {
-            this.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: ["Internal Server Error"]
-            };
-          } else if (error.status >= 400) {
-            this.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            this.err_msg = error.body.meta;
-          }
-          this.status.error = true;
-          this.error = error;
+                    notif.showError(this, error);
+
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     }
