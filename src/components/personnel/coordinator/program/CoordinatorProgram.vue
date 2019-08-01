@@ -3,16 +3,13 @@
     <div>
       <v-container>
         <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-        <v-dialog v-model="loader" hide-overlay persistent width="300">
-          <v-card color="primary" dark>
-            <v-card-text>
-              {{ $vuetify.t('$vuetify.info.standby') }}
-              <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
 
-        <v-data-table :headers="headers" :items="programmeCoordinatorships.list" class="elevation-1">
+        <v-data-table
+          :loading="loader"
+          :headers="headers"
+          :items="programmeCoordinatorships.list"
+          class="elevation-1"
+        >
           <template v-slot:items="props">
             <td>{{ props.item.programme.name }}</td>
             <td>{{ props.item.programme.curriculum.name }}</td>
@@ -48,7 +45,7 @@ export default {
         warning: false
       },
       singleData: { id: "", name: "" },
-      err_msg: "",
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -76,34 +73,27 @@ export default {
       }
     };
   },
-  created: function() {
-    // this.user = JSON.parse(auth.getAuthData());
-  },
+  created: function() {},
   mounted: function() {
     this.getDataList();
-    // this.programmeCoordinatorships = this.user.data.programmeCoordinatorships;
   },
   methods: {
     getDataList: function() {
       this.loader = true;
       this.status.error = false;
       net
-        .getData(
-          this,
-          "/talent/programme-coordinatorships"
-        )
+        .getData(this, "/talent/programme-coordinatorships")
         .then(res => {
           if (res.data.data) {
             this.programmeCoordinatorships = res.data.data;
           } else {
-            this.programmeCoordinatorships = {total:0, list:[]};
+            this.programmeCoordinatorships = { total: 0, list: [] };
           }
         })
         .catch(error => {
-          console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     },

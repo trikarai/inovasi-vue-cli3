@@ -73,7 +73,7 @@ export default {
       respone: "",
       loader: false,
       alert: false,
-      err_msg: { code: 0, type: "", details: [] },
+      err_msg: {details:[""]},
       status: {
         success: false,
         error: false,

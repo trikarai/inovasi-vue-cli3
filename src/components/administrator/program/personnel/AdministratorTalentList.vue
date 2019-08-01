@@ -82,7 +82,7 @@ export default {
         info: true,
         warning: false
       },
-      err_msg: "",
+      err_msg: {details:[""]},
       loader: false,
       dialogDel: false,
       dialogForm: false,

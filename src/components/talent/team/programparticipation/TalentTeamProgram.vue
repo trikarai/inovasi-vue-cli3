@@ -67,7 +67,7 @@
               </v-chip>
             </td>
             <td class="text-xs-right">
-              <v-btn small @click="openMentoring(props.item.id)">
+              <v-btn v-if="props.item.status == 'active'" small @click="openMentoring(props.item.id)">
                 <v-icon small left>today</v-icon>
                 {{ $vuetify.t('$vuetify.mentoring.mentoringsession') }}
               </v-btn>
@@ -77,12 +77,12 @@
                 {{ $vuetify.t('$vuetify.action.view') }}
               </v-btn>-->
 
-              <v-btn v-if="props.item.status == applied" small dark color="warning" @click="cancelAct(props.item.id)">
+              <v-btn v-if="props.item.status === 'applied'" small dark color="warning" @click="cancelAct(props.item.id)">
                 <v-icon small>outlined_flag</v-icon>
                 {{ $vuetify.t('$vuetify.action.cancel') }}
               </v-btn>
 
-              <v-btn v-if="props.item.status == active"  small dark color="red" @click="quitAct(props.item.id)">
+              <v-btn v-if="props.item.status == 'active'"  small dark color="red" @click="quitAct(props.item.id)">
                 <v-icon small>outlined_flag</v-icon>
                 {{ $vuetify.t('$vuetify.team.quit') }}
               </v-btn>

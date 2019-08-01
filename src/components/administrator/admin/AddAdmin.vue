@@ -98,7 +98,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: {details:[""]},
       params: {
         name: "",
         username: "",

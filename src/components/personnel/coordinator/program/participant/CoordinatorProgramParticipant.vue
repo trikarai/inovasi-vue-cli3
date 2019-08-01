@@ -3,8 +3,9 @@
     <div>
       <v-container>
         <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-        <v-dialog v-model="loader" hide-overlay persistent width="300">
-          <v-card color="primary" dark>
+
+        <v-dialog v-model="loader2" hide-overlay persistent width="300">
+          <v-card color="primary">
             <v-card-text>
               {{ $vuetify.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
@@ -12,36 +13,56 @@
           </v-card>
         </v-dialog>
 
-        <v-data-table :headers="headers" :items="participants.list" class="elevation-1">
+        <v-data-table
+          :loading="loader"
+          :headers="headers"
+          :items="participants.list"
+          class="elevation-1"
+        >
           <template v-slot:items="props">
             <td>{{ props.item.team.name }}</td>
             <td>
-              <v-chip color="teal" text-color="white">
+              <v-chip :color="setColor(props.item.status)" text-color="white">
                 <v-avatar>
-                  <v-icon>check_circle</v-icon>
+                  <v-icon>{{setIcon(props.item.status)}}</v-icon>
                 </v-avatar>
                 {{ props.item.status }}
               </v-chip>
             </td>
             <td class="text-xs-right">
-              <v-btn round small @click.stop="openDetail(props.item.id)">
-                <v-icon small>search</v-icon>
-              </v-btn>
-              <v-btn small color="green" @click="acceptAct(props.index)">
+              <v-btn
+                v-if="props.item.status == 'applied'"
+                small
+                color="green"
+                @click="acceptAct(props.item.id)"
+              >
                 <v-icon small>check_circle_outline</v-icon>Accept
               </v-btn>
-              <v-btn small color="warning" @click="rejectAct(props.index)">
+              <v-btn
+                v-if="props.item.status == 'applied'"
+                small
+                color="warning"
+                @click="rejectAct(props.item.id)"
+              >
                 <v-icon small>highlight_off</v-icon>Reject
               </v-btn>
-              <v-btn small color="red" @click="expellAct(props.index)">
+              <v-btn
+                v-if="props.item.status == 'active'"
+                small
+                color="red"
+                @click="expellAct(props.item.id)"
+              >
                 <v-icon small>block</v-icon>Expell
+              </v-btn>
+              <v-btn round small @click.stop="openDetail(props.item.id)">
+                <v-icon small>search</v-icon>
               </v-btn>
 
               <v-flex shrink>
                 <v-expand-transition>
-                  <div v-show="props.index == selectedIndexAcc" style="white-space: nowrap">
+                  <div v-show="props.item.id == selectedIndexAcc" style="white-space: nowrap">
                     Confirm to Accept!
-                    <v-btn color="green" @click="acceptParticipant">
+                    <v-btn color="green" @click="acceptParticipant(props.item.id)">
                       <v-icon>check</v-icon>
                     </v-btn>
                     <v-btn color="red" @click="selectedIndexAcc = null">
@@ -53,9 +74,9 @@
 
               <v-flex shrink>
                 <v-expand-transition>
-                  <div v-show="props.index == selectedIndexRej" style="white-space: nowrap">
+                  <div v-show="props.item.id == selectedIndexRej" style="white-space: nowrap">
                     Confirm to Reject!
-                    <v-btn color="green" @click="rejectParticipant">
+                    <v-btn color="green" @click="rejectParticipant(props.item.id)">
                       <v-icon>check</v-icon>
                     </v-btn>
                     <v-btn color="red" @click="selectedIndexRej = null">
@@ -67,9 +88,9 @@
 
               <v-flex shrink>
                 <v-expand-transition>
-                  <div v-show="props.index == selectedIndexExp" style="white-space: nowrap">
+                  <div v-show="props.item.id == selectedIndexExp" style="white-space: nowrap">
                     Confirm to Expell!
-                    <v-btn color="green" @click="expellParticipant">
+                    <v-btn color="green" @click="expellParticipant(props.item.id)">
                       <v-icon>check</v-icon>
                     </v-btn>
                     <v-btn color="red" @click="selectedIndexExp = null">
@@ -143,8 +164,9 @@ export default {
           name: ""
         }
       },
-      err_msg: "",
+      err_msg: { details: [""] },
       loader: false,
+      loader2: false,
       loaderDialog: false,
       dialogDel: false,
       dialog: false,
@@ -175,9 +197,41 @@ export default {
     this.getDataList();
   },
   methods: {
+    setColor: function(status) {
+      var color = "grey";
+      if (status === "active") {
+        color = "green";
+      } else if (status === "applied") {
+        color = "blue";
+      } else if (status === "quit") {
+        color = "red";
+      } else if (status === "cancelled") {
+        color = "warning";
+      } else if (status === "expelled") {
+        color = "red";
+      } else {
+      }
+      return color;
+    },
+    setIcon: function(status) {
+      var icon = "check";
+      if (status === "active") {
+        icon = "check_circle";
+      } else if (status === "applied") {
+        icon = "hourglass_empty";
+      } else if (status === "quit") {
+        icon = "flag";
+      } else if (status === "cancelled") {
+        icon = "cancel";
+      } else if (status === "expelled") {
+        icon = "remove_circle";
+      } else {
+      }
+      return icon;
+    },
     getDataList: function() {
       this.loader = true;
-      this.status.error = false;
+      notif.reset(this);
       net
         .getData(
           this,
@@ -193,15 +247,14 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     },
     getSingleData: function(id) {
-      this.status.error = false;
+      notif.reset(this);
       this.loaderDialog = true;
       net
         .getData(
@@ -219,11 +272,10 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
           notif.showError(this, error);
           this.dialog = false;
         })
-        .finally(function() {
+        .finally(() => {
           this.loaderDialog = false;
         });
     },
@@ -242,28 +294,28 @@ export default {
         this.selectedIndexAcc = index;
       }
     },
-    acceptParticipant: function() {
-      this.loader = true;
-      this.status.error = false;
+    acceptParticipant: function(id) {
+      this.loader2 = true;
+      notif.reset(this);
       net
         .putData(
           this,
           "/talent/as-programme-coordinator/" +
             this.$route.params.programId +
             "/participants/" +
-            this.participants.list[this.selectedIndexAcc].id +
+            id +
             "/accept"
         )
         .then(res => {
-          console.log(res);
           this.refresh();
         })
         .catch(error => {
-          console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
-          this.loader = false;
+        .finally(()=> {
+          this.selectedIndexAcc = null;
+          this.loader2 = false;
+          this.refresh();
         });
     },
     rejectAct: function(index) {
@@ -275,28 +327,27 @@ export default {
         this.selectedIndexRej = index;
       }
     },
-    rejectParticipant: function() {
-      this.loader = true;
-      this.status.error = false;
+    rejectParticipant: function(id) {
+      this.loader2 = true;
+      notif.reset(this);
       net
         .putData(
           this,
           "/talent/as-programme-coordinator/" +
             this.$route.params.programId +
             "/participants/" +
-            this.participants.list[this.selectedIndexAcc].id +
+            id +
             "/reject"
         )
         .then(res => {
-          console.log(res);
           this.refresh();
         })
         .catch(error => {
-          console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
-          this.loader = false;
+        .finally(() => {
+          this.selectedIndexRej = null;
+          this.loader2 = false;
         });
     },
     expellAct: function(index) {
@@ -308,32 +359,30 @@ export default {
         this.selectedIndexExp = index;
       }
     },
-    expellParticipant: function() {
+    expellParticipant: function(id) {
       this.loader = true;
-      this.status.error = false;
+      notif.reset(this);
       net
         .putData(
           this,
           "/talent/as-programme-coordinator/" +
             this.$route.params.programId +
             "/participants/" +
-            this.participants.list[this.selectedIndexAcc].id +
+            id +
             "/expell"
         )
         .then(res => {
-          console.log(res);
           this.refresh();
         })
         .catch(error => {
-          console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
+          this.selectedIndexExp = null;
           this.loader = false;
         });
     },
     refresh: function() {
-      // this.dialogForm = false;
       this.getDataList();
     }
   }

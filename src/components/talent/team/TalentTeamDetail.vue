@@ -13,23 +13,34 @@
           </v-card>
         </v-dialog>
 
-        <v-layout align-start justify-start column fill-height>
-          <!-- <v-flex>{{params}}</v-flex> -->
-          <v-flex>{{params.team.name}}</v-flex>
-          <v-flex>{{params.position}}</v-flex>
-          <v-flex>{{params.status.displayName}}</v-flex>
+        <v-layout align-start justify-start fill-height>
+          <v-flex md6>
+            <v-card>
+              <v-card-title>
+                {{params.team.name}}
+              </v-card-title>
+              <v-card-text>
+                {{params.position}}
+                <v-divider/>
+                {{params.status.displayName}}
+              </v-card-text>
+            </v-card>
+          </v-flex>
         </v-layout>
 
-        <v-layout align-start justify-start column fill-height>
-          <v-flex xs12>
+        <v-layout align-start justify-start fill-height>
+          <v-flex md6>
             <v-btn @click="openSearch()">
               <v-icon>add</v-icon>Add Members
             </v-btn>
-          </v-flex>
           <v-divider></v-divider>
-          <v-flex xs12>
             <!-- {{memberlist.list}} -->
-            <v-data-table :loading="loader" :headers="headers" :items="memberlist.list" class="elevation-1">
+            <v-data-table
+              :loading="loader"
+              :headers="headers"
+              :items="memberlist.list"
+              class="elevation-1"
+            >
               <template v-slot:items="props">
                 <td>{{ props.item.talent.name }}</td>
               </template>
@@ -42,12 +53,10 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
-import { setTimeout } from "timers";
+
 export default {
-  components: {
-    "notification-alert": Notification
-  },
   data() {
     return {
       valid: false,
@@ -57,8 +66,14 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
-      params: {},
+      err_msg: { details: [""] },
+      params: {
+        id: "",
+        team: { id: "", name: "" },
+        position: "sasa",
+        status: { value: "", displayName: "" },
+        joinTime: ""
+      },
       memberlist: { total: 0, list: [] },
       loader: false,
       dialogDel: false,
@@ -77,7 +92,9 @@ export default {
       ]
     };
   },
-  components: {},
+  components: {
+    "notification-alert": Notification
+  },
   created: function() {},
   mounted: function() {
     this.getSingleData();
@@ -87,29 +104,26 @@ export default {
   },
   methods: {
     getSingleData: function() {
-      var app = this;
-      this.status.error = false;
       this.loader = !this.loader;
+      notif.reset(this);
       net
         .getData(
           this,
           "/talent/team-memberships/" + this.$route.params.membershipId
         )
-        .then(function(res) {
-          console.log(res);
+        .then(res => {
           this.params = res.data.data;
         })
-        .catch(function(error) {
-          console.log(error);
-          app.err_msg = error.body.meta;
-          app.status.error = true;
+        .catch(error => {
+          notif.showError(this, error);
         })
-        .finally(function() {
-          app.loader = false;
+        .finally(() => {
+          this.loader = false;
         });
     },
     getMemberList: function() {
       this.loader = true;
+      notif.reset(this);
       net
         .getData(
           this,
@@ -124,9 +138,9 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     },

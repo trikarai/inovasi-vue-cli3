@@ -24,7 +24,7 @@
             </v-toolbar>
             <v-card v-if="status.error">
               <v-card-text class="pt-4">
-                  <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+                <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
               </v-card-text>
               <v-card-action>
                 <v-btn color="blue" @click="resendAccount">
@@ -35,7 +35,8 @@
             <!-- card sucsess response -->
             <v-card v-if="status.success">
               <v-card-title>Activation Success</v-card-title>
-              <v-card-text>Thank you!
+              <v-card-text>
+                Thank you!
                 <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
               </v-card-text>
               <v-card-action>
@@ -49,11 +50,9 @@
               <v-card-title>Activation Resend</v-card-title>
               <v-card-text>
                 <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-                <br>
-                Check email for activation link
+                <br />Check email for activation link
               </v-card-text>
-              <v-card-action>
-              </v-card-action>
+              <v-card-action></v-card-action>
             </v-card>
           </v-flex>
         </v-layout>
@@ -63,6 +62,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import auth from "@/config/auth";
 import Notification from "@/components/Notification";
 
@@ -75,7 +75,7 @@ export default {
       error: "",
       valid: false,
       alert: false,
-      err_msg: { code: 0, type: "", details: [] },
+      err_msg: { details: [""] },
       status: {
         success: false,
         error: false,
@@ -92,15 +92,11 @@ export default {
   components: {
     "notification-alert": Notification
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
     activateAccount: function() {
       this.loader = true;
-      this.status.error = false;
-      this.status.success = false;
-      this.status.info = false;
+      notif.reset(this);
       net
         .putDataPublic(
           this,
@@ -108,28 +104,14 @@ export default {
             this.$route.params.email +
             "&activationCode=" +
             this.$route.params.activationCode
-          ).then(res => {
-          console.log(res);
-          this.err_msg = res.data.meta;
-          this.status.success = true;
+        )
+        .then(res => {
+          notif.showInfo(this, res, "Activated");
         })
         .catch(error => {
-          console.log(error);
-          if (error.status >= 500) {
-            this.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: ["Internal Server Error"]
-            };
-          } else if (error.status >= 400) {
-            this.err_msg = error.body.meta
-          } else {
-            this.err_msg = error.body.meta;
-          }
-          this.status.error = true;
-          this.error = error;
+          notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -139,29 +121,18 @@ export default {
       this.status.success = false;
       this.status.info = false;
       net
-        .putDataPublic(this,"/talent-account-control/regenerate-activation-code", {email: this.$route.params.email})
+        .putDataPublic(
+          this,
+          "/talent-account-control/regenerate-activation-code",
+          { email: this.$route.params.email }
+        )
         .then(res => {
-          console.log(res);
-          this.err_msg = res.data.meta;
-          this.status.info = true;
+          notif.showInfo(this, res, "Code Resend");
         })
         .catch(error => {
-          console.log(error);
-          if (error.status >= 500) {
-            this.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: ["Internal Server Error"]
-            };
-          } else if (error.status >= 400) {
-            this.err_msg = error.body.meta
-          } else {
-            this.err_msg = error.body.meta;
-          }
-          this.status.error = true;
-          this.error = error;
+          notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     }

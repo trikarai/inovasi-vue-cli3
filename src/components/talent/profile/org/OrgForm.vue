@@ -66,7 +66,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: { code: 666, type: "", details: [] },
+      err_msg: { code: 666, type: "", details: [""] },
       params: {
         name: "",
         position: "",

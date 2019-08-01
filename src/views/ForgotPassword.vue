@@ -28,7 +28,7 @@
                       <v-btn
                         @click="submit"
                         :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
-                      >Login</v-btn>
+                      >Submit</v-btn>
 
                       <v-dialog v-model="loader" hide-overlay persistent width="300">
                         <v-card color="primary" dark>
@@ -61,6 +61,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import auth from "@/config/auth";
 import Notification from "@/components/Notification";
 
@@ -73,7 +74,7 @@ export default {
       error: "",
       valid: false,
       alert: false,
-      err_msg: { code: 0, type: "", details: [] },
+      err_msg: {details:[""]},
       status: {
         success: false,
         error: false,
@@ -82,7 +83,7 @@ export default {
       },
       domain: "",
       params: {
-        email: "tri@gmail.com"
+        email: ""
       },
       emailRules: [
         v => !!v || "E-mail is required",
@@ -119,35 +120,14 @@ export default {
           this.params
         )
         .then(res => {
-          console.log(res);
-          this.err_msg = {
-            code: res.data.meta.code,
-            type: res.data.meta.type,
-            details: ["Success"]
-          };
-          this.status.success = true;
+                   notif.showSuccess(this, res, ["Reset Code Sent"])
+
         })
         .catch(error => {
-          console.log(error);
-          if (error.status >= 500) {
-            this.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: ["Internal Server Error"]
-            };
-          } else if (error.status >= 400) {
-            this.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            this.err_msg = error.body.meta;
-          }
-          this.status.error = true;
-          this.error = error;
+                    notif.showError(this, error);
+
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     }

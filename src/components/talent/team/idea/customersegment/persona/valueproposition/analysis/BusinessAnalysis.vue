@@ -152,7 +152,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: "",
+      err_msg: {details:[""]},
       error: "error",
       loader: false,
       dialogDel: false,
