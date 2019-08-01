@@ -123,8 +123,9 @@
                       </v-card-title>
                       <div class="garistiga"></div>
                       <v-card-text
-                        class="text-center;"
+                        class="text-center"
                       >Untuk memastikan ide yang dimiliki oleh Startup VALID, kami membantu para founders dengan tools eksperimen bisnis untuk memudahkan validasi ide yang telah di buat</v-card-text>
+                      </v-card-text>
                     </v-card>
                   </v-flex>
                   <v-flex xs12 md4>
