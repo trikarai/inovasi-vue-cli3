@@ -17,9 +17,20 @@ import 'tiptap-vuetify/dist/main.css';
 import VueVisible from "vue-visible";
 import UUID from 'vue-uuid';
 
+//font
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret, faAddressBook } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faUserSecret, faAddressBook)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
 //Translation 
 import en from 'vuetify/es5/locale/en'
 import id from 'vuetify/es5/locale/id'
+
+import customcolors from "@/components/css/customcolor"
 
 // Vue.prototype.$axios = axios;
 Vue.use(UUID);
@@ -30,10 +41,7 @@ Vue.use(Vuetify, {
     locales: {en, id},
     current: 'en'
   },
-  theme: {
-    primary: "#8bc751",
-    accent: "#e4e4e4",
-  }
+  theme: customcolors
 });
 Vue.use(TiptapVuetifyPlugin)
 
