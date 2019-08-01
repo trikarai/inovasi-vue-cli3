@@ -17,24 +17,23 @@
           <v-flex md6>
             <v-card>
               <v-card-title>
-                <v-flex>{{params.team.name}}</v-flex>
+                {{params.team.name}}
               </v-card-title>
               <v-card-text>
-                <v-flex>{{params.position}}</v-flex>
-                <v-flex>{{params.status.displayName}}</v-flex>
+                {{params.position}}
+                <v-divider/>
+                {{params.status.displayName}}
               </v-card-text>
             </v-card>
           </v-flex>
         </v-layout>
 
-        <v-layout align-start justify-start column fill-height>
-          <v-flex xs12>
+        <v-layout align-start justify-start fill-height>
+          <v-flex md6>
             <v-btn @click="openSearch()">
               <v-icon>add</v-icon>Add Members
             </v-btn>
-          </v-flex>
           <v-divider></v-divider>
-          <v-flex xs12>
             <!-- {{memberlist.list}} -->
             <v-data-table
               :loading="loader"
