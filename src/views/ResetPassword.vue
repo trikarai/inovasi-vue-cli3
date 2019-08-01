@@ -24,7 +24,7 @@
                       :rules="[passwordRules.required, passwordRules.min]"
                       :type="show1 ? 'text' : 'password'"
                       name="New Password"
-                      :label="$vuetify.t('$vuetify.profile.previousPassword')"
+                      :label="$vuetify.t('$vuetify.profile.newPassword')"
                       hint="At least 8 characters"
                       counter
                       @click:append="show1 = !show1"
@@ -35,7 +35,7 @@
                       :rules="passwordConfirmationRules"
                       :type="show2 ? 'text' : 'password'"
                       name="Confirm New Password"
-                      :label="$vuetify.t('$vuetify.profile.newPassword')"
+                      :label="$vuetify.t('$vuetify.profile.confirmPassword')"
                       hint="At least 8 characters"
                       counter
                       @click:append="show2 = !show2"
@@ -44,7 +44,7 @@
                       <v-btn
                         @click="submit"
                         :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
-                      >Login</v-btn>
+                      >Reset</v-btn>
 
                       <v-dialog v-model="loader" hide-overlay persistent width="300">
                         <v-card color="primary" dark>
@@ -65,8 +65,7 @@
               <v-card-text>Thank you!</v-card-text>
               <v-card-action>
                 <v-btn color="primary" to="/login">
-                  <v-icon small left>vpn_key</v-icon>
-                  Login
+                  <v-icon small left>vpn_key</v-icon>Login
                 </v-btn>
               </v-card-action>
             </v-card>
@@ -93,7 +92,7 @@ export default {
       alert: false,
       show1: false,
       show2: false,
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       status: {
         success: false,
         error: false,
@@ -121,8 +120,7 @@ export default {
   components: {
     "notification-alert": Notification
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     submit() {
       if (this.$refs.form.validate()) {
@@ -135,16 +133,19 @@ export default {
       net
         .putDataPublic(
           this,
-          "/talent-account-control/reset-password?email="+ this.$route.params.email + "&resetPasswordCode=" + this.$route.params.resetPasswordCode ,
+          "/talent-account-control/reset-password?email=" +
+            this.$route.params.email +
+            "&resetPasswordCode=" +
+            this.$route.params.resetPasswordCode,
           this.params
         )
         .then(res => {
-          notif.showSuccess(this, res, ["Password Reset"])
+          notif.showSuccess(this, res, ["Password Reset"]);
         })
         .catch(error => {
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     }

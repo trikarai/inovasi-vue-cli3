@@ -28,7 +28,7 @@
                       <v-btn
                         @click="submit"
                         :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
-                      >Login</v-btn>
+                      >Submit</v-btn>
 
                       <v-dialog v-model="loader" hide-overlay persistent width="300">
                         <v-card color="primary" dark>
@@ -83,7 +83,7 @@ export default {
       },
       domain: "",
       params: {
-        email: "tri@gmail.com"
+        email: ""
       },
       emailRules: [
         v => !!v || "E-mail is required",
