@@ -204,7 +204,7 @@
                 </v-layout>
               </v-carousel-item>
             </v-carousel>
-            <v-img style="margin:0 auto !important" src="/img/bawah.png" width="900"></v-img>
+            <v-img style="margin:0 auto !important" src="/img/bawah.png" aspect-ratio="10" max-width="900"></v-img>
           </v-container>
         </section>
 
