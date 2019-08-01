@@ -92,7 +92,7 @@ export default {
       alert: false,
       show1: false,
       show2: false,
-      err_msg: { code: 0, type: "", details: [] },
+      err_msg: {details:[""]},
       status: {
         success: false,
         error: false,

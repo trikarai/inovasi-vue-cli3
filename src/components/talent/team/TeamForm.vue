@@ -84,7 +84,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: { code: 666, type: "", details: [] },
+      err_msg: {details:[""]},
       valid: false,
       loader: false,
       type: [
