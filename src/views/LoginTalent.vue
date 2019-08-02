@@ -7,7 +7,7 @@
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4 elevation-12 class="text-xs-center">
-            <v-toolbar class="pt-2 darken-4" color="#00667f">
+            <v-toolbar class="pt-2" color="primary">
               <v-img src="/img/miktilampu.png" style="position: relative;bottom: 5px;" aspect-ratio="1" max-width="30px"></v-img>
               <v-toolbar-title class="white--text ml-2">
                  <h4>MIKTI <v-chip>S t a r t</v-chip></h4>
@@ -28,7 +28,7 @@
                 <div>
                   <v-form v-model="valid" ref="form">
                     <v-layout>
-                      <v-icon color="#00667f" class="mr-3">person</v-icon>
+                      <v-icon color="primary" class="mr-3">person</v-icon>
                       <v-text-field
                         label="Username"
                         v-model="email"
@@ -37,7 +37,7 @@
                       ></v-text-field>
                     </v-layout>
                     <v-layout>
-                      <v-icon color="#00667f" class="mr-3">lock</v-icon>
+                      <v-icon color="primary" class="mr-3">lock</v-icon>
                       <v-text-field
                         label="Password"
                         v-model="password"
