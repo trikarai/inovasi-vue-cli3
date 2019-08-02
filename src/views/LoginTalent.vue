@@ -28,18 +28,18 @@
                 <div>
                   <v-form v-model="valid" ref="form">
                     <v-layout>
-                      <v-icon color="primary" class="mr-3">person</v-icon>
                       <v-text-field
                         label="Username"
+                        prepend-icon="person"
                         v-model="email"
-                        :rules="emailRules"
+                        :rules="emailRules"                       
                         required
                       ></v-text-field>
                     </v-layout>
                     <v-layout>
-                      <v-icon color="primary" class="mr-3">lock</v-icon>
                       <v-text-field
                         label="Password"
+                        prepend-icon="lock"
                         v-model="password"
                         min="8"
                         :append-icon="e1 ? 'visibility' : 'visibility_off'"
@@ -154,7 +154,7 @@ export default {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },

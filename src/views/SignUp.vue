@@ -1,41 +1,52 @@
 <template>
-  <div id="app">
     <v-app>
+    <div id="signuppage">
       <v-layout align-center justify-center>
         <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       </v-layout>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4 elevation-12>
-            <v-toolbar class="pt-5 darken-4" color="#8bc751">
-              <v-toolbar-title class="white--text">
-                <h4>{{$route.name}}</h4>
+            <v-toolbar class="pt-2" color="primary">
+              <v-img src="/img/miktilampu.png" style="position: relative;bottom: 5px;" aspect-ratio="1" max-width="30px"></v-img>
+              <v-toolbar-title class="white--text ml-2">
+                <h4>MIKTI <v-chip>S t a r t</v-chip></h4>
               </v-toolbar-title>
+              <v-toolbar-title class="ml-auto">
+                <router-link v-bind:to="'/login'">
+                    <v-icon class="white--text mb-2">exit_to_app</v-icon>
+                </router-link>
+                <router-link v-bind:to="'/'">
+                    <v-icon class="white--text mb-2 ml-3">home</v-icon>
+                </router-link>
+            </v-toolbar-title>
             </v-toolbar>
-            <v-card>
+            <v-card style="padding:20px 30px 30px 30px;">
+              <h3 class="font-weight-light text-center mt-4 mb-1">Daftar</h3>
               <v-card-text class="pt-4">
                 <div>
                   <v-form v-model="valid" ref="form">
                     <v-text-field
-                      label="Enter your username"
+                      label="Username"
                       v-model="params.username"
                       autocomplete="username"
-                      append-icon="vpn_key"
+                      prepend-icon="person"
                       :rules="required"
                     ></v-text-field>
                     <v-text-field
-                      label="Enter your email"
+                      label="Email"
                       v-model="params.email"
                       :rules="emailRules"
                       autocomplete="email"
-                      append-icon="email"
+                      prepend-icon="email"
                       required
                     ></v-text-field>
                     <v-text-field
-                      label="Enter your password"
+                      label="Password"
                       v-model="params.password"
                       min="8"
                       autocomplete="new-password"
+                      prepend-icon="lock"
                       :append-icon="e1 ? 'visibility' : 'visibility_off'"
                       @click:append="e1 = !e1"
                       :type="e1 ? 'password' : 'text'"
@@ -44,7 +55,8 @@
                       required
                     ></v-text-field>
                     <v-text-field
-                      label="Confirm password"
+                      style="padding-left: 32px;"
+                      label="Confirm Password"
                       v-model="cpassword"
                       min="8"
                       autocomplete="new-password"
@@ -56,10 +68,10 @@
                       required
                     ></v-text-field>
                     <v-text-field
-                      label="Enter your Name"
+                      label="Name"
                       autocomplete="name"
                       v-model="params.name"
-                      append-icon="person"
+                      prepend-icon="person"
                       :rules="required"
                       required
                     ></v-text-field>
@@ -94,19 +106,19 @@
                     </v-flex>
                     <v-text-field
                       mask="(###) #### #####"
-                      label="Enter your Phone"
+                      label="Phone Number"
                       v-model="params.phone"
                       autocomplete="tel-local"
-                      append-icon="phone"
+                      prepend-icon="phone"
                       :rules="phoneRules"
                       persistent-hint
                       hint="08xxxxx"
                       required
                     ></v-text-field>
                     <v-text-field
-                      label="Enter your City of Origin"
+                      label="City of Origin"
                       v-model="params.cityOfOrigin"
-                      append-icon="location_city"
+                      prepend-icon="location_city"
                       :rules="required"
                       required
                     ></v-text-field>
@@ -115,6 +127,7 @@
                       <v-radio label="Female" value="p" color="primary"></v-radio>
                     </v-radio-group>
                     <v-autocomplete
+                      prepend-icon="location_on"
                       v-model="params.regionId"
                       label="Region"
                       :items="region.list"
@@ -126,8 +139,13 @@
                     <v-layout justify-space-between>
                       <v-btn
                         @click="validate"
-                        :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
-                      >{{ $vuetify.t('$vuetify.info.signup')}}</v-btn>
+                        block
+                        :class=" { 'primary white--text' : valid}"
+                        :disabled="!valid"
+                        color="#e4e4e4"
+                        style="color:#fff"
+                      >DAFTAR</v-btn>
+                      <!-- >{{ $vuetify.t('$vuetify.info.signup')}}</v-btn> -->
 
                       <v-dialog v-model="loader" hide-overlay persistent width="300">
                         <v-card color="primary" dark>
@@ -146,8 +164,9 @@
           </v-flex>
         </v-layout>
       </v-container>
+      </div>
     </v-app>
-  </div>
+  
 </template>
 <script>
 import net from "@/config/httpclient";
@@ -271,10 +290,12 @@ export default {
 };
 </script>
 <style scoped>
-#app {
-  background-image: url("http://103.23.22.223/img/login-bg.png");
+#signuppage {
+  background-image: url("/img/back.jpg") !important;
   background-size: cover;
+  background-position: center center;
   overflow: hidden;
+  height: 100%
 }
 </style>
 

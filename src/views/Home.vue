@@ -13,7 +13,9 @@
       <v-toolbar-items class="hidden-xs-only">
         <v-btn class="font-weight-light" flat disabled>Beranda</v-btn>
         <v-btn class="font-weight-light" flat router to="/signup">Daftar</v-btn>
+        <!-- <v-btn class="font-weight-light" flat router to="/signup">{{ $vuetify.t('$vuetify.action.signup')}}</v-btn> -->
         <v-btn class="font-weight-light" flat router to="/login">Login</v-btn>
+        <!-- <button @click="setLang('en')">EN</button>  <button @click="setLang('id')">ID</button> -->
       </v-toolbar-items>
       <v-toolbar-side-icon class="hidden-sm-and-up" light @click.stop="drawer = !drawer"></v-toolbar-side-icon>
     </v-toolbar>
@@ -338,7 +340,12 @@ export default {
         }
       ]
     };
-  }
+  },
+  methods: {
+    setLang: function(lang) {
+      this.$vuetify.lang.current = lang;
+    }
+  } 
 };
 </script>
 
