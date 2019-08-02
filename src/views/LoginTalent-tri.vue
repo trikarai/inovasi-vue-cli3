@@ -1,66 +1,44 @@
 <template>
+  <div id="app">
     <v-app>
-      <div id="loginpage">
       <v-layout align-center justify-center>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
       </v-layout>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
-          <v-flex xs12 sm8 md4 elevation-12 class="text-xs-center">
-            <v-toolbar class="pt-2 darken-4" color="#00667f">
-              <v-img src="/img/miktilampu.png" style="position: relative;bottom: 5px;" aspect-ratio="1" max-width="30px"></v-img>
-              <v-toolbar-title class="white--text ml-2">
-                 <h4>MIKTI <v-chip>S t a r t</v-chip></h4>
-              </v-toolbar-title>
-              <v-toolbar-title class="ml-auto">
-                <router-link v-bind:to="'/signup'">
-                    <v-icon class="white--text mb-2">person_add</v-icon>
-                </router-link>
-                <router-link v-bind:to="'/'">
-                    <v-icon class="white--text mb-2 ml-3">home</v-icon>
-                </router-link>
+          <v-flex xs12 sm8 md4 elevation-12>
+            <v-toolbar class="pt-5 darken-4" color="#8bc751">
+              <v-toolbar-title class="white--text">
+                <h4>{{$route.name}}</h4>
               </v-toolbar-title>
               <!-- </v-toolbar-items> -->
             </v-toolbar>
-            <v-card style="padding:20px 30px 30px 30px;">
-              <h3 class="font-weight-light mt-4 mb-1">Login</h3>
+            <v-card>
               <v-card-text style="pa-4">
                 <div>
-                  <v-form v-model="valid" ref="form">
-                    <v-layout>
-                      <v-icon color="#00667f" class="mr-3">person</v-icon>
-                      <v-text-field
-                        label="Username"
-                        v-model="email"
-                        :rules="emailRules"
-                        required
-                      ></v-text-field>
-                    </v-layout>
-                    <v-layout>
-                      <v-icon color="#00667f" class="mr-3">lock</v-icon>
-                      <v-text-field
-                        label="Password"
-                        v-model="password"
-                        min="8"
-                        :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                        :append-icon-cb="() => (e1 = !e1)"
-                        :type="e1 ? 'password' : 'text'"
-                        :rules="passwordRules"
-                        counter
-                        required
-                        v-on:keyup.enter="submit"
-                      ></v-text-field>
-                    </v-layout>
-                    <v-layout justify-end class="mt-2">
-                      <v-flex class="mt-2">
-                         <router-link v-bind:to="'/forgot-password'">Forgot Password</router-link>
-                      </v-flex>
+                  <v-form v-model="valid" ref="form" pa-1>
+                    <v-text-field
+                      label="Enter your username"
+                      v-model="email"
+                      :rules="emailRules"
+                      required
+                    ></v-text-field>
+                    <v-text-field
+                      label="Enter your password"
+                      v-model="password"
+                      min="8"
+                      :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                      :append-icon-cb="() => (e1 = !e1)"
+                      :type="e1 ? 'password' : 'text'"
+                      :rules="passwordRules"
+                      counter
+                      required
+                      v-on:keyup.enter="submit"
+                    ></v-text-field>
+                    <v-layout justify-space-between>
                       <v-btn
                         @click="submit"
-                        :class=" { 'primary white--text' : valid}"
-                        :disabled="!valid"
-                        color="#e4e4e4"
-                        style="color:#fff"
+                        :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                       >Login</v-btn>
 
                       <v-dialog v-model="loader" hide-overlay persistent width="300">
@@ -71,7 +49,7 @@
                           </v-card-text>
                         </v-card>
                       </v-dialog>
-                      
+                      <router-link v-bind:to="'/forgot-password'">Forgot Password</router-link>
                     </v-layout>
                   </v-form>
                 </div>
@@ -80,9 +58,8 @@
           </v-flex>
         </v-layout>
       </v-container>
-     </div>
     </v-app>
-  
+  </div>
 </template>
 <script>
 import net from "@/config/httpclient";
@@ -165,11 +142,10 @@ export default {
 };
 </script>
 <style scoped>
-#loginpage {
-  background-image: url("/img/back.jpg") !important;
+#app {
+  background-image: url("http://103.23.22.223/img/login-bg.png");
   background-size: cover;
-  background-position: center center;
   overflow: hidden;
-  height: 100%
 }
 </style>
+

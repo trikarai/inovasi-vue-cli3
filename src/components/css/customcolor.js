@@ -18,7 +18,7 @@ var omikti = Object.freeze({
 });
 export default {
 
-    primary: "#8bc751",
+    primary: "#00667f",
     accent: "#e4e4e4",
     omikti: omikti,
     bmikti: "#00667f",
