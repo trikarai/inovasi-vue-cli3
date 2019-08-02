@@ -1,30 +1,26 @@
 <template>
   <v-layout align-center justify-center>
-    <v-alert
-      transition="scale-transition"
-      dismissible
-      type="success"
-      :value="status.success"
-    >{{err_msg.details[0]}}.</v-alert>
+    
+    <v-snackbar v-model="status.success" :auto-height="true" :multi-line="true" color="green" top class="ma-4">
+      {{err_msg.details[0]}}
+      <v-btn color="white" flat @click="status.success = false">Close</v-btn>
+    </v-snackbar>
 
-    <v-alert
-      transition="scale-transition"
-      dismissible
-      type="info"
-      :value="status.info"
-    >{{err_msg.code}} {{err_msg.details[0]}}</v-alert>
+    <v-snackbar v-model="status.info" :auto-height="true" :multi-line="true" color="blue" top class="ma-4">
+      {{err_msg.details[0]}}
+      <v-btn color="white" flat @click="status.info = false">Close</v-btn>
+    </v-snackbar>
 
-    <v-alert
-      transition="scale-transition"
-      dismissible
-      type="warning"
-      :value="status.warning"
-    >warning.</v-alert>
+    <v-snackbar v-model="status.warning" :auto-height="true" :multi-line="true" color="yellow" top class="ma-4">
+      {{err_msg.details[0]}}
+      <v-btn color="white" flat @click="status.warning = false">Close</v-btn>
+    </v-snackbar>
 
-    <v-snackbar v-model="status.error" :auto-height="true" :multi-line="true" color="red" top>
+    <v-snackbar v-model="status.error" :auto-height="true" :multi-line="true" color="red" top class="ma-4">
       {{err_msg.code}} {{err_msg.details[0]}}
       <v-btn color="white" flat @click="status.error = false">Close</v-btn>
     </v-snackbar>
+
   </v-layout>
 </template>
 <script>
