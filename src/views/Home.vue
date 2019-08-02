@@ -49,8 +49,37 @@
 
     <v-content>
       <section>
-        <v-parallax src="/img/ino-landingpage2.jpg" height="650">
-          <v-container grid-list-xl style="margin-top:170px">
+        <v-parallax src="/img/ino-landingpage2.jpg" height="670">
+          <v-container grid-list-xl style="margin-top:170px" class="hidden-xs-only">
+            <v-layout row wrap>
+              <v-flex xs12 sm12 md7></v-flex>
+              <v-flex xs12 sm12 md5>
+                <h1 class="bmikti--text display-1 text-right">
+                  Tentang
+                  <b>MIKTI Start</b>
+                </h1>
+                <div class="garislp"></div>
+                <v-card color="white" class="mb-3">
+                  <v-card-text>
+                    <div
+                      class="bmikti--text text--lighten-1 subheading text-justify"
+                    >MIKTI Start merupakan sebuah platform yang diinisiasi oleh Indonesia Digital Creative Industry Community (MIKTI) sebagai wadah bagi para Startup Founders Untuk dapat mengembangkan ide-ide inovasi mereka menjadi sebuah produk/servis yang siap untuk melanjutkan ke tahap berikut-nya yaitu pendanaan dan kemudian berkembang menjadi sebuah Startup yang solid</div>
+                  </v-card-text>
+                </v-card>
+                <v-btn
+                  style="float:right;"
+                  class="mt-12"
+                  color="blue lighten-2"
+                  dark
+                  router
+                  to="/signup"
+                >
+                  <v-icon left>person_add</v-icon>Daftar
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-container>
+          <v-container grid-list-xl style="margin-top:75px" class="hidden-sm-and-up">
             <v-layout row wrap>
               <v-flex xs12 sm12 md7></v-flex>
               <v-flex xs12 sm12 md5>
@@ -83,7 +112,7 @@
       </section>
 
       <section>
-        <v-layout column wrap class="my-12" align-center>
+        <v-layout column wrap class="my-12 mt-5" align-center>
           <v-flex xs12>
             <v-container grid-list-xl>
               <v-layout row wrap align-center>
