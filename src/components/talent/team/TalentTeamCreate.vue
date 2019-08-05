@@ -15,7 +15,7 @@
         <v-form v-model="valid" ref="form">
           <v-container>
             <v-layout column fill-height>
-              <v-flex sm4>
+              <v-flex xs12 md6>
                 <v-text-field
                   position="absolute"
                   v-model="params.name"
@@ -35,38 +35,43 @@
                 ></v-text-field>
               </v-flex>
               <v-flex>
-                {{ $vuetify.t('$vuetify.team.vision')}}
+                <!-- {{ $vuetify.t('$vuetify.team.vision')}}
                 <tiptap-vuetify
                   placeholder="Vision"
                   v-model="params.vision"
                   :extensions="extensions"
-                />
+                />-->
+                <v-textarea
+                  v-model="params.vision"
+                  :label="$vuetify.t('$vuetify.team.vision')"
+                  :placeholder="$vuetify.t('$vuetify.team.vision')"
+                  counter
+                ></v-textarea>
               </v-flex>
               <v-flex>
-                {{ $vuetify.t('$vuetify.team.mission')}}
-                <tiptap-vuetify
-                  placeholder="Mission"
+                <v-textarea
                   v-model="params.mission"
-                  :extensions="extensions"
-                />
+                  :label="$vuetify.t('$vuetify.team.mission')"
+                  :placeholder="$vuetify.t('$vuetify.team.mission')"
+                  counter
+                ></v-textarea>
               </v-flex>
               <v-flex>
-                {{ $vuetify.t('$vuetify.team.culture')}}
-                <tiptap-vuetify
-                  placeholder="Culture"
+                <v-textarea
                   v-model="params.culture"
-                  :extensions="extensions"
-                />
+                  :label="$vuetify.t('$vuetify.team.culture')"
+                  :placeholder="$vuetify.t('$vuetify.team.culture')"
+                  counter
+                ></v-textarea>
               </v-flex>
-              <!-- <v-flex sm4>
-                <v-text-field
+              <v-flex sm4>
+                <v-textarea
                   v-model="params.founderAgreement"
-                  :counter="25"
                   :label="$vuetify.t('$vuetify.team.founderAgreement')"
-                  required
-                ></v-text-field>
-              </v-flex>-->
-              <!-- {{params}} -->
+                  :placeholder="$vuetify.t('$vuetify.team.founderAgreement')"
+                  counter
+                ></v-textarea>
+              </v-flex>
             </v-layout>
           </v-container>
           <v-layout justify-space-between>

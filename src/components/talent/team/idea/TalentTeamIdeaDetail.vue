@@ -56,7 +56,7 @@
                   <v-icon color="warning">delete</v-icon>
                 </v-btn>
               </v-list-tile-action>
-              <v-expand-x-transition>
+              <v-scale-transition>
                 <div v-show="index == selectedIndex">
                   <!-- {{ $vuetify.t('$vuetify.action.confirmationtodelete') }} -->
                   <v-btn @click="deleteData(item.id)" color="red">
@@ -68,7 +68,7 @@
                     {{ $vuetify.t('$vuetify.action.cancel') }}
                   </v-btn>
                 </div>
-              </v-expand-x-transition>
+              </v-scale-transition>
             </v-list-tile>
           </v-list>
           <v-btn color="primary" @click="openAdd">
