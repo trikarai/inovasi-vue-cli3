@@ -97,7 +97,7 @@
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
-import { TiptapVuetify, OrderedList, ListItem, History } from "tiptap-vuetify";
+// import { TiptapVuetify, OrderedList, ListItem, History } from "tiptap-vuetify";
 
 export default {
   data() {
@@ -139,7 +139,7 @@ export default {
     };
   },
   components: {
-    TiptapVuetify,
+    // TiptapVuetify,
     "notification-alert": Notification
   },
   created: function() {},

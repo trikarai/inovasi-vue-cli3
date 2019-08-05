@@ -71,7 +71,7 @@
                       label="Name"
                       autocomplete="name"
                       v-model="params.name"
-                      prepend-icon="person"
+                      prepend-icon="person_outline"
                       :rules="required"
                       required
                     ></v-text-field>
