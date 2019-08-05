@@ -74,7 +74,7 @@
               </v-text>
               <v-card-text>Thank you! Please check your email for the reset link.</v-card-text>
               <v-card-action>
-                 <v-btn block dark color="bmikti" style="text-decoration:none !important":href="'https://'+getEmailDomain"> go to {{getEmailDomain}}</v-btn> 
+                 <v-btn block dark color="bmikti" style="text-decoration:none !important" :href="'https://'+getEmailDomain"> go to {{getEmailDomain}}</v-btn> 
               </v-card-action>
               
             </v-card>
