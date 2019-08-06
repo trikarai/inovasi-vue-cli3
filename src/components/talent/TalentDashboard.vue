@@ -1,5 +1,252 @@
 <template>
   <div>
+    <v-stepper v-model="e1">
+      <v-stepper-header>
+        <v-stepper-step :editable="true" :complete="e1 > 1" step="1">Buat Fondasi Startup Anda</v-stepper-step>
+
+        <v-stepper-step :editable="true" :complete="e1 > 2" step="2">Buat Ide dan Kenali Pelanggan Anda</v-stepper-step>
+
+        <v-stepper-step :editable="true" :complete="e1 > 3" step="3">Analisa Bisnis Anda</v-stepper-step>
+
+        <v-stepper-step :editable="true" step="4">Validasi Ide Anda</v-stepper-step>
+      </v-stepper-header>
+
+      <v-stepper-items>
+        <v-stepper-content step="1">
+          <v-card>
+            <v-stepper v-model="e6" vertical>
+              <v-stepper-step :complete="e6 > 1" step="1">
+                Rayu Investor dengan Profil Anda
+                <small><b>
+                Mengapa langkah ini penting? Karena investor, mentor, dan inkubator 
+                sangat menganggap penting profil dari pendiri Startup. Oleh karena itu 
+                tahap ini merupakan fondasi awal keberhasilan startup kalian.</b>
+                </small>
+              </v-stepper-step>
+
+              <v-stepper-content step="1">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 2">Continue</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 2" step="2">
+                Buatlah Tim yang Solid
+                <small><b>Tim yang solid sangatlah penting bagi keberhasilan sebuah startup. Oleh
+                karena itu lengkapi tim anda dan bentuk "Dream Team" anda.</b>
+                </small>
+              </v-stepper-step>
+
+              <v-stepper-content step="2">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 3">Continue</v-btn>
+                <v-btn color="primary" @click="e6 = 1">Back</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 3" step="3">
+                Bergabung pada Program Inkubasi
+                <small><b>Program Inkubasi akan sangat bermanfaat untuk membantu startup
+                terutama pada tahap awal. Maka bergabunglah pada program yang tersedia dan sesuai dengan startup anda untuk mempercepat pertumbuhan startup anda.
+                </b></small>
+              </v-stepper-step>
+
+              <v-stepper-content step="3">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 1">Continue</v-btn>
+                <v-btn color="primary" @click="e6 = 2">Back</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+            </v-stepper>
+          </v-card>
+
+          <v-btn
+            color="primary"
+            @click="e1 = 2"
+          >
+            Continue
+          </v-btn>
+
+          <v-btn flat>Cancel</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-content step="2">
+          <v-card>
+            <v-stepper v-model="e6" vertical>
+              <v-stepper-step :complete="e6 > 1" step="1">
+                Rayu Investor dengan Profil Anda
+                <small><b>
+                Mengapa langkah ini penting? Karena investor, mentor, dan inkubator 
+                sangat menganggap penting profil dari pendiri Startup. Oleh karena itu 
+                tahap ini merupakan fondasi awal keberhasilan startup kalian.</b>
+                </small>
+              </v-stepper-step>
+
+              <v-stepper-content step="1">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 2">Continue</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 2" step="2">
+                Buatlah Tim yang Solid
+                <small><b>Tim yang solid sangatlah penting bagi keberhasilan sebuah startup. Oleh
+                karena itu lengkapi tim anda dan bentuk "Dream Team" anda.</b>
+                </small>
+              </v-stepper-step>
+
+              <v-stepper-content step="2">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 3">Continue</v-btn>
+                <v-btn color="primary" @click="e6 = 1">Back</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 3" step="3">
+                Bergabung pada Program Inkubasi
+                <small><b>Program Inkubasi akan sangat bermanfaat untuk membantu startup
+                terutama pada tahap awal. Maka bergabunglah pada program yang tersedia dan sesuai dengan startup anda untuk mempercepat pertumbuhan startup anda.
+                </b></small>
+              </v-stepper-step>
+
+              <v-stepper-content step="3">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 1">Continue</v-btn>
+                <v-btn color="primary" @click="e6 = 2">Back</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+            </v-stepper>
+          </v-card>
+
+          <v-btn
+            color="primary"
+            @click="e1 = 3"
+          >
+            Continue
+          </v-btn>
+
+          <v-btn flat>Cancel</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-content step="3">
+          <v-card>
+            <v-stepper v-model="e6" vertical>
+              <v-stepper-step :complete="e6 > 1" step="1">
+                Rayu Investor dengan Profil Anda
+                <small><b>
+                Mengapa langkah ini penting? Karena investor, mentor, dan inkubator 
+                sangat menganggap penting profil dari pendiri Startup. Oleh karena itu 
+                tahap ini merupakan fondasi awal keberhasilan startup kalian.</b>
+                </small>
+              </v-stepper-step>
+
+              <v-stepper-content step="1">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 2">Continue</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 2" step="2">
+                Buatlah Tim yang Solid
+                <small><b>Tim yang solid sangatlah penting bagi keberhasilan sebuah startup. Oleh
+                karena itu lengkapi tim anda dan bentuk "Dream Team" anda.</b>
+                </small>
+              </v-stepper-step>
+
+              <v-stepper-content step="2">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 3">Continue</v-btn>
+                <v-btn color="primary" @click="e6 = 1">Back</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 3" step="3">
+                Bergabung pada Program Inkubasi
+                <small><b>Program Inkubasi akan sangat bermanfaat untuk membantu startup
+                terutama pada tahap awal. Maka bergabunglah pada program yang tersedia dan sesuai dengan startup anda untuk mempercepat pertumbuhan startup anda.
+                </b></small>
+              </v-stepper-step>
+
+              <v-stepper-content step="3">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 1">Continue</v-btn>
+                <v-btn color="primary" @click="e6 = 2">Back</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+            </v-stepper>
+          </v-card>
+
+          <v-btn
+            color="primary"
+            @click="e1 = 4"
+          >
+            Continue
+          </v-btn>
+
+          <v-btn flat>Cancel</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-content step="4">
+          <v-card>
+            <v-stepper v-model="e6" vertical>
+              <v-stepper-step :complete="e6 > 1" step="1">
+                Rayu Investor dengan Profil Anda
+                <small><b>
+                Mengapa langkah ini penting? Karena investor, mentor, dan inkubator 
+                sangat menganggap penting profil dari pendiri Startup. Oleh karena itu 
+                tahap ini merupakan fondasi awal keberhasilan startup kalian.</b>
+                </small>
+              </v-stepper-step>
+
+              <v-stepper-content step="1">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 2">Continue</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 2" step="2">
+                Buatlah Tim yang Solid
+                <small><b>Tim yang solid sangatlah penting bagi keberhasilan sebuah startup. Oleh
+                karena itu lengkapi tim anda dan bentuk "Dream Team" anda.</b>
+                </small>
+              </v-stepper-step>
+
+              <v-stepper-content step="2">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 3">Continue</v-btn>
+                <v-btn color="primary" @click="e6 = 1">Back</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-step :complete="e6 > 3" step="3">
+                Bergabung pada Program Inkubasi
+                <small><b>Program Inkubasi akan sangat bermanfaat untuk membantu startup
+                terutama pada tahap awal. Maka bergabunglah pada program yang tersedia dan sesuai dengan startup anda untuk mempercepat pertumbuhan startup anda.
+                </b></small>
+              </v-stepper-step>
+
+              <v-stepper-content step="3">
+                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-btn color="primary" @click="e6 = 1">Continue</v-btn>
+                <v-btn color="primary" @click="e6 = 2">Back</v-btn>
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+            </v-stepper>
+          </v-card>
+
+          <v-btn
+            color="primary"
+            @click="e1 = 1"
+          >
+            Continue
+          </v-btn>
+
+          <v-btn flat>Cancel</v-btn>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
+
+    
     <!-- bcm -->
 
     <!-- <v-container fluid grid-list-md>
@@ -79,6 +326,8 @@ import Notification from "@/components/Notification";
 
 export default {
   data: () => ({
+    e6: 1,
+    e1: 0,
     data: "",
     canvas: "Business Model Canvas",
     lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`,
