@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <v-app>
+<v-app>
+  <div id="aacc">  
       <v-layout align-center justify-center>
         <!-- <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" /> -->
       </v-layout>
@@ -15,17 +15,15 @@
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4 elevation-12>
-            <v-toolbar class="pt-5 darken-4" color="#8bc751">
+            <!-- <v-toolbar class="pt-5 darken-4" color="#8bc751">
               <v-toolbar-title class="white--text">
                 <h4>{{$route.name}}</h4>
               </v-toolbar-title>
-              <!-- </v-toolbar-items> -->
-              <!-- {{error}} -->
-            </v-toolbar>
-            <v-card v-if="status.error">
-              <v-card-text class="pt-4">
+            </v-toolbar> -->
+            <v-card style="padding:30px" v-if="status.error">
+              <!-- <v-card-text class="pt-4">
                 <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-              </v-card-text>
+              </v-card-text> -->
               <v-card-action>
                 <v-btn color="blue" @click="resendAccount">
                   <v-icon small left>autorenew</v-icon>Resend Activation
@@ -33,15 +31,18 @@
               </v-card-action>
             </v-card>
             <!-- card sucsess response -->
-            <v-card v-if="status.success">
-              <v-card-title>Activation Success</v-card-title>
-              <v-card-text>
-                Thank you!
-                <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-              </v-card-text>
+            <v-card style="padding:30px" v-if="status.success">
+              <div class="face text-center">
+                <v-icon style="font-size:128px;" color="omikti">check</v-icon>
+              </div>                
+              <div class="shadow scale"></div>
+              <v-text>
+                <h1 class="text-center mt-3">Aktifasi Sukses</h1>
+              </v-text>
+              <v-card-text class="text-center">Terima Kasih! Anda bisa mencoba untuk login</v-card-text>
               <v-card-action>
-                <v-btn color="primary" to="/login">
-                  <v-icon small left>vpn_key</v-icon>Login
+                <v-btn block color="primary" to="/login">
+                  Login
                 </v-btn>
               </v-card-action>
             </v-card>
@@ -49,7 +50,7 @@
             <v-card v-if="status.info">
               <v-card-title>Activation Resend</v-card-title>
               <v-card-text>
-                <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+                <!-- <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" /> -->
                 <br />Check email for activation link
               </v-card-text>
               <v-card-action></v-card-action>
@@ -57,8 +58,8 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </v-app>
   </div>
+</v-app>
 </template>
 <script>
 import net from "@/config/httpclient";
@@ -77,7 +78,7 @@ export default {
       alert: false,
       err_msg: { details: [""] },
       status: {
-        success: false,
+        success: true,
         error: false,
         info: false,
         warning: false
@@ -87,7 +88,7 @@ export default {
   },
   created: function() {},
   mounted: function() {
-    this.activateAccount();
+    // this.activateAccount();
   },
   components: {
     "notification-alert": Notification
@@ -140,9 +141,74 @@ export default {
 };
 </script>
 <style scoped>
-#app {
-  background-image: url("http://103.23.22.223/img/login-bg.png");
+#aacc {
+  background-image: url("/img/back.jpg") !important;
   background-size: cover;
+  background-position: center center;
   overflow: hidden;
+  height: 100%
+}
+
+.face {
+  animation: bounce 1s ease-in infinite;
+}
+
+
+.shadow {
+  position: absolute;
+  width: 21%;
+  height: 3%;
+  opacity: 0.5;
+  background: #777777;
+  left: 40%;
+  top: 43%;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.scale {
+  animation: scale 1s ease-in infinite;
+}
+
+.move {
+  animation: move 3s ease-in-out infinite;
+}
+
+
+
+@keyframes bounce {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes scale {
+  50% {
+    transform: scale(0.9);
+  }
+}
+@keyframes roll {
+  0% {
+    transform: rotate(0deg);
+    left: 25%;
+  }
+  50% {
+    left: 60%;
+    transform: rotate(168deg);
+  }
+  100% {
+    transform: rotate(0deg);
+    left: 25%;
+  }
+}
+@keyframes move {
+  0% {
+    left: 25%;
+  }
+  50% {
+    left: 60%;
+  }
+  100% {
+    left: 25%;
+  }
 }
 </style>

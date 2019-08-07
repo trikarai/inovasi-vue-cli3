@@ -1,22 +1,26 @@
 <template>
-  <div id="app">
-    <v-app>
+<v-app>
+  <div id="rpass"> 
       <v-layout align-center justify-center>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       </v-layout>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4 elevation-12>
-            <v-toolbar class="pt-5 darken-4" color="#8bc751">
+            <!-- <v-toolbar class="pt-5 darken-4" color="#8bc751">
               <v-toolbar-title class="white--text">
                 <h4>{{$route.name}}</h4>
               </v-toolbar-title>
-              <!-- </v-toolbar-items> -->
-              <!-- {{error}} -->
-            </v-toolbar>
-            <v-card v-if="!status.success">
+            </v-toolbar> -->
+
+            <v-card style="padding:30px" v-if="!status.success">
               <v-card-text class="pt-4">
                 <div>
+                  <div class="face text-center">
+                    <v-icon style="font-size:128px;" color="omikti">lock</v-icon>
+                  </div>                
+                  <div class="shadow scale"></div>
+                  <h3 class="font-weight-light mt-5 mb-1 text-center">Reset Password</h3>
                   <v-form v-model="valid" ref="form">
                     <v-text-field
                       v-model="params.password"
@@ -43,7 +47,11 @@
                     <v-layout justify-space-between>
                       <v-btn
                         @click="submit"
-                        :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                        :class=" { 'primary white--text' : valid}"
+                        :disabled="!valid"
+                        color="#e4e4e4"
+                        style="color:#fff"
+                        block
                       >Reset</v-btn>
 
                       <v-dialog v-model="loader" hide-overlay persistent width="300">
@@ -72,8 +80,8 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </v-app>
   </div>
+</v-app>
 </template>
 <script>
 import net from "@/config/httpclient";
@@ -153,9 +161,74 @@ export default {
 };
 </script>
 <style scoped>
-#app {
-  background-image: url("http://103.23.22.223/img/login-bg.png");
+#rpass {
+  background-image: url("/img/back.jpg") !important;
   background-size: cover;
+  background-position: center center;
   overflow: hidden;
+  height: 100%
+}
+
+.face {
+  animation: bounce 1s ease-in infinite;
+}
+
+
+.shadow {
+  position: absolute;
+  width: 21%;
+  height: 3%;
+  opacity: 0.5;
+  background: #777777;
+  left: 40%;
+  top: 40%;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.scale {
+  animation: scale 1s ease-in infinite;
+}
+
+.move {
+  animation: move 3s ease-in-out infinite;
+}
+
+
+
+@keyframes bounce {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes scale {
+  50% {
+    transform: scale(0.9);
+  }
+}
+@keyframes roll {
+  0% {
+    transform: rotate(0deg);
+    left: 25%;
+  }
+  50% {
+    left: 60%;
+    transform: rotate(168deg);
+  }
+  100% {
+    transform: rotate(0deg);
+    left: 25%;
+  }
+}
+@keyframes move {
+  0% {
+    left: 25%;
+  }
+  50% {
+    left: 60%;
+  }
+  100% {
+    left: 25%;
+  }
 }
 </style>

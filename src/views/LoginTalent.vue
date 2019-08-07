@@ -53,7 +53,7 @@
                     </v-layout>
                     <v-layout justify-end class="mt-2">
                       <v-flex class="mt-2">
-                         <router-link v-bind:to="'/forgot-password'">Forgot Password</router-link>
+                         <router-link v-bind:to="'/forgot-password'">Lupa Password</router-link>
                       </v-flex>
                       <v-btn
                         @click="submit"

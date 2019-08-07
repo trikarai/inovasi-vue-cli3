@@ -28,7 +28,8 @@
               <!-- </v-toolbar-items> -->
             </v-toolbar>
             <v-card style="padding:20px 30px 30px 30px;" v-if="!status.success">
-              <h3 class="font-weight-light mt-4 mb-1 text-center">{{$route.name}}</h3>
+              <!-- <h3 class="font-weight-light mt-4 mb-1 text-center">{{$route.name}}</h3> -->
+              <h3 class="font-weight-light mt-4 mb-1 text-center">Lupa Password</h3>
               <v-card-text class="pt-4">
                 <div>
                   <v-form v-model="valid" ref="form">
@@ -65,14 +66,13 @@
             <!-- card sucsess response -->
             <v-card style="padding:30px" v-if="status.success">
               <div class="face text-center">
-                        <v-icon style="font-size:128px;" color="omikti">email</v-icon>
-                      </div>
-                      
-                      <div class="shadow scale"></div>
+                <v-icon style="font-size:128px;" color="omikti">email</v-icon>
+              </div>                
+              <div class="shadow scale"></div>
               <v-text>
-                <h1 class="text-center mt-3">Success</h1>
+                <h1 class="text-center mt-3">Sukses</h1>
               </v-text>
-              <v-card-text>Thank you! Please check your email for the reset link.</v-card-text>
+              <v-card-text class="text-center">Terima Kasih! Mohon untuk memeriksa email untuk mendapatkan link reset</v-card-text>
               <v-card-action>
                  <v-btn block dark color="bmikti" style="text-decoration:none !important" :href="'https://'+getEmailDomain"> go to {{getEmailDomain}}</v-btn> 
               </v-card-action>
