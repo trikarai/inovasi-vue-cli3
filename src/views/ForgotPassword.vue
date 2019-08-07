@@ -1,28 +1,43 @@
 <template>
-<v-app>
-  <div id="fpass">
+  <v-app>
+    <div id="fpass">
       <v-layout align-center justify-center>
-        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+        <!-- <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" /> -->
+
+        <v-snackbar
+          v-model="status.error"
+          :auto-height="true"
+          :multi-line="true"
+          color="red"
+          top
+          class="ma-4"
+        >
+          {{err_msg.code}} {{err_msg.details[0]}}
+          <v-btn color="white" flat @click="status.error = false">Close</v-btn>
+        </v-snackbar>
       </v-layout>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4 elevation-12>
-            <!-- <v-toolbar class="pt-5 darken-4" color="#8bc751" v-if="!status.success">
-              <v-toolbar-title class="white--text">
-                <h4>{{$route.name}}</h4>
-              </v-toolbar-title>
-            </v-toolbar> -->
             <v-toolbar class="pt-2" color="primary" v-if="!status.success">
-              <v-img src="/img/miktilampu.png" style="position: relative;bottom: 5px;" aspect-ratio="1" max-width="30px"></v-img>
+              <v-img
+                src="/img/miktilampu.png"
+                style="position: relative;bottom: 5px;"
+                aspect-ratio="1"
+                max-width="30px"
+              ></v-img>
               <v-toolbar-title class="white--text ml-2">
-                 <h4>MIKTI <v-chip>S t a r t</v-chip></h4>
+                <h4>
+                  MIKTI
+                  <v-chip>S t a r t</v-chip>
+                </h4>
               </v-toolbar-title>
               <v-toolbar-title class="ml-auto">
                 <router-link v-bind:to="'/signup'">
-                    <v-icon class="white--text mb-2">person_add</v-icon>
+                  <v-icon class="white--text mb-2">person_add</v-icon>
                 </router-link>
                 <router-link v-bind:to="'/'">
-                    <v-icon class="white--text mb-2 ml-3">home</v-icon>
+                  <v-icon class="white--text mb-2 ml-3">home</v-icon>
                 </router-link>
               </v-toolbar-title>
               <!-- </v-toolbar-items> -->
@@ -40,7 +55,8 @@
                       required
                     ></v-text-field>
                     <v-layout justify-space-between>
-                      <v-btn class="mt-3"
+                      <v-btn
+                        class="mt-3"
                         @click="submit"
                         :class=" { 'primary white--text' : valid}"
                         :disabled="!valid"
@@ -65,46 +81,36 @@
             <!-- card sucsess response -->
             <v-card style="padding:30px" v-if="status.success">
               <div class="face text-center">
-                        <v-icon style="font-size:128px;" color="omikti">email</v-icon>
-                      </div>
-                      
-                      <div class="shadow scale"></div>
+                <v-icon style="font-size:128px;" color="omikti">email</v-icon>
+              </div>
+
+              <div class="shadow scale"></div>
               <v-text>
                 <h1 class="text-center mt-3">Success</h1>
               </v-text>
               <v-card-text>Thank you! Please check your email for the reset link.</v-card-text>
               <v-card-action>
-                 <v-btn block dark color="bmikti" style="text-decoration:none !important" :href="'https://'+getEmailDomain"> go to {{getEmailDomain}}</v-btn> 
+                <v-btn
+                  block
+                  dark
+                  color="bmikti"
+                  style="text-decoration:none !important"
+                  :href="'https://'+getEmailDomain"
+                  target="_blank"
+                >go to {{getEmailDomain}}</v-btn>
               </v-card-action>
-              
             </v-card>
-            
           </v-flex>
-          <!-- <div id="wrapcontain" v-if="status.success">
-                  <div id="success-box">
-                      <div class="dot"></div>
-                      <div class="dot two"></div>
-                      <div class="face">
-                        <i class="fa fa-envelope-open-o mailpos"></i>
-                      </div>
-                      
-                      <div class="shadow scale"></div>
-                      <div class="message" style="text-align: center;position: relative;top: 200px;"><sc class="alertinfo">Success!</sc><h4 style="color: #565656;font-size:12px">Reset Password Link has been send to your email</h4></div>
-                      <router-link :to="'/'">
-                          <button class="button-box"><sc class="green">login</sc></button>
-                      </router-link>
-                    </div>
-              </div> -->
         </v-layout>
       </v-container>
-  </div>
-</v-app>
+    </div>
+  </v-app>
 </template>
 <script>
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import auth from "@/config/auth";
-import Notification from "@/components/Notification";
+// import Notification from "@/components/Notification";
 
 export default {
   name: "Login",
@@ -115,9 +121,9 @@ export default {
       error: "",
       valid: false,
       alert: false,
-      err_msg: {details:[""]},
+      err_msg: { code: 666,  details: ["Error"] },
       status: {
-        success: true,
+        success: false,
         error: false,
         info: false,
         warning: false
@@ -137,7 +143,7 @@ export default {
   created: function() {},
   mounted: function() {},
   components: {
-    "notification-alert": Notification
+    // "notification-alert": Notification
   },
   computed: {
     getEmailDomain: function() {
@@ -152,8 +158,7 @@ export default {
     },
     forgotPassword: function() {
       this.loader = true;
-      this.status.error = false;
-      this.status.success = false;
+      notif.reset(this);
       net
         .putDataPublic(
           this,
@@ -161,14 +166,14 @@ export default {
           this.params
         )
         .then(res => {
-                   notif.showSuccess(this, res, ["Reset Code Sent"])
-
+          // notif.showSuccess(this, res, ["Reset Code Sent"]);
+          this.status.success = true;
         })
         .catch(error => {
-                    notif.showError(this, error);
-
+          this.status.error = true;
+          this.err_msg = error.body.meta;
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     }
@@ -181,13 +186,12 @@ export default {
   background-size: cover;
   background-position: center center;
   overflow: hidden;
-  height: 100%
+  height: 100%;
 }
 
 .face {
   animation: bounce 1s ease-in infinite;
 }
-
 
 .shadow {
   position: absolute;
@@ -208,8 +212,6 @@ export default {
 .move {
   animation: move 3s ease-in-out infinite;
 }
-
-
 
 @keyframes bounce {
   50% {
