@@ -140,6 +140,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 #aacc {
   background-image: url("/img/back.jpg") !important;
@@ -173,8 +174,6 @@ export default {
 .move {
   animation: move 3s ease-in-out infinite;
 }
-
-
 
 @keyframes bounce {
   50% {
