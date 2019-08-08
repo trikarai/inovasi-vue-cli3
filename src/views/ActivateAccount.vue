@@ -1,9 +1,7 @@
 <template>
-<v-app>
-  <div id="aacc">  
-      <v-layout align-center justify-center>
-        <!-- <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" /> -->
-      </v-layout>
+  <v-app>
+    <div id="aacc">
+      <v-layout align-center justify-center></v-layout>
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
@@ -15,17 +13,18 @@
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4 elevation-12>
-            <!-- <v-toolbar class="pt-5 darken-4" color="#8bc751">
-              <v-toolbar-title class="white--text">
-                <h4>{{$route.name}}</h4>
-              </v-toolbar-title>
-            </v-toolbar> -->
             <v-card style="padding:30px" v-if="status.error">
-              <!-- <v-card-text class="pt-4">
-                <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-              </v-card-text> -->
-              <v-card-action>
-                <v-btn color="blue" @click="resendAccount">
+              <div class="face text-center">
+                <v-icon style="font-size:128px;" color="omikti">warning</v-icon>
+              </div>
+
+              <v-card-text class="text-center">
+                <h1 class="text-center mt-3">Aktivasi Gagal</h1>
+              </v-card-text>
+              <v-card-text class="text-center">{{err_msg}}</v-card-text>
+
+              <v-card-action class="text-center">
+                <v-btn block color="blue" @click="resendAccount">
                   <v-icon small left>autorenew</v-icon>Resend Activation
                 </v-btn>
               </v-card-action>
@@ -34,38 +33,37 @@
             <v-card style="padding:30px" v-if="status.success">
               <div class="face text-center">
                 <v-icon style="font-size:128px;" color="omikti">check</v-icon>
-              </div>                
+              </div>
               <div class="shadow scale"></div>
               <v-text>
-                <h1 class="text-center mt-3">Aktifasi Sukses</h1>
+                <h1 class="text-center mt-3">Aktivasi Sukses</h1>
               </v-text>
               <v-card-text class="text-center">Terima Kasih! Anda bisa mencoba untuk login</v-card-text>
               <v-card-action>
-                <v-btn block color="primary" to="/login">
-                  Login
-                </v-btn>
+                <v-btn block color="primary" to="/login">Login</v-btn>
               </v-card-action>
             </v-card>
 
-            <v-card v-if="status.info">
-              <v-card-title>Activation Resend</v-card-title>
+            <v-card style="padding:30px" v-if="status.info">
+              <div class="face text-center">
+                <v-icon style="font-size:128px;" color="omikti">check</v-icon>
+              </div>
               <v-card-text>
-                <!-- <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" /> -->
-                <br />Check email for activation link
+                <h1 class="text-center mt-3">Activation Dikirim Ulang</h1>
               </v-card-text>
+              <v-card-text class="text-center">Check email for activation link</v-card-text>
               <v-card-action></v-card-action>
             </v-card>
           </v-flex>
         </v-layout>
       </v-container>
-  </div>
-</v-app>
+    </div>
+  </v-app>
 </template>
 <script>
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import auth from "@/config/auth";
-import Notification from "@/components/Notification";
 
 export default {
   name: "Login",
@@ -78,8 +76,8 @@ export default {
       alert: false,
       err_msg: { details: [""] },
       status: {
-        success: true,
-        error: false,
+        success: false,
+        error: true,
         info: false,
         warning: false
       },
@@ -88,11 +86,9 @@ export default {
   },
   created: function() {},
   mounted: function() {
-    // this.activateAccount();
+    this.activateAccount();
   },
-  components: {
-    "notification-alert": Notification
-  },
+  components: {},
   computed: {},
   methods: {
     activateAccount: function() {
@@ -107,10 +103,11 @@ export default {
             this.$route.params.activationCode
         )
         .then(res => {
-          notif.showInfo(this, res, "Activated");
+          this.status.success = true;
         })
         .catch(error => {
-          notif.showError(this, error);
+          this.err_msg = error.body.meta;
+          this.status.error = true;
         })
         .finally(() => {
           this.loader = false;
@@ -118,9 +115,7 @@ export default {
     },
     resendAccount: function() {
       this.loader = true;
-      this.status.error = false;
-      this.status.success = false;
-      this.status.info = false;
+      notif.reset(this);
       net
         .putDataPublic(
           this,
@@ -128,10 +123,12 @@ export default {
           { email: this.$route.params.email }
         )
         .then(res => {
-          notif.showInfo(this, res, "Code Resend");
+          // notif.showInfo(this, res, "Code Resend");
+          this.status.info = true;
         })
         .catch(error => {
-          notif.showError(this, error);
+          this.err_msg = error.body.meta;
+          this.status.error = true;
         })
         .finally(() => {
           this.loader = false;
@@ -147,13 +144,12 @@ export default {
   background-size: cover;
   background-position: center center;
   overflow: hidden;
-  height: 100%
+  height: 100%;
 }
 
 .face {
   animation: bounce 1s ease-in infinite;
 }
-
 
 .shadow {
   position: absolute;
