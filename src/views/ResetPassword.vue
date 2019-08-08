@@ -68,13 +68,17 @@
               </v-card-text>
             </v-card>
             <!-- card sucsess response -->
-            <v-card v-if="status.success">
-              <v-card-title>Success</v-card-title>
-              <v-card-text>Thank you!</v-card-text>
+            <v-card style="padding:30px" v-if="status.success">
+              <div class="face text-center">
+                <v-icon style="font-size:128px;" color="omikti">check</v-icon>
+              </div>
+              <div class="shadow scale"></div>
+              <v-text>
+                <h1 class="text-center mt-5 font-weight-light">Reset Password Sukses</h1>
+              </v-text>
+              <v-card-text class="text-center">Terima Kasih! Anda bisa mencoba untuk login</v-card-text>
               <v-card-action>
-                <v-btn color="primary" to="/login">
-                  <v-icon small left>vpn_key</v-icon>Login
-                </v-btn>
+                <v-btn block color="primary" to="/login">Login</v-btn>
               </v-card-action>
             </v-card>
           </v-flex>

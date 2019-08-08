@@ -17,15 +17,15 @@
               <div class="face text-center">
                 <v-icon style="font-size:128px;" color="omikti">warning</v-icon>
               </div>
-
+              <div class="shadow scale"></div>
               <v-card-text class="text-center">
-                <h1 class="text-center mt-3">Aktivasi Gagal</h1>
+                <h1 class="text-center mt-5 font-weight-light">Aktivasi Gagal</h1>
               </v-card-text>
               <v-card-text class="text-center">{{err_msg}}</v-card-text>
 
               <v-card-action class="text-center">
-                <v-btn block color="blue" @click="resendAccount">
-                  <v-icon small left>autorenew</v-icon>Resend Activation
+                <v-btn block dark color="primary" @click="resendAccount">
+                  Resend Activation
                 </v-btn>
               </v-card-action>
             </v-card>
@@ -36,7 +36,7 @@
               </div>
               <div class="shadow scale"></div>
               <v-text>
-                <h1 class="text-center mt-3">Aktivasi Sukses</h1>
+                <h1 class="text-center mt-5 font-weight-light">Aktivasi Sukses</h1>
               </v-text>
               <v-card-text class="text-center">Terima Kasih! Anda bisa mencoba untuk login</v-card-text>
               <v-card-action>
@@ -46,12 +46,13 @@
 
             <v-card style="padding:30px" v-if="status.info">
               <div class="face text-center">
-                <v-icon style="font-size:128px;" color="omikti">check</v-icon>
+                <v-icon style="font-size:128px;" color="omikti">send</v-icon>
               </div>
+              <div class="shadow scale"></div>
               <v-card-text>
-                <h1 class="text-center mt-3">Activation Dikirim Ulang</h1>
+                <h1 class="text-center mt-5 font-weight-light">Aktivasi Dikirim Ulang</h1>
               </v-card-text>
-              <v-card-text class="text-center">Check email for activation link</v-card-text>
+              <v-card-text class="text-center">Cek Email untuk mendapatkan link aktivasi</v-card-text>
               <v-card-action></v-card-action>
             </v-card>
           </v-flex>
@@ -77,7 +78,7 @@ export default {
       err_msg: { details: [""] },
       status: {
         success: false,
-        error: true,
+        error: false,
         info: false,
         warning: false
       },

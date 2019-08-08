@@ -36,7 +36,7 @@
                             @click=""
                           >
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -57,7 +57,7 @@
                             @click=""
                           >
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -87,7 +87,7 @@
                         <v-list>
                           <v-list-tile @click="">
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>loupe</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>loupe</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title>Buat Tim</v-list-tile-title>
@@ -99,7 +99,7 @@
 
                           <v-list-tile @click="">
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>person_add</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>person_add</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title>Tambah Anggota Tim</v-list-tile-title>
@@ -111,7 +111,7 @@
 
                           <v-list-tile @click="">
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>search</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>search</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title>Lihat Undangan Tim</v-list-tile-title>
@@ -140,7 +140,7 @@
                      <v-list>
                           <v-list-tile @click="">
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>how_to_reg</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>how_to_reg</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title>Daftar ke Program</v-list-tile-title>
@@ -152,7 +152,7 @@
 
                           <v-list-tile @click="">
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>search</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>search</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title>Lihat Partisipasi Program</v-list-tile-title>
@@ -196,7 +196,7 @@
                      <v-list>
                           <v-list-tile @click="">
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>wb_incandescent</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>wb_incandescent</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title>Tambah Ide Baru</v-list-tile-title>
@@ -224,7 +224,7 @@
                      <v-list>
                           <v-list-tile @click="">
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>supervised_user_circle</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>ballot</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title>Buat Tipe Pengguna Baru</v-list-tile-title>
@@ -254,7 +254,7 @@
                      <v-list>
                           <v-list-tile @click="">
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>supervisor_account</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>category</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title>Buat Segmen Pelanggan Baru</v-list-tile-title>
@@ -284,7 +284,7 @@
                      <v-list>
                           <v-list-tile @click="">
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>supervisor_account</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>table_chart</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title>Buat Value Proposition Baru</v-list-tile-title>
@@ -339,7 +339,7 @@ Untuk perkembangan startup anda.
                             @click=""
                           >
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -360,7 +360,7 @@ Untuk perkembangan startup anda.
                             @click=""
                           >
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -416,7 +416,7 @@ Seperti ketidakcocokan antara solusi yang ditawarkan dengan kebutuhan yang diras
                             @click=""
                           >
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -437,7 +437,7 @@ Seperti ketidakcocokan antara solusi yang ditawarkan dengan kebutuhan yang diras
                             @click=""
                           >
                           <v-list-tile-action class="mr-3">
-                              <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
+                              <v-btn style="min-width: 36px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
                               <v-list-tile-title v-html="item.title"></v-list-tile-title>

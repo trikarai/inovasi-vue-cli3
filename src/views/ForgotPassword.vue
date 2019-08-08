@@ -70,7 +70,7 @@
               </div>                
               <div class="shadow scale"></div>
               <v-text>
-                <h1 class="text-center mt-3">Sukses</h1>
+                <h1 class="text-center mt-5 font-weight-light">Sukses</h1>
               </v-text>
               <v-card-text class="text-center">Terima Kasih! Mohon untuk memeriksa email untuk mendapatkan link reset</v-card-text>
               <v-card-action>
@@ -117,7 +117,7 @@ export default {
       alert: false,
       err_msg: {details:[""]},
       status: {
-        success: true,
+        success: false,
         error: false,
         info: false,
         warning: false

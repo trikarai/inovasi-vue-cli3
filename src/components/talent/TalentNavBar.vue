@@ -43,7 +43,7 @@
         </v-list-tile>
         <v-list-tile avatar>
           <v-list-tile-avatar>
-            <img src="https://randomuser.me/api/portraits/men/85.jpg" />
+            <img src="/img/avatar.png" />
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>{{user.data.name}}</v-list-tile-title>
@@ -98,11 +98,11 @@
       <v-list>
         <v-list-tile>
           <v-list-tile-avatar>
-            <v-icon>exit_to_app</v-icon>
+            <!-- <v-icon>exit_to_app</v-icon> -->
           </v-list-tile-avatar>
           <v-list-tile-content></v-list-tile-content>
           <v-list-tile-action>
-            <v-btn small color="red" @click="logout" v-if="checkLogin">
+            <v-btn dark small color="red" @click="logout" v-if="checkLogin">
               <span>{{ $vuetify.t('$vuetify.action.signout') }}</span>
             </v-btn>
           </v-list-tile-action>
@@ -160,7 +160,7 @@ export default {
       group: false,
       drawer: true,
       rightDrawer: false,
-      miniVariant: true,
+      miniVariant: false,
       clipped: true,
       fixed: false,
       user: "",
