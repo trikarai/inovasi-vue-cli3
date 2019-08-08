@@ -35,7 +35,7 @@
                             avatar
                             @click=""
                           >
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -56,7 +56,7 @@
                             avatar
                             @click=""
                           >
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -86,7 +86,7 @@
                   <v-flex xs12 md6>
                         <v-list>
                           <v-list-tile @click="">
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>loupe</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -98,7 +98,7 @@
                           </v-list-tile>
 
                           <v-list-tile @click="">
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>person_add</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -110,7 +110,7 @@
                           </v-list-tile>
 
                           <v-list-tile @click="">
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>search</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -139,7 +139,7 @@
                   <v-flex xs12 md6>
                      <v-list>
                           <v-list-tile @click="">
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>how_to_reg</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -151,7 +151,7 @@
                           </v-list-tile>
 
                           <v-list-tile @click="">
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>search</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -195,7 +195,7 @@
                   <v-flex xs12 md6>
                      <v-list>
                           <v-list-tile @click="">
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>wb_incandescent</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -223,7 +223,7 @@
                   <v-flex xs12 md6>
                      <v-list>
                           <v-list-tile @click="">
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>supervised_user_circle</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -253,7 +253,7 @@
                   <v-flex xs12 md6>
                      <v-list>
                           <v-list-tile @click="">
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>supervisor_account</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -283,7 +283,7 @@
                   <v-flex xs12 md6>
                      <v-list>
                           <v-list-tile @click="">
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>supervisor_account</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -338,7 +338,7 @@ Untuk perkembangan startup anda.
                             avatar
                             @click=""
                           >
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -359,7 +359,7 @@ Untuk perkembangan startup anda.
                             avatar
                             @click=""
                           >
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -415,7 +415,7 @@ Seperti ketidakcocokan antara solusi yang ditawarkan dengan kebutuhan yang diras
                             avatar
                             @click=""
                           >
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
@@ -436,7 +436,7 @@ Seperti ketidakcocokan antara solusi yang ditawarkan dengan kebutuhan yang diras
                             avatar
                             @click=""
                           >
-                          </v-list-tile-action class="mr-3">
+                          <v-list-tile-action class="mr-3">
                               <v-btn style="min-width:0px !important"><v-icon>edit</v-icon></v-btn>
                           </v-list-tile-action>
                             <v-list-tile-content>
