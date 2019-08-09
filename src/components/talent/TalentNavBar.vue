@@ -23,7 +23,7 @@
       v-model="drawer"
       :mini-variant.sync="miniVariant"
     >
-      <v-layout column justify-space-between fill-height>
+      <!-- <v-layout column justify-space-between fill-height> -->
         <!-- list head-->
         <v-list class="pa-1">
           <v-list-tile v-if="miniVariant" @click.stop="miniVariant = !miniVariant">
@@ -109,7 +109,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
-      </v-layout>
+      <!-- </v-layout> -->
     </v-navigation-drawer>
 
     <v-navigation-drawer temporary right v-model="rightDrawer" fixed>
@@ -322,6 +322,9 @@ export default {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #a5a5a5;
+}
+.v-toolbar {
+  z-index:3 !important;
 }
 </style>
 

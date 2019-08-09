@@ -6,6 +6,7 @@
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Education
       </v-btn>
+      
       <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1 mt-1">
         <template v-slot:items="props">
           <td>{{ props.item.institution }}</td>
@@ -21,12 +22,14 @@
             </v-btn>
             <v-expand-transition>
               <div v-show="props.index == selectedIndex">
-                {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
+                <div>
+                   <v-icon>warning</v-icon> <span> {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}</span>
+                </div>
+                <v-btn flat dark small @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
                   {{ $vuetify.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn @click="deleteAct(null)">
+                <v-btn flat small @click="deleteAct(null)">
                   <v-icon></v-icon>
                   {{ $vuetify.t('$vuetify.action.cancel') }}
                 </v-btn>

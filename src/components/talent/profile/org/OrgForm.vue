@@ -4,8 +4,12 @@
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
           <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-          <v-card elevation="0" width="400">
-            <v-card-text class="pt-4">
+          <v-card style="padding:0px 30px 0px 30px" class="mt-5" elevation="0" width="400">
+            <v-card class="taitel primary white--text elevation-5">
+              <h3 v-if="edit" class="headline mb-0 font-weight-light">{{ $vuetify.t('$vuetify.action.edit') }} Organization</h3>
+              <h3 v-if="!edit" class="headline mb-0 font-weight-light">{{ $vuetify.t('$vuetify.action.add') }} Organization</h3>    
+            </v-card>
+            <v-card-text class="pt-0">
               <div>
                 <v-form v-model="valid" ref="form">
                   <v-text-field
@@ -23,13 +27,17 @@
                     <v-btn
                       v-if="edit == false"
                       @click.prevent="submit"
-                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                      :class=" { 'primary white--text' : valid}"
+                      :disabled="!valid"
+                      block
                     >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
 
                     <v-btn
                       v-else
                       @click="update"
-                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                      :class=" { 'primary white--text' : valid}"
+                      :disabled="!valid"
+                      block
                     >{{ $vuetify.t('$vuetify.action.update')}}</v-btn>
 
                     <v-dialog v-model="loader" hide-overlay persistent width="300">
@@ -167,4 +175,12 @@ export default {
 </script>
 <style scoped>
 @import "../../../css/modal.css";
+
+.taitel {
+  padding: 24px;
+  width: 90%;
+  margin: 0 auto;
+  bottom: 27px;
+  z-index: 2;
+}
 </style>

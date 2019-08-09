@@ -15,7 +15,7 @@
 
       <v-layout class="atastop" wrap>
         <v-flex xs12 md5>
-          <v-card class="taitel primary white--text">
+          <v-card class="taitel primary white--text elevation-5">
             <h3 class="headline mb-0 font-weight-light">{{ $vuetify.t('$vuetify.profile.profileInformation') }}</h3>
           </v-card>
           <v-card style="padding:90px 50px 50px 50px">
@@ -108,7 +108,7 @@
           </v-card>
         </v-flex>
         <v-flex xs12 md5>
-          <v-card class="taitel primary white--text">
+          <v-card class="taitel primary white--text elevation-5">
             <h3 class="headline mb-0 font-weight-light">{{$vuetify.t('$vuetify.action.change')}} {{ $vuetify.t('$vuetify.profile.password') }}</h3>
           </v-card>
           <v-card style="padding:68px 50px 50px 50px">

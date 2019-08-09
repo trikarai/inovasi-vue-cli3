@@ -2,12 +2,12 @@
   <div>
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn dark @click="openAdd()" color="primary" style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Work Experiences
       </v-btn>
 
-      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
+      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1 mt-1">
         <template v-slot:items="props">
           <td>{{ props.item.companyName }}</td>
           <td class="text-xs-right">
@@ -21,12 +21,14 @@
             </v-btn>
             <v-expand-transition>
               <div v-show="props.index == selectedIndex">
-                {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
+                <div>
+                   <v-icon>warning</v-icon> <span> {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}</span>
+                </div>
+                <v-btn flat dark @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
                   {{ $vuetify.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn @click="deleteAct(null)">
+                <v-btn flat @click="deleteAct(null)">
                   <v-icon></v-icon>
                   {{ $vuetify.t('$vuetify.action.cancel') }}
                 </v-btn>

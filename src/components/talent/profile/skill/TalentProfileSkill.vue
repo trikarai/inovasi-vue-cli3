@@ -3,12 +3,12 @@
     <v-container ref="tabletop">
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <transition name="fade">
-        <v-btn @click="openAdd()" color="blue" style="left: -8px" v-if="!certificateShow">
+        <v-btn dark @click="openAdd()" color="primary" style="left: -8px" v-if="!certificateShow">
           <v-icon>add</v-icon>
           {{ $vuetify.t('$vuetify.action.add') }} Skills
         </v-btn>
       </transition>
-      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
+      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1 mt-1">
         <template v-slot:items="props">
           <td>{{ props.item.skillReferenceName }}</td>
           <td>
@@ -30,12 +30,14 @@
 
             <v-scale-transition>
               <div v-show="props.index == selectedIndex">
-                {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
+                <div>
+                   <v-icon>warning</v-icon> <span> {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}</span>
+                </div>
+                <v-btn dark flat @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
                   {{ $vuetify.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn @click="deleteAct(null)">
+                <v-btn flat @click="deleteAct(null)">
                   <v-icon></v-icon>
                   {{ $vuetify.t('$vuetify.action.cancel') }}
                 </v-btn>
@@ -50,7 +52,7 @@
       <v-container v-if="certificateShow">
         <v-divider></v-divider>
         <v-btn small @click="closeCertificate" color="warning">
-          <v-icon>close</v-icon>Close
+          <v-icon>close</v-icon> Close
         </v-btn>
         <v-layout>
           <CertificateComp :skillId="skillId" />
