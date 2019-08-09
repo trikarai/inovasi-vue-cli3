@@ -153,6 +153,7 @@ export default {
       net
         .postData(this, "/talent/skills", this.params)
         .then(res => {
+          this.$store.commit("incrementSki");
           this.$emit("refresh");
         })
         .catch(error => {

@@ -3,7 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
-          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
+          <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
@@ -60,6 +60,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import notification from "@/components/Notification";
 
 export default {
@@ -141,89 +142,54 @@ export default {
       }
     },
     getSingleData: function() {
+      this.loader = true;
+      notif.reset(this);
       net
         .getData(this, "/talent/entrepreneurship-experiences/" + this.data.id)
-        .then(
-          res => {
-            console.log(res);
-            this.params = res.data.data;
-            this.params.businessCategory = res.data.data.businessCategory.value;
-          },
-          error => {
-            console.log(error);
-            if(error.status === 5000){
-              this.err_msg = {code: error.status, type: error.statusText, details:[error.statusText]};
-            }else{
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          console.log(res);
+          this.params = res.data.data;
+          this.params.businessCategory = res.data.data.businessCategory.value;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
     addData: function() {
-      var app = this;
       this.loader = true;
-      this.status.error = false;
+      notif.reset(this);
       net
         .postData(this, "/talent/entrepreneurship-experiences", this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-            if(error.status === 500){
-              this.err_msg = {code: error.status, type: error.statusText, details:[error.statusText]};
-            }else{
-              this.err_msg = error.body.meta;
-            }
-            this.error = error;
-            this.status.error = true;
-          }
-        )
-        .catch(function(error){
-          app.err_msg = {code: error.status, type: error.statusText, details:[error.statusText]};
-          app.status.error = true;
+        .then(res => {
+          this.$store.commit("incrementEnt");
+          this.$emit("refresh");
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
     updateData: function() {
-      var app = this;
       this.loader = true;
-      this.status.error = false;
+      notif.reset(this);
       net
         .putData(
           this,
           "/talent/entrepreneurship-experiences/" + this.data.id,
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-            if(error.status === 500){
-              this.err_msg = {code: error.status, type: error.statusText, details:[error.statusText]};
-            }else{
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch(function(error){
-          app.err_msg = {code: error.status, type: error.statusText, details:[error.statusText]};
-          app.status.error = true;
+        .then(res => {
+          this.$emit("refresh");
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(()=> {
           this.loader = false;
         });
     }
