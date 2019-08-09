@@ -1,7 +1,7 @@
 <template>
   <v-card>
-    <v-stepper v-model="e6" vertical>
-      <v-stepper-step :complete="e6 > 1" step="1">
+    <v-stepper v-model="e6" vertical non-linear>
+      <v-stepper-step :complete="e6 > 1" step="1" editable>
         Rayu Investor dengan Profil Anda
         <small>
           <b>
@@ -61,7 +61,7 @@
         <v-btn color="primary" @click="e6 = 2">Continue</v-btn>
       </v-stepper-content>
 
-      <v-stepper-step :complete="e6 > 2" step="2">
+      <v-stepper-step :complete="e6 > 2" step="2" editable>
         Buatlah Tim yang Solid
         <small>
           <b>
@@ -77,7 +77,7 @@
             <v-list>
               <v-list-tile>
                 <v-list-tile-action class="mr-3">
-                  <v-btn style="min-width: 36px !important">
+                  <v-btn style="min-width: 36px !important" router to="/talent/create/team">
                     <v-icon>loupe</v-icon>
                   </v-btn>
                 </v-list-tile-action>
@@ -85,11 +85,11 @@
                   <v-list-tile-title>Buat Tim</v-list-tile-title>
                 </v-list-tile-content>
                 <v-list-tile-action>
-                  <v-icon>check</v-icon>
+                  <v-icon :color="$store.state.teamMemberships.length > 0 ? 'teal' : 'grey'">check</v-icon>
                 </v-list-tile-action>
               </v-list-tile>
 
-              <v-list-tile>
+              <!-- <v-list-tile>
                 <v-list-tile-action class="mr-3">
                   <v-btn style="min-width: 36px !important">
                     <v-icon>person_add</v-icon>
@@ -98,19 +98,24 @@
                 <v-list-tile-content>
                   <v-list-tile-title>Tambah Anggota Tim</v-list-tile-title>
                 </v-list-tile-content>
-                <!-- <v-list-tile-action>
+                <v-list-tile-action>
                               <v-icon>check</v-icon>
-                </v-list-tile-action>-->
-              </v-list-tile>
+                </v-list-tile-action>
+              </v-list-tile>-->
 
               <v-list-tile>
                 <v-list-tile-action class="mr-3">
-                  <v-btn style="min-width: 36px !important">
+                  <v-btn style="min-width: 36px !important" router to="/talent/team">
                     <v-icon>search</v-icon>
                   </v-btn>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title>Lihat Undangan Tim</v-list-tile-title>
+                  <v-badge color="red">
+                    <template v-slot:badge>
+                      <span>{{$store.state.teamMemberships.length}}</span>
+                    </template>
+                    <v-list-tile-title>Lihat Tim</v-list-tile-title>
+                  </v-badge>
                 </v-list-tile-content>
                 <!-- <v-list-tile-action>
                               <v-icon>check</v-icon>
@@ -123,7 +128,7 @@
         <v-btn color="primary" @click="e6 = 1">Back</v-btn>
       </v-stepper-content>
 
-      <v-stepper-step :complete="e6 > 3" step="3">
+      <v-stepper-step :complete="e6 > 3" step="3" editable>
         Bergabung pada Program Inkubasi
         <small>
           <b>
@@ -137,7 +142,7 @@
         <v-card class="mb-5 elevation-0">
           <v-flex xs12 md6>
             <v-list>
-              <v-list-tile>
+              <!-- <v-list-tile>
                 <v-list-tile-action class="mr-3">
                   <v-btn style="min-width: 36px !important">
                     <v-icon>how_to_reg</v-icon>
@@ -149,11 +154,11 @@
                 <v-list-tile-action>
                   <v-icon>check</v-icon>
                 </v-list-tile-action>
-              </v-list-tile>
+              </v-list-tile> -->
 
               <v-list-tile>
-                <v-list-tile-action class="mr-3">
-                  <v-btn style="min-width: 36px !important">
+                <v-list-tile-action class="mr-3" >
+                  <v-btn style="min-width: 36px !important" router to="/talent/program">
                     <v-icon>search</v-icon>
                   </v-btn>
                 </v-list-tile-action>
