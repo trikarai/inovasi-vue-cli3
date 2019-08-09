@@ -19,7 +19,8 @@ export default new Vuex.Store({
       { title: "ent", total: 0 },
       { title: "tra", total: 0 },
       { title: "ski", total: 0 },
-    ]
+    ],
+    teamMemberships: []
   },
   mutations: {
     switchTheme(state) {
@@ -82,6 +83,7 @@ export default new Vuex.Store({
     },
     setProfile(state, payload) {
       state.profile[0].total = payload.data.educationalBackgrounds.length;
+      state.teamMemberships = payload.data.teamMemberships;
     },
     incrementEdu(state){
       state.profile[0].total = state.profile[0].total + 1;
