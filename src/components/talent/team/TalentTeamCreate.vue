@@ -130,12 +130,12 @@ export default {
         v => !!v || "Name is required",
         v => v.length <= 25 || "Name must be less than 10 characters"
       ],
-      extensions: [
+      // extensions: [
         // you can specify options for extension
-        new OrderedList(),
-        new ListItem(),
-        new History()
-      ]
+        // new OrderedList(),
+        // new ListItem(),
+        // new History()
+      // ]
     };
   },
   components: {
