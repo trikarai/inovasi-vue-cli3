@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app>
     <v-container grid-list-md>
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-layout>
@@ -13,13 +13,15 @@
         </v-dialog>
       </v-layout>
 
-      <v-layout pa-3 mb-2 wrap>
-        <v-flex xs12 md6>
-          <v-card>
+      <v-layout class="atastop" wrap>
+        <v-flex xs12 md5>
+          <v-card class="taitel primary white--text">
+            <h3 class="headline mb-0 font-weight-light">{{ $vuetify.t('$vuetify.profile.profileInformation') }}</h3>
+          </v-card>
+          <v-card style="padding:90px 50px 50px 50px">
             <v-form v-model="valid" ref="form">
-              <v-card-title primary-title>
-                <div>
-                  <h3 class="headline mb-0">{{ $vuetify.t('$vuetify.profile.profileInformation') }}</h3>
+              <!-- <v-card-title primary-title> -->
+                 
                   <v-text-field
                     :disabled="true"
                     :label="$vuetify.t('$vuetify.profile.username')"
@@ -92,27 +94,26 @@
                     item-value="value"
                     required
                   ></v-autocomplete>
-                </div>
-              </v-card-title>
+              <!-- </v-card-title> -->
 
               <v-card-actions>
                 <v-btn
                   @click="validateProfile"
-                  :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                  :class=" { 'primary white--text' : valid}"
+                  :disabled="!valid"
+                  block
                 >{{$vuetify.t('$vuetify.action.update')}} {{$vuetify.t('$vuetify.profile.profile')}}</v-btn>
               </v-card-actions>
             </v-form>
           </v-card>
         </v-flex>
-        <v-flex xs12 md6>
-          <v-card>
+        <v-flex xs12 md5>
+          <v-card class="taitel primary white--text">
+            <h3 class="headline mb-0 font-weight-light">{{$vuetify.t('$vuetify.action.change')}} {{ $vuetify.t('$vuetify.profile.password') }}</h3>
+          </v-card>
+          <v-card style="padding:68px 50px 50px 50px">
             <v-form v-model="valid2" ref="form2">
-              <v-card-title primary-title>
-                <div>
-                  <h3
-                    class="headline mb-0"
-                  >{{$vuetify.t('$vuetify.action.change')}} {{$vuetify.t('$vuetify.profile.password')}}</h3>
-
+              <v-card-title primary-title>              
                   <v-text-field
                     v-model="password.previousPassword"
                     :append-icon="show1 ? 'visibility' : 'visibility_off'"
@@ -149,13 +150,14 @@
                     counter
                     required
                   ></v-text-field>
-                </div>
               </v-card-title>
 
               <v-card-actions>
                 <v-btn
                   @click="validatePassword"
-                  :class=" { 'blue darken-4 white--text' : valid2, disabled: !valid2 }"
+                  :class=" { 'primary white--text' : valid2}"
+                  :disabled="!valid2"
+                  block
                 >{{$vuetify.t('$vuetify.action.update')}} {{$vuetify.t('$vuetify.profile.password')}}</v-btn>
               </v-card-actions>
             </v-form>
@@ -166,7 +168,7 @@
     <v-container>
       <v-layout></v-layout>
     </v-container>
-  </div>
+  </v-app>
 </template>
 <script>
 import net from "@/config/httpclient";
@@ -327,3 +329,18 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.taitel {
+  padding: 24px;
+  width: 90%;
+  margin: 0 auto;
+  top: 59px;
+  z-index: 2;
+}
+.atastop {
+  bottom: 75px;
+  position: relative;
+}
+</style>
+

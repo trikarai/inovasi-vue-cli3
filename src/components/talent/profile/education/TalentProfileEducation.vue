@@ -2,11 +2,11 @@
   <div>
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="primary" dark style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.t('$vuetify.action.add') }} Education
       </v-btn>
-      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1">
+      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1 mt-1">
         <template v-slot:items="props">
           <td>{{ props.item.institution }}</td>
           <td>{{ props.item.phase }}</td>
