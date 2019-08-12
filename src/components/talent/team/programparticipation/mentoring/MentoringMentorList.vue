@@ -22,7 +22,6 @@
             <v-layout wrap>
               {{proposeParams}}
               <v-flex xs12 sm12 md12>
-                <v-datetime-picker label="Select Datetime" v-model="proposeParams.startTime"></v-datetime-picker>
               </v-flex>
 
               <v-flex xs12 sm6 md4>
