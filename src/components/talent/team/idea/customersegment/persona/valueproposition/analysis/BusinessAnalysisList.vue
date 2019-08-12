@@ -54,19 +54,19 @@ export default {
         { text: "", value: "", sortable: false },
         { text: "", value: "", sortable: false }
       ],
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       error: "error",
       loader: false,
       selectedIndex: null,
       canvas: { total: 0, list: [] },
-      active: null,
+      active: null
     };
   },
   mounted: function() {
     this.getBusinessCanvas();
   },
   methods: {
-    gotoCanvas: function(id){
+    gotoCanvas: function(id) {
       this.$router.push({
         path:
           "/talent/team/" +
@@ -79,7 +79,8 @@ export default {
           this.$route.params.personaId +
           "/vp/" +
           this.$route.params.valuepropositionId +
-          "/analysis/" + id
+          "/analysis/" +
+          id
       });
     },
     getBusinessCanvas: function() {
@@ -87,7 +88,11 @@ export default {
       net
         .getData(this, "/talent/forms?types[]=can")
         .then(res => {
-          this.canvas = res.data.data;
+          if (res.data.data) {
+            this.canvas = res.data.data;
+          } else {
+            this.canvas = { total: 0, list: [] };
+          }
         })
         .catch(error => {
           console.log(error);
