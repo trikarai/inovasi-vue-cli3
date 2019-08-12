@@ -26,7 +26,10 @@
               <br />
               {{parentData.form.name}}
               <br />
-              {{parentData}}
+              <v-divider></v-divider>
+              <template v-for="field in parentData.fields">
+                <div :key="field.id">{{field.field.name}} : {{field.value}} </div>
+              </template> 
             </v-card-text>
           </v-card>
         </v-flex>
