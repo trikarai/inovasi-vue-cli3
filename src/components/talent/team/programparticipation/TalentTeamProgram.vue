@@ -11,7 +11,7 @@
         >
           <v-icon>add</v-icon>Register a Program
         </v-btn>
-        <v-dialog v-model="loader" hide-overlay persistent width="300">
+        <v-dialog v-model="loader" :hide-overlay="false" persistent width="300">
           <v-card color="primary">
             <v-card-text>
               {{ $vuetify.t('$vuetify.info.standby') }}
