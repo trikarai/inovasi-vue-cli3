@@ -12,8 +12,6 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css"; // Ensure you are using css-loader
-import DatetimePicker from 'vuetify-datetime-picker'
-import 'vuetify-datetime-picker/src/stylus/main.styl'
 import { TiptapVuetifyPlugin } from "tiptap-vuetify";
 import 'tiptap-vuetify/dist/main.css';
 import VueVisible from "vue-visible";
@@ -45,7 +43,6 @@ Vue.use(Vuetify, {
   },
   theme: customcolors
 });
-Vue.use(DatetimePicker)
 Vue.use(TiptapVuetifyPlugin)
 
 Vue.config.productionTip = false;
