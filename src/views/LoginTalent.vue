@@ -29,9 +29,10 @@
                   <v-form v-model="valid" ref="form">
                     <v-layout>
                       <v-text-field
-                        label="Username"
+                        label="Email"
                         prepend-icon="person"
                         v-model="email"
+                        autocomplete="email"
                         :rules="emailRules"                       
                         required
                       ></v-text-field>
@@ -110,10 +111,10 @@ export default {
       passwordRules: [v => !!v || "Password is required"],
       email: "",
       emailRules: [
-        v => !!v || "E-mail is required"
-        // v =>
-        //   /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-        //   "E-mail must be valid"
+        v => !!v || "E-mail is required",
+        v =>
+          /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          "E-mail must be valid"
       ]
     };
   },
@@ -135,7 +136,7 @@ export default {
       this.status.error = false;
       net
         .loginTalent(this, "/talent-login", {
-          username: this.email,
+          email: this.email,
           password: this.password
         })
         .then(
