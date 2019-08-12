@@ -18,22 +18,81 @@
           <v-progress-linear :indeterminate="true"></v-progress-linear>
         </v-card-text>
         <v-card-text v-else>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              {{proposeParams}}
-              <v-flex xs12 sm12 md12>
-              </v-flex>
+          <v-form v-model="valid">
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <!-- {{proposeParams}} -->
+                <v-flex xs12 sm12 md6>
+                  <v-menu
+                    v-model="menu1"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="date"
+                        label="Date"
+                        prepend-icon="today"
+                        readonly
+                        :rules="[v => !!v || 'Date is required']"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      color="blue"
+                      :locale="$vuetify.lang.current"
+                      v-model="date"
+                      @input="menu1 = false"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-flex>
+                <v-flex xs12 sm12 md6>
+                  <v-menu
+                    v-model="menu2"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="time"
+                        label="Time"
+                        prepend-icon="schedule"
+                        readonly
+                        :rules="[v => !!v || 'Time is required']"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker color="blue" :locale="$vuetify.lang.current" v-model="time"></v-time-picker>
+                  </v-menu>
+                </v-flex>
 
-              <v-flex xs12 sm6 md4>
-                <v-textarea label="Media" v-model="proposeParams.media" required></v-textarea>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-textarea label="Note" v-model="proposeParams.note" required></v-textarea>
-              </v-flex>
-            </v-layout>
-          </v-container>
+                <v-flex xs12 sm6 md4>
+                  <v-textarea
+                    label="Media"
+                    :rules="[v => !!v || 'Media is required']"
+                    v-model="proposeParams.media"
+                    required
+                  ></v-textarea>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-textarea label="Note" v-model="proposeParams.note" required></v-textarea>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-form>
         </v-card-text>
         <v-card-actions>
+          <v-btn color="primary" :disabled="!valid">Submit</v-btn>
           <v-spacer></v-spacer>
           <v-btn small fab color="red" text @click="dialogPropose = false">
             <v-icon>close</v-icon>
@@ -81,6 +140,7 @@ import Notification from "@/components/Notification";
 export default {
   data() {
     return {
+      valid: false,
       status: {
         success: false,
         error: false,
@@ -92,6 +152,7 @@ export default {
       loader2: false,
       dialogPropose: false,
       loaderDetail: false,
+      menu1: false,
       menu2: false,
       mentor: {
         total: 0,
@@ -125,11 +186,18 @@ export default {
   components: {
     "notification-alert": Notification
   },
+  watch: {
+    date: "setDateTime",
+    time: "setDateTime"
+  },
   created: function() {},
   mounted: function() {
     this.getDataList();
   },
   methods: {
+    setDateTime: function() {
+      this.proposeParams.startTime = this.date + " " + this.time;
+    },
     getDataList: function() {
       this.loader = true;
       notif.reset(this);
