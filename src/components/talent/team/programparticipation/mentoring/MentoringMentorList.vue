@@ -92,7 +92,11 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" :disabled="!valid">Submit</v-btn>
+          <v-btn
+            @click="validate"
+            color="primary"
+            :disabled="!valid"
+          >{{$vuetify.t('$vuetify.action.add')}}</v-btn>
           <v-spacer></v-spacer>
           <v-btn small fab color="red" text @click="dialogPropose = false">
             <v-icon>close</v-icon>
@@ -198,6 +202,11 @@ export default {
     setDateTime: function() {
       this.proposeParams.startTime = this.date + " " + this.time;
     },
+    validate: function() {
+      if (this.$refs.form.validate()) {
+        this.submitMentoring();
+      }
+    },
     getDataList: function() {
       this.loader = true;
       notif.reset(this);
@@ -221,7 +230,24 @@ export default {
       this.dialogPropose = true;
       this.proposeParams.mentorId = id;
       this.proposeParams.mentoringId = this.$route.params.eventId;
-      // this.loaderDetail = true;
+    },
+    submitMentoring: function() {
+      this.loaderDetail = true;
+      net.postData(
+        this,
+        "/talent/as-team-member/" +
+          this.$route.params.teamId +
+          "/programme-participations/" +
+          this.$route.params.participationId +
+          "/mentoring-sessions",
+        this.proposeParams
+      ).then(res=>{
+        this.dialogPropose = false;
+      }).catch(error=>{
+        notif.showError(this, error);
+      }).finally(()=>{
+        this.loaderDetail = false;
+      });
     }
   }
 };
