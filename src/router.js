@@ -46,6 +46,8 @@ import TalentTeam from "./components/talent/TalentTeam.vue";
 import TalentTeamProgram from "./components/talent/team/programparticipation/TalentTeamProgram";
 import TalentTeamProgramRegister from "./components/talent/TalentProgrammes.vue";
 import TalentTeamProgramMentoring from "./components/talent/team/programparticipation/mentoring/MentoringSession";
+import TalentTeamProgramMentoringEvent from "./components/talent/team/programparticipation/mentoring/MentoringEventList";
+import TalentTeamProgramMentorList from "./components/talent/team/programparticipation/mentoring/MentoringMentorList";
 import TalentTeamCreate from "./components/talent/team/TalentTeamCreate";
 import TalentTeamDetail from "./components/talent/team/TalentTeamDetail";
 import TalentTeamSearch from "./components/talent/team/manage/SearchTalent";
@@ -251,7 +253,25 @@ const routes = [
         component: TalentTeamProgramMentoring,
         meta: {
           level: 3,
-          text: "Mentoring List"
+          text: "Mentoring Session"
+        }
+      },
+      {
+        path: "/talent/team/:teamId/participation/:participationId/mentoring-event",
+        name: "Mentoring Event List",
+        component: TalentTeamProgramMentoringEvent,
+        meta: {
+          level: 4,
+          text: "Mentoring Event List"
+        }
+      },
+      {
+        path: "/talent/team/:teamId/participation/:participationId/mentoring-event/:eventId/mentor-list",
+        name: "Mentor List",
+        component: TalentTeamProgramMentorList,
+        meta: {
+          level: 5,
+          text: "Mentor List"
         }
       },
       {
