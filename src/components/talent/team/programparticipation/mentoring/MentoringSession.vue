@@ -20,12 +20,14 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn small fab color="red" text @click="dialogDetail = false"><v-icon>close</v-icon></v-btn>
+            <v-btn small fab color="red" text @click="dialogDetail = false">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
 
-      <v-btn color="primary">
+      <v-btn color="primary" @click="gotoMentoringEvent">
         <v-icon left>add</v-icon>
         {{ $vuetify.t('$vuetify.mentoring.propose') }} Mentoring
       </v-btn>
@@ -217,7 +219,7 @@ export default {
         warning: false
       },
       singleData: { id: "", name: "" },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       loader2: false,
       dialogDel: false,
@@ -268,6 +270,16 @@ export default {
     this.getDataList();
   },
   methods: {
+    gotoMentoringEvent: function() {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/participation/" +
+          this.$route.params.participationId +
+          "/mentoring-event"
+      });
+    },
     buildQueryUrl: function() {
       this.queryurl = "";
       if (this.select.length === 0) {
@@ -305,7 +317,7 @@ export default {
           console.log(error);
           alert.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -313,7 +325,7 @@ export default {
       this.dialogDetail = true;
       // this.getSingleData(id);
     },
-    getSingleData: function(id){
+    getSingleData: function(id) {
       net
         .getData(
           this,
@@ -321,7 +333,8 @@ export default {
             this.$route.params.teamId +
             "/programme-participations/" +
             this.$route.params.participationId +
-            "/mentoring-sessions/" + id
+            "/mentoring-sessions/" +
+            id
         )
         .then(res => {
           if (res.data.data) {
@@ -334,7 +347,7 @@ export default {
           console.log(error);
           alert.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     },
