@@ -48,32 +48,47 @@
                 <td>{{ props.item.participant.team.name }}</td>
                 <td>{{ props.item.startTime }}</td>
                 <td>{{ props.item.endTime }}</td>
-                <td>{{ props.item.status }}</td>
+                <td>
+                  <v-chip :color="colorStatus(props.item.status)" text-color="white">
+                    <v-avatar>
+                      <v-icon>check</v-icon>
+                    </v-avatar>
+                    {{ props.item.status }}
+                  </v-chip>
+                </td>
 
                 <td class="text-xs-right">
                   <v-spacer></v-spacer>
+
+                  <v-btn small>
+                    <v-icon left>search</v-icon>View
+                  </v-btn>
+
                   <v-btn
-                    @click="openFormMentoring(props.item.id, props.item.status)"
+                    @click="openFormMentoring(props.item.id, 'accept')"
                     small
                     color="green"
+                    v-if="props.item.status == 'proposed'"
                   >
                     <v-icon small left>done</v-icon>
                     {{ $vuetify.t('$vuetify.mentoring.accept') }}
                   </v-btn>
 
                   <v-btn
-                    @click="openFormMentoring(props.item.id, props.item.status)"
+                    @click="openFormMentoring(props.item.id, 'offer')"
                     small
                     color="warning"
+                    v-if="props.item.status == 'proposed'"
                   >
                     <v-icon small left>history</v-icon>
                     {{ $vuetify.t('$vuetify.mentoring.offer') }}
                   </v-btn>
 
                   <v-btn
-                    @click="openFormMentoring(props.item.id, props.item.status)"
+                    @click="openFormMentoring(props.item.id, 'reject')"
                     small
                     color="red"
+                    v-if="props.item.status == 'proposed'"
                   >
                     <v-icon small left>cancel</v-icon>
                     {{ $vuetify.t('$vuetify.mentoring.reject') }}
@@ -99,15 +114,15 @@
                     <v-icon small>pageview</v-icon>
                   </v-btn>-->
 
-                  <v-btn @click="openFormMentoring(data.id, data.status)" small fab color="green">
+                  <v-btn @click="openFormMentoring(data.id, 'accept')" small fab color="green">
                     <v-icon small>done</v-icon>
                   </v-btn>
 
-                  <v-btn @click="openFormMentoring(data.id, data.status)" small fab color="warning">
+                  <v-btn @click="openFormMentoring(data.id, 'offer')" small fab color="warning">
                     <v-icon small>history</v-icon>
                   </v-btn>
 
-                  <v-btn @click="openFormMentoring(data.id, data.status)" small fab color="red">
+                  <v-btn @click="openFormMentoring(data.id, 'reject')" small fab color="red">
                     <v-icon small>cancel</v-icon>
                   </v-btn>
                 </v-card-actions>
@@ -119,24 +134,53 @@
         <v-dialog v-model="dialogForm" hide-overlay persistent width="400">
           <v-form ref="form">
             <v-card>
+              {{status.mentoring}}
+              <v-card-title>{{singleData.participant.team.name}}</v-card-title>
+              <v-card-text>
+                {{singleData.status}}
+                {{singleData.startTime}}
+                {{singleData.endTime}}
+                {{singleData.media}}
+                {{singleData.note}}
+              </v-card-text>
               <v-card-text>
                 <v-textarea
                   v-model="params.note"
                   hint="Note"
                   label="Note"
-                  counter="25"
-                  maxlength="25"
-                />
-                <v-textarea
-                  v-if="status.mentoring !== 'proposed'"
-                  v-model="params.media"
-                  hint="Media"
-                  label="Media"
                   counter="100"
                   maxlength="100"
                 />
+                <v-textarea
+                  v-if="singleData.status !== 'proposed'"
+                  v-model="params.media"
+                  hint="Media"
+                  label="Media"
+                  counter="500"
+                  maxlength="500"
+                />
               </v-card-text>
               <v-card-actions>
+                <v-btn
+                  color="green"
+                  v-if="type == 'accept'"
+                  @click="acceptMentoring(singleData.id)"
+                >
+                  <v-icon>check</v-icon>Accept
+                </v-btn>
+
+                <v-btn color="red" v-if="type == 'reject'" @click="rejectMentoring(singleData.id)">
+                  <v-icon>close</v-icon>Reject
+                </v-btn>
+
+                <v-btn
+                  color="warning"
+                  v-if="type == 'offer'"
+                  @click="offerMentoring(singleData.id)"
+                >
+                  <v-icon>history</v-icon>Offer
+                </v-btn>
+
                 <v-spacer></v-spacer>
                 <v-btn @click="closeFormMentoring" small fab color="red">
                   <v-icon>close</v-icon>
@@ -164,11 +208,22 @@ export default {
         success: false,
         error: false,
         info: false,
-        warning: false,
-        mentoring: ""
+        warning: false
       },
-      singleData: { id: "", name: "" },
-      err_msg: {details:[""]},
+      type: "",
+      singleData: {
+        id: "",
+        status: "",
+        startTime: "",
+        endTime: "",
+        media: "",
+        note: "",
+        participant: {
+          id: "",
+          team: { id: "", name: "" }
+        }
+      },
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -215,6 +270,17 @@ export default {
     this.getDataList();
   },
   methods: {
+    colorStatus: function(status) {
+      var color = "accent";
+      if (status === "scheduled") {
+        color = "green";
+      } else if (status === "rejected") {
+        color = "red";
+      } else {
+        color = "accent";
+      }
+      return color;
+    },
     buildQueryUrl: function() {
       this.queryurl = "";
       if (this.select.length === 0) {
@@ -231,7 +297,7 @@ export default {
     },
     getDataList: function() {
       this.loader = true;
-      this.status.error = false;
+      notif.reset(this);
       net
         .getData(
           this,
@@ -248,10 +314,30 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    getSingleData: function(id) {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .getData(
+          this,
+          "/talent/programme-mentorships/" +
+            this.$route.params.programId +
+            "/mentoring-sessions/" +
+            id
+        )
+        .then(res => {
+          this.singleData = res.data.data;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -263,7 +349,8 @@ export default {
       this.isHidden = true;
       this.dialogForm = true;
       this.selectedIndex = id;
-      this.status.mentoring = status;
+      this.type = status;
+      this.getSingleData(id);
     },
     closeFormMentoring: function() {
       this.isHidden = false;
@@ -307,7 +394,6 @@ export default {
           this.params
         )
         .then(res => {
-          console.log(res);
           this.refresh();
         })
         .catch(error => {
@@ -339,19 +425,6 @@ export default {
         .finally(() => {
           this.loader = false;
         });
-    },
-    colorStatus: function(status) {
-      var colorStatus = "grey";
-      if (status === "accepted") {
-        colorStatus = "green";
-      } else if (status === "cancelled") {
-        colorStatus = "grey";
-      } else if (status === "proposed") {
-        colorStatus = "blue";
-      } else if (status === "offered") {
-        colorStatus = "blue";
-      }
-      return colorStatus;
     }
   }
 };
