@@ -86,8 +86,8 @@
 
                     <v-flex xs12>
                       <v-menu
-                        ref="menu2"
-                        v-model="menu2"
+                        ref="menu"
+                        v-model="menu"
                         :close-on-content-click="false"
                         :nudge-right="40"
                         lazy
@@ -107,11 +107,12 @@
                           ></v-text-field>
                         </template>
                         <v-date-picker
+                          ref="picker"
                           :locale="$vuetify.lang.current"
                           v-model="params.birthDate"
                           :max="new Date().toISOString().substr(0, 10)"
                           min="1950-01-01"
-                          @input="menu2 = false"
+                          @input="menu = false"
                         ></v-date-picker>
                       </v-menu>
                     </v-flex>
@@ -198,6 +199,7 @@ export default {
       valid: false,
       alert: false,
       err_msg: { code: 0, type: "", error_details: [""] },
+      menu: false,
       menu1: false,
       menu2: false,
       e1: false,
@@ -246,7 +248,7 @@ export default {
     this.getRegionList();
   },
   watch: {
-    menu2 (val) {
+    menu(val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = "YEAR"));
     }
   },
