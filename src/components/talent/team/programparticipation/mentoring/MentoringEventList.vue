@@ -123,7 +123,10 @@ export default {
       this.loader = true;
       notif.reset(this);
       net
-        .getData(this, "/talent/programmes/programme-1-id/mentorings")
+        .getData(
+          this,
+          "/talent/programmes/" + this.$store.state.programId + "/mentorings"
+        )
         .then(res => {
           if (res.data.data) {
             this.event = res.data.data;
@@ -142,7 +145,13 @@ export default {
       this.dialogDetail = true;
       this.loaderDetail = true;
       net
-        .getData(this, "/talent/programmes/programme-1-id/mentorings/" + id)
+        .getData(
+          this,
+          "/talent/programmes/" +
+            this.$store.state.programId +
+            "/mentorings/" +
+            id
+        )
         .then(res => {
           this.eventDetail = res.data.data;
         })
