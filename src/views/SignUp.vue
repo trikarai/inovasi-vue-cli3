@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+  <v-app>
     <div id="signuppage">
       <v-layout align-center justify-center>
         <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
@@ -8,18 +8,26 @@
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4 elevation-12>
             <v-toolbar class="pt-2" color="primary">
-              <v-img src="/img/miktilampu.png" style="position: relative;bottom: 5px;" aspect-ratio="1" max-width="30px"></v-img>
+              <v-img
+                src="/img/miktilampu.png"
+                style="position: relative;bottom: 5px;"
+                aspect-ratio="1"
+                max-width="30px"
+              ></v-img>
               <v-toolbar-title class="white--text ml-2">
-                <h4>MIKTI <v-chip>S t a r t</v-chip></h4>
+                <h4>
+                  MIKTI
+                  <v-chip>S t a r t</v-chip>
+                </h4>
               </v-toolbar-title>
               <v-toolbar-title class="ml-auto">
                 <router-link v-bind:to="'/login'">
-                    <v-icon class="white--text mb-2">exit_to_app</v-icon>
+                  <v-icon class="white--text mb-2">exit_to_app</v-icon>
                 </router-link>
                 <router-link v-bind:to="'/'">
-                    <v-icon class="white--text mb-2 ml-3">home</v-icon>
+                  <v-icon class="white--text mb-2 ml-3">home</v-icon>
                 </router-link>
-            </v-toolbar-title>
+              </v-toolbar-title>
             </v-toolbar>
             <v-card style="padding:20px 30px 30px 30px;">
               <h3 class="font-weight-light text-center mt-4 mb-1">Daftar</h3>
@@ -78,6 +86,7 @@
 
                     <v-flex xs12>
                       <v-menu
+                        ref="menu2"
                         v-model="menu2"
                         :close-on-content-click="false"
                         :nudge-right="40"
@@ -100,6 +109,8 @@
                         <v-date-picker
                           :locale="$vuetify.lang.current"
                           v-model="params.birthDate"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1950-01-01"
                           @input="menu2 = false"
                         ></v-date-picker>
                       </v-menu>
@@ -164,9 +175,8 @@
           </v-flex>
         </v-layout>
       </v-container>
-      </div>
-    </v-app>
-  
+    </div>
+  </v-app>
 </template>
 <script>
 import net from "@/config/httpclient";
@@ -235,6 +245,11 @@ export default {
   mounted: function() {
     this.getRegionList();
   },
+  watch: {
+    menu2 (val) {
+      val && setTimeout(() => (this.$refs.picker.activePicker = "YEAR"));
+    }
+  },
   methods: {
     validate: function() {
       if (this.$refs.form.validate()) {
@@ -295,7 +310,7 @@ export default {
   background-size: cover;
   background-position: center center;
   overflow: hidden;
-  height: 100%
+  height: 100%;
 }
 </style>
 
