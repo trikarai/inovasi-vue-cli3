@@ -294,6 +294,7 @@ export default {
       this.$router.push({ path: "/talent/team/" + id });
     },
     openParticipation: function(id) {
+      this.$store.commit("setTeamId", id);
       this.$router.push({ path: "/talent/team/" + id + "/participation" });
     },
     openIdea: function(id) {
