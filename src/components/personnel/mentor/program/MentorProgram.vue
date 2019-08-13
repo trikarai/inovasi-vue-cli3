@@ -16,7 +16,7 @@
           <template v-slot:items="props">
             <td>{{ props.item.programme.name }}</td>
             <td class="text-xs-right">
-              <v-btn small @click="gotoMentoring(props.item.programme.id)">
+              <v-btn small @click="gotoMentoring(props.item.id)">
                 <v-icon small left>today</v-icon>
                 <!-- {{ $vuetify.t('$vuetify.action.view') }} -->
                 Mentoring
