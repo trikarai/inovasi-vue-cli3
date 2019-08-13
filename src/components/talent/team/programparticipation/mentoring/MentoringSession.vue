@@ -589,12 +589,14 @@ export default {
     },
     colorStatus: function(status) {
       var colorStatus = "grey";
-      if (status === "accepted") {
+      if (status === "scheduled") {
         colorStatus = "green";
       } else if (status === "cancelled") {
         colorStatus = "grey";
       } else if (status === "proposed") {
         colorStatus = "blue";
+      } else if (status === "rejected") {
+        colorStatus = "red";
       } else if (status === "offered") {
         colorStatus = "blue";
       }
