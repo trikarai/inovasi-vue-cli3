@@ -67,7 +67,7 @@
               </v-chip>
             </td>
             <td class="text-xs-right">
-              <v-btn v-if="props.item.status == 'active'" small @click="openMentoring(props.item.id)">
+              <v-btn v-if="props.item.status == 'active'" small @click="openMentoring(props.item.programme.id, props.item.id)">
                 <v-icon small left>today</v-icon>
                 {{ $vuetify.t('$vuetify.mentoring.mentoringsession') }}
               </v-btn>
@@ -284,13 +284,14 @@ export default {
     openDetail: function(id) {
       // this.$router.push({path: "/talent/program/"+ id})
     },
-    openMentoring: function(id) {
+    openMentoring: function(programId, participationId) {
+      this.$store.commit("setProgramId", programId);
       this.$router.push({
         path:
           "/talent/team/" +
           this.$route.params.teamId +
           "/participation/" +
-          id +
+          participationId +
           "/mentoring"
       });
     },
