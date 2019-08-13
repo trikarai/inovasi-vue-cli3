@@ -73,7 +73,12 @@
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-time-picker color="blue" :locale="$vuetify.lang.current" v-model="time"></v-time-picker>
+                    <v-time-picker
+                      format="24hr"
+                      color="blue"
+                      :locale="$vuetify.lang.current"
+                      v-model="time"
+                    ></v-time-picker>
                   </v-menu>
                 </v-flex>
 
@@ -195,8 +200,7 @@ export default {
     date: "setDateTime",
     time: "setDateTime"
   },
-  created: function() {
-  },
+  created: function() {},
   mounted: function() {
     this.proposeParams.programmeId = this.$store.state.programId;
     this.getDataList();
@@ -228,7 +232,10 @@ export default {
       this.loader = true;
       notif.reset(this);
       net
-        .getData(this, "/talent/programmes/" + this.$store.state.programId + "/mentors")
+        .getData(
+          this,
+          "/talent/programmes/" + this.$store.state.programId + "/mentors"
+        )
         .then(res => {
           if (res.data.data) {
             this.mentor = res.data.data;
@@ -262,7 +269,7 @@ export default {
         )
         .then(res => {
           this.dialogPropose = false;
-          this.$router.go(-2)
+          this.$router.go(-2);
         })
         .catch(error => {
           notif.showError(this, error);
