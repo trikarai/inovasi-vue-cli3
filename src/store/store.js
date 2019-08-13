@@ -20,9 +20,17 @@ export default new Vuex.Store({
       { title: "tra", total: 0 },
       { title: "ski", total: 0 },
     ],
-    teamMemberships: []
+    teamMemberships: [],
+    teamId: "",
+    programId: "",
   },
   mutations: {
+    setTeamId(state, payload){
+      state.teamId = payload;
+    },
+    setProgramId(state, payload){
+      state.programId = payload;
+    },
     switchTheme(state) {
       state.isDark = !state.isDark
     },
