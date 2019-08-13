@@ -220,7 +220,7 @@ export default {
       net
         .getData(
           this,
-          "/talent/programmes/programme-1-id/mentors/" +
+          "/talent/programmes/"+this.$store.state.programId+"/mentors/" +
             this.$route.params.mentorId +
             "/sessions"
         )
