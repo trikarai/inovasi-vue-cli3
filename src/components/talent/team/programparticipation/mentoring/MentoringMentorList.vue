@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <!-- {{$store.state.programId}} -->
     <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
     <v-dialog v-model="loader2" :hide-overlay="false" persistent width="300">
       <v-card color="primary" dark>
@@ -12,16 +13,16 @@
 
     <!-- propose dialog modal-->
     <v-dialog v-model="dialogPropose" max-width="600">
-      <v-card>
-        <v-card-title class="headline">Propose</v-card-title>
-        <v-card-text v-if="loaderDetail">
-          <v-progress-linear :indeterminate="true"></v-progress-linear>
-        </v-card-text>
-        <v-card-text v-else>
-          <v-form v-model="valid">
+      <v-form v-model="valid" ref="form">
+        <v-card>
+          <v-card-title class="headline">Propose</v-card-title>
+          <v-card-text v-if="loaderDetail">
+            <v-progress-linear :indeterminate="true"></v-progress-linear>
+          </v-card-text>
+          <v-card-text v-else>
             <v-container grid-list-md>
               <v-layout wrap>
-                <!-- {{proposeParams}} -->
+                {{proposeParams}}
                 <v-flex xs12 sm12 md6>
                   <v-menu
                     v-model="menu1"
@@ -89,20 +90,20 @@
                 </v-flex>
               </v-layout>
             </v-container>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            @click="validate"
-            color="primary"
-            :disabled="!valid"
-          >{{$vuetify.t('$vuetify.action.add')}}</v-btn>
-          <v-spacer></v-spacer>
-          <v-btn small fab color="red" text @click="dialogPropose = false">
-            <v-icon>close</v-icon>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              @click="propose()"
+              color="primary"
+              :disabled="!valid"
+            >{{$vuetify.t('$vuetify.action.add')}}</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn small fab color="red" text @click="dialogPropose = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-form>
     </v-dialog>
     <!-- end propose dialog modal-->
 
@@ -123,7 +124,7 @@
               <v-btn small color="primary" round @click="proposeMentoring(props.item.id)">
                 <v-icon left small>today</v-icon>Propose
               </v-btn>
-              <v-btn small round>
+              <v-btn small round @click="gotomentorsession(props.item.id)">
                 <v-icon left small>search</v-icon>View Schedule
               </v-btn>
             </td>
@@ -194,15 +195,31 @@ export default {
     date: "setDateTime",
     time: "setDateTime"
   },
-  created: function() {},
+  created: function() {
+  },
   mounted: function() {
+    this.proposeParams.programmeId = this.$store.state.programId;
     this.getDataList();
   },
   methods: {
     setDateTime: function() {
       this.proposeParams.startTime = this.date + " " + this.time;
     },
-    validate: function() {
+    gotomentorsession: function(id) {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/participation/" +
+          this.$route.params.participationId +
+          "/mentoring-event/" +
+          this.$route.params.eventId +
+          "/mentor/" +
+          id +
+          "/session"
+      });
+    },
+    propose: function() {
       if (this.$refs.form.validate()) {
         this.submitMentoring();
       }
@@ -211,7 +228,7 @@ export default {
       this.loader = true;
       notif.reset(this);
       net
-        .getData(this, "/talent/programmes/programme-1-id/mentors")
+        .getData(this, "/talent/programmes/" + this.$store.state.programId + "/mentors")
         .then(res => {
           if (res.data.data) {
             this.mentor = res.data.data;
@@ -233,21 +250,26 @@ export default {
     },
     submitMentoring: function() {
       this.loaderDetail = true;
-      net.postData(
-        this,
-        "/talent/as-team-member/" +
-          this.$route.params.teamId +
-          "/programme-participations/" +
-          this.$route.params.participationId +
-          "/mentoring-sessions",
-        this.proposeParams
-      ).then(res=>{
-        this.dialogPropose = false;
-      }).catch(error=>{
-        notif.showError(this, error);
-      }).finally(()=>{
-        this.loaderDetail = false;
-      });
+      net
+        .postData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/programme-participations/" +
+            this.$route.params.participationId +
+            "/mentoring-sessions",
+          this.proposeParams
+        )
+        .then(res => {
+          this.dialogPropose = false;
+          this.$router.go(-2)
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loaderDetail = false;
+        });
     }
   }
 };

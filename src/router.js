@@ -48,6 +48,7 @@ import TalentTeamProgramRegister from "./components/talent/TalentProgrammes.vue"
 import TalentTeamProgramMentoring from "./components/talent/team/programparticipation/mentoring/MentoringSession";
 import TalentTeamProgramMentoringEvent from "./components/talent/team/programparticipation/mentoring/MentoringEventList";
 import TalentTeamProgramMentorList from "./components/talent/team/programparticipation/mentoring/MentoringMentorList";
+import TalentTeamProgramMentorSession from "./components/talent/team/programparticipation/mentoring/MentoringMentorSchedule";
 import TalentTeamCreate from "./components/talent/team/TalentTeamCreate";
 import TalentTeamDetail from "./components/talent/team/TalentTeamDetail";
 import TalentTeamSearch from "./components/talent/team/manage/SearchTalent";
@@ -272,6 +273,15 @@ const routes = [
         meta: {
           level: 5,
           text: "Mentor List"
+        }
+      },
+      {
+        path: "/talent/team/:teamId/participation/:participationId/mentoring-event/:eventId/mentor/:mentorId/session",
+        name: "Mentor Sessions",
+        component: TalentTeamProgramMentorSession,
+        meta: {
+          level: 6,
+          text: "Mentor Sessions"
         }
       },
       {

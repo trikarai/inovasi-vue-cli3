@@ -1,9 +1,10 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+      <!-- {{$store.state.programId}} -->
+      <notification-notif v-bind:err_msg="err_msg" v-bind:status="status" />
 
-      <v-dialog v-model="loader2" hide-overlay persistent width="300">
+      <v-dialog v-model="loader2" :hide-overlay="false" persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
             {{ $vuetify.t('$vuetify.info.standby') }}
@@ -12,16 +13,115 @@
         </v-card>
       </v-dialog>
 
+      <!-- propose dialog modal-->
+      <v-dialog v-model="dialogPropose" max-width="600">
+        <v-form v-model="valid" ref="form">
+          <v-card>
+            <v-card-title class="headline">Reschedule</v-card-title>
+            <v-card-text v-if="loaderDetail">
+              <v-progress-linear :indeterminate="true"></v-progress-linear>
+            </v-card-text>
+            <v-card-text v-else>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <!-- {{proposeParams}} -->
+                  <v-flex xs12 sm12 md6>
+                    <v-menu
+                      v-model="menu1"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="date"
+                          label="Date"
+                          prepend-icon="today"
+                          readonly
+                          :rules="[v => !!v || 'Date is required']"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        color="blue"
+                        :locale="$vuetify.lang.current"
+                        v-model="date"
+                        @input="menu1 = false"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs12 sm12 md6>
+                    <v-menu
+                      v-model="menu2"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="time"
+                          label="Time"
+                          prepend-icon="schedule"
+                          readonly
+                          :rules="[v => !!v || 'Time is required']"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker color="blue" :locale="$vuetify.lang.current" v-model="time"></v-time-picker>
+                    </v-menu>
+                  </v-flex>
+
+                  <v-flex xs12 sm6 md4>
+                    <v-textarea
+                      label="Media"
+                      :rules="[v => !!v || 'Media is required']"
+                      v-model="proposeParams.media"
+                      required
+                    ></v-textarea>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-textarea label="Note" v-model="proposeParams.note" required></v-textarea>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                @click="propose()"
+                color="primary"
+                :disabled="!valid"
+              >{{$vuetify.t('$vuetify.action.add')}}</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn small fab color="red" text @click="dialogPropose = false">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-form>
+      </v-dialog>
+      <!-- end propose dialog modal-->
+
       <v-dialog v-model="dialogDetail" max-width="350">
         <v-card>
-          <v-card-title class="headline">Mentoring Detail</v-card-title>
-
-          <v-card-text>{{mentoringDetail}}</v-card-text>
+          <v-card-title class="headline">{{mentoringDetail.mentoring.name}}</v-card-title>
+          <v-card-text>{{mentoringDetail.mentor.talent.name}}</v-card-text>
+          <v-card-text>{{mentoringDetail.startTime}}</v-card-text>
+          <v-card-text>{{mentoringDetail.status}}</v-card-text>
+          <v-card-text>{{mentoringDetail.media}}</v-card-text>
+          <v-card-text>{{mentoringDetail.note}}</v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn small fab color="red" text @click="dialogDetail = false">
-              <v-icon>close</v-icon>
+              <v-icon small>close</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -85,17 +185,32 @@
                   {{ $vuetify.t('$vuetify.action.view') }}
                 </v-btn>
 
-                <v-btn @click="acceptAct(props.item.id)" small color="green">
+                <v-btn
+                  @click="acceptAct(props.item.id)"
+                  small
+                  color="green"
+                  v-if="props.item.status === 'offered'"
+                >
                   <v-icon small left>done</v-icon>
                   {{ $vuetify.t('$vuetify.mentoring.accept') }}
                 </v-btn>
 
-                <v-btn small color="warning">
+                <v-btn
+                  @click="rescheduleAct(props.item.id)"
+                  small
+                  color="warning"
+                  v-if="props.item.status === 'proposed'"
+                >
                   <v-icon small left>history</v-icon>
                   {{ $vuetify.t('$vuetify.mentoring.reschedule') }}
                 </v-btn>
 
-                <v-btn @click="cancelAct(props.item.id)" small color="red">
+                <v-btn
+                  @click="cancelAct(props.item.id)"
+                  small
+                  color="red"
+                  v-if="props.item.status === 'proposed'"
+                >
                   <v-icon small left>cancel</v-icon>
                   {{ $vuetify.t('$vuetify.mentoring.cancel') }}
                 </v-btn>
@@ -103,7 +218,7 @@
                 <v-expand-transition>
                   <div v-if="props.item.id == selectedAcc">
                     {{ $vuetify.t('$vuetify.mentoring.confirmationtoaccept') }}
-                    <v-btn @click="acceptMentoring(props.items.id)" color="primary">
+                    <v-btn @click="acceptMentoring(props.item.id)" color="primary">
                       <v-icon></v-icon>
                       {{ $vuetify.t('$vuetify.action.yes') }}
                     </v-btn>
@@ -114,10 +229,10 @@
                   </div>
                 </v-expand-transition>
 
-                <v-expand-transition>
+                <v-scale-transition>
                   <div v-if="props.item.id == selectedCan">
                     {{ $vuetify.t('$vuetify.mentoring.confirmationtocancel') }}
-                    <v-btn @click="cancelMentoring(props.items.id)" color="red">
+                    <v-btn @click="cancelMentoring(props.item.id)" color="red">
                       <v-icon></v-icon>
                       {{ $vuetify.t('$vuetify.action.yes') }}
                     </v-btn>
@@ -126,7 +241,7 @@
                       {{ $vuetify.t('$vuetify.action.cancel') }}
                     </v-btn>
                   </div>
-                </v-expand-transition>
+                </v-scale-transition>
               </td>
             </template>
           </v-data-table>
@@ -148,21 +263,33 @@
                   <v-icon small>pageview</v-icon>
                 </v-btn>
 
-                <v-btn @click="acceptAct(data.id)" small fab color="green">
+                <v-btn
+                  @click="acceptAct(data.id)"
+                  small
+                  fab
+                  color="green"
+                  v-if="data.status === 'offered'"
+                >
                   <v-icon small>done</v-icon>
                 </v-btn>
 
-                <v-btn small fab color="warning">
+                <v-btn small fab color="warning" v-if="data.status === 'proposed'">
                   <v-icon small>history</v-icon>
                 </v-btn>
 
-                <v-btn @click="cancelAct(data.id)" small fab color="red">
+                <v-btn
+                  @click="cancelAct(data.id)"
+                  small
+                  fab
+                  color="red"
+                  v-if="data.status === 'proposed'"
+                >
                   <v-icon small>cancel</v-icon>
                 </v-btn>
               </v-card-actions>
 
               <v-card-actions>
-                <v-scale-transition>
+                <v-fade-transition>
                   <div v-if="data.id == selectedAcc">
                     {{ $vuetify.t('$vuetify.mentoring.confirmationtoaccept') }}
                     <br />
@@ -175,7 +302,7 @@
                       {{ $vuetify.t('$vuetify.action.cancel') }}
                     </v-btn>
                   </div>
-                </v-scale-transition>
+                </v-fade-transition>
                 <v-scale-transition>
                   <div v-if="data.id == selectedCan">
                     {{ $vuetify.t('$vuetify.mentoring.confirmationtocancel') }}
@@ -206,12 +333,13 @@
 </template>
 <script>
 import net from "@/config/httpclient";
-import alert from "@/config/alerthandling";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 
 export default {
   data() {
     return {
+      valid: false,
       status: {
         success: false,
         error: false,
@@ -222,9 +350,13 @@ export default {
       err_msg: { details: [""] },
       loader: false,
       loader2: false,
+      loaderDetail: false,
+      menu1: false,
+      menu2: false,
       dialogDel: false,
       dialogForm: false,
       dialogDetail: false,
+      dialogPropose: false,
       edit: false,
       view: false,
       expand: false,
@@ -247,7 +379,22 @@ export default {
         total: 0,
         list: []
       },
-      mentoringDetail: "",
+      mentoringDetail: {
+        id: "",
+        mentoring: {
+          id: "",
+          name: ""
+        },
+        mentor: {
+          id: "",
+          talent: { id: "", name: "" }
+        },
+        startTime: "",
+        endTime: "",
+        status: "",
+        media: "",
+        note: ""
+      },
       items: [
         { displayName: "Proposed", value: "pro" },
         { displayName: "Accepted", value: "acc" },
@@ -256,20 +403,37 @@ export default {
       ],
       select: [{ displayName: "Proposed", value: "pro" }],
       queryurl: "",
-      selectedIndex: null
+      selectedIndex: null,
+      proposeParams: {
+        programmeId: "",
+        mentoringId: "",
+        mentorId: "",
+        startTime: "",
+        media: "",
+        note: ""
+      },
+      date: "",
+      time: "",
+      sessionId: ""
     };
   },
   components: {
-    "notification-alert": Notification
+    "notification-notif": Notification
   },
   watch: {
-    select: "buildQueryUrl"
+    select: "buildQueryUrl",
+    date: "setDateTime",
+    time: "setDateTime"
   },
-  created: function() {},
+  created: function() {
+  },
   mounted: function() {
     this.getDataList();
   },
   methods: {
+    setDateTime: function() {
+      this.proposeParams.startTime = this.date + " " + this.time;
+    },
     gotoMentoringEvent: function() {
       this.$router.push({
         path:
@@ -315,7 +479,7 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          alert.showError(this, error);
+          notif.showError(this, error);
         })
         .finally(() => {
           this.loader = false;
@@ -323,9 +487,15 @@ export default {
     },
     openDetail: function(id) {
       this.dialogDetail = true;
-      // this.getSingleData(id);
+      this.getSingleData(id);
+    },
+    rescheduleAct: function(id) {
+      this.sessionId = id;
+      this.dialogPropose = true;
+      this.getSingleData(id);
     },
     getSingleData: function(id) {
+      this.loaderDetail = true;
       net
         .getData(
           this,
@@ -339,16 +509,16 @@ export default {
         .then(res => {
           if (res.data.data) {
             this.mentoringDetail = res.data.data;
+            this.proposeParams = res.data.data;
           } else {
             this.mentoringDetail = null;
           }
         })
         .catch(error => {
-          console.log(error);
-          alert.showError(this, error);
+          notif.showError(this, error);
         })
         .finally(() => {
-          this.loader = false;
+          this.loaderDetail = false;
         });
     },
     acceptAct: function(id) {
@@ -410,14 +580,13 @@ export default {
           this.refresh();
         })
         .catch(error => {
-          console.log(error);
           notif.showError(this, error);
         })
         .finally(() => {
+          this.selectedCan = null;
           this.loader2 = false;
         });
     },
-    rescheduleMentoring: function() {},
     colorStatus: function(status) {
       var colorStatus = "grey";
       if (status === "accepted") {
@@ -433,6 +602,36 @@ export default {
     },
     refresh: function() {
       this.getDataList();
+    },
+    propose: function() {
+      if (this.$refs.form.validate()) {
+        this.rescheduleMentoring();
+      }
+    },
+    rescheduleMentoring: function() {
+      this.loaderDetail = true;
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/programme-participations/" +
+            this.$route.params.participationId +
+            "/mentoring-sessions/" +
+            this.sessionId +
+            "/reschedule",
+          this.proposeParams
+        )
+        .then(res => {
+          this.dialogPropose = false;
+          this.refresh();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loaderDetail = false;
+        });
     }
   }
 };
