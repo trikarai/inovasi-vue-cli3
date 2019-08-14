@@ -46,7 +46,7 @@
             </div>
             <v-form v-model="valid" ref="form" v-if="talent !== null">
               <v-layout>
-                <v-flex xs12 md4>
+                <!-- <v-flex xs12 md4>
                   <v-text-field
                     v-model="position"
                     :rules="nameRules"
@@ -54,6 +54,17 @@
                     label="Position"
                     required
                   ></v-text-field>
+                </v-flex>-->
+                <!-- Hustler / Hacker / Hispter -->
+                <v-flex xs12>
+                  <v-combobox
+                    required
+                    :rules="nameRules"
+                    v-model="position"
+                    :items="item"
+                    chips
+                    label="Position"
+                  ></v-combobox>
                 </v-flex>
               </v-layout>
             </v-form>
@@ -72,15 +83,15 @@
   </v-container>
 </template>
 <script>
-import Vue from 'vue'
-import VueLodash from 'vue-lodash'
-const options = { name: 'lodash' } // customize the way you want to call it
+import Vue from "vue";
+import VueLodash from "vue-lodash";
+const options = { name: "lodash" }; // customize the way you want to call it
 
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 
-Vue.use(VueLodash, options) // options is optional
+Vue.use(VueLodash, options); // options is optional
 
 export default {
   components: {
@@ -97,12 +108,13 @@ export default {
         warning: false
       },
       async: false,
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       search: "",
       talent: null,
       position: "",
       valid: false,
-      nameRules: [v => !!v || "Position is required"]
+      nameRules: [v => !!v || "Position is required"],
+      item: ["Hustler", "Hacker", "Hipster"]
     };
   },
   watch: {
@@ -139,7 +151,7 @@ export default {
           this.talent = null;
           //   alert.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.async = false;
         });
     },
@@ -150,9 +162,7 @@ export default {
     },
     inviteTalent: function() {
       this.loader = true;
-      this.status.error = false;
-      this.status.info = false;
-
+      notif.reset(this);
       net
         .postData(
           this,
@@ -165,16 +175,12 @@ export default {
           }
         )
         .then(res => {
-          console.log(res);
-          if (res.status >= 200) {
-            notif.showInfo(this, res);
-          }
+          notif.showInfo(this, res, ["Talent Invited"]);
         })
         .catch(error => {
-          console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     }
