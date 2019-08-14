@@ -73,7 +73,8 @@
                 v-if="ifShow(props.item.status.value)"
               >
                 <v-icon small>pageview</v-icon>
-                {{ $vuetify.t('$vuetify.action.view') }}
+                <!-- {{ $vuetify.t('$vuetify.action.view') }} -->
+                Manage
               </v-btn>
               <v-btn
                 small
