@@ -270,7 +270,7 @@ export default {
       net
         .postDataPublic(this, "/talent-signup", this.params)
         .then(res => {
-          this.$router.push({ path: "/login" });
+          this.$router.push({path: "/login", query: {activate: true}})
         })
         .catch(error => {
           notif.showError(this, error);

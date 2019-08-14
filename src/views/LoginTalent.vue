@@ -1,23 +1,31 @@
 <template>
-    <v-app>
-      <div id="loginpage">
+  <v-app>
+    <div id="loginpage">
       <v-layout align-center justify-center>
-        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       </v-layout>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4 elevation-12 class="text-xs-center">
             <v-toolbar class="pt-2" color="primary">
-              <v-img src="/img/miktilampu.png" style="position: relative;bottom: 5px;" aspect-ratio="1" max-width="30px"></v-img>
+              <v-img
+                src="/img/miktilampu.png"
+                style="position: relative;bottom: 5px;"
+                aspect-ratio="1"
+                max-width="30px"
+              ></v-img>
               <v-toolbar-title class="white--text ml-2">
-                 <h4>MIKTI <v-chip>S t a r t</v-chip></h4>
+                <h4>
+                  MIKTI
+                  <v-chip>S t a r t</v-chip>
+                </h4>
               </v-toolbar-title>
               <v-toolbar-title class="ml-auto">
                 <router-link v-bind:to="'/signup'">
-                    <v-icon class="white--text mb-2">person_add</v-icon>
+                  <v-icon class="white--text mb-2">person_add</v-icon>
                 </router-link>
                 <router-link v-bind:to="'/'">
-                    <v-icon class="white--text mb-2 ml-3">home</v-icon>
+                  <v-icon class="white--text mb-2 ml-3">home</v-icon>
                 </router-link>
               </v-toolbar-title>
               <!-- </v-toolbar-items> -->
@@ -33,7 +41,7 @@
                         prepend-icon="person"
                         v-model="email"
                         autocomplete="email"
-                        :rules="emailRules"                       
+                        :rules="emailRules"
                         required
                       ></v-text-field>
                     </v-layout>
@@ -54,7 +62,7 @@
                     </v-layout>
                     <v-layout justify-end class="mt-2">
                       <v-flex class="mt-2">
-                         <router-link v-bind:to="'/forgot-password'">Lupa Password</router-link>
+                        <router-link v-bind:to="'/forgot-password'">Lupa Password</router-link>
                       </v-flex>
                       <v-btn
                         @click="submit"
@@ -72,7 +80,20 @@
                           </v-card-text>
                         </v-card>
                       </v-dialog>
-                      
+
+                      <v-dialog v-model="activate" :hide-overlay="false" persistent width="400">
+                        <v-card>
+                          <v-card-text>
+                            <h3>Please check your email for account activation before login.</h3>
+                          </v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn small fab color="red" @click="activate = false">
+                              <v-icon>close</v-icon>
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
                     </v-layout>
                   </v-form>
                 </div>
@@ -81,9 +102,8 @@
           </v-flex>
         </v-layout>
       </v-container>
-     </div>
-    </v-app>
-  
+    </div>
+  </v-app>
 </template>
 <script>
 import net from "@/config/httpclient";
@@ -99,7 +119,7 @@ export default {
       response: "",
       valid: false,
       alert: false,
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       status: {
         success: false,
         error: false,
@@ -115,7 +135,8 @@ export default {
         v =>
           /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
           "E-mail must be valid"
-      ]
+      ],
+      activate: this.$route.query.activate
     };
   },
   created: function() {},
@@ -139,23 +160,21 @@ export default {
           email: this.email,
           password: this.password
         })
-        .then(
-          res => {
-            this.response = res.data.data;
-            authUser.data = res.data.data;
-            authUser.role_id = "TALENT";
-            authUser.token = res.data.credentials.token;
-            authUser.valid_until = res.data.credentials.valid_until;
-            this.$store.state.isLoggedIn = true;
-            window.localStorage.setItem("lbUser", JSON.stringify(authUser));
-            this.$router.replace("/talent/dashboard");
-          }
-        )
-        .catch(error=>{
+        .then(res => {
+          this.response = res.data.data;
+          authUser.data = res.data.data;
+          authUser.role_id = "TALENT";
+          authUser.token = res.data.credentials.token;
+          authUser.valid_until = res.data.credentials.valid_until;
+          this.$store.state.isLoggedIn = true;
+          window.localStorage.setItem("lbUser", JSON.stringify(authUser));
+          this.$router.replace("/talent/dashboard");
+        })
+        .catch(error => {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -171,6 +190,6 @@ export default {
   background-size: cover;
   background-position: center center;
   overflow: hidden;
-  height: 100%
+  height: 100%;
 }
 </style>
