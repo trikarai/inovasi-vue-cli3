@@ -131,6 +131,7 @@
           </v-carousel>
         </v-layout>
 
+        <!-- dialog form mentoring -->
         <v-dialog v-model="dialogForm" hide-overlay persistent width="400">
           <v-form ref="form">
             <v-card>
@@ -142,6 +143,69 @@
                 {{singleData.endTime}}
                 {{singleData.media}}
                 {{singleData.note}}
+              </v-card-text>
+
+              <v-card-text v-if="type == 'offer'">
+                <v-layout wrap>
+                  <v-flex xs12 sm12 md6>
+                    <v-menu
+                      v-model="menu1"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="date"
+                          label="Date"
+                          prepend-icon="today"
+                          readonly
+                          :rules="[v => !!v || 'Date is required']"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        color="blue"
+                        :locale="$vuetify.lang.current"
+                        v-model="date"
+                        @input="menu1 = false"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs12 sm12 md6>
+                    <v-menu
+                      v-model="menu2"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="time"
+                          label="Time"
+                          prepend-icon="schedule"
+                          readonly
+                          :rules="[v => !!v || 'Time is required']"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker
+                        format="24hr"
+                        color="blue"
+                        :locale="$vuetify.lang.current"
+                        v-model="time"
+                      ></v-time-picker>
+                    </v-menu>
+                  </v-flex>
+                </v-layout>
               </v-card-text>
               <v-card-text>
                 <v-textarea
@@ -161,6 +225,7 @@
                 />
               </v-card-text>
               <v-card-actions>
+                {{params}}
                 <v-btn
                   color="green"
                   v-if="type == 'accept'"
@@ -211,6 +276,7 @@ export default {
         warning: false
       },
       type: "",
+      menu2: false,
       singleData: {
         id: "",
         status: "",
@@ -243,7 +309,10 @@ export default {
         { text: "Status", value: "id", sortable: false },
         { text: "", value: "id", sortable: false }
       ],
+      date: "",
+      time: "",
       params: {
+        startTime: "",
         note: "",
         media: ""
       },
@@ -254,8 +323,8 @@ export default {
       isHidden: false,
       items: [
         { displayName: "Proposed", value: "pro" },
-        { displayName: "Accepted", value: "acc" },
-        { displayName: "Cancelled", value: "can" },
+        { displayName: "Scheduled", value: "sch" },
+        { displayName: "Rejected", value: "rej" },
         { displayName: "Offered", value: "off" }
       ],
       select: [{ displayName: "Proposed", value: "pro" }],
@@ -263,17 +332,26 @@ export default {
     };
   },
   watch: {
-    select: "buildQueryUrl"
+    select: "buildQueryUrl",
+    date: "setDateTime",
+    time: "setDateTime"
   },
   created: function() {},
   mounted: function() {
     this.getDataList();
   },
   methods: {
+    setDateTime: function() {
+      this.params.startTime = this.date + " " + this.time;
+    },
     colorStatus: function(status) {
       var color = "accent";
       if (status === "scheduled") {
         color = "green";
+      } else if (status === "proposed") {
+        color = "blue";
+      } else if (status === "offered") {
+        color = "warning";
       } else if (status === "rejected") {
         color = "red";
       } else {
@@ -286,11 +364,11 @@ export default {
       if (this.select.length === 0) {
         this.queryurl = "";
       } else if (this.select.length === 1) {
-        this.queryurl = "?status[]=" + this.select[0].value;
+        this.queryurl = "?statuses[]=" + this.select[0].value;
       } else if (this.select.length > 1) {
-        this.queryurl = "?status[]=" + this.select[0].value;
+        this.queryurl = "?statuses[]=" + this.select[0].value;
         for (var i = 1; i < this.select.length; i++) {
-          this.queryurl += "&status[]=" + this.select[i].value;
+          this.queryurl += "&statuses[]=" + this.select[i].value;
         }
       }
       this.getDataList();
