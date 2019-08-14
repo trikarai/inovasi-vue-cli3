@@ -25,15 +25,7 @@
               </v-btn>
             </v-card-title>
             <v-card-text>
-              {{parentData.description}}
-              <br />
-              {{parentData.targetCustomer}}
-              <br />
-              {{parentData.problemConfront}}
-              <br />
-              {{parentData.valueProposed}}
-              <br />
-              {{parentData.revenueModel}}
+              {{parentData.elevatorPitch}}
               <v-divider />
               Initiator : {{parentData.initiator.talent.name}}
             </v-card-text>

@@ -7,17 +7,17 @@
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
               <div>
-                <!-- {{error}} -->
+                <!-- {{params}} -->
                 <v-form v-model="valid" ref="form">
                   <v-text-field
                     label="Idea Name"
                     v-model="params.name"
                     :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
+                    :counter="100"
+                    maxlength="100"
                     required
                   ></v-text-field>
-                  <v-text-field
+                  <!-- <v-text-field
                     label="Target Customer"
                     v-model="params.targetCustomer"
                     :rules="nameRules"
@@ -48,12 +48,12 @@
                     :counter="25"
                     maxlength="25"
                     required
-                  ></v-text-field>
+                  ></v-text-field>-->
                   <v-textarea
                     :auto-grow="grow"
                     counter
                     label="Elevator Pitch"
-                    v-model="params.description"
+                    v-model="params.elevatorPitch"
                   ></v-textarea>
                   <v-layout justify-space-between>
                     <v-btn
@@ -161,60 +161,32 @@ export default {
             "/ideas/" +
             this.data.id
         )
-        .then(
-          res => {
-            console.log(res);
-            this.params = res.data.data;
-          },
-          error => {
-            console.log(error);
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          this.params = res.data.data;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
     addData: function() {
       this.loader = true;
-      this.status.error = false;
+      notif.reset(this);
       net
         .postData(
           this,
           "/talent/as-team-member/" + this.$route.params.teamId + "/ideas",
           this.params
         )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -228,18 +200,17 @@ export default {
           "/talent/as-team-member/" +
             this.$route.params.teamId +
             "/ideas/" +
-            this.data.id + "/update-profile",
+            this.data.id +
+            "/update-profile",
           this.params
         )
         .then(res => {
-          console.log(res);
           this.$emit("refresh");
         })
         .catch(error => {
-          console.log("Log Error : " + error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     }
