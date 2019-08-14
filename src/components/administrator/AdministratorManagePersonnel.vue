@@ -2,7 +2,7 @@
   <div>
     <v-container>
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
-        <v-icon>add</v-icon>{{ $vuetify.t('$vuetify.action.add') }} Personnel
+        <v-icon>add</v-icon>{{ $vuetify.lang.t('$vuetify.action.add') }} Personnel
       </v-btn>
 
       <v-data-table dark :headers="headers" :items="data.list" class="elevation-1">
@@ -10,17 +10,17 @@
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">
             <v-btn @click="openDetail(props.item.id)" small>
-              <v-icon small>search</v-icon>{{ $vuetify.t('$vuetify.action.view') }}
+              <v-icon small>search</v-icon>{{ $vuetify.lang.t('$vuetify.action.view') }}
             </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)"><v-icon small>delete</v-icon> {{ $vuetify.t('$vuetify.action.delete') }}</v-btn>
+            <v-btn small dark color="warning" @click="deleteAct(props.index)"><v-icon small>delete</v-icon> {{ $vuetify.lang.t('$vuetify.action.delete') }}</v-btn>
             <v-expand-transition>
               <div v-show="props.index == selectedIndex">
                 Delete Confirm !
                 <v-btn @click="deleteData(props.item.id)" color="red">
-                  <v-icon></v-icon>{{ $vuetify.t('$vuetify.action.yes') }}
+                  <v-icon></v-icon>{{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
                 <v-btn @click="deleteAct(null)">
-                  <v-icon></v-icon>{{ $vuetify.t('$vuetify.action.cancel') }}
+                  <v-icon></v-icon>{{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>

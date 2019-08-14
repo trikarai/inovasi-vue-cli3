@@ -5,7 +5,7 @@
 
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
-        {{ $vuetify.t('$vuetify.action.add') }} track
+        {{ $vuetify.lang.t('$vuetify.action.add') }} track
       </v-btn>
     
       <v-data-table dark :loading="loader" :headers="headers" :items="track.list" class="elevation-1">
@@ -14,28 +14,28 @@
           <td class="text-xs-right">
             <v-btn small @click="gotoskill(props.item.id)">
               <v-icon small>extension</v-icon>
-              {{ $vuetify.t('$vuetify.profile.skill') }}
+              {{ $vuetify.lang.t('$vuetify.profile.skill') }}
             </v-btn>
           </td>
           <td class="text-xs-right">
             <v-btn @click="openEdit(props.index)" small>
               <v-icon small>edit</v-icon>
-              {{ $vuetify.t('$vuetify.action.edit') }}
+              {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>
             <v-btn small dark color="warning" @click="deleteAct(props.index)">
               <v-icon small>delete</v-icon>
-              {{ $vuetify.t('$vuetify.action.delete') }}
+              {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
               <div v-show="props.index == selectedIndex">
-                {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
+                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
                 <v-btn @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.yes') }}
+                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
                 <v-btn @click="deleteAct(null)">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.cancel') }}
+                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>

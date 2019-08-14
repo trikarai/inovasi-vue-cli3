@@ -4,7 +4,7 @@
     <v-dialog v-model="loader2" :hide-overlay="false" persistent width="300">
       <v-card color="primary" dark>
         <v-card-text>
-          {{ $vuetify.t('$vuetify.info.standby') }}
+          {{ $vuetify.lang.t('$vuetify.info.standby') }}
           <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
         </v-card-text>
       </v-card>
@@ -44,10 +44,10 @@
           <template v-slot:items="props">
             <td>{{ props.item.name }}</td>
             <td>
-              <v-btn small color="primary" round @click="gotoMentorList(props.item.id)">
+              <v-btn small color="primary" rounded @click="gotoMentorList(props.item.id)">
                 <v-icon left small>today</v-icon>Propose
               </v-btn>
-              <v-btn small round @click="viewEvent(props.item.id)">
+              <v-btn small rounded @click="viewEvent(props.item.id)">
                 <v-icon left small>search</v-icon>View
               </v-btn>
             </td>

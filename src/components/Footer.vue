@@ -1,6 +1,6 @@
 <template>
   <v-footer dark height="auto" app>
-    <v-card class="flex" flat tile>
+    <v-card class="flex" text tile>
       <v-card-actions class="grey lighten-3 justify-center">
         <span class="grey--text text--darken-2">
           &copy;2019, <strong>MIKTI - Start</strong> &nbsp;&nbsp;|&nbsp;&nbsp; 

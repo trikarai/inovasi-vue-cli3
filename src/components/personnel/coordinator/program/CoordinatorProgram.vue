@@ -16,7 +16,7 @@
             <td class="text-xs-right">
               <v-btn small @click="openParticipant(props.item.programme.id)">
                 <v-icon small left>people_outline</v-icon>
-                <!-- {{ $vuetify.t('$vuetify.action.view') }} -->
+                <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
                 Participants
               </v-btn>
             </td>

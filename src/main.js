@@ -34,18 +34,25 @@ import customcolors from "@/components/css/customcolor"
 Vue.use(UUID);
 Vue.use(VueResource);
 Vue.use(VueVisible);
-Vue.use(Vuetify, {
+
+const opts = {
   lang: {
-    locales: {en, id},
+    locales: { en, id },
     current: 'en'
   },
-  theme: customcolors
-});
+  theme: {
+    dark: false
+  }
+  // theme: customcolors
+}
+Vue.use(Vuetify)
+
 Vue.config.productionTip = false;
 
 export const app = new Vue({
   router,
   store,
+  vuetify: new Vuetify(opts),
   render: h => h(App)
 }).$mount("#app");
 

@@ -7,7 +7,7 @@
       <v-dialog v-model="loader2" :hide-overlay="false" persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
+            {{ $vuetify.lang.t('$vuetify.info.standby') }}
             <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
           </v-card-text>
         </v-card>
@@ -98,7 +98,7 @@
                 @click="propose()"
                 color="primary"
                 :disabled="!valid"
-              >{{$vuetify.t('$vuetify.action.add')}}</v-btn>
+              >{{$vuetify.lang.t('$vuetify.action.add')}}</v-btn>
               <v-spacer></v-spacer>
               <v-btn small fab color="red" text @click="dialogPropose = false">
                 <v-icon>close</v-icon>
@@ -129,7 +129,7 @@
 
       <v-btn color="primary" @click="gotoMentoringEvent">
         <v-icon left>add</v-icon>
-        {{ $vuetify.t('$vuetify.mentoring.propose') }} Mentoring
+        {{ $vuetify.lang.t('$vuetify.mentoring.propose') }} Mentoring
       </v-btn>
       <v-flex xs12 md4>
         <v-combobox
@@ -172,7 +172,7 @@
             <template v-slot:items="props">
               <td>{{ props.item.startTime }} - {{ props.item.endTime }}</td>
               <td> 
-                <v-btn flat fab small @click="openDetail(props.item.id)">
+                <v-btn text fab small @click="openDetail(props.item.id)">
                   <v-icon small>pageview</v-icon>
                 </v-btn>
                 {{ props.item.mentor.talent.name }}</td>
@@ -187,7 +187,7 @@
               <td class="text-xs-right">
                 <!-- <v-btn small @click="openDetail(props.item.id)">
                   <v-icon small left>pageview</v-icon>
-                  {{ $vuetify.t('$vuetify.action.view') }}
+                  {{ $vuetify.lang.t('$vuetify.action.view') }}
                 </v-btn> -->
 
                 <v-btn
@@ -197,7 +197,7 @@
                   v-if="props.item.status === 'offered'"
                 >
                   <v-icon small left>done</v-icon>
-                  {{ $vuetify.t('$vuetify.mentoring.accept') }}
+                  {{ $vuetify.lang.t('$vuetify.mentoring.accept') }}
                 </v-btn>
 
                 <v-btn
@@ -207,7 +207,7 @@
                   v-if="props.item.status === 'proposed'"
                 >
                   <v-icon small left>history</v-icon>
-                  {{ $vuetify.t('$vuetify.mentoring.reschedule') }}
+                  {{ $vuetify.lang.t('$vuetify.mentoring.reschedule') }}
                 </v-btn>
 
                 <v-btn
@@ -217,33 +217,33 @@
                   v-if="checkCancel(props.item.status)"
                 >
                   <v-icon small left>cancel</v-icon>
-                  {{ $vuetify.t('$vuetify.mentoring.cancel') }}
+                  {{ $vuetify.lang.t('$vuetify.mentoring.cancel') }}
                 </v-btn>
 
                 <v-expand-transition>
                   <div v-if="props.item.id == selectedAcc">
-                    {{ $vuetify.t('$vuetify.mentoring.confirmationtoaccept') }}
+                    {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtoaccept') }}
                     <v-btn @click="acceptMentoring(props.item.id)" color="primary">
                       <v-icon></v-icon>
-                      {{ $vuetify.t('$vuetify.action.yes') }}
+                      {{ $vuetify.lang.t('$vuetify.action.yes') }}
                     </v-btn>
                     <v-btn @click="selectedAcc = null">
                       <v-icon></v-icon>
-                      {{ $vuetify.t('$vuetify.action.cancel') }}
+                      {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                     </v-btn>
                   </div>
                 </v-expand-transition>
 
                 <v-scale-transition>
                   <div v-if="props.item.id == selectedCan">
-                    {{ $vuetify.t('$vuetify.mentoring.confirmationtocancel') }}
+                    {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtocancel') }}
                     <v-btn @click="cancelMentoring(props.item.id)" color="red">
                       <v-icon></v-icon>
-                      {{ $vuetify.t('$vuetify.action.yes') }}
+                      {{ $vuetify.lang.t('$vuetify.action.yes') }}
                     </v-btn>
                     <v-btn @click="selectedCan = null">
                       <v-icon></v-icon>
-                      {{ $vuetify.t('$vuetify.action.cancel') }}
+                      {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                     </v-btn>
                   </div>
                 </v-scale-transition>
@@ -292,29 +292,29 @@
               <v-card-actions>
                 <v-fade-transition>
                   <div v-if="data.id == selectedAcc">
-                    {{ $vuetify.t('$vuetify.mentoring.confirmationtoaccept') }}
+                    {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtoaccept') }}
                     <br />
                     <v-btn @click="acceptMentoring(data.id)" color="primary">
                       <v-icon></v-icon>
-                      {{ $vuetify.t('$vuetify.action.yes') }}
+                      {{ $vuetify.lang.t('$vuetify.action.yes') }}
                     </v-btn>
                     <v-btn @click="selectedAcc = null">
                       <v-icon></v-icon>
-                      {{ $vuetify.t('$vuetify.action.cancel') }}
+                      {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                     </v-btn>
                   </div>
                 </v-fade-transition>
                 <v-scale-transition>
                   <div v-if="data.id == selectedCan">
-                    {{ $vuetify.t('$vuetify.mentoring.confirmationtocancel') }}
+                    {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtocancel') }}
                     <br />
                     <v-btn @click="cancelMentoring(data.id)" color="red">
                       <v-icon></v-icon>
-                      {{ $vuetify.t('$vuetify.action.yes') }}
+                      {{ $vuetify.lang.t('$vuetify.action.yes') }}
                     </v-btn>
                     <v-btn @click="selectedCan = null">
                       <v-icon></v-icon>
-                      {{ $vuetify.t('$vuetify.action.cancel') }}
+                      {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                     </v-btn>
                   </div>
                 </v-scale-transition>

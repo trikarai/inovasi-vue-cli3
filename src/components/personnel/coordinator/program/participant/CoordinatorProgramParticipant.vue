@@ -7,7 +7,7 @@
         <v-dialog v-model="loader2" hide-overlay persistent width="300">
           <v-card color="primary">
             <v-card-text>
-              {{ $vuetify.t('$vuetify.info.standby') }}
+              {{ $vuetify.lang.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -54,7 +54,7 @@
               >
                 <v-icon small>block</v-icon>Expell
               </v-btn>
-              <v-btn round small @click.stop="openDetail(props.item.id)">
+              <v-btn rounded small @click.stop="openDetail(props.item.id)">
                 <v-icon small>search</v-icon>
               </v-btn>
 
@@ -122,7 +122,7 @@
               <v-divider></v-divider>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red" flat @click="dialog = false">
+                <v-btn color="red" text @click="dialog = false">
                   <v-icon>close</v-icon>Close
                 </v-btn>
               </v-card-actions>

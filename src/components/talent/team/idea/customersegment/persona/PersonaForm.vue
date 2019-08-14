@@ -48,12 +48,12 @@
                       v-if="params.formId"
                       @click.prevent="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
-                    >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
+                    >{{ $vuetify.lang.t('$vuetify.action.add')}}</v-btn>
 
                     <v-dialog v-model="loader" hide-overlay persistent width="300">
                       <v-card color="primary" dark>
                         <v-card-text>
-                          {{ $vuetify.t('$vuetify.info.standby')}}
+                          {{ $vuetify.lang.t('$vuetify.info.standby')}}
                           <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
                         </v-card-text>
                       </v-card>

@@ -28,7 +28,7 @@
                       :rules="[passwordRules.required, passwordRules.min]"
                       :type="show1 ? 'text' : 'password'"
                       name="New Password"
-                      :label="$vuetify.t('$vuetify.profile.newPassword')"
+                      :label="$vuetify.lang.t('$vuetify.profile.newPassword')"
                       hint="At least 8 characters"
                       counter
                       @click:append="show1 = !show1"
@@ -39,7 +39,7 @@
                       :rules="passwordConfirmationRules"
                       :type="show2 ? 'text' : 'password'"
                       name="Confirm New Password"
-                      :label="$vuetify.t('$vuetify.profile.confirmPassword')"
+                      :label="$vuetify.lang.t('$vuetify.profile.confirmPassword')"
                       hint="At least 8 characters"
                       counter
                       @click:append="show2 = !show2"

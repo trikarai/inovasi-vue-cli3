@@ -7,7 +7,7 @@
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary" dark>
             <v-card-text>
-              {{ $vuetify.t('$vuetify.info.standby') }}
+              {{ $vuetify.lang.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -71,7 +71,7 @@
                     v-if="props.item.status == 'proposed'"
                   >
                     <v-icon small left>done</v-icon>
-                    {{ $vuetify.t('$vuetify.mentoring.accept') }}
+                    {{ $vuetify.lang.t('$vuetify.mentoring.accept') }}
                   </v-btn>
 
                   <v-btn
@@ -81,7 +81,7 @@
                     v-if="props.item.status == 'proposed'"
                   >
                     <v-icon small left>history</v-icon>
-                    {{ $vuetify.t('$vuetify.mentoring.offer') }}
+                    {{ $vuetify.lang.t('$vuetify.mentoring.offer') }}
                   </v-btn>
 
                   <v-btn
@@ -91,7 +91,7 @@
                     v-if="props.item.status == 'proposed'"
                   >
                     <v-icon small left>cancel</v-icon>
-                    {{ $vuetify.t('$vuetify.mentoring.reject') }}
+                    {{ $vuetify.lang.t('$vuetify.mentoring.reject') }}
                   </v-btn>
                 </td>
               </template>

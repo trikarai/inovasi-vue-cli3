@@ -2,7 +2,7 @@
   <div style="padding-top: 20px">
     <!-- <button @click="setLang('en')">EN</button> - 
     <button @click="setLang('id')">ID</button>-->
-    <v-select v-model="$vuetify.lang.current" flat label="Language" :items="items" item-text="name" item-value="value"></v-select>
+    <v-select v-model="$vuetify.lang.current" text label="Language" :items="items" item-text="name" item-value="value"></v-select>
   </div>
 </template>
 

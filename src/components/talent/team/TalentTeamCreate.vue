@@ -6,7 +6,7 @@
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary">
             <v-card-text>
-              {{ $vuetify.t('$vuetify.info.standby') }}
+              {{ $vuetify.lang.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -21,7 +21,7 @@
                   v-model="params.name"
                   :rules="nameRules"
                   :counter="25"
-                  :label="$vuetify.t('$vuetify.team.teamName')"
+                  :label="$vuetify.lang.t('$vuetify.team.teamName')"
                   required
                 ></v-text-field>
               </v-flex>
@@ -30,7 +30,7 @@
                   position="absolute"
                   v-model="params.position"
                   :counter="25"
-                  :label="$vuetify.t('$vuetify.team.position')"
+                  :label="$vuetify.lang.t('$vuetify.team.position')"
                   required
                 ></v-text-field>
               </v-flex> -->
@@ -41,11 +41,11 @@
                     v-model="params.position"
                     :items="item"
                     chips
-                    :label="$vuetify.t('$vuetify.team.position')"
+                    :label="$vuetify.lang.t('$vuetify.team.position')"
                   ></v-combobox>
                 </v-flex>
               <v-flex>
-                <!-- {{ $vuetify.t('$vuetify.team.vision')}}
+                <!-- {{ $vuetify.lang.t('$vuetify.team.vision')}}
                 <tiptap-vuetify
                   placeholder="Vision"
                   v-model="params.vision"
@@ -53,32 +53,32 @@
                 />-->
                 <v-textarea
                   v-model="params.vision"
-                  :label="$vuetify.t('$vuetify.team.vision')"
-                  :placeholder="$vuetify.t('$vuetify.team.vision')"
+                  :label="$vuetify.lang.t('$vuetify.team.vision')"
+                  :placeholder="$vuetify.lang.t('$vuetify.team.vision')"
                   counter
                 ></v-textarea>
               </v-flex>
               <v-flex>
                 <v-textarea
                   v-model="params.mission"
-                  :label="$vuetify.t('$vuetify.team.mission')"
-                  :placeholder="$vuetify.t('$vuetify.team.mission')"
+                  :label="$vuetify.lang.t('$vuetify.team.mission')"
+                  :placeholder="$vuetify.lang.t('$vuetify.team.mission')"
                   counter
                 ></v-textarea>
               </v-flex>
               <v-flex>
                 <v-textarea
                   v-model="params.culture"
-                  :label="$vuetify.t('$vuetify.team.culture')"
-                  :placeholder="$vuetify.t('$vuetify.team.culture')"
+                  :label="$vuetify.lang.t('$vuetify.team.culture')"
+                  :placeholder="$vuetify.lang.t('$vuetify.team.culture')"
                   counter
                 ></v-textarea>
               </v-flex>
               <v-flex sm4>
                 <v-textarea
                   v-model="params.founderAgreement"
-                  :label="$vuetify.t('$vuetify.team.founderAgreement')"
-                  :placeholder="$vuetify.t('$vuetify.team.founderAgreement')"
+                  :label="$vuetify.lang.t('$vuetify.team.founderAgreement')"
+                  :placeholder="$vuetify.lang.t('$vuetify.team.founderAgreement')"
                   counter
                 ></v-textarea>
               </v-flex>
@@ -88,11 +88,11 @@
             <v-btn
               @click.prevent="validateTeam"
               :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
-            >{{ $vuetify.t('$vuetify.action.create')}} {{ $vuetify.t('$vuetify.team.team')}}</v-btn>
+            >{{ $vuetify.lang.t('$vuetify.action.create')}} {{ $vuetify.lang.t('$vuetify.team.team')}}</v-btn>
             <v-dialog v-model="loader" hide-overlay persistent width="300">
               <v-card color="primary" dark>
                 <v-card-text>
-                  {{ $vuetify.t('$vuetify.info.standby')}}
+                  {{ $vuetify.lang.t('$vuetify.info.standby')}}
                   <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
                 </v-card-text>
               </v-card>

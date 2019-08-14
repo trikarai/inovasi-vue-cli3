@@ -6,7 +6,7 @@
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary" dark>
             <v-card-text>
-              {{ $vuetify.t('$vuetify.info.standby') }}
+              {{ $vuetify.lang.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -21,34 +21,34 @@
                   outline
                   color="accent"
                   @click="editProfile()"
-                >{{ $vuetify.t('$vuetify.action.edit') }} {{ $vuetify.t('$vuetify.profile.profile')}}</v-btn>
+                >{{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.profile.profile')}}</v-btn>
                 <v-btn
                   outline
                   color="accent"
                   @click="editPassword()"
-                >{{ $vuetify.t('$vuetify.action.edit') }} {{ $vuetify.t('$vuetify.profile.password')}}</v-btn>
+                >{{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.profile.password')}}</v-btn>
               </v-card-actions>
             </v-sheet>
             <v-card-title primary-title>
               <div>
                 <h3 class="headline mb-0">{{data.name}}</h3>
                 <div>
-                  <span class="subheading">{{ $vuetify.t('$vuetify.profile.username')}}</span> :
+                  <span class="subheading">{{ $vuetify.lang.t('$vuetify.profile.username')}}</span> :
                   <span class="body-2">{{data.username}}</span>
                   <br>
-                  <span class="subheading">{{ $vuetify.t('$vuetify.profile.email')}}</span> :
+                  <span class="subheading">{{ $vuetify.lang.t('$vuetify.profile.email')}}</span> :
                   <span class="body-2">{{data.email}}</span>
                   <br>
-                  <span class="subheading">{{ $vuetify.t('$vuetify.profile.phone')}}</span> :
+                  <span class="subheading">{{ $vuetify.lang.t('$vuetify.profile.phone')}}</span> :
                   <span class="body-2">{{data.phone}}</span>
                   <br>
-                  <span class="subheading">{{ $vuetify.t('$vuetify.profile.cityOfOrigin')}}</span> :
+                  <span class="subheading">{{ $vuetify.lang.t('$vuetify.profile.cityOfOrigin')}}</span> :
                   <span class="body-2">{{data.cityOfOrigin}}</span>
                   <br>
-                  <span class="subheading">{{ $vuetify.t('$vuetify.profile.birthDate')}}</span> :
+                  <span class="subheading">{{ $vuetify.lang.t('$vuetify.profile.birthDate')}}</span> :
                   <span class="body-2">{{data.birthDate}}</span>
                   <br>
-                  <span class="subheading">{{ $vuetify.t('$vuetify.profile.gender')}}</span> :
+                  <span class="subheading">{{ $vuetify.lang.t('$vuetify.profile.gender')}}</span> :
                   <span class="body-2">{{data.gender.value}}</span>
                   <br>
                 </div>

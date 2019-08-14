@@ -5,7 +5,7 @@
     <v-dialog v-model="loader2" :hide-overlay="false" persistent width="300">
       <v-card color="primary" dark>
         <v-card-text>
-          {{ $vuetify.t('$vuetify.info.standby') }}
+          {{ $vuetify.lang.t('$vuetify.info.standby') }}
           <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
         </v-card-text>
       </v-card>
@@ -101,7 +101,7 @@
               @click="propose()"
               color="primary"
               :disabled="!valid"
-            >{{$vuetify.t('$vuetify.action.add')}}</v-btn>
+            >{{$vuetify.lang.t('$vuetify.action.add')}}</v-btn>
             <v-spacer></v-spacer>
             <v-btn small fab color="red" text @click="dialogPropose = false">
               <v-icon>close</v-icon>
@@ -126,10 +126,10 @@
           <template v-slot:items="props">
             <td>{{ props.item.talent.name }}</td>
             <td>
-              <v-btn small color="primary" round @click="proposeMentoring(props.item.id)">
+              <v-btn small color="primary" rounded @click="proposeMentoring(props.item.id)">
                 <v-icon left small>today</v-icon>Propose
               </v-btn>
-              <v-btn small round @click="gotomentorsession(props.item.id)">
+              <v-btn small rounded @click="gotomentorsession(props.item.id)">
                 <v-icon left small>search</v-icon>View Schedule
               </v-btn>
             </td>

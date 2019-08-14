@@ -43,7 +43,7 @@
           <td class="text-xs-right">
             <v-btn @click="openDetail(props.index)" small>
               <v-icon small>add</v-icon>
-              <!-- {{ $vuetify.t('$vuetify.action.add') }} -->
+              <!-- {{ $vuetify.lang.t('$vuetify.action.add') }} -->
               Assign
             </v-btn>
           </td>

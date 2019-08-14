@@ -6,7 +6,7 @@
       <transition name="fade">
         <v-btn @click="openAdd()" color="blue" style="left: -8px" v-if="!optionShow">
           <v-icon>add</v-icon>
-          {{ $vuetify.t('$vuetify.action.add') }} Field
+          {{ $vuetify.lang.t('$vuetify.action.add') }} Field
         </v-btn>
       </transition>
 
@@ -30,23 +30,23 @@
           <td class="text-xs-right" v-visible="!optionShow">
             <v-btn @click="openEdit(props.item.id)" small>
               <v-icon small>edit</v-icon>
-              {{ $vuetify.t('$vuetify.action.edit') }}
+              {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>
             <v-btn small dark color="warning" @click="deleteAct(props.item.id)" v-show="!optionShow">
               <v-icon small>delete</v-icon>
-              {{ $vuetify.t('$vuetify.action.delete') }}
+              {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
 
             <v-expand-transition>
               <div v-show="props.item.id == selectedIndex">
-                {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
+                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
                 <v-btn @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.yes') }}
+                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
                 <v-btn @click="deleteAct(null)">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.cancel') }}
+                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>

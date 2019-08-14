@@ -6,7 +6,7 @@
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary" dark>
             <v-card-text>
-              {{ $vuetify.t('$vuetify.info.standby') }}
+              {{ $vuetify.lang.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -16,7 +16,7 @@
       <v-layout class="atastop" wrap>
         <v-flex xs12 md5>
           <v-card class="taitel primary white--text elevation-5">
-            <h3 class="headline mb-0 font-weight-light">{{ $vuetify.t('$vuetify.profile.profileInformation') }}</h3>
+            <h3 class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.profile.profileInformation') }}</h3>
           </v-card>
           <v-card style="padding:90px 50px 50px 50px">
             <v-form v-model="valid" ref="form">
@@ -24,7 +24,7 @@
                  
                   <v-text-field
                     :disabled="true"
-                    :label="$vuetify.t('$vuetify.profile.username')"
+                    :label="$vuetify.lang.t('$vuetify.profile.username')"
                     v-model="data.username"
                     :rules="nameRules"
                     :counter="25"
@@ -33,7 +33,7 @@
                   ></v-text-field>
                   <v-text-field
                     :disabled="view"
-                    :label="$vuetify.t('$vuetify.profile.name')"
+                    :label="$vuetify.lang.t('$vuetify.profile.name')"
                     v-model="data.name"
                     :rules="nameRules"
                     :counter="25"
@@ -42,20 +42,20 @@
                   ></v-text-field>
                   <v-text-field
                     :disabled="view"
-                    :label="$vuetify.t('$vuetify.profile.email')"
+                    :label="$vuetify.lang.t('$vuetify.profile.email')"
                     :rules="emailRules"
                     v-model="data.email"
                     required
                   ></v-text-field>
                   <v-text-field
                     :disabled="view"
-                    :label="$vuetify.t('$vuetify.profile.phone')"
+                    :label="$vuetify.lang.t('$vuetify.profile.phone')"
                     v-model="data.phone"
                     required
                   ></v-text-field>
                   <v-text-field
                     :disabled="view"
-                    :label="$vuetify.t('$vuetify.profile.cityOfOrigin')"
+                    :label="$vuetify.lang.t('$vuetify.profile.cityOfOrigin')"
                     v-model="data.cityOfOrigin"
                     required
                   ></v-text-field>
@@ -73,7 +73,7 @@
                       <template v-slot:activator="{ on }">
                         <v-text-field
                           v-model="data.birthDate"
-                          :label="$vuetify.t('$vuetify.profile.birthDate')"
+                          :label="$vuetify.lang.t('$vuetify.profile.birthDate')"
                           prepend-icon="cake"
                           readonly
                           v-on="on"
@@ -88,7 +88,7 @@
                   </v-flex>
                   <v-autocomplete
                     v-model="data.gender"
-                    :label="$vuetify.t('$vuetify.profile.gender')"
+                    :label="$vuetify.lang.t('$vuetify.profile.gender')"
                     :items="type"
                     item-text="name"
                     item-value="value"
@@ -102,14 +102,14 @@
                   :class=" { 'primary white--text' : valid}"
                   :disabled="!valid"
                   block
-                >{{$vuetify.t('$vuetify.action.update')}} {{$vuetify.t('$vuetify.profile.profile')}}</v-btn>
+                >{{$vuetify.lang.t('$vuetify.action.update')}} {{$vuetify.lang.t('$vuetify.profile.profile')}}</v-btn>
               </v-card-actions>
             </v-form>
           </v-card>
         </v-flex>
         <v-flex xs12 md5>
           <v-card class="taitel primary white--text elevation-5">
-            <h3 class="headline mb-0 font-weight-light">{{$vuetify.t('$vuetify.action.change')}} {{ $vuetify.t('$vuetify.profile.password') }}</h3>
+            <h3 class="headline mb-0 font-weight-light">{{$vuetify.lang.t('$vuetify.action.change')}} {{ $vuetify.lang.t('$vuetify.profile.password') }}</h3>
           </v-card>
           <v-card style="padding:68px 50px 50px 50px">
             <v-form v-model="valid2" ref="form2">
@@ -121,7 +121,7 @@
                     name="Previous Password"
                     :rules="passwordRules"
                     autocomplete="current-password"
-                    :label="$vuetify.t('$vuetify.profile.previousPassword')"
+                    :label="$vuetify.lang.t('$vuetify.profile.previousPassword')"
                     hint="At least 8 characters"
                     counter
                     @click:append="show1 = !show1"
@@ -133,7 +133,7 @@
                     name="New Password"
                     :rules="passwordRules"
                     autocomplete="new-password"
-                    :label="$vuetify.t('$vuetify.profile.newPassword')"
+                    :label="$vuetify.lang.t('$vuetify.profile.newPassword')"
                     hint="At least 8 characters"
                     counter
                     @click:append="show2 = !show2"
@@ -158,7 +158,7 @@
                   :class=" { 'primary white--text' : valid2}"
                   :disabled="!valid2"
                   block
-                >{{$vuetify.t('$vuetify.action.update')}} {{$vuetify.t('$vuetify.profile.password')}}</v-btn>
+                >{{$vuetify.lang.t('$vuetify.action.update')}} {{$vuetify.lang.t('$vuetify.profile.password')}}</v-btn>
               </v-card-actions>
             </v-form>
           </v-card>

@@ -6,7 +6,7 @@
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary" dark>
             <v-card-text>
-              {{ $vuetify.t('$vuetify.info.standby') }}
+              {{ $vuetify.lang.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -18,7 +18,7 @@
             <td class="text-xs-right">
               <v-btn small @click="gotoMentoring(props.item.id)">
                 <v-icon small left>today</v-icon>
-                <!-- {{ $vuetify.t('$vuetify.action.view') }} -->
+                <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
                 Mentoring
               </v-btn>
             </td>

@@ -6,8 +6,8 @@
           <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card style="padding:0px 30px 0px 30px" class="mt-5" elevation="0" width="400">
             <v-card class="taitel primary white--text elevation-5">
-              <h3 v-if="edit" class="headline mb-0 font-weight-light">{{ $vuetify.t('$vuetify.action.edit') }} Education</h3>
-              <h3 v-if="!edit" class="headline mb-0 font-weight-light">{{ $vuetify.t('$vuetify.action.add') }} Education</h3>    
+              <h3 v-if="edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.edit') }} Education</h3>
+              <h3 v-if="!edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.add') }} Education</h3>    
             </v-card>
             <v-card-text class="pt-0">
               <div>
@@ -38,7 +38,7 @@
                       :class=" { 'primary white--text' : valid}"
                       :disabled="!valid"
                       block
-                    >{{ $vuetify.t('$vuetify.action.add')}}</v-btn>
+                    >{{ $vuetify.lang.t('$vuetify.action.add')}}</v-btn>
 
                     <v-btn
                       v-else
@@ -46,12 +46,12 @@
                       :class=" { 'primary white--text' : valid}"
                       :disabled="!valid"
                       block
-                    >{{ $vuetify.t('$vuetify.action.update')}}</v-btn>
+                    >{{ $vuetify.lang.t('$vuetify.action.update')}}</v-btn>
 
                     <v-dialog v-model="loader" hide-overlay persistent width="300">
                       <v-card color="primary" dark>
                         <v-card-text>
-                          {{ $vuetify.t('$vuetify.info.standby')}}
+                          {{ $vuetify.lang.t('$vuetify.info.standby')}}
                           <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
                         </v-card-text>
                       </v-card>

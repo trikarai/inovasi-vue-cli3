@@ -5,7 +5,7 @@
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
-            {{ $vuetify.t('$vuetify.info.standby') }}
+            {{ $vuetify.lang.t('$vuetify.info.standby') }}
             <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
           </v-card-text>
         </v-card>
@@ -34,38 +34,38 @@
         <v-flex xs12 md6>
           <v-list subheader style="margin:10px">
             <v-subheader>Customer Segments</v-subheader>
-            <v-list-tile v-for="(item, index) in data.list" :key="item.id">
-              <v-list-tile-avatar>
-                <v-btn fab flat @click="openDetail(item.id)">
+            <v-list-item v-for="(item, index) in data.list" :key="item.id">
+              <v-list-item-avatar>
+                <v-btn fab text @click="openDetail(item.id)">
                   <v-icon>pageview</v-icon>
                 </v-btn>
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>{{item.name}}</v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-btn flat @click="deleteAct(index)" small>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{item.name}}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn text @click="deleteAct(index)" small>
                   <v-icon color="warning">delete</v-icon>
                 </v-btn>
-              </v-list-tile-action>
+              </v-list-item-action>
               <v-scale-transition>
                 <div v-show="index == selectedIndex">
-                  <!-- {{ $vuetify.t('$vuetify.action.confirmationtodelete') }} -->
+                  <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }} -->
                   <v-btn @click="deleteData(item.id)" color="red">
                     <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.yes') }}
+                    {{ $vuetify.lang.t('$vuetify.action.yes') }}
                   </v-btn>
                   <v-btn @click="deleteAct(null)">
                     <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.cancel') }}
+                    {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                   </v-btn>
                 </div>
               </v-scale-transition>
-            </v-list-tile>
+            </v-list-item>
           </v-list>
           <v-btn color="primary" @click="openAdd">
             <v-icon>add</v-icon>
-            {{$vuetify.t("$vuetify.action.add")}}
+            {{$vuetify.lang.t("$vuetify.action.add")}}
           </v-btn>
         </v-flex>
       </v-layout>

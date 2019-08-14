@@ -11,41 +11,40 @@
       <!-- <v-toolbar-title color="red">MIKTI - Start</v-toolbar-title> -->
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
-        <v-btn class="font-weight-light" flat disabled>Beranda</v-btn>
-        <v-btn class="font-weight-light" flat router to="/signup">Daftar</v-btn>
-        <!-- <v-btn class="font-weight-light" flat router to="/signup">{{ $vuetify.t('$vuetify.action.signup')}}</v-btn> -->
-        <v-btn class="font-weight-light" flat router to="/login">Login</v-btn>
+        <v-btn class="font-weight-light" text disabled>Beranda</v-btn>
+        <v-btn class="font-weight-light" text router to="/signup">Daftar</v-btn>
+        <v-btn class="font-weight-light" text router to="/login">Login</v-btn>
         <!-- <button @click="setLang('en')">EN</button>  <button @click="setLang('id')">ID</button> -->
       </v-toolbar-items>
-      <v-toolbar-side-icon class="hidden-sm-and-up" light @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-app-bar-nav-icon class="hidden-sm-and-up" light @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-toolbar>
 
     <v-navigation-drawer v-model="drawer" temporary right fixed width="150">
       <v-list class="pa-1">
-        <v-list-tile avatar>
-          <v-list-tile-content>
-            <v-list-tile-title class="title">Menu</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        <v-list-item avatar>
+          <v-list-item-content>
+            <v-list-item-title class="title">Menu</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
       <v-list class="pt-0" dense>
         <v-divider class="mt-0"></v-divider>
 
-        <v-list-tile
+        <v-list-item
           v-for="item in items"
           :key="item.title"
           route
           :to="item.to"
           :disabled="item.disabled"
         >
-          <v-list-tile-action>
+          <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
+          </v-list-item-action>
 
-          <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -119,7 +118,7 @@
             <v-container grid-list-xl>
               <v-layout row wrap align-center>
                 <v-flex xs12 md4>
-                  <v-card flat class="transparent">
+                  <v-card text class="transparent">
                     <v-card-text>
                       <v-img
                         style="margin:0 auto !important"
@@ -137,7 +136,7 @@
                   </v-card>
                 </v-flex>
                 <v-flex xs12 md4>
-                  <v-card flat class="transparent">
+                  <v-card text class="transparent">
                     <v-card-text class="text-center">
                       <v-img
                         style="margin:0 auto !important"
@@ -155,7 +154,7 @@
                   </v-card>
                 </v-flex>
                 <v-flex xs12 md4>
-                  <v-card flat class="transparent">
+                  <v-card text class="transparent">
                     <v-card-text class="text-center">
                       <v-img
                         style="margin:0 auto !important"
@@ -182,7 +181,7 @@
         <v-container>
           <v-layout row wrap align-center>
             <v-flex xs12 md8>
-              <v-card flat class="transparent">
+              <v-card text class="transparent">
                 <v-card-text class="title text-center">
                   <h2 class="font-weight-light">AYO, Segera Daftarkan STARTUP-mu Sekarang, GRATIS !</h2>
                 </v-card-text>
@@ -194,7 +193,7 @@
               </v-card-text>
             </v-flex>
             <v-flex xs12 md2>
-              <v-card flat class="transparent text-center">
+              <v-card text class="transparent text-center">
                 <v-btn color="blue lighten-2" dark router to="/signup">Daftar disini !</v-btn>
               </v-card>
             </v-flex>
@@ -219,7 +218,7 @@
             <v-carousel-item v-for="(data, i) in mentor" :key="i">
               <v-layout align-center justify-center wrap fill-height>
                 <v-flex xs12 md3 v-for="(data, i) in data.groups" :key="i">
-                  <v-card flat class="transparent">
+                  <v-card text class="transparent">
                     <v-card-text>
                       <v-img style="margin:0 auto !important" :src="data.photo" max-width="150px"></v-img>
                     </v-card-text>

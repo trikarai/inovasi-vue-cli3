@@ -5,7 +5,7 @@
       <!-- {{res}}<br> -->
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
-        {{ $vuetify.t('$vuetify.action.add') }} {{ $vuetify.t('$vuetify.personnel.coordinator') }}
+        {{ $vuetify.lang.t('$vuetify.action.add') }} {{ $vuetify.lang.t('$vuetify.personnel.coordinator') }}
       </v-btn>
 
       <v-data-table
@@ -20,22 +20,22 @@
           <td class="text-xs-right">
             <v-btn @click="openDetail(props.index)" small>
               <v-icon small>search</v-icon>
-              {{ $vuetify.t('$vuetify.action.view') }}
+              {{ $vuetify.lang.t('$vuetify.action.view') }}
             </v-btn>
             <v-btn small dark color="warning" @click="deleteAct(props.index)">
               <v-icon small>delete</v-icon>
-              {{ $vuetify.t('$vuetify.action.delete') }}
+              {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
               <div v-show="props.index == selectedIndex">
-                {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
+                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
                 <v-btn @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.yes') }}
+                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
                 <v-btn @click="deleteAct(null)">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.cancel') }}
+                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>

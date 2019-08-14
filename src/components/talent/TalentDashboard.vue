@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <dashboard-stepper />
+    <!-- <dashboard-stepper /> -->
 
   </div>
 </template>

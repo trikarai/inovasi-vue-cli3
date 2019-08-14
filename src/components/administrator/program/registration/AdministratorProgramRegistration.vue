@@ -4,7 +4,7 @@
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
-        {{ $vuetify.t('$vuetify.action.add') }} Registration
+        {{ $vuetify.lang.t('$vuetify.action.add') }} Registration
       </v-btn>
 
       <v-data-table
@@ -19,26 +19,26 @@
           <td class="text-xs-right">
             <v-btn @click="openEdit(props.index)" small>
               <v-icon small>edit</v-icon>
-              {{ $vuetify.t('$vuetify.action.edit') }}
+              {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>
             <!-- <v-btn @click="openDetail(props.item.id)" small>
               <v-icon small>pageview</v-icon> 
-              {{ $vuetify.t('$vuetify.action.view') }}
+              {{ $vuetify.lang.t('$vuetify.action.view') }}
             </v-btn>-->
             <v-btn small dark color="warning" @click="deleteAct(props.item.id)">
               <v-icon small>delete</v-icon>
-              {{ $vuetify.t('$vuetify.action.delete') }}
+              {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
               <div v-show="props.item.id == selectedIndex">
-                {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
+                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
                 <v-btn @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.yes') }}
+                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
                 <v-btn @click="deleteAct(null)">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.cancel') }}
+                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>

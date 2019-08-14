@@ -4,7 +4,7 @@
     <v-dialog v-model="loader2" :hide-overlay="false" persistent width="300">
       <v-card color="primary" dark>
         <v-card-text>
-          {{ $vuetify.t('$vuetify.info.standby') }}
+          {{ $vuetify.lang.t('$vuetify.info.standby') }}
           <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
         </v-card-text>
       </v-card>
@@ -34,7 +34,7 @@
                       v-html="event.status"
                     ></div>
                   </template>
-                  <v-card color="grey lighten-4" min-width="350px" flat>
+                  <v-card color="grey lighten-4" min-width="350px" text>
                     <v-toolbar color="primary" dark>
                       <v-btn icon>
                         <v-icon>edit</v-icon>
@@ -52,7 +52,7 @@
                       <span v-html="event.title"></span>
                     </v-card-title>
                     <v-card-actions>
-                      <v-btn flat color="secondary">Cancel</v-btn>
+                      <v-btn text color="secondary">Cancel</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-menu>

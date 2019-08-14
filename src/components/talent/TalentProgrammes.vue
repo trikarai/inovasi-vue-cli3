@@ -6,7 +6,7 @@
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary">
             <v-card-text>
-              {{ $vuetify.t('$vuetify.info.standby') }}
+              {{ $vuetify.lang.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -20,13 +20,13 @@
             <td>
               <v-btn small color="primary" v-if="isTeam" @click="registerProgram(props.item.id)">
                 <v-icon small left>how_to_reg</v-icon>
-                {{ $vuetify.t("$vuetify.action.register") }}
+                {{ $vuetify.lang.t("$vuetify.action.register") }}
               </v-btn>
             </td>
             <td class="text-xs-right">
               <v-btn small @click="openDetail(props.index)">
                 <v-icon small left>search</v-icon>
-                {{ $vuetify.t("$vuetify.action.view") }}
+                {{ $vuetify.lang.t("$vuetify.action.view") }}
               </v-btn>
             </td>
           </template>

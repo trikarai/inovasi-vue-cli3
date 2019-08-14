@@ -63,7 +63,7 @@
                     v-model="position"
                     :items="item"
                     chips
-                    :label="$vuetify.t('$vuetify.team.position')"
+                    :label="$vuetify.lang.t('$vuetify.team.position')"
                   ></v-combobox>
                 </v-flex>
               </v-layout>

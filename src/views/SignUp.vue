@@ -100,7 +100,7 @@
                           <v-text-field
                             v-model="params.birthDate"
                             autocomplete="bday"
-                            :label="$vuetify.t('$vuetify.profile.birthDate')"
+                            :label="$vuetify.lang.t('$vuetify.profile.birthDate')"
                             prepend-icon="cake"
                             readonly
                             v-on="on"
@@ -157,12 +157,12 @@
                         color="#e4e4e4"
                         style="color:#fff"
                       >DAFTAR</v-btn>
-                      <!-- >{{ $vuetify.t('$vuetify.info.signup')}}</v-btn> -->
+                      <!-- >{{ $vuetify.lang.t('$vuetify.info.signup')}}</v-btn> -->
 
                       <v-dialog v-model="loader" hide-overlay persistent width="300">
                         <v-card color="primary" dark>
                           <v-card-text>
-                            {{ $vuetify.t('$vuetify.info.standby')}}
+                            {{ $vuetify.lang.t('$vuetify.info.standby')}}
                             <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
                           </v-card-text>
                         </v-card>

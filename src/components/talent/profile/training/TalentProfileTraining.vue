@@ -4,7 +4,7 @@
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-btn dark @click="openAdd()" color="primary" style="left: -8px">
         <v-icon>add</v-icon>
-        {{ $vuetify.t('$vuetify.action.add') }} Training Experiences
+        {{ $vuetify.lang.t('$vuetify.action.add') }} Training Experiences
       </v-btn>
 
       <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1 mt-1">
@@ -13,24 +13,24 @@
           <td class="text-xs-right">
             <v-btn @click="openEdit(props.index)" small>
               <v-icon small>edit</v-icon>
-              {{ $vuetify.t('$vuetify.action.edit') }}
+              {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>
             <v-btn small color="warning" @click="deleteAct(props.index)">
               <v-icon small>delete</v-icon>
-              {{ $vuetify.t('$vuetify.action.delete') }}
+              {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
               <div v-show="props.index == selectedIndex">
                 <div>
-                   <v-icon>warning</v-icon> <span> {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}</span>
+                   <v-icon>warning</v-icon> <span> {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
                 </div>
-                <v-btn dark flat @click="deleteData(props.item.id)" color="red">
+                <v-btn dark text @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.yes') }}
+                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn flat @click="deleteAct(null)">
+                <v-btn text @click="deleteAct(null)">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.cancel') }}
+                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>

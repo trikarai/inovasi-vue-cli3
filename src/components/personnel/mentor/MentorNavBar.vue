@@ -1,9 +1,9 @@
 <template>
   <nav>
-    <v-toolbar flat app color="primary">
-      <v-toolbar-side-icon class="white--text" @click="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar text app color="primary">
+      <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
       <!-- <v-toolbar fixed app :clipped-left="clipped" dark color="primary">
-        <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
+        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
         <v-btn icon @click.stop="miniVariant = !miniVariant">
           <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
         </v-btn>
@@ -16,11 +16,11 @@
         <span class>Mikti</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <!-- <v-btn flat @click="logout" v-if="checkLogin">
-        <span>{{ $vuetify.t('$vuetify.action.signout') }}</span>
+      <!-- <v-btn text @click="logout" v-if="checkLogin">
+        <span>{{ $vuetify.lang.t('$vuetify.action.signout') }}</span>
         <v-icon right>exit_to_app</v-icon>
       </v-btn>-->
-      <v-btn flat @click="rightDrawer =! rightDrawer">
+      <v-btn text @click="rightDrawer =! rightDrawer">
         <v-icon>settings</v-icon>
       </v-btn>
     </v-toolbar>
@@ -32,113 +32,113 @@
     <v-navigation-drawer app v-model="drawer" :mini-variant.sync="miniVariant">
       <!-- list head-->
       <v-list class="pa-1">
-        <v-list-tile v-if="miniVariant" @click.stop="miniVariant = !miniVariant">
-          <v-list-tile-action>
+        <v-list-item v-if="miniVariant" @click.stop="miniVariant = !miniVariant">
+          <v-list-item-action>
             <v-icon>chevron_right</v-icon>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item avatar>
+          <v-list-item-avatar>
             <img src="https://randomuser.me/api/portraits/men/85.jpg" />
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title>{{user.data.name}}</v-list-tile-title>
-          </v-list-tile-content>
-          <v-list-tile-action>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{user.data.name}}</v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-action>
             <v-btn icon @click.stop="miniVariant = !miniVariant">
               <v-icon>chevron_left</v-icon>
             </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
+          </v-list-item-action>
+        </v-list-item>
       </v-list>
       <!-- link router -->
       <v-list>
         <!--dashboar-->
-        <v-list-tile router to="/mentor/dashboard">
-          <v-list-tile-action>
+        <v-list-item router to="/mentor/dashboard">
+          <v-list-item-action>
             <v-icon color="#676767">dashboard</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title class="grey--text">Dashboard</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">Dashboard</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <!-- profile-->
         <v-list-group prepend-icon="account_circle" value="true" no-action>
           <template v-slot:activator>
-            <v-list-tile>
-              <v-list-tile-title>Profile</v-list-tile-title>
-            </v-list-tile>
+            <v-list-item>
+              <v-list-item-title>Profile</v-list-item-title>
+            </v-list-item>
           </template>
           <template v-if="!miniVariant">
-            <v-list-tile v-for="link in linkProfile" :key="link.text" router :to="link.route">
-              <v-list-tile-title>{{link.text}}</v-list-tile-title>
-              <v-list-tile-action>
+            <v-list-item v-for="link in linkProfile" :key="link.text" router :to="link.route">
+              <v-list-item-title>{{link.text}}</v-list-item-title>
+              <v-list-item-action>
                 <v-icon>{{link.icon}}</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
+              </v-list-item-action>
+            </v-list-item>
           </template>
         </v-list-group>
         <!--sub list other-->
-        <v-list-tile v-for="link in links" :key="link.text" router :to="link.route">
-          <v-list-tile-action>
+        <v-list-item v-for="link in links" :key="link.text" router :to="link.route">
+          <v-list-item-action>
             <v-icon color="#676767">{{link.icon}}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title class="grey--text">{{link.text}}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">{{link.text}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <v-navigation-drawer temporary right v-model="rightDrawer" fixed>
       <v-list>
-        <v-list-tile>
-          <v-list-tile-avatar>
+        <v-list-item>
+          <v-list-item-avatar>
             <v-icon>exit_to_app</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content></v-list-tile-content>
-          <v-list-tile-action>
+          </v-list-item-avatar>
+          <v-list-item-content></v-list-item-content>
+          <v-list-item-action>
             <v-btn small color="red" @click="logout" v-if="checkLogin">
-              <span>{{ $vuetify.t('$vuetify.action.signout') }}</span>
+              <span>{{ $vuetify.lang.t('$vuetify.action.signout') }}</span>
             </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-avatar>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-avatar>
             <v-icon>language</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content></v-list-tile-content>
-          <v-list-tile-action>
+          </v-list-item-avatar>
+          <v-list-item-content></v-list-item-content>
+          <v-list-item-action>
             <LocaleSwitcher />
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-avatar>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-avatar>
             <v-icon>brightness_4</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content>Dark Theme</v-list-tile-content>
-          <v-list-tile-action>
+          </v-list-item-avatar>
+          <v-list-item-content>Dark Theme</v-list-item-content>
+          <v-list-item-action>
             <v-switch color="black" @change="switchTheme"></v-switch>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-avatar>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-avatar>
             <v-icon>pages</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content>Talent Menu</v-list-tile-content>
-          <v-list-tile-action>
-            <v-btn router to="/talent/dashboard" small flat color="blue"><v-icon small>forward</v-icon></v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile v-if="checkProgramCoordinatoship">
-          <v-list-tile-avatar>
+          </v-list-item-avatar>
+          <v-list-item-content>Talent Menu</v-list-item-content>
+          <v-list-item-action>
+            <v-btn router to="/talent/dashboard" small text color="blue"><v-icon small>forward</v-icon></v-btn>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item v-if="checkProgramCoordinatoship">
+          <v-list-item-avatar>
             <v-icon>pages</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content>Coordinator Menu</v-list-tile-content>
-          <v-list-tile-action>
-            <v-btn router to="/coordinator/dashboard" small flat color="blue"><v-icon small>forward</v-icon></v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
+          </v-list-item-avatar>
+          <v-list-item-content>Coordinator Menu</v-list-item-content>
+          <v-list-item-action>
+            <v-btn router to="/coordinator/dashboard" small text color="blue"><v-icon small>forward</v-icon></v-btn>
+          </v-list-item-action>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
   </nav>

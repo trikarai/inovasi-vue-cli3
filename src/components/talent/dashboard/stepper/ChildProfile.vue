@@ -17,43 +17,43 @@
           <v-layout wrap>
             <v-flex xs12 md6>
               <v-list>
-                <v-list-tile v-for="(item, index) in items.slice(0,3)" :key="index" avatar>
-                  <v-list-tile-action class="mr-3">
+                <v-list-item v-for="(item, index) in items.slice(0,3)" :key="index" avatar>
+                  <v-list-item-action class="mr-3">
                     <v-btn style="min-width: 36px !important" router :to="item.to">
                       <v-icon>edit</v-icon>
                     </v-btn>
-                  </v-list-tile-action>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{item.title}}</v-list-tile-title>
-                  </v-list-tile-content>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>{{item.title}}</v-list-item-title>
+                  </v-list-item-content>
 
-                  <v-list-tile-action>
+                  <v-list-item-action>
                     <v-icon :color="$store.state.profile[index].total > 0 ? 'teal' : 'grey'">check</v-icon>
                     <!-- {{$store.state.profile[index].total}} -->
-                  </v-list-tile-action>
-                </v-list-tile>
+                  </v-list-item-action>
+                </v-list-item>
               </v-list>
             </v-flex>
 
             <v-flex xs12 md6>
               <v-list>
-                <v-list-tile v-for="(item, index) in items.slice(3,6)" :key="index" avatar>
-                  <v-list-tile-action class="mr-3">
+                <v-list-item v-for="(item, index) in items.slice(3,6)" :key="index" avatar>
+                  <v-list-item-action class="mr-3">
                     <v-btn style="min-width: 36px !important" :to="item.to">
                       <v-icon>edit</v-icon>
                     </v-btn>
-                  </v-list-tile-action>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{item.title}}</v-list-tile-title>
-                  </v-list-tile-content>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>{{item.title}}</v-list-item-title>
+                  </v-list-item-content>
 
-                  <v-list-tile-action>
+                  <v-list-item-action>
                     <v-icon
                       :color="$store.state.profile[index + 3].total > 0 ? 'teal' : 'grey'"
                     >check</v-icon>
-                  </v-list-tile-action>
+                  </v-list-item-action>
                   <!-- {{$store.state.profile[index + 3].title}} -->
-                </v-list-tile>
+                </v-list-item>
               </v-list>
             </v-flex>
           </v-layout>
@@ -75,52 +75,52 @@
         <v-card class="mb-5 elevation-0">
           <v-flex xs12 md6>
             <v-list>
-              <v-list-tile>
-                <v-list-tile-action class="mr-3">
+              <v-list-item>
+                <v-list-item-action class="mr-3">
                   <v-btn style="min-width: 36px !important" router to="/talent/create/team">
                     <v-icon>loupe</v-icon>
                   </v-btn>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>Buat Tim</v-list-tile-title>
-                </v-list-tile-content>
-                <v-list-tile-action>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Buat Tim</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
                   <v-icon :color="$store.state.teamMemberships.length > 0 ? 'teal' : 'grey'">check</v-icon>
-                </v-list-tile-action>
-              </v-list-tile>
+                </v-list-item-action>
+              </v-list-item>
 
-              <!-- <v-list-tile>
-                <v-list-tile-action class="mr-3">
+              <!-- <v-list-item>
+                <v-list-item-action class="mr-3">
                   <v-btn style="min-width: 36px !important">
                     <v-icon>person_add</v-icon>
                   </v-btn>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>Tambah Anggota Tim</v-list-tile-title>
-                </v-list-tile-content>
-                <v-list-tile-action>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Tambah Anggota Tim</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
                               <v-icon>check</v-icon>
-                </v-list-tile-action>
-              </v-list-tile>-->
+                </v-list-item-action>
+              </v-list-item>-->
 
-              <v-list-tile>
-                <v-list-tile-action class="mr-3">
+              <v-list-item>
+                <v-list-item-action class="mr-3">
                   <v-btn style="min-width: 36px !important" router to="/talent/team">
                     <v-icon>search</v-icon>
                   </v-btn>
-                </v-list-tile-action>
-                <v-list-tile-content>
+                </v-list-item-action>
+                <v-list-item-content>
                   <v-badge color="red">
                     <template v-slot:badge>
                       <span>{{$store.state.teamMemberships.length}}</span>
                     </template>
-                    <v-list-tile-title>Lihat Tim</v-list-tile-title>
+                    <v-list-item-title>Lihat Tim</v-list-item-title>
                   </v-badge>
-                </v-list-tile-content>
-                <!-- <v-list-tile-action>
+                </v-list-item-content>
+                <!-- <v-list-item-action>
                               <v-icon>check</v-icon>
-                </v-list-tile-action>-->
-              </v-list-tile>
+                </v-list-item-action>-->
+              </v-list-item>
             </v-list>
           </v-flex>
         </v-card>
@@ -142,33 +142,33 @@
         <v-card class="mb-5 elevation-0">
           <v-flex xs12 md6>
             <v-list>
-              <!-- <v-list-tile>
-                <v-list-tile-action class="mr-3">
+              <!-- <v-list-item>
+                <v-list-item-action class="mr-3">
                   <v-btn style="min-width: 36px !important">
                     <v-icon>how_to_reg</v-icon>
                   </v-btn>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>Daftar ke Program</v-list-tile-title>
-                </v-list-tile-content>
-                <v-list-tile-action>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Daftar ke Program</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
                   <v-icon>check</v-icon>
-                </v-list-tile-action>
-              </v-list-tile> -->
+                </v-list-item-action>
+              </v-list-item> -->
 
-              <v-list-tile>
-                <v-list-tile-action class="mr-3" >
+              <v-list-item>
+                <v-list-item-action class="mr-3" >
                   <v-btn style="min-width: 36px !important" router to="/talent/program">
                     <v-icon>search</v-icon>
                   </v-btn>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>Lihat Partisipasi Program</v-list-tile-title>
-                </v-list-tile-content>
-                <!-- <v-list-tile-action>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Lihat Partisipasi Program</v-list-item-title>
+                </v-list-item-content>
+                <!-- <v-list-item-action>
                               <v-icon>check</v-icon>
-                </v-list-tile-action>-->
-              </v-list-tile>
+                </v-list-item-action>-->
+              </v-list-item>
             </v-list>
           </v-flex>
         </v-card>

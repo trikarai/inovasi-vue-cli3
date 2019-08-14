@@ -1,10 +1,11 @@
 <template>
   <nav>
-    <v-toolbar height="50" flat app color="primary">
-      <v-toolbar-side-icon class="white--text" @click="drawer = !drawer"></v-toolbar-side-icon>
+    <v-app-bar height="50" text app color="primary">
+      <!-- <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer"></v-app-bar-nav-icon> -->
+      <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
       <v-icon @click="rightDrawer =! rightDrawer" color="white">settings</v-icon>
-    </v-toolbar>
+    </v-app-bar>
     <div>
       <v-breadcrumbs :items="$store.state.breads.item" divider=" > ">
         <template v-slot:item="props">
@@ -26,145 +27,145 @@
       <!-- <v-layout column justify-space-between fill-height> -->
         <!-- list head-->
         <v-list class="pa-1">
-          <v-list-tile v-if="miniVariant" @click.stop="miniVariant = !miniVariant">
-            <v-list-tile-action>
+          <v-list-item v-if="miniVariant" @click.stop="miniVariant = !miniVariant">
+            <v-list-item-action>
               <v-icon>chevron_right</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
+            </v-list-item-action>
+          </v-list-item>
+          <v-list-item avatar>
+            <v-list-item-avatar>
               <img src="/img/avatar.png" />
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{user.data.name}}</v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{user.data.name}}</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-action>
               <v-btn icon @click.stop="miniVariant = !miniVariant">
                 <v-icon>chevron_left</v-icon>
               </v-btn>
-            </v-list-tile-action>
-          </v-list-tile>
+            </v-list-item-action>
+          </v-list-item>
         </v-list>
         <!-- link router -->
         <v-list>
           <!--dashboar-->
-          <v-list-tile ripple router to="/talent/dashboard">
-            <v-list-tile-action>
+          <v-list-item ripple router to="/talent/dashboard">
+            <v-list-item-action>
               <v-icon color="#676767">dashboard</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title class="grey--text">Dashboard</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="grey--text">Dashboard</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <!-- profile-->
           <v-list-group prepend-icon="account_circle" :value="group" no-action>
             <template v-slot:activator>
-              <v-list-tile ripple>
-                <v-list-tile-title>Profile</v-list-tile-title>
-              </v-list-tile>
+              <v-list-item ripple>
+                <v-list-item-title>Profile</v-list-item-title>
+              </v-list-item>
             </template>
             <template v-if="!miniVariant">
-              <v-list-tile
+              <v-list-item
                 ripple
                 v-for="link in linkProfile"
                 :key="link.text"
                 router
                 :to="link.route"
               >
-                <v-list-tile-title>{{link.text}}</v-list-tile-title>
-                <v-list-tile-action>
+                <v-list-item-title>{{link.text}}</v-list-item-title>
+                <v-list-item-action>
                   <v-icon>{{link.icon}}</v-icon>
-                </v-list-tile-action>
-              </v-list-tile>
+                </v-list-item-action>
+              </v-list-item>
             </template>
           </v-list-group>
           <!--sub list other-->
-          <v-list-tile ripple v-for="link in links" :key="link.text" router :to="link.route">
-            <v-list-tile-action>
+          <v-list-item ripple v-for="link in links" :key="link.text" router :to="link.route">
+            <v-list-item-action>
               <v-icon color="#676767">{{link.icon}}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title class="grey--text">{{link.text}}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="grey--text">{{link.text}}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
 
         <v-spacer></v-spacer>
         <v-divider></v-divider>
         <v-list dense class="py-0">
-          <v-list-tile v-if="checkProgramCoordinatoship" ripple router to="/coordinator/dashboard">
-            <v-list-tile-action>
+          <v-list-item v-if="checkProgramCoordinatoship" ripple router to="/coordinator/dashboard">
+            <v-list-item-action>
               <v-icon color="#676767">pages</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title class="grey--text">Coordinator Menu</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile v-if="checkProgramMentorship" ripple router to="/mentor/dashboard">
-            <v-list-tile-action>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="grey--text">Coordinator Menu</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-if="checkProgramMentorship" ripple router to="/mentor/dashboard">
+            <v-list-item-action>
               <v-icon color="#676767">pages</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title class="grey--text">Mentor Menu</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="grey--text">Mentor Menu</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
       <!-- </v-layout> -->
     </v-navigation-drawer>
 
     <v-navigation-drawer temporary right v-model="rightDrawer" fixed>
       <v-list>
-        <v-list-tile>
-          <v-list-tile-avatar>
+        <v-list-item>
+          <v-list-item-avatar>
             <!-- <v-icon>exit_to_app</v-icon> -->
-          </v-list-tile-avatar>
-          <v-list-tile-content></v-list-tile-content>
-          <v-list-tile-action>
+          </v-list-item-avatar>
+          <v-list-item-content></v-list-item-content>
+          <v-list-item-action>
             <v-btn dark small color="red" @click="logout" v-if="checkLogin">
-              <span>{{ $vuetify.t('$vuetify.action.signout') }}</span>
+              <span>{{ $vuetify.lang.t('$vuetify.action.signout') }}</span>
             </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-avatar>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-avatar>
             <v-icon>language</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content></v-list-tile-content>
-          <v-list-tile-action>
+          </v-list-item-avatar>
+          <v-list-item-content></v-list-item-content>
+          <v-list-item-action>
             <LocaleSwitcher />
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-avatar>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-avatar>
             <v-icon>brightness_4</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content>Dark Theme</v-list-tile-content>
-          <v-list-tile-action>
+          </v-list-item-avatar>
+          <v-list-item-content>Dark Theme</v-list-item-content>
+          <v-list-item-action>
             <v-switch color="black" @change="switchTheme"></v-switch>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile v-if="checkProgramCoordinatoship">
-          <v-list-tile-avatar>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item v-if="checkProgramCoordinatoship">
+          <v-list-item-avatar>
             <v-icon>pages</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content>Coordinator Menu</v-list-tile-content>
-          <v-list-tile-action>
-            <v-btn router to="/coordinator/dashboard" small flat color="blue">
+          </v-list-item-avatar>
+          <v-list-item-content>Coordinator Menu</v-list-item-content>
+          <v-list-item-action>
+            <v-btn router to="/coordinator/dashboard" small text color="blue">
               <v-icon small>forward</v-icon>
             </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile v-if="checkProgramMentorship">
-          <v-list-tile-avatar>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item v-if="checkProgramMentorship">
+          <v-list-item-avatar>
             <v-icon>pages</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content>Mentor Menu</v-list-tile-content>
-          <v-list-tile-action>
-            <v-btn router to="/mentor/dashboard" small flat color="blue">
+          </v-list-item-avatar>
+          <v-list-item-content>Mentor Menu</v-list-item-content>
+          <v-list-item-action>
+            <v-btn router to="/mentor/dashboard" small text color="blue">
               <v-icon small>forward</v-icon>
             </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
+          </v-list-item-action>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
   </nav>

@@ -1,9 +1,9 @@
 <template>
   <nav>
-    <v-toolbar flat app color="primary">
-      <v-toolbar-side-icon class="white--text" @click="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar text app color="primary">
+      <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
       <!-- <v-toolbar fixed app :clipped-left="clipped" dark color="primary">
-        <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
+        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
         <v-btn icon @click.stop="miniVariant = !miniVariant">
           <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
         </v-btn>
@@ -16,11 +16,11 @@
         <span class>Mikti</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <!-- <v-btn flat @click="logout">
-        <span>{{ $vuetify.t('$vuetify.action.signout') }}</span>
+      <!-- <v-btn text @click="logout">
+        <span>{{ $vuetify.lang.t('$vuetify.action.signout') }}</span>
         <v-icon right>exit_to_app</v-icon>
       </v-btn> -->
-      <v-btn flat @click="rightDrawer =! rightDrawer">
+      <v-btn text @click="rightDrawer =! rightDrawer">
         <v-icon>settings</v-icon>
       </v-btn>
     </v-toolbar>
@@ -31,59 +31,59 @@
       :mini-variant.sync="miniVariant"
     >
       <v-list class="pa-0" style="height: 49px;!important">
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
+        <v-list-item avatar>
+          <v-list-item-avatar>
             <img src="https://randomuser.me/api/portraits/men/85.jpg">
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title>{{user.data.name}}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{user.data.name}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
       <hr>
       <v-list>
-        <v-list-tile v-for="link in links" :key="link.text" router :to="link.route">
-          <v-list-tile-action>
+        <v-list-item v-for="link in links" :key="link.text" router :to="link.route">
+          <v-list-item-action>
             <v-icon color="#676767">{{link.icon}}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title class="grey--text">{{link.text}}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">{{link.text}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <v-navigation-drawer temporary right v-model="rightDrawer" fixed>
       <v-list>
-        <v-list-tile>
-          <v-list-tile-avatar>
+        <v-list-item>
+          <v-list-item-avatar>
             <v-icon>exit_to_app</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content></v-list-tile-content>
-          <v-list-tile-action>
+          </v-list-item-avatar>
+          <v-list-item-content></v-list-item-content>
+          <v-list-item-action>
             <v-btn color="red" @click="logout" v-if="checkLogin">
-              <span>{{ $vuetify.t('$vuetify.action.signout') }}</span>
+              <span>{{ $vuetify.lang.t('$vuetify.action.signout') }}</span>
             </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-avatar>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-avatar>
             <v-icon>language</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content></v-list-tile-content>
-          <v-list-tile-action>
+          </v-list-item-avatar>
+          <v-list-item-content></v-list-item-content>
+          <v-list-item-action>
             <LocaleSwitcher />
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-avatar>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-avatar>
             <v-icon>brightness_4</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content>Dark Theme</v-list-tile-content>
-          <v-list-tile-action>
+          </v-list-item-avatar>
+          <v-list-item-content>Dark Theme</v-list-item-content>
+          <v-list-item-action>
             <v-switch color="black" @change="switchTheme"></v-switch>
-          </v-list-tile-action>
-        </v-list-tile>
+          </v-list-item-action>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
   </nav>

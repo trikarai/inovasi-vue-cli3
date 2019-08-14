@@ -15,19 +15,19 @@
                 <v-card class="mb-5 elevation-0">
                   <v-flex xs12 md6>
                     <v-list>
-                      <v-list-tile >
-                        <v-list-tile-action class="mr-3">
+                      <v-list-item >
+                        <v-list-item-action class="mr-3">
                           <v-btn style="min-width: 36px !important">
                             <v-icon>wb_incandescent</v-icon>
                           </v-btn>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                          <v-list-tile-title>Tambah Ide Baru</v-list-tile-title>
-                        </v-list-tile-content>
-                        <v-list-tile-action>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Tambah Ide Baru</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
                           <v-icon>check</v-icon>
-                        </v-list-tile-action>
-                      </v-list-tile>
+                        </v-list-item-action>
+                      </v-list-item>
                     </v-list>
                   </v-flex>
                 </v-card>
@@ -48,19 +48,19 @@
                 <v-card class="mb-5 elevation-0">
                   <v-flex xs12 md6>
                     <v-list>
-                      <v-list-tile>
-                        <v-list-tile-action class="mr-3">
+                      <v-list-item>
+                        <v-list-item-action class="mr-3">
                           <v-btn style="min-width: 36px !important">
                             <v-icon>ballot</v-icon>
                           </v-btn>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                          <v-list-tile-title>Buat Tipe Pengguna Baru</v-list-tile-title>
-                        </v-list-tile-content>
-                        <v-list-tile-action>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Buat Tipe Pengguna Baru</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
                           <v-icon>check</v-icon>
-                        </v-list-tile-action>
-                      </v-list-tile>
+                        </v-list-item-action>
+                      </v-list-item>
                     </v-list>
                   </v-flex>
                 </v-card>
@@ -83,19 +83,19 @@
                 <v-card class="mb-5 elevation-0">
                   <v-flex xs12 md6>
                     <v-list>
-                      <v-list-tile>
-                        <v-list-tile-action class="mr-3">
+                      <v-list-item>
+                        <v-list-item-action class="mr-3">
                           <v-btn style="min-width: 36px !important">
                             <v-icon>category</v-icon>
                           </v-btn>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                          <v-list-tile-title>Buat Segmen Pelanggan Baru</v-list-tile-title>
-                        </v-list-tile-content>
-                        <v-list-tile-action>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Buat Segmen Pelanggan Baru</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
                           <v-icon>check</v-icon>
-                        </v-list-tile-action>
-                      </v-list-tile>
+                        </v-list-item-action>
+                      </v-list-item>
                     </v-list>
                   </v-flex>
                 </v-card>
@@ -118,19 +118,19 @@
                 <v-card class="mb-5 elevation-0">
                   <v-flex xs12 md6>
                     <v-list>
-                      <v-list-tile>
-                        <v-list-tile-action class="mr-3">
+                      <v-list-item>
+                        <v-list-item-action class="mr-3">
                           <v-btn style="min-width: 36px !important">
                             <v-icon>table_chart</v-icon>
                           </v-btn>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                          <v-list-tile-title>Buat Value Proposition Baru</v-list-tile-title>
-                        </v-list-tile-content>
-                        <v-list-tile-action>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Buat Value Proposition Baru</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
                           <v-icon>check</v-icon>
-                        </v-list-tile-action>
-                      </v-list-tile>
+                        </v-list-item-action>
+                      </v-list-item>
                     </v-list>
                   </v-flex>
                 </v-card>

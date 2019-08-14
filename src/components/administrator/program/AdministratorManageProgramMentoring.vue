@@ -27,7 +27,7 @@
 
       <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
-        {{ $vuetify.t('$vuetify.action.add') }} Mentoring Event
+        {{ $vuetify.lang.t('$vuetify.action.add') }} Mentoring Event
       </v-btn>
 
       <v-data-table
@@ -46,19 +46,19 @@
 
             <v-btn color="red" @click="deleteAct(props.item.id)" small>
               <v-icon small left>delete</v-icon>
-              {{ $vuetify.t('$vuetify.action.delete') }}
+              {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
 
             <v-expand-transition>
               <div v-show="props.item.id == selectedIndex">
-                {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
+                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
                 <v-btn @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.yes') }}
+                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
                 <v-btn @click="deleteAct(null)">
                   <v-icon></v-icon>
-                  {{ $vuetify.t('$vuetify.action.cancel') }}
+                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>

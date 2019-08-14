@@ -5,7 +5,7 @@
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
         <v-btn @click="openAdd()" color="blue" style="left: -8px">
           <v-icon>add</v-icon>
-          {{ $vuetify.t('$vuetify.action.add') }} Administrator
+          {{ $vuetify.lang.t('$vuetify.action.add') }} Administrator
         </v-btn>
         <v-data-table dark :headers="headers" :loading="loader" :items="admin.list" class="elevation-1">
           <template v-slot:items="props">
@@ -13,30 +13,30 @@
             <td class="text-xs-right">
               <v-btn @click="openDetail(props.index)" small>
                 <v-icon small>search</v-icon>
-                {{ $vuetify.t('$vuetify.action.view') }}
+                {{ $vuetify.lang.t('$vuetify.action.view') }}
               </v-btn>
               <v-btn @click="openEdit(props.index)" small v-if="props.item.id == authData.data.id">
                 <v-icon small>edit</v-icon>
-                {{ $vuetify.t('$vuetify.action.edit') }} {{ $vuetify.t('$vuetify.profile.profile') }}
+                {{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.profile.profile') }}
               </v-btn>
               <v-btn @click="openPassword(props.index)" small v-if="props.item.id == authData.data.id">
                 <v-icon small>edit</v-icon>
-                {{ $vuetify.t('$vuetify.action.edit') }} {{ $vuetify.t('$vuetify.profile.password') }}
+                {{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.profile.password') }}
               </v-btn>
               <v-btn small dark color="warning" @click="deleteAct(props.index)" v-if="props.item.id != authData.data.id">
                 <v-icon small>delete</v-icon>
-                {{ $vuetify.t('$vuetify.action.delete') }}
+                {{ $vuetify.lang.t('$vuetify.action.delete') }}
               </v-btn>
               <v-expand-transition>
                 <div v-show="props.index == selectedIndex">
-                  {{ $vuetify.t('$vuetify.action.confirmationtodelete') }}
+                  {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
                   <v-btn @click="deleteData(props.item.id)" color="red">
                     <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.yes') }}
+                    {{ $vuetify.lang.t('$vuetify.action.yes') }}
                   </v-btn>
                   <v-btn @click="deleteAct(null)">
                     <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.cancel') }}
+                    {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                   </v-btn>
                 </div>
               </v-expand-transition>

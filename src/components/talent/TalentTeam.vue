@@ -5,12 +5,12 @@
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
         <v-btn color="blue" append to="/talent/create/team" style="left: -8px">
           <v-icon>add</v-icon>
-          {{ $vuetify.t('$vuetify.action.create') }} {{ $vuetify.t('$vuetify.team.team') }}
+          {{ $vuetify.lang.t('$vuetify.action.create') }} {{ $vuetify.lang.t('$vuetify.team.team') }}
         </v-btn>
         <v-dialog v-model="loader" hide-overlay persistent width="300">
           <v-card color="primary" dark>
             <v-card-text>
-              {{ $vuetify.t('$vuetify.info.standby') }}
+              {{ $vuetify.lang.t('$vuetify.info.standby') }}
               <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -61,19 +61,19 @@
                 v-if="ifShow(props.item.status.value)"
                 small
                 @click="openIdea(props.item.team.id)"
-              >{{$vuetify.t('$vuetify.idea.idea')}}</v-btn>
+              >{{$vuetify.lang.t('$vuetify.idea.idea')}}</v-btn>
               <v-btn
                 v-if="ifShow(props.item.status.value)"
                 small
                 @click="openParticipation(props.item.team.id)"
-              >{{$vuetify.t('$vuetify.team.programParticipation')}}</v-btn>
+              >{{$vuetify.lang.t('$vuetify.team.programParticipation')}}</v-btn>
               <v-btn
                 small
                 @click="openDetail(props.item.id)"
                 v-if="ifShow(props.item.status.value)"
               >
                 <v-icon small>pageview</v-icon>
-                <!-- {{ $vuetify.t('$vuetify.action.view') }} -->
+                <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
                 Manage
               </v-btn>
               <v-btn
@@ -83,18 +83,18 @@
                 v-if="ifShow(props.item.status.value)"
               >
                 <v-icon small>outlined_flag</v-icon>
-                {{ $vuetify.t('$vuetify.team.quit') }}
+                {{ $vuetify.lang.t('$vuetify.team.quit') }}
               </v-btn>
               <v-expand-transition>
                 <div v-show="props.item.id == selectedQuit">
-                  {{ $vuetify.t('$vuetify.action.confirmationtoquit') }}
+                  {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }}
                   <v-btn @click="deleteData(props.item.id)" color="red">
                     <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.yes') }}
+                    {{ $vuetify.lang.t('$vuetify.action.yes') }}
                   </v-btn>
                   <v-btn @click="deleteAct(null)">
                     <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.cancel') }}
+                    {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                   </v-btn>
                 </div>
               </v-expand-transition>
@@ -106,7 +106,7 @@
                 v-if="props.item.status.value === 'inv'"
               >
                 <v-icon small>check_circle</v-icon>
-                <!-- {{ $vuetify.t('$vuetify.team.quit') }} -->
+                <!-- {{ $vuetify.lang.t('$vuetify.team.quit') }} -->
                 Accept
               </v-btn>
 
@@ -117,33 +117,33 @@
                 v-if="props.item.status.value === 'inv'"
               >
                 <v-icon small>close</v-icon>
-                <!-- {{ $vuetify.t('$vuetify.team.quit') }} -->
+                <!-- {{ $vuetify.lang.t('$vuetify.team.quit') }} -->
                 Reject
               </v-btn>
 
               <v-expand-transition>
                 <div v-show="props.index == selectedIndexAcc">
-                  <!-- {{ $vuetify.t('$vuetify.action.confirmationtoquit') }} -->
+                  <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }} -->
                   <v-btn @click="acceptInvitation(props.item.id)" color="blue">
                     <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.yes') }}
+                    {{ $vuetify.lang.t('$vuetify.action.yes') }}
                   </v-btn>
                   <v-btn @click="acceptAct(null)">
                     <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.cancel') }}
+                    {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                   </v-btn>
                 </div>
               </v-expand-transition>
               <v-expand-transition>
                 <div v-show="props.index == selectedIndexRej">
-                  <!-- {{ $vuetify.t('$vuetify.action.confirmationtoquit') }} -->
+                  <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }} -->
                   <v-btn @click="rejectInvitation(props.item.id)" color="red">
                     <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.yes') }}
+                    {{ $vuetify.lang.t('$vuetify.action.yes') }}
                   </v-btn>
                   <v-btn @click="rejectAct(null)">
                     <v-icon></v-icon>
-                    {{ $vuetify.t('$vuetify.action.cancel') }}
+                    {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                   </v-btn>
                 </div>
               </v-expand-transition>
@@ -152,13 +152,6 @@
         </v-data-table>
       </v-container>
 
-      <TeamForm
-        :data="singleData"
-        v-bind:edit="edit"
-        v-bind:view="view"
-        v-if="dialogForm"
-        @close="dialogForm = false"
-      />
     </div>
   </transition>
 </template>
@@ -166,10 +159,8 @@
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
-import TeamForm from "@/components/talent/team/TeamForm";
 export default {
   components: {
-    TeamForm,
     "notification-alert": Notification
   },
   data() {
