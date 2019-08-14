@@ -25,7 +25,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-              <v-flex sm4>
+              <!-- <v-flex sm4>
                 <v-text-field
                   position="absolute"
                   v-model="params.position"
@@ -33,7 +33,17 @@
                   :label="$vuetify.t('$vuetify.team.position')"
                   required
                 ></v-text-field>
-              </v-flex>
+              </v-flex> -->
+              <v-flex xs12 sm4>
+                  <v-combobox
+                    required
+                    :rules="posRules"
+                    v-model="params.position"
+                    :items="item"
+                    chips
+                    :label="$vuetify.t('$vuetify.team.position')"
+                  ></v-combobox>
+                </v-flex>
               <v-flex>
                 <!-- {{ $vuetify.t('$vuetify.team.vision')}}
                 <tiptap-vuetify
@@ -126,10 +136,12 @@ export default {
       view: false,
       expand: false,
       selectedIndex: null,
+      posRules: [v => !!v || "Position is required"],
       nameRules: [
         v => !!v || "Name is required",
         v => v.length <= 25 || "Name must be less than 10 characters"
       ],
+      item: ["Hustler", "Hacker", "Hipster"]
       // extensions: [
         // you can specify options for extension
         // new OrderedList(),
