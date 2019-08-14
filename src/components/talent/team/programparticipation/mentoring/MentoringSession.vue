@@ -170,9 +170,12 @@
             class="elevation-1"
           >
             <template v-slot:items="props">
-              <td>{{ props.item.startTime }}</td>
-              <td>{{ props.item.endTime }}</td>
-              <td>{{ props.item.mentor.talent.name }}</td>
+              <td>{{ props.item.startTime }} - {{ props.item.endTime }}</td>
+              <td> 
+                <v-btn flat fab small @click="openDetail(props.item.id)">
+                  <v-icon small>pageview</v-icon>
+                </v-btn>
+                {{ props.item.mentor.talent.name }}</td>
 
               <td>
                 <v-chip
@@ -182,10 +185,10 @@
               </td>
 
               <td class="text-xs-right">
-                <v-btn small @click="openDetail(props.item.id)">
+                <!-- <v-btn small @click="openDetail(props.item.id)">
                   <v-icon small left>pageview</v-icon>
                   {{ $vuetify.t('$vuetify.action.view') }}
-                </v-btn>
+                </v-btn> -->
 
                 <v-btn
                   @click="acceptAct(props.item.id)"
@@ -211,7 +214,7 @@
                   @click="cancelAct(props.item.id)"
                   small
                   color="red"
-                  v-if="props.item.status === 'proposed'"
+                  v-if="checkCancel(props.item.status)"
                 >
                   <v-icon small left>cancel</v-icon>
                   {{ $vuetify.t('$vuetify.mentoring.cancel') }}
@@ -261,10 +264,6 @@
               </v-card-text>
 
               <v-card-actions>
-                <v-btn small fab @click="openDetail(data.id)">
-                  <v-icon small>pageview</v-icon>
-                </v-btn>
-
                 <v-btn
                   @click="acceptAct(data.id)"
                   small
@@ -284,7 +283,7 @@
                   small
                   fab
                   color="red"
-                  v-if="data.status === 'proposed'"
+                  v-if="checkCancel(data.status)"
                 >
                   <v-icon small>cancel</v-icon>
                 </v-btn>
@@ -367,12 +366,11 @@ export default {
       selectedRes: null,
       headers: [
         {
-          text: "Start Time",
+          text: "Date Time",
           align: "left",
           sortable: false,
           value: "name"
         },
-        { text: "End Time", value: "id", sortable: false },
         { text: "Mentor", value: "id", sortable: false },
         { text: "Status", value: "id", sortable: false },
         { text: "", value: "id", sortable: false }
@@ -435,6 +433,15 @@ export default {
   methods: {
     setDateTime: function() {
       this.proposeParams.startTime = this.date + " " + this.time;
+    },
+    checkCancel: function(status){
+      var cek = true;
+      if(status === 'proposed' || status === 'offered'){
+        cek = true;
+      }else{
+        cek = false;
+      }
+      return cek;
     },
     gotoMentoringEvent: function() {
       this.$router.push({
