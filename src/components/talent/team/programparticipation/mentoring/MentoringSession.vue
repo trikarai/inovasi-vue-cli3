@@ -159,8 +159,10 @@
         </v-combobox>
       </v-flex>
 
+
       <v-layout hidden-sm-and-down>
         <v-flex md12>
+         query :  {{queryurl}}
           <v-data-table
             :loading="loader"
             :headers="headers"
@@ -397,11 +399,11 @@ export default {
       },
       items: [
         { displayName: "Proposed", value: "pro" },
-        { displayName: "Accepted", value: "acc" },
+        { displayName: "Scheduled", value: "sch" },
         { displayName: "Cancelled", value: "can" },
         { displayName: "Offered", value: "off" }
       ],
-      select: [{ displayName: "Proposed", value: "pro" }],
+      select: [],
       queryurl: "",
       selectedIndex: null,
       proposeParams: {
@@ -449,11 +451,11 @@ export default {
       if (this.select.length === 0) {
         this.queryurl = "";
       } else if (this.select.length === 1) {
-        this.queryurl = "?status[]=" + this.select[0].value;
+        this.queryurl = "?statuses[]=" + this.select[0].value;
       } else if (this.select.length > 1) {
-        this.queryurl = "?status[]=" + this.select[0].value;
+        this.queryurl = "?statuses[]=" + this.select[0].value;
         for (var i = 1; i < this.select.length; i++) {
-          this.queryurl += "&status[]=" + this.select[i].value;
+          this.queryurl += "&statuses[]=" + this.select[i].value;
         }
       }
       this.getDataList();
@@ -592,13 +594,13 @@ export default {
       if (status === "scheduled") {
         colorStatus = "green";
       } else if (status === "cancelled") {
-        colorStatus = "grey";
+        colorStatus = "red";
       } else if (status === "proposed") {
         colorStatus = "blue";
       } else if (status === "rejected") {
         colorStatus = "red";
       } else if (status === "offered") {
-        colorStatus = "blue";
+        colorStatus = "warning";
       }
       return colorStatus;
     },
