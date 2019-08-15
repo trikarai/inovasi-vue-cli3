@@ -29,6 +29,7 @@ import en from '@/config/lang/en';
 import id from '@/config/lang/id';
 
 import customcolors from "@/components/css/customcolor"
+// import colors from 'vuetify/lib/util/colors'
 
 // Vue.prototype.$axios = axios;
 Vue.use(UUID);
@@ -41,9 +42,19 @@ const opts = {
     current: 'en'
   },
   theme: {
-    dark: false
+    dark: false,
+    themes: {
+      light: {
+        primary: customcolors.primary,
+        accent: customcolors.accent,
+        omikti: customcolors.omikti,
+        bmikti: customcolors.bmikti
+      },
+      dark: {
+        primary: customcolors.primary,
+      },
+    }
   }
-  // theme: customcolors
 }
 Vue.use(Vuetify)
 
