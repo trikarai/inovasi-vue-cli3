@@ -4,7 +4,7 @@
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
           <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-          <v-card elevation="0" width="450">
+          <v-card elevation="0" width="550">
             <v-card-title>
               <h3>{{params.name}}</h3>
             </v-card-title>
@@ -21,7 +21,7 @@
               </v-btn>
 
               <v-layout justify-space-between>
-                <v-dialog v-model="loader" hide-overlay persistent width="300">
+                <v-dialog v-model="loader" hide-overlay persistent width="00">
                   <v-card color="primary" dark>
                     <v-card-text>
                       {{ $vuetify.lang.t('$vuetify.info.standby')}}
