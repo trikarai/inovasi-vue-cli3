@@ -178,11 +178,6 @@
               <v-chip :color="colorStatus(item.status)" text-color="white">{{ item.status }}</v-chip>
             </template>
             <template v-slot:item.action="{item}">
-              <v-btn small @click="openDetail(item.id)">
-                <v-icon small left>pageview</v-icon>
-                {{ $vuetify.lang.t('$vuetify.action.view') }}
-              </v-btn>
-
               <v-btn
                 @click="acceptAct(item.id)"
                 small
@@ -539,10 +534,10 @@ export default {
             "/accept"
         )
         .then(res => {
+          this.selectedAcc = null;
           this.refresh();
         })
         .catch(error => {
-          console.log(error);
           notif.showError(this, error);
         })
         .finally(() => {
@@ -572,6 +567,7 @@ export default {
             "/cancel"
         )
         .then(res => {
+          this.selectedCan = null;
           this.refresh();
         })
         .catch(error => {
