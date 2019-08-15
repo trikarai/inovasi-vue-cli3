@@ -87,7 +87,7 @@ export default {
           text: "Name",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "talent.name"
         }
       ]
     };
@@ -127,7 +127,7 @@ export default {
       net
         .getData(
           this,
-          "/talent/as-team-member/" + this.params.team.id + "/members/"
+          "/talent/as-team-member/" + this.params.team.id + "/members"
         )
         .then(res => {
           console.log(res);
