@@ -31,7 +31,7 @@
       :mini-variant.sync="miniVariant"
     >
       <v-list class="pa-0" style="height: 49px;!important">
-        <v-list-item avatar>
+        <v-list-item>
           <v-list-item-avatar>
             <img src="https://randomuser.me/api/portraits/men/85.jpg">
           </v-list-item-avatar>
