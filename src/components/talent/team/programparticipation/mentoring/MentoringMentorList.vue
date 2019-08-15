@@ -22,7 +22,7 @@
           <v-card-text v-else>
             <v-container grid-list-md>
               <v-layout wrap>
-                {{proposeParams}}
+                <!-- {{proposeParams}} -->
                 <v-flex xs12 sm12 md6>
                   <v-menu
                     v-model="menu1"
@@ -120,19 +120,16 @@
           :loading="loader"
           :headers="headers"
           :items="mentor.list"
-          :total-items="mentor.total"
+          :server-items-length="mentor.total"
           class="elevation-1"
         >
-          <template v-slot:items="props">
-            <td>{{ props.item.talent.name }}</td>
-            <td>
-              <v-btn small color="primary" rounded @click="proposeMentoring(props.item.id)">
+          <template v-slot:item.action="{item}">
+              <v-btn small color="primary" rounded @click="proposeMentoring(item.id)">
                 <v-icon left small>today</v-icon>Propose
               </v-btn>
-              <v-btn small rounded @click="gotomentorsession(props.item.id)">
+              <v-btn small rounded @click="gotomentorsession(item.id)">
                 <v-icon left small>search</v-icon>View Schedule
               </v-btn>
-            </td>
           </template>
         </v-data-table>
       </v-flex>
@@ -177,9 +174,9 @@ export default {
           text: "Mentor Name",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "talent.name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "Actions", value: "action", sortable: false }
       ],
       date: "",
       time: "",

@@ -38,19 +38,16 @@
           :loading="loader"
           :headers="headers"
           :items="event.list"
-          :total-items="event.total"
+          :server-items-length="event.total"
           class="elevation-1"
         >
-          <template v-slot:items="props">
-            <td>{{ props.item.name }}</td>
-            <td>
-              <v-btn small color="primary" rounded @click="gotoMentorList(props.item.id)">
+          <template v-slot:item.action="{item}">
+              <v-btn small color="primary" rounded @click="gotoMentorList(item.id)">
                 <v-icon left small>today</v-icon>Propose
               </v-btn>
-              <v-btn small rounded @click="viewEvent(props.item.id)">
+              <v-btn small rounded @click="viewEvent(item.id)">
                 <v-icon left small>search</v-icon>View
               </v-btn>
-            </td>
           </template>
         </v-data-table>
       </v-flex>
@@ -95,7 +92,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "Actions", value: "action", sortable: false }
       ]
     };
   },
