@@ -20,6 +20,7 @@
           class="elevation-1"
         >
           <template v-slot:item.status="{item}">
+
             <v-chip :color="setColor(item.status)" text-color="white">
               <v-avatar>
                 <v-icon>{{setIcon(item.status)}}</v-icon>
@@ -28,6 +29,9 @@
             </v-chip>
           </template>
           <template v-slot:item.action="{item}">
+            <v-btn rounded small @click.stop="openDetail(item.id)">
+              <v-icon small>search</v-icon>
+            </v-btn>
             <v-btn v-if="item.status == 'applied'" small color="green" @click="acceptAct(item.id)">
               <v-icon small>check_circle_outline</v-icon>Accept
             </v-btn>
@@ -42,9 +46,7 @@
             <v-btn v-if="item.status == 'active'" small color="red" @click="expellAct(item.id)">
               <v-icon small>block</v-icon>Expell
             </v-btn>
-            <v-btn rounded small @click.stop="openDetail(item.id)">
-              <v-icon small>search</v-icon>
-            </v-btn>
+            
 
             <v-flex shrink>
               <v-expand-transition>
