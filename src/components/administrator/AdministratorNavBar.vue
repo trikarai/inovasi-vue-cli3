@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-toolbar text app color="primary">
+    <v-toolbar text color="primary">
       <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
       <!-- <v-toolbar fixed app :clipped-left="clipped" dark color="primary">
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
