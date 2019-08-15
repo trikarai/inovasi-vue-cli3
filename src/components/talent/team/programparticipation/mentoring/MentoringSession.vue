@@ -158,96 +158,83 @@
           </template>
         </v-combobox>
       </v-flex>
-
-
+      <!-- {{mentoring.list}} -->
       <v-layout hidden-sm-and-down>
         <v-flex md12>
-         query :  {{queryurl}}
+          <!-- query : {{queryurl}} -->
           <v-data-table
             :loading="loader"
             :headers="headers"
             :items="mentoring.list"
             class="elevation-1"
           >
-            <template v-slot:items="props">
-              <td>{{ props.item.startTime }} - {{ props.item.endTime }}</td>
-              <td> 
-                <v-btn text fab small @click="openDetail(props.item.id)">
-                  <v-icon small>pageview</v-icon>
-                </v-btn>
-                {{ props.item.mentor.talent.name }}</td>
+            <template v-slot:item.mentor="{item}">
+              <v-btn text fab small @click="openDetail(item.id)">
+                <v-icon small>pageview</v-icon>
+              </v-btn>
+              {{ item.mentor.talent.name }}
+            </template>
+            <template v-slot:item.status="{item}">
+              <v-chip :color="colorStatus(item.status)" text-color="white">{{ item.status }}</v-chip>
+            </template>
+            <template v-slot:item.action="{item}">
+              <v-btn small @click="openDetail(item.id)">
+                <v-icon small left>pageview</v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.view') }}
+              </v-btn>
 
-              <td>
-                <v-chip
-                  :color="colorStatus(props.item.status)"
-                  text-color="white"
-                >{{ props.item.status }}</v-chip>
-              </td>
+              <v-btn
+                @click="acceptAct(item.id)"
+                small
+                color="green"
+                v-if="item.status === 'offered'"
+              >
+                <v-icon small left>done</v-icon>
+                {{ $vuetify.lang.t('$vuetify.mentoring.accept') }}
+              </v-btn>
 
-              <td class="text-xs-right">
-                <!-- <v-btn small @click="openDetail(props.item.id)">
-                  <v-icon small left>pageview</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.view') }}
-                </v-btn> -->
+              <v-btn
+                @click="rescheduleAct(item.id)"
+                small
+                color="warning"
+                v-if="item.status === 'proposed'"
+              >
+                <v-icon small left>history</v-icon>
+                {{ $vuetify.lang.t('$vuetify.mentoring.reschedule') }}
+              </v-btn>
 
-                <v-btn
-                  @click="acceptAct(props.item.id)"
-                  small
-                  color="green"
-                  v-if="props.item.status === 'offered'"
-                >
-                  <v-icon small left>done</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.mentoring.accept') }}
-                </v-btn>
+              <v-btn @click="cancelAct(item.id)" small color="red" v-if="checkCancel(item.status)">
+                <v-icon small left>cancel</v-icon>
+                {{ $vuetify.lang.t('$vuetify.mentoring.cancel') }}
+              </v-btn>
 
-                <v-btn
-                  @click="rescheduleAct(props.item.id)"
-                  small
-                  color="warning"
-                  v-if="props.item.status === 'proposed'"
-                >
-                  <v-icon small left>history</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.mentoring.reschedule') }}
-                </v-btn>
+              <v-expand-transition>
+                <div v-if="item.id == selectedAcc">
+                  {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtoaccept') }}
+                  <v-btn @click="acceptMentoring(item.id)" color="primary">
+                    <v-icon></v-icon>
+                    {{ $vuetify.lang.t('$vuetify.action.yes') }}
+                  </v-btn>
+                  <v-btn @click="selectedAcc = null">
+                    <v-icon></v-icon>
+                    {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+                  </v-btn>
+                </div>
+              </v-expand-transition>
 
-                <v-btn
-                  @click="cancelAct(props.item.id)"
-                  small
-                  color="red"
-                  v-if="checkCancel(props.item.status)"
-                >
-                  <v-icon small left>cancel</v-icon>
-                  {{ $vuetify.lang.t('$vuetify.mentoring.cancel') }}
-                </v-btn>
-
-                <v-expand-transition>
-                  <div v-if="props.item.id == selectedAcc">
-                    {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtoaccept') }}
-                    <v-btn @click="acceptMentoring(props.item.id)" color="primary">
-                      <v-icon></v-icon>
-                      {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                    </v-btn>
-                    <v-btn @click="selectedAcc = null">
-                      <v-icon></v-icon>
-                      {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                    </v-btn>
-                  </div>
-                </v-expand-transition>
-
-                <v-scale-transition>
-                  <div v-if="props.item.id == selectedCan">
-                    {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtocancel') }}
-                    <v-btn @click="cancelMentoring(props.item.id)" color="red">
-                      <v-icon></v-icon>
-                      {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                    </v-btn>
-                    <v-btn @click="selectedCan = null">
-                      <v-icon></v-icon>
-                      {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                    </v-btn>
-                  </div>
-                </v-scale-transition>
-              </td>
+              <v-scale-transition>
+                <div v-if="item.id == selectedCan">
+                  {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtocancel') }}
+                  <v-btn @click="cancelMentoring(item.id)" color="red">
+                    <v-icon></v-icon>
+                    {{ $vuetify.lang.t('$vuetify.action.yes') }}
+                  </v-btn>
+                  <v-btn @click="selectedCan = null">
+                    <v-icon></v-icon>
+                    {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+                  </v-btn>
+                </div>
+              </v-scale-transition>
             </template>
           </v-data-table>
         </v-flex>
@@ -366,14 +353,14 @@ export default {
       selectedRes: null,
       headers: [
         {
-          text: "Date Time",
+          text: "Date/Time",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "startTime"
         },
-        { text: "Mentor", value: "id", sortable: false },
-        { text: "Status", value: "id", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Mentor", value: "mentor", sortable: false },
+        { text: "Status", value: "status", sortable: false },
+        { text: "Actions", value: "action", sortable: false }
       ],
       mentoring: {
         total: 0,
@@ -425,8 +412,7 @@ export default {
     date: "setDateTime",
     time: "setDateTime"
   },
-  created: function() {
-  },
+  created: function() {},
   mounted: function() {
     this.getDataList();
   },
@@ -434,11 +420,11 @@ export default {
     setDateTime: function() {
       this.proposeParams.startTime = this.date + " " + this.time;
     },
-    checkCancel: function(status){
+    checkCancel: function(status) {
       var cek = true;
-      if(status === 'proposed' || status === 'offered'){
+      if (status === "proposed" || status === "offered") {
         cek = true;
-      }else{
+      } else {
         cek = false;
       }
       return cek;
