@@ -8,32 +8,37 @@
           {{ $vuetify.lang.t('$vuetify.action.add') }} Skills
         </v-btn>
       </transition>
-      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1 mt-1">
-        <template v-slot:items="props">
-          <td>{{ props.item.skillReferenceName }}</td>
-          <td>
-            <v-rating :readonly="true" v-model="props.item.score"></v-rating>
-          </td>
-          <td class="text-xs-right" v-visible="!certificateShow">
-            <!-- <v-btn @click="openEdit(props.index)" small>
+      <v-data-table
+        :headers="headers"
+        :items="data.list"
+        :loading="loader"
+        class="elevation-1 mt-1"
+      >
+        <template v-slot:item.score="{item}">
+          <v-rating :readonly="true" v-model="item.score"></v-rating>
+        </template>
+        <template v-slot:item.action="{item}">
+          <div class="text-xs-right" v-visible="!certificateShow">
+            <!-- <v-btn @click="openEdit(item.id)" small>
               <v-icon small>edit</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>-->
-            <v-btn @click="openCertificate(props.item.id)" small>
+            <v-btn @click="openCertificate(item.id)" small>
               <v-icon small left>card_membership</v-icon>
               {{ $vuetify.lang.t('$vuetify.profile.certificate') }}
             </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
+            <v-btn small dark color="warning" @click="deleteAct(item.id)">
               <v-icon small>delete</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
 
             <v-scale-transition>
-              <div v-show="props.index == selectedIndex">
+              <div v-show="item.id == selectedIndex">
                 <div>
-                   <v-icon>warning</v-icon> <span> {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
+                  <v-icon>warning</v-icon>
+                  <span>{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
                 </div>
-                <v-btn dark text @click="deleteData(props.item.id)" color="red">
+                <v-btn dark text @click="deleteData(item.id)" color="red">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
@@ -43,7 +48,7 @@
                 </v-btn>
               </div>
             </v-scale-transition>
-          </td>
+          </div>
         </template>
       </v-data-table>
     </v-container>
@@ -52,7 +57,7 @@
       <v-container v-if="certificateShow">
         <v-divider></v-divider>
         <v-btn small @click="closeCertificate" color="warning">
-          <v-icon>close</v-icon> Close
+          <v-icon>close</v-icon>Close
         </v-btn>
         <v-layout>
           <CertificateComp :skillId="skillId" />
@@ -111,10 +116,10 @@ export default {
           text: "Skill",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "skillReferenceName"
         },
-        { text: "Score", value: "id", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Score", value: "score", sortable: false },
+        { text: "", value: "action", sortable: false }
       ]
     };
   },
@@ -145,7 +150,7 @@ export default {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.data.list[index];
+      this.singleData.id = index;
     },
     openAdd: function() {
       this.dialogForm = true;
