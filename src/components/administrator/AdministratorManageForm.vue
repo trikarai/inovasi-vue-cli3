@@ -100,6 +100,7 @@ export default {
           sortable: false,
           value: "name"
         },
+        { text: "Type", value: "type.displayName", sortable: false },
         { text: "", value: "manage", sortable: false },
         { text: "", value: "action", sortable: false }
       ]
