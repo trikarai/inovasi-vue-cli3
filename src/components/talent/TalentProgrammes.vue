@@ -13,22 +13,17 @@
         </v-dialog>
 
         <v-alert :value="!isTeam" type="info">Please Register in Team Menu</v-alert>
-
+        <!-- {{program.list}} -->
         <v-data-table :headers="headers" :items="program.list" class="elevation-1">
-          <template v-slot:items="props">
-            <td>{{ props.item.name }}</td>
-            <td>
-              <v-btn small color="primary" v-if="isTeam" @click="registerProgram(props.item.id)">
+          <template v-slot:item.action="{ item }">
+              <v-btn small color="primary" v-if="isTeam" @click="registerProgram(item.id)">
                 <v-icon small left>how_to_reg</v-icon>
                 {{ $vuetify.lang.t("$vuetify.action.register") }}
               </v-btn>
-            </td>
-            <td class="text-xs-right">
-              <v-btn small @click="openDetail(props.index)">
+              <v-btn small @click="openDetail(item.id)">
                 <v-icon small left>search</v-icon>
                 {{ $vuetify.lang.t("$vuetify.action.view") }}
               </v-btn>
-            </td>
           </template>
         </v-data-table>
       </v-container>
@@ -81,8 +76,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Actions", value: "action", sortable: false }
       ],
       program: {
         total: 0,
@@ -138,7 +132,7 @@ export default {
       this.dialogForm = true;
       this.view = true;
       this.edit = false;
-      this.singleData = this.program.list[index];
+      this.singleData.id = index;
     },
     openAdd: function() {
       this.dialogForm = true;
