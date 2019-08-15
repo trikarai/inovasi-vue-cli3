@@ -25,8 +25,8 @@ library.add(faUserSecret, faAddressBook)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 //Translation 
-import en from 'vuetify/es5/locale/en'
-import id from 'vuetify/es5/locale/id'
+import en from '@/config/lang/en';
+import id from '@/config/lang/id';
 
 import customcolors from "@/components/css/customcolor"
 
