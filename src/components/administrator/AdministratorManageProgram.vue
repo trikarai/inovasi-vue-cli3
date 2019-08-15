@@ -13,50 +13,47 @@
         :items="program.list"
         class="elevation-1"
       >
-        <template v-slot:items="props">
-          <td>{{ props.item.name }}</td>
-          <td class="text-xs-right">
-            <v-btn small @click="gotoRegistration(props.item.id)">
-              <v-icon small>schedule</v-icon>Registration
-            </v-btn>
-            <v-btn small @click="gotoMentoring(props.item.id)">
-              <v-icon small>event</v-icon>Mentoring
-            </v-btn>
-            <v-btn small @click="gotoPhase(props.item.id)">
-              <v-icon small>extension</v-icon>Phase
-            </v-btn>
-            <v-btn small @click="gotoCoordinator(props.item.id)">
-              <v-icon left small>person_add</v-icon>
-              {{$vuetify.lang.t('$vuetify.personnel.coordinator')}}
-            </v-btn>
-            <v-btn small @click="gotoMentor(props.item.id)">
-              <v-icon left small>person_add</v-icon>
-              {{$vuetify.lang.t('$vuetify.personnel.mentor')}}
-            </v-btn>
-          </td>
-          <td class="text-xs-right">
-            <v-btn @click="openEdit(props.item)" small>
-              <v-icon small>edit</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.edit') }}
-            </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.item.id)">
-              <v-icon small>delete</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.delete') }}
-            </v-btn>
-            <v-expand-transition>
-              <div v-show="props.item.id == selectedIndex">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                </v-btn>
-                <v-btn @click="deleteAct(null)">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                </v-btn>
-              </div>
-            </v-expand-transition>
-          </td>
+        <template v-slot:item.manage="{item}">
+          <v-btn small @click="gotoRegistration(item.id)">
+            <v-icon small>schedule</v-icon>Registration
+          </v-btn>
+          <v-btn small @click="gotoMentoring(item.id)">
+            <v-icon small>event</v-icon>Mentoring
+          </v-btn>
+          <v-btn small @click="gotoPhase(item.id)">
+            <v-icon small>extension</v-icon>Phase
+          </v-btn>
+          <v-btn small @click="gotoCoordinator(item.id)">
+            <v-icon left small>person_add</v-icon>
+            {{$vuetify.lang.t('$vuetify.personnel.coordinator')}}
+          </v-btn>
+          <v-btn small @click="gotoMentor(item.id)">
+            <v-icon left small>person_add</v-icon>
+            {{$vuetify.lang.t('$vuetify.personnel.mentor')}}
+          </v-btn>
+        </template>
+        <template v-slot:item.action="{item}">
+          <v-btn @click="openEdit(item)" small>
+            <v-icon small>edit</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.edit') }}
+          </v-btn>
+          <v-btn small dark color="warning" @click="deleteAct(item.id)">
+            <v-icon small>delete</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.delete') }}
+          </v-btn>
+          <v-expand-transition>
+            <div v-show="item.id == selectedIndex">
+              {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+              <v-btn @click="deleteData(item.id)" color="red">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.yes') }}
+              </v-btn>
+              <v-btn @click="deleteAct(null)">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+              </v-btn>
+            </div>
+          </v-expand-transition>
         </template>
       </v-data-table>
     </v-container>
@@ -90,7 +87,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -108,8 +105,8 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Manage", value: "manage", sortable: false },
+        { text: "Actions", value: "action", sortable: false }
       ]
     };
   },
@@ -146,18 +143,18 @@ export default {
       this.loader = true;
       net
         .getData(this, "/administrator/programmes")
-        .then(res=> {
+        .then(res => {
           if (res.data.data) {
             this.program = res.data.data;
           } else {
             this.program.list = [];
           }
         })
-        .catch(error=> {
+        .catch(error => {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -185,10 +182,10 @@ export default {
       net
         .deleteData(this, "/administrator/programmes/" + id)
         .then()
-        .catch(error=> {
+        .catch(error => {
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });

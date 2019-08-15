@@ -11,17 +11,17 @@
                     label="Skill Name"
                     v-model="params.name"
                     :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
+                    :counter="50"
+                    maxlength="50"
                     required
                   ></v-text-field>
-                  <v-text-field
+                  <v-textarea
                     label="Description"
                     v-model="params.description"
-                    :counter="25"
-                    maxlength="25"
+                    :counter="100"
+                    maxlength="100"
                     required
-                  ></v-text-field>
+                  ></v-textarea>
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"

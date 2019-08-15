@@ -8,29 +8,27 @@
           {{ $vuetify.lang.t('$vuetify.action.add') }} Administrator
         </v-btn>
         <v-data-table dark :headers="headers" :loading="loader" :items="admin.list" class="elevation-1">
-          <template v-slot:items="props">
-            <td>{{ props.item.name }}</td>
-            <td class="text-xs-right">
-              <v-btn @click="openDetail(props.index)" small>
+          <template v-slot:item.action="{item}">
+              <v-btn @click="openDetail(item.id)" small>
                 <v-icon small>search</v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.view') }}
               </v-btn>
-              <v-btn @click="openEdit(props.index)" small v-if="props.item.id == authData.data.id">
+              <v-btn @click="openEdit(item.id)" small v-if="item.id == authData.data.id">
                 <v-icon small>edit</v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.profile.profile') }}
               </v-btn>
-              <v-btn @click="openPassword(props.index)" small v-if="props.item.id == authData.data.id">
+              <v-btn @click="openPassword(item.id)" small v-if="item.id == authData.data.id">
                 <v-icon small>edit</v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.profile.password') }}
               </v-btn>
-              <v-btn small dark color="warning" @click="deleteAct(props.index)" v-if="props.item.id != authData.data.id">
+              <v-btn small dark color="warning" @click="deleteAct(item.id)" v-if="item.id != authData.data.id">
                 <v-icon small>delete</v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.delete') }}
               </v-btn>
               <v-expand-transition>
-                <div v-show="props.index == selectedIndex">
+                <div v-show="item.id == selectedIndex">
                   {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                  <v-btn @click="deleteData(props.item.id)" color="red">
+                  <v-btn @click="deleteData(item.id)" color="red">
                     <v-icon></v-icon>
                     {{ $vuetify.lang.t('$vuetify.action.yes') }}
                   </v-btn>
@@ -40,7 +38,6 @@
                   </v-btn>
                 </div>
               </v-expand-transition>
-            </td>
           </template>
         </v-data-table>
       </v-container>
@@ -104,7 +101,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "Actions", value: "action", sortable: false }
       ],
       admin: {
         total: 0,
@@ -146,19 +143,19 @@ export default {
       this.dialogForm = true;
       this.view = true;
       this.edit = true;
-      this.singleData = this.admin.list[index];
+      this.singleData.id = index;
     },
     openEdit: function(index) {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.admin.list[index];
+      this.singleData.id = index;
     },
     openPassword: function(index) {
       this.dialogPassword = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.admin.list[index];
+      this.singleData.id = index;
     },
     openAdd: function() {
       this.dialogForm = true;

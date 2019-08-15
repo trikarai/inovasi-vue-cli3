@@ -2,6 +2,8 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
+        <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+
         <div class="modal-container" @click.stop>
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
@@ -49,6 +51,8 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
+import Notification from "@/components/Notification";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -64,6 +68,9 @@ export default {
         v => v.length >= 3 || "Name must be more than 3 characters"
       ]
     };
+  },
+  components: {
+    "notification-alert": Notification
   },
   created: function() {
     this.params.name = this.data.name;
@@ -83,17 +90,14 @@ export default {
       this.loader = true;
       net
         .postData(this, "/administrator/regions", this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -101,17 +105,14 @@ export default {
       this.loader = true;
       net
         .putData(this, "/administrator/regions/" + this.data.id, this.params)
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-          }
-        )
-        .catch()
-        .finally(function() {
+        .then(res => {
+          console.log(res);
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     }

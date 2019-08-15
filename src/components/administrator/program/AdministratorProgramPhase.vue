@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       <!-- {{res}}<br> -->
       <!-- <v-btn @click="openAdd()" color="blue" style="left: -8px">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} Phase
-      </v-btn> -->
+      </v-btn>-->
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
@@ -15,35 +15,7 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      <v-data-table dark :headers="headers" :items="phase.list" class="elevation-1">
-        <template v-slot:items="props">
-          <td>{{ props.item.order }}</td>
-          <td>{{ props.item.phasePlan.name }}</td>
-          <td class="text-xs-right">
-            <!-- <v-btn @click="openDetail(props.index)" small>
-              <v-icon small>search</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.view') }}
-            </v-btn> -->
-            <!-- <v-btn small dark color="warning" @click="deleteAct(props.index)">
-              <v-icon small>delete</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.delete') }}
-            </v-btn> -->
-            <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                </v-btn>
-                <v-btn @click="deleteAct(null)">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                </v-btn>
-              </div>
-            </v-expand-transition>
-          </td>
-        </template>
-      </v-data-table>
+      <v-data-table dark :headers="headers" :items="phase.list" class="elevation-1"></v-data-table>
     </v-container>
     <!-- <PhaseForm
       :data="singleData"
@@ -52,7 +24,7 @@
       v-if="dialogForm"
       @close="dialogForm = false"
       @refresh="refresh()"
-    /> -->
+    />-->
   </div>
 </template>
 <script>
@@ -62,7 +34,7 @@ import Notification from "@/components/Notification";
 
 export default {
   components: {
-    "notification-alert": Notification,
+    "notification-alert": Notification
     //  PhaseForm
   },
   data() {
@@ -74,7 +46,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -97,8 +69,7 @@ export default {
           align: "left",
           sortable: false,
           value: "phasePlan.name"
-        },
-        { text: "", value: "id", sortable: false }
+        }
       ]
     };
   },
@@ -109,13 +80,18 @@ export default {
     getDataList: function() {
       this.loader = true;
       net
-        .getData(this, "/administrator/programmes/" + this.$route.params.programId + "/phases")
+        .getData(
+          this,
+          "/administrator/programmes/" +
+            this.$route.params.programId +
+            "/phases"
+        )
         .then(
           res => {
-            if(res.data.data){
+            if (res.data.data) {
               this.phase = res.data.data;
-            }else{
-              this.phase.list = []; 
+            } else {
+              this.phase.list = [];
             }
           },
           error => {
@@ -124,8 +100,7 @@ export default {
             this.status.error = true;
           }
         )
-        .catch(function() {
-        })
+        .catch(function() {})
         .finally(function() {
           this.loader = false;
         });
@@ -151,7 +126,13 @@ export default {
     },
     deleteData: function(id) {
       net
-        .deleteData(this, "/administrator/programmes/" + this.$route.params.programId + "/phases/" + id)
+        .deleteData(
+          this,
+          "/administrator/programmes/" +
+            this.$route.params.programId +
+            "/phases/" +
+            id
+        )
         .then()
         .catch(function() {})
         .finally(function() {
