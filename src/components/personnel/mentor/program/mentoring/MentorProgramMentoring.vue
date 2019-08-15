@@ -44,56 +44,51 @@
         <v-layout hidden-sm-and-down>
           <v-flex md12>
             <v-data-table :headers="headers" :items="mentoring.list" class="elevation-1">
-              <template v-slot:items="props">
-                <td>{{ props.item.participant.team.name }}</td>
-                <td>{{ props.item.startTime }}</td>
-                <td>{{ props.item.endTime }}</td>
-                <td>
-                  <v-chip :color="colorStatus(props.item.status)" text-color="white">
-                    <v-avatar>
-                      <v-icon>check</v-icon>
-                    </v-avatar>
-                    {{ props.item.status }}
-                  </v-chip>
-                </td>
+              <template v-slot:item.time="{item}">{{ item.startTime }} - {{ item.endTime }}</template>
+              <template v-slot:item.status="{item}">
+                <v-chip :color="colorStatus(item.status)" text-color="white">
+                  <v-avatar>
+                    <v-icon>check</v-icon>
+                  </v-avatar>
+                  {{ item.status }}
+                </v-chip>
+              </template>
+              <template v-slot:item.action="{item}">
+                <v-spacer></v-spacer>
 
-                <td class="text-xs-right">
-                  <v-spacer></v-spacer>
+                <!-- <v-btn small>
+                  <v-icon left>search</v-icon>View
+                </v-btn> -->
 
-                  <v-btn small>
-                    <v-icon left>search</v-icon>View
-                  </v-btn>
+                <v-btn
+                  @click="openFormMentoring(item.id, 'accept')"
+                  small
+                  color="green"
+                  v-if="item.status == 'proposed'"
+                >
+                  <v-icon small left>done</v-icon>
+                  {{ $vuetify.lang.t('$vuetify.mentoring.accept') }}
+                </v-btn>
 
-                  <v-btn
-                    @click="openFormMentoring(props.item.id, 'accept')"
-                    small
-                    color="green"
-                    v-if="props.item.status == 'proposed'"
-                  >
-                    <v-icon small left>done</v-icon>
-                    {{ $vuetify.lang.t('$vuetify.mentoring.accept') }}
-                  </v-btn>
+                <v-btn
+                  @click="openFormMentoring(item.id, 'offer')"
+                  small
+                  color="warning"
+                  v-if="item.status == 'proposed'"
+                >
+                  <v-icon small left>history</v-icon>
+                  {{ $vuetify.lang.t('$vuetify.mentoring.offer') }}
+                </v-btn>
 
-                  <v-btn
-                    @click="openFormMentoring(props.item.id, 'offer')"
-                    small
-                    color="warning"
-                    v-if="props.item.status == 'proposed'"
-                  >
-                    <v-icon small left>history</v-icon>
-                    {{ $vuetify.lang.t('$vuetify.mentoring.offer') }}
-                  </v-btn>
-
-                  <v-btn
-                    @click="openFormMentoring(props.item.id, 'reject')"
-                    small
-                    color="red"
-                    v-if="props.item.status == 'proposed'"
-                  >
-                    <v-icon small left>cancel</v-icon>
-                    {{ $vuetify.lang.t('$vuetify.mentoring.reject') }}
-                  </v-btn>
-                </td>
+                <v-btn
+                  @click="openFormMentoring(item.id, 'reject')"
+                  small
+                  color="red"
+                  v-if="item.status == 'proposed'"
+                >
+                  <v-icon small left>cancel</v-icon>
+                  {{ $vuetify.lang.t('$vuetify.mentoring.reject') }}
+                </v-btn>
               </template>
             </v-data-table>
           </v-flex>
@@ -302,12 +297,11 @@ export default {
           text: "Team Name",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "participant.team.name"
         },
-        { text: "Start Time", value: "id", sortable: false },
-        { text: "End Time", value: "id", sortable: false },
-        { text: "Status", value: "id", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Date/Time", value: "time", sortable: false },
+        { text: "Status", value: "status", sortable: false },
+        { text: "", value: "action", sortable: false }
       ],
       date: "",
       time: "",

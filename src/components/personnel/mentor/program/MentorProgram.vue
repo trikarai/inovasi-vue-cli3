@@ -13,15 +13,12 @@
         </v-dialog>
 
         <v-data-table :headers="headers" :items="programmeMentorship.list" class="elevation-1">
-          <template v-slot:items="props">
-            <td>{{ props.item.programme.name }}</td>
-            <td class="text-xs-right">
-              <v-btn small @click="gotoMentoring(props.item.id)">
+          <template v-slot:item.action="{item}">
+              <v-btn small @click="gotoMentoring(item.id)">
                 <v-icon small left>today</v-icon>
-                <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
+                {{ $vuetify.lang.t('$vuetify.action.view') }}
                 Mentoring
               </v-btn>
-            </td>
           </template>
         </v-data-table>
       </v-container>
@@ -59,9 +56,9 @@ export default {
           text: "Program Name",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "programme.name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "", value: "action", sortable: false }
       ],
       program: {
         total: 0,
