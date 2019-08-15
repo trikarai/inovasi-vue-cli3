@@ -14,23 +14,21 @@
         :items="data.list"
         class="elevation-1"
       >
-        <template v-slot:items="props">
-          <td>{{ props.item.name }}</td>
-          <td class="text-xs-right">
-            <v-btn @click="openEdit(props.index)" small>
+        <template v-slot:item.action="{item}">
+            <v-btn @click="openEdit(item)" small>
               <v-icon small>edit</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>
-            <!-- <v-btn @click="openDetail(props.item.id)" small>
+            <!-- <v-btn @click="openDetail(item.id)" small>
               <v-icon small>pageview</v-icon> 
               {{ $vuetify.lang.t('$vuetify.action.view') }}
             </v-btn>-->
-            <v-btn small dark color="warning" @click="deleteAct(props.item.id)">
+            <v-btn small dark color="warning" @click="deleteAct(item.id)">
               <v-icon small>delete</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
-              <div v-show="props.item.id == selectedIndex">
+              <div v-show="item.id == selectedIndex">
                 {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
                 <v-btn @click="deleteData(props.item.id)" color="red">
                   <v-icon></v-icon>
@@ -42,7 +40,6 @@
                 </v-btn>
               </div>
             </v-expand-transition>
-          </td>
         </template>
       </v-data-table>
       <br />
@@ -99,7 +96,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "", value: "action", sortable: false }
       ]
     };
   },
@@ -138,7 +135,7 @@ export default {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.data.list[index];
+      this.singleData = index;
     },
     openAdd: function() {
       this.dialogForm = true;
