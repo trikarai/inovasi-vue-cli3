@@ -285,7 +285,7 @@ export default {
       app.$store.state.isLoggedIn = false;
     },
     switchTheme: function() {
-      this.$store.commit("switchTheme");
+         this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
     buildBreadcrumbs: function() {
       var payload = {
