@@ -31,6 +31,7 @@
                     :items="type"
                     item-text="name"
                     item-value="value"
+                    :disabled="edit"
                   ></v-autocomplete>
 
                   <v-layout justify-space-between v-if="!view">

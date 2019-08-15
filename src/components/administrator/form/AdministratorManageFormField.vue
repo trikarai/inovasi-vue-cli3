@@ -11,46 +11,42 @@
       </transition>
 
       <v-data-table :loading="loader" :headers="headers" :items="field.list">
-        <template v-slot:items="props">
-          <td>{{props.item.position}}</td>
-          <td>{{props.item.name}}</td>
-          <td>{{props.item.type.displayName}}</td>
-          <td>
-            <v-btn
-              @click="openOption(props.item.id)"
-              color="blue"
-              right
-              small
-              fab
-              v-show="props.item.type.value === 'sel'"
-            >
-              <v-icon>playlist_add</v-icon>
-            </v-btn>
-          </td>
-          <td class="text-xs-right" v-visible="!optionShow">
-            <v-btn @click="openEdit(props.item.id)" small>
-              <v-icon small>edit</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.edit') }}
-            </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.item.id)" v-show="!optionShow">
-              <v-icon small>delete</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.delete') }}
-            </v-btn>
+        <template v-slot:item.option="{item}">
+          <v-btn
+            @click="openOption(item.id)"
+            color="blue"
+            right
+            small
+            fab
+            v-show="item.type.value === 'sel'"
+          >
+            <v-icon>playlist_add</v-icon>
+          </v-btn>
+        </template>
 
-            <v-expand-transition>
-              <div v-show="props.item.id == selectedIndex">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                </v-btn>
-                <v-btn @click="deleteAct(null)">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                </v-btn>
-              </div>
-            </v-expand-transition>
-          </td>
+        <template v-slot:item.action="{item}">
+          <v-btn @click="openEdit(item.id)" small>
+            <v-icon small>edit</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.edit') }}
+          </v-btn>
+          <v-btn small dark color="warning" @click="deleteAct(item.id)" v-show="!optionShow">
+            <v-icon small>delete</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.delete') }}
+          </v-btn>
+
+          <v-expand-transition>
+            <div v-show="item.id == selectedIndex">
+              {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+              <v-btn @click="deleteData(item.id)" color="red">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.yes') }}
+              </v-btn>
+              <v-btn @click="deleteAct(null)">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+              </v-btn>
+            </div>
+          </v-expand-transition>
         </template>
       </v-data-table>
     </v-container>
@@ -126,8 +122,8 @@ export default {
           value: "name"
         },
         { text: "Type", value: "type.displayName", sortable: false },
-        { text: "Option", value: "type.value", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Option", value: "option", sortable: false },
+        { text: "", value: "action", sortable: false }
       ]
     };
   },
@@ -182,10 +178,10 @@ export default {
           "/administrator/forms/" + this.$route.params.formId + "/fields/" + id
         )
         .then()
-        .catch(error=>{
+        .catch(error => {
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });
