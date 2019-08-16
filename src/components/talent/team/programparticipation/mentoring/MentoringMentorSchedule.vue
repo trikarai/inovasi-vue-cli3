@@ -11,13 +11,16 @@
     </v-dialog>
     <!-- {{mentorSession}} -->
     <v-layout wrap>
+      <v-btn small color="primary" rounded class="mb-3" @click="proposeMentoring()">
+        <v-icon left small>today</v-icon>Propose
+      </v-btn>
+
       <v-flex xs12 class="mb-3">
         <v-sheet height="500">
           <v-calendar
             ref="calendar"
             v-model="start"
             :type="type"
-            :end="end"
             :now="today"
             :value="today"
             :events="mentorSession.list"
@@ -44,6 +47,107 @@
         </v-btn>
       </v-flex>
     </v-layout>
+
+    <!-- propose dialog modal-->
+    <v-dialog v-model="dialogPropose" max-width="600">
+      <v-form v-model="valid" ref="form">
+        <v-card>
+          <v-card-title class="headline">Propose</v-card-title>
+          <v-card-text v-if="loaderDetail">
+            <v-progress-linear :indeterminate="true"></v-progress-linear>
+          </v-card-text>
+          <v-card-text v-else>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                {{proposeParams}}
+                <v-flex xs12 sm12 md6>
+                  <v-menu
+                    v-model="menu1"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="date"
+                        label="Date"
+                        prepend-icon="today"
+                        readonly
+                        :rules="[v => !!v || 'Date is required']"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      color="blue"
+                      :locale="$vuetify.lang.current"
+                      v-model="date"
+                      @input="menu1 = false"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-flex>
+                <v-flex xs12 sm12 md6>
+                  <v-menu
+                    v-model="menu2"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="time"
+                        label="Time"
+                        prepend-icon="schedule"
+                        readonly
+                        :rules="[v => !!v || 'Time is required']"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      format="24hr"
+                      color="blue"
+                      :locale="$vuetify.lang.current"
+                      v-model="time"
+                    ></v-time-picker>
+                  </v-menu>
+                </v-flex>
+
+                <v-flex xs12 sm6 md4>
+                  <v-textarea
+                    label="Media"
+                    :rules="[v => !!v || 'Media is required']"
+                    v-model="proposeParams.media"
+                    required
+                  ></v-textarea>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-textarea label="Note" v-model="proposeParams.note" required></v-textarea>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              @click="propose()"
+              color="primary"
+              :disabled="!valid"
+            >{{$vuetify.lang.t('$vuetify.action.add')}}</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn small fab color="red" text @click="dialogPropose = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-form>
+    </v-dialog>
+    <!-- end propose dialog modal-->
   </v-container>
 </template>
 
@@ -56,9 +160,8 @@ export default {
   data() {
     return {
       type: "month",
-      today: "2019-08-13",
-      start: "2019-08-01",
-      end: "2019-09-01",
+      today: new Date(),
+      start: new Date(),
       typeOptions: [
         { text: "Day", value: "day" },
         { text: "4 Day", value: "4day" },
@@ -73,22 +176,44 @@ export default {
         warning: false
       },
       loader2: false,
+      loaderDetail: false,
+      menu1: false,
+      menu2: false,
+      dialogPropose: false,
       err_msg: { details: [""] },
       mentorSession: {
         total: 0,
         list: []
+      },
+      date: "",
+      time: "",
+      proposeParams: {
+        programmeId: "",
+        mentoringId: "",
+        mentorId: "",
+        startTime: "",
+        media: "",
+        note: ""
       }
     };
   },
   components: {
     "notification-alert": Notification
   },
+  watch: {
+    date: "setDateTime",
+    time: "setDateTime"
+  },
   created: function() {},
   computed: {},
   mounted: function() {
+    this.proposeParams.programmeId = this.$store.state.programId;
     this.getMentorSession();
   },
   methods: {
+    setDateTime: function() {
+      this.proposeParams.startTime = this.date + " " + this.time;
+    },
     getMentorSession: function() {
       notif.reset(this);
       this.loader2 = true;
@@ -113,6 +238,39 @@ export default {
         })
         .finally(() => {
           this.loader2 = false;
+        });
+    },
+    proposeMentoring: function() {
+      this.dialogPropose = true;
+      this.proposeParams.mentorId = this.$route.params.mentorId;
+      this.proposeParams.mentoringId = this.$route.params.eventId;
+    },
+    propose: function() {
+      if (this.$refs.form.validate()) {
+        this.submitMentoring();
+      }
+    },
+    submitMentoring: function() {
+      this.loaderDetail = true;
+      net
+        .postData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/programme-participations/" +
+            this.$route.params.participationId +
+            "/mentoring-sessions",
+          this.proposeParams
+        )
+        .then(res => {
+          this.dialogPropose = false;
+          this.$router.go(-2);
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loaderDetail = false;
         });
     }
   }
