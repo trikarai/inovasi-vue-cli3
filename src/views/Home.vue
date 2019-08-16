@@ -11,9 +11,9 @@
       <!-- <v-toolbar-title color="red">MIKTI - Start</v-toolbar-title> -->
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
-        <v-btn class="font-weight-light" text disabled>Beranda</v-btn>
+        <v-btn class="font-weight-light" text router to="/talent/dashboard" :disabled="!checkLogin">Beranda</v-btn>
         <v-btn class="font-weight-light" text router to="/signup">Daftar</v-btn>
-        <v-btn class="font-weight-light" text router to="/login">Login</v-btn>
+        <v-btn class="font-weight-light" text router to="/login" v-if="!checkLogin">Login</v-btn>
         <!-- <button @click="setLang('en')">EN</button>  <button @click="setLang('id')">ID</button> -->
       </v-toolbar-items>
       <v-app-bar-nav-icon class="hidden-sm-and-up" light @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -340,11 +340,16 @@ export default {
       ]
     };
   },
+  computed: {
+    checkLogin() {
+      return this.$store.state.isLoggedIn;
+    }
+  },
   methods: {
     setLang: function(lang) {
       this.$vuetify.lang.current = lang;
     }
-  } 
+  }
 };
 </script>
 
