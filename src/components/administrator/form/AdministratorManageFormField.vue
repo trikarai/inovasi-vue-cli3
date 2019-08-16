@@ -4,7 +4,7 @@
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <!-- {{res}}<br> -->
       <transition name="fade">
-        <v-btn @click="openAdd()" color="blue" style="left: -8px" v-if="!optionShow">
+        <v-btn @click="openAdd()" color="primary" class="mb-3" v-if="!optionShow">
           <v-icon>add</v-icon>
           {{ $vuetify.lang.t('$vuetify.action.add') }} Field
         </v-btn>
@@ -25,7 +25,7 @@
         </template>
 
         <template v-slot:item.action="{item}">
-          <v-btn @click="openEdit(item.id)" small>
+          <v-btn @click="openEdit(item.id)" small class="mr-1">
             <v-icon small>edit</v-icon>
             {{ $vuetify.lang.t('$vuetify.action.edit') }}
           </v-btn>
@@ -37,7 +37,7 @@
           <v-expand-transition>
             <div v-show="item.id == selectedIndex">
               {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-              <v-btn @click="deleteData(item.id)" color="red">
+              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
                 <v-icon></v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.yes') }}
               </v-btn>
@@ -123,7 +123,7 @@ export default {
         },
         { text: "Type", value: "type.displayName", sortable: false },
         { text: "Option", value: "option", sortable: false },
-        { text: "", value: "action", sortable: false }
+        { text: "", value: "action", sortable: false, align: "right" }
       ]
     };
   },

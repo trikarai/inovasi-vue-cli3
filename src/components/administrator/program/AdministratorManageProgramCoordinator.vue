@@ -3,7 +3,7 @@
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       <!-- {{res}}<br> -->
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="primary" class="mb-3">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} {{ $vuetify.lang.t('$vuetify.personnel.coordinator') }}
       </v-btn>

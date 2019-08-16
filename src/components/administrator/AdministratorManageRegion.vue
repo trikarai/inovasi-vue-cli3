@@ -3,7 +3,7 @@
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="primary" class="mb-3">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} Region
       </v-btn>
@@ -16,7 +16,7 @@
         class="elevation-1"
       >
         <template v-slot:item.action="{item}">
-          <v-btn @click="openEdit(item)" small>
+          <v-btn @click="openEdit(item)" small class="ma-1">
             <v-icon small>edit</v-icon>
             {{ $vuetify.lang.t('$vuetify.action.edit') }}
           </v-btn>
@@ -27,7 +27,7 @@
           <v-expand-transition>
             <div v-show="item.id == selectedIndex">
               {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-              <v-btn @click="deleteData(item.id)" color="red">
+              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
                 <v-icon></v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.yes') }}
               </v-btn>
@@ -88,7 +88,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "Actions", value: "action" }
+        { text: "Actions", value: "action", align: "right" }
       ]
     };
   },

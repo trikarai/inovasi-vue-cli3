@@ -3,7 +3,7 @@
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="primary" class="mb-3">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} Form
       </v-btn>
@@ -16,18 +16,15 @@
         class="elevation-1"
       >
         <template v-slot:item.manage="{item}">
-          <td class="text-xs-right">
-            <v-btn small @click="gotoSection(item.id)">
+            <v-btn small @click="gotoSection(item.id)" class="mr-1">
               <v-icon small>extension</v-icon>Section
             </v-btn>
             <v-btn small @click="gotoField(item.id)">
               <v-icon small>art_track</v-icon>Field
             </v-btn>
-          </td>
         </template>
         <template v-slot:item.action="{item}">
-          <td class="text-xs-right">
-            <v-btn @click="openEdit(item)" small>
+            <v-btn @click="openEdit(item)" small class="mr-1">
               <v-icon small>edit</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>
@@ -38,7 +35,7 @@
             <v-expand-transition>
               <div v-show="item.id == selectedIndex">
                 {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(item.id)" color="red">
+                <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
@@ -48,7 +45,6 @@
                 </v-btn>
               </div>
             </v-expand-transition>
-          </td>
         </template>
       </v-data-table>
     </v-container>
@@ -100,9 +96,9 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "Type", value: "type.displayName", sortable: false },
-        { text: "", value: "manage", sortable: false },
-        { text: "", value: "action", sortable: false }
+        { text: "Type", value: "type.value", sortable: false },
+        { text: "", value: "manage", sortable: false, align: "left" },
+        { text: "", value: "action", sortable: false, align: "right" }
       ]
     };
   },

@@ -2,7 +2,7 @@
   <div>
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="primary" class="mb-3">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} program
       </v-btn>
@@ -14,41 +14,42 @@
         class="elevation-1"
       >
         <template v-slot:item.manage="{item}">
-          <v-btn small @click="gotoRegistration(item.id)">
-            <v-icon small>schedule</v-icon>Registration
+          <v-btn small @click="gotoRegistration(item.id)" class="ma-1">
+            <v-icon small left>schedule</v-icon>Registration
           </v-btn>
           <v-btn small @click="gotoMentoring(item.id)">
-            <v-icon small>event</v-icon>Mentoring
+            <v-icon small left>event</v-icon>Mentoring
           </v-btn>
-          <v-btn small @click="gotoPhase(item.id)">
-            <v-icon small>extension</v-icon>Phase
+          <v-btn small @click="gotoPhase(item.id)" class="ma-1">
+            <v-icon small left>extension</v-icon>Phase
           </v-btn>
+          <br>
           <v-btn small @click="gotoCoordinator(item.id)">
             <v-icon left small>person_add</v-icon>
             {{$vuetify.lang.t('$vuetify.personnel.coordinator')}}
           </v-btn>
-          <v-btn small @click="gotoMentor(item.id)">
+          <v-btn small @click="gotoMentor(item.id)" class="ma-1">
             <v-icon left small>person_add</v-icon>
             {{$vuetify.lang.t('$vuetify.personnel.mentor')}}
           </v-btn>
         </template>
         <template v-slot:item.action="{item}">
-          <v-btn @click="openEdit(item)" small>
-            <v-icon small>edit</v-icon>
+          <v-btn @click="openEdit(item)" small class="ma-1">
+            <v-icon small left>edit</v-icon>
             {{ $vuetify.lang.t('$vuetify.action.edit') }}
           </v-btn>
-          <v-btn small dark color="warning" @click="deleteAct(item.id)">
-            <v-icon small>delete</v-icon>
+          <v-btn small dark color="warning" @click="deleteAct(item.id)" class="ma-1">
+            <v-icon small left>delete</v-icon>
             {{ $vuetify.lang.t('$vuetify.action.delete') }}
           </v-btn>
           <v-expand-transition>
             <div v-show="item.id == selectedIndex">
               {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-              <v-btn @click="deleteData(item.id)" color="red">
+              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
                 <v-icon></v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.yes') }}
               </v-btn>
-              <v-btn @click="deleteAct(null)">
+              <v-btn @click="deleteAct(null)" class="ma-2">
                 <v-icon></v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.cancel') }}
               </v-btn>
@@ -105,8 +106,8 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "Manage", value: "manage", sortable: false },
-        { text: "Actions", value: "action", sortable: false }
+        { text: "Manage", value: "manage", sortable: false, align:"center" },
+        { text: "Actions", value: "action", sortable: false, align: "right" }
       ]
     };
   },

@@ -3,17 +3,17 @@
     <div>
       <v-container>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
-        <v-btn @click="openAdd()" color="blue" style="left: -8px">
+        <v-btn @click="openAdd()" color="primary" class="mb-3">
           <v-icon>add</v-icon>
           {{ $vuetify.lang.t('$vuetify.action.add') }} Administrator
         </v-btn>
         <v-data-table dark :headers="headers" :loading="loader" :items="admin.list" class="elevation-1">
           <template v-slot:item.action="{item}">
-              <v-btn @click="openDetail(item.id)" small>
+              <v-btn @click="openDetail(item.id)" small class="ma-1">
                 <v-icon small>search</v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.view') }}
               </v-btn>
-              <v-btn @click="openEdit(item.id)" small v-if="item.id == authData.data.id">
+              <v-btn @click="openEdit(item.id)" small v-if="item.id == authData.data.id" class="ma-1">
                 <v-icon small>edit</v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.profile.profile') }}
               </v-btn>
@@ -28,7 +28,7 @@
               <v-expand-transition>
                 <div v-show="item.id == selectedIndex">
                   {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                  <v-btn @click="deleteData(item.id)" color="red">
+                  <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
                     <v-icon></v-icon>
                     {{ $vuetify.lang.t('$vuetify.action.yes') }}
                   </v-btn>
@@ -101,7 +101,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "Actions", value: "action", sortable: false }
+        { text: "Actions", value: "action", sortable: false, align: "right" }
       ],
       admin: {
         total: 0,
