@@ -46,22 +46,22 @@
             </v-chip>
           </template>
           <template v-slot:item.action="{ item }">
-            <v-btn
+            <v-btn class="ma-1"
               v-if="ifShow(item.status.value)"
               small
               @click="openIdea(item.team.id)"
             >{{$vuetify.lang.t('$vuetify.idea.idea')}}</v-btn>
-            <v-btn
+            <v-btn class="ma-1"
               v-if="ifShow(item.status.value)"
               small
               @click="openParticipation(item.team.id)"
             >{{$vuetify.lang.t('$vuetify.team.programParticipation')}}</v-btn>
-            <v-btn small @click="openDetail(item.id)" v-if="ifShow(item.status.value)">
+            <v-btn class="ma-1" small @click="openDetail(item.id)" v-if="ifShow(item.status.value)">
               <v-icon small>pageview</v-icon>
               <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
               Manage
             </v-btn>
-            <v-btn
+            <v-btn class="ma-1"
               small
               color="warning"
               @click="deleteAct(item.id)"
@@ -74,7 +74,7 @@
             <v-expand-transition>
               <div v-show="item.id == selectedQuit">
                 {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }}
-                <v-btn @click="deleteData(item.id)" color="red">
+                <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
@@ -105,7 +105,7 @@
             <v-expand-transition>
               <div v-show="item.id == selectedIndexAcc">
                 <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }} -->
-                <v-btn @click="acceptInvitation(item.id)" color="blue">
+                <v-btn @click="acceptInvitation(item.id)" color="blue" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
@@ -138,6 +138,7 @@
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
+
 export default {
   components: {
     "notification-alert": Notification
@@ -173,7 +174,7 @@ export default {
         },
         { text: "Position", value: "position", sortable: false },
         { text: "Status", value: "status", sortable: false },
-        { text: "Actions", value: "action", sortable: false }
+        { text: "Actions", value: "action", align: "right", sortable: false }
       ],
       items: [
         { displayName: "Active", value: "act" },

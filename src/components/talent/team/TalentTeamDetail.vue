@@ -39,11 +39,29 @@
               :items="memberlist.list"
               class="elevation-1"
             >
+              <template v-slot:item.status="{ item }">
+                <v-chip :color="colorStatus(item.status.value)" text-color="white">
+                  <v-avatar>
+                    <v-icon>{{iconStatus(item.status.value)}}</v-icon>
+                  </v-avatar>
+                  {{ item.status.displayName }}
+                </v-chip>
+              </template>
               <template v-slot:item.action="{item}">
-                <v-btn small color="warning" @click="cancelAct(item.id)" v-if="item.status.value == 'inv'">
+                <v-btn
+                  small
+                  color="warning"
+                  @click="cancelAct(item.id)"
+                  v-if="item.status.value == 'inv'"
+                >
                   <v-icon left small>cancel</v-icon>Cancel
                 </v-btn>
-                <v-btn small color="red" @click="removeAct(item.id)" v-if="item.status.value == 'act'">
+                <v-btn
+                  small
+                  color="red"
+                  @click="removeAct(item.id)"
+                  v-if="item.status.value == 'act'"
+                >
                   <v-icon left small>block</v-icon>Remove
                 </v-btn>
                 <v-expand-transition>
@@ -109,7 +127,7 @@ export default {
           text: "Status",
           align: "left",
           sortable: false,
-          value: "status.displayName"
+          value: "status"
         },
         {
           text: "Actions",
@@ -131,6 +149,30 @@ export default {
     }, 1000);
   },
   methods: {
+    colorStatus: function(status) {
+      var color = "accent";
+      if (status === "act") {
+        color = "green";
+      } else if (status === "inv") {
+        color = "blue";
+      } else {
+        color = "red";
+      }
+      return color;
+    },
+    iconStatus: function(status) {
+      var icon = "check";
+      if (status === "act") {
+        icon = "check_circle";
+      } else if (status === "inv") {
+        icon = "email";
+      } else if (status === "rem") {
+        icon = "block";
+      } else {
+        icon = "outlined_flag";
+      }
+      return icon;
+    },
     getSingleData: function() {
       this.loader = !this.loader;
       notif.reset(this);
