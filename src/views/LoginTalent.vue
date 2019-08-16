@@ -52,11 +52,11 @@
                         v-model="password"
                         min="8"
                         :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                        :append-icon-cb="() => (e1 = !e1)"
                         :type="e1 ? 'password' : 'text'"
                         :rules="passwordRules"
                         counter
                         required
+                        @click:append="e1 = !e1"
                         v-on:keyup.enter="submit"
                       ></v-text-field>
                     </v-layout>
@@ -83,9 +83,9 @@
 
                       <v-dialog v-model="activate" :hide-overlay="false" persistent width="400">
                         <v-card>
-                          <v-card-text>
+                          <v-card-title>
                             <h3>Please check your email for account activation before login.</h3>
-                          </v-card-text>
+                          </v-card-title>
                           <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn small fab color="red" @click="activate = false">
