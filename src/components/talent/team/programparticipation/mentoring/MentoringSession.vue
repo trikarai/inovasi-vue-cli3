@@ -19,7 +19,7 @@
           <v-card>
             <v-card-title class="headline">Reschedule</v-card-title>
             <v-card-text v-if="loaderDetail">
-              <v-progress-linear :indeterminate="true"></v-progress-linear>
+              <v-progress-linear :indeterminate="true" color="omikti"></v-progress-linear>
             </v-card-text>
             <v-card-text v-else>
               <v-container grid-list-md>
@@ -75,7 +75,7 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-time-picker color="blue" :locale="$vuetify.lang.current" v-model="time"></v-time-picker>
+                      <v-time-picker color="blue" :locale="$vuetify.lang.current" v-model="time" format="24hr"></v-time-picker>
                     </v-menu>
                   </v-flex>
 
@@ -111,13 +111,19 @@
 
       <v-dialog v-model="dialogDetail" max-width="350">
         <v-card>
-          <v-card-title class="headline">{{mentoringDetail.mentoring.name}}</v-card-title>
-          <v-card-text>{{mentoringDetail.mentor.talent.name}}</v-card-text>
-          <v-card-text>{{mentoringDetail.startTime}}</v-card-text>
-          <v-card-text>{{mentoringDetail.status}}</v-card-text>
-          <v-card-text>{{mentoringDetail.media}}</v-card-text>
-          <v-card-text>{{mentoringDetail.note}}</v-card-text>
+          <v-card-title v-if="!loaderDetail" class="headline">{{mentoringDetail.mentoring.name}}</v-card-title>
+          <v-card-title v-if="loaderDetail" class="headline"></v-card-title>
 
+          <v-card-text v-if="loaderDetail">
+            <v-progress-linear :indeterminate="true" color="omikti"></v-progress-linear>
+          </v-card-text>
+          <template v-if="!loaderDetail">
+            <v-card-text>{{mentoringDetail.mentor.talent.name}}</v-card-text>
+            <v-card-text>{{mentoringDetail.startTime}}</v-card-text>
+            <v-card-text>{{mentoringDetail.status}}</v-card-text>
+            <v-card-text>{{mentoringDetail.media}}</v-card-text>
+            <v-card-text>{{mentoringDetail.note}}</v-card-text>
+          </template>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn small fab color="red" text @click="dialogDetail = false">
@@ -168,17 +174,19 @@
             :items="mentoring.list"
             class="elevation-1"
           >
-            <template v-slot:item.mentor="{item}">
+            <template v-slot:item.startTime="{item}">
               <v-btn text fab small @click="openDetail(item.id)">
                 <v-icon small>pageview</v-icon>
               </v-btn>
-              {{ item.mentor.talent.name }}
+              {{ item.startTime }}
             </template>
+            <template v-slot:item.mentor="{item}">{{ item.mentor.talent.name }}</template>
             <template v-slot:item.status="{item}">
               <v-chip :color="colorStatus(item.status)" text-color="white">{{ item.status }}</v-chip>
             </template>
             <template v-slot:item.action="{item}">
               <v-btn
+                class="ma-1"
                 @click="acceptAct(item.id)"
                 small
                 color="green"
@@ -189,6 +197,7 @@
               </v-btn>
 
               <v-btn
+                class="ma-1"
                 @click="rescheduleAct(item.id)"
                 small
                 color="warning"
@@ -206,7 +215,7 @@
               <v-expand-transition>
                 <div v-if="item.id == selectedAcc">
                   {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtoaccept') }}
-                  <v-btn @click="acceptMentoring(item.id)" color="primary">
+                  <v-btn @click="acceptMentoring(item.id)" color="primary" class="ma-2">
                     <v-icon></v-icon>
                     {{ $vuetify.lang.t('$vuetify.action.yes') }}
                   </v-btn>
@@ -217,10 +226,10 @@
                 </div>
               </v-expand-transition>
 
-              <v-scale-transition>
+              <v-fade-transition>
                 <div v-if="item.id == selectedCan">
                   {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtocancel') }}
-                  <v-btn @click="cancelMentoring(item.id)" color="red">
+                  <v-btn @click="cancelMentoring(item.id)" color="red" class="ma-2">
                     <v-icon></v-icon>
                     {{ $vuetify.lang.t('$vuetify.action.yes') }}
                   </v-btn>
@@ -229,7 +238,7 @@
                     {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                   </v-btn>
                 </div>
-              </v-scale-transition>
+              </v-fade-transition>
             </template>
           </v-data-table>
         </v-flex>
@@ -286,7 +295,7 @@
                     </v-btn>
                   </div>
                 </v-fade-transition>
-                <v-scale-transition>
+                <v-fade-transition>
                   <div v-if="data.id == selectedCan">
                     {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtocancel') }}
                     <br />
@@ -299,7 +308,7 @@
                       {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                     </v-btn>
                   </div>
-                </v-scale-transition>
+                </v-fade-transition>
               </v-card-actions>
 
               <v-card-actions style="visibility:hidden">
@@ -355,7 +364,7 @@ export default {
         },
         { text: "Mentor", value: "mentor", sortable: false },
         { text: "Status", value: "status", sortable: false },
-        { text: "Actions", value: "action", sortable: false }
+        { text: "Actions", value: "action", sortable: false, align: "right" }
       ],
       mentoring: {
         total: 0,

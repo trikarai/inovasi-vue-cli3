@@ -19,14 +19,14 @@
             clearable
           >
             <template v-slot:selection="data">
-              <v-chip
+              <v-chip 
                 :key="JSON.stringify(data.item)"
                 :selected="data.selected"
                 :disabled="data.disabled"
                 class="v-chip--select-multi"
                 @input="data.parent.selectItem(data.item)"
               >
-                <v-avatar
+                <v-avatar left
                   class="primary white--text"
                   v-text="data.item.value.slice(0, 1).toUpperCase()"
                 ></v-avatar>
@@ -39,7 +39,7 @@
         <v-data-table :loading="loader" :headers="headers" :items="team.list" class="elevation-1">
           <template v-slot:item.status="{ item }">
             <v-chip :color="colorStatus(item.status.value)" text-color="white">
-              <v-avatar>
+              <v-avatar left>
                 <v-icon>{{iconStatus(item.status.value)}}</v-icon>
               </v-avatar>
               {{ item.status.displayName }}

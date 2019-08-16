@@ -41,7 +41,7 @@
             >
               <template v-slot:item.status="{ item }">
                 <v-chip :color="colorStatus(item.status.value)" text-color="white">
-                  <v-avatar>
+                  <v-avatar left>
                     <v-icon>{{iconStatus(item.status.value)}}</v-icon>
                   </v-avatar>
                   {{ item.status.displayName }}
