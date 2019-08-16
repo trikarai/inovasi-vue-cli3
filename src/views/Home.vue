@@ -118,7 +118,7 @@
             <v-container grid-list-xl>
               <v-layout row wrap align-center>
                 <v-flex xs12 md4>
-                  <v-card text class="transparent">
+                  <v-card text class="transparent" elevation="0">
                     <v-card-text>
                       <v-img
                         style="margin:0 auto !important"
@@ -136,7 +136,7 @@
                   </v-card>
                 </v-flex>
                 <v-flex xs12 md4>
-                  <v-card text class="transparent">
+                  <v-card text class="transparent" elevation="0">
                     <v-card-text class="text-center">
                       <v-img
                         style="margin:0 auto !important"
@@ -154,7 +154,7 @@
                   </v-card>
                 </v-flex>
                 <v-flex xs12 md4>
-                  <v-card text class="transparent">
+                  <v-card text class="transparent" elevation="0">
                     <v-card-text class="text-center">
                       <v-img
                         style="margin:0 auto !important"
@@ -181,7 +181,7 @@
         <v-container>
           <v-layout row wrap align-center>
             <v-flex xs12 md8>
-              <v-card text class="transparent">
+              <v-card text class="transparent" elevation="0">
                 <v-card-text class="title text-center">
                   <h2 class="font-weight-light">AYO, Segera Daftarkan STARTUP-mu Sekarang, GRATIS !</h2>
                 </v-card-text>
@@ -193,7 +193,7 @@
               </v-card-text>
             </v-flex>
             <v-flex xs12 md2>
-              <v-card text class="transparent text-center">
+              <v-card text class="transparent text-center" elevation="0">
                 <v-btn color="blue lighten-2" dark router to="/signup">Daftar disini !</v-btn>
               </v-card>
             </v-flex>
@@ -218,7 +218,7 @@
             <v-carousel-item v-for="(data, i) in mentor" :key="i">
               <v-layout align-center justify-center wrap fill-height>
                 <v-flex xs12 md3 v-for="(data, i) in data.groups" :key="i">
-                  <v-card text class="transparent">
+                  <v-card text class="transparent" elevation="0">
                     <v-card-text>
                       <v-img style="margin:0 auto !important" :src="data.photo" max-width="150px"></v-img>
                     </v-card-text>
