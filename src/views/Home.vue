@@ -248,6 +248,7 @@
           </div>
           <div data-v-cc192626 class="grsbwh"></div>
           <p>© MIKTI - Innovation 2019</p>
+          <v-btn text router to="/administrator/login"> </v-btn>
         </div>
       </section>
     </v-content>
