@@ -43,7 +43,7 @@
                     </template>
                   </div>
                   <v-layout justify-space-between>
-                    {{params}}
+                    <!-- {{params}} -->
                     <v-btn
                       v-if="params.formId"
                       @click.prevent="submit"

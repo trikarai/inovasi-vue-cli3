@@ -2,10 +2,8 @@
   <div>
     <v-container>
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
-        <v-icon>add</v-icon>
-        {{ $vuetify.lang.t('$vuetify.action.add') }} {{$vuetify.lang.t('$vuetify.idea.idea')}}
-      </v-btn>
+      
+
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary">
           <v-card-text>
@@ -14,6 +12,12 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+
+      <v-btn @click="openAdd()" color="blue" class="mb-2">
+        <v-icon>add</v-icon>
+        {{ $vuetify.lang.t('$vuetify.action.add') }} {{$vuetify.lang.t('$vuetify.idea.idea')}}
+      </v-btn>
+
       <v-data-table :headers="headers" :items="data.list" class="elevation-1">
         <template v-slot:item.name="{item}">
           <v-btn @click="openDetail(item.id)" small fab text>
@@ -24,11 +28,11 @@
           <v-icon color="yellow" small v-if="item.aMainIdea">start</v-icon>
         </template>
         <template v-slot:item.action="{item}">
-          <v-btn @click="setMain(item.id)" small v-if="!item.aMainIdea">
+          <v-btn @click="setMain(item.id)" small v-if="!item.aMainIdea" class="ma-1">
             <v-icon small>swap_calls</v-icon>
             {{ $vuetify.lang.t('$vuetify.idea.setMainIdea') }}
           </v-btn>
-          <v-btn @click="openEdit(item.id)" small>
+          <v-btn @click="openEdit(item.id)" small class="ma-1">
             <v-icon small>edit</v-icon>
             {{ $vuetify.lang.t('$vuetify.action.edit') }}
           </v-btn>
@@ -40,7 +44,7 @@
           <v-expand-transition>
             <div v-show="item.id == selectedIndex">
               {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-              <v-btn @click="deleteData(item.id)" color="red">
+              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
                 <v-icon></v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.yes') }}
               </v-btn>
@@ -106,7 +110,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "action", sortable: false }
+        { text: "", value: "action", sortable: false, align: "right" }
       ]
     };
   },

@@ -3,7 +3,8 @@
     <div>
       <v-container>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-        <v-btn color="blue" append to="/talent/create/team" style="left: -8px">
+        
+        <v-btn color="blue" append to="/talent/create/team" class="mb-2">
           <v-icon>add</v-icon>
           {{ $vuetify.lang.t('$vuetify.action.create') }} {{ $vuetify.lang.t('$vuetify.team.team') }}
         </v-btn>
