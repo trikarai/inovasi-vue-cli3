@@ -14,7 +14,7 @@
 
         <v-data-table :headers="headers" :items="programmeMentorship.list" class="elevation-1">
           <template v-slot:item.action="{item}">
-              <v-btn small @click="gotoMentoring(item.id)">
+              <v-btn small @click="gotoMentoring(item.id)" color="primary">
                 <v-icon small left>today</v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.view') }}
                 Mentoring
@@ -58,7 +58,7 @@ export default {
           sortable: false,
           value: "programme.name"
         },
-        { text: "", value: "action", sortable: false }
+        { text: "", value: "action", sortable: false, align:"right" }
       ],
       program: {
         total: 0,

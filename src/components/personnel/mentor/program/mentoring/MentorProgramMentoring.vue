@@ -31,7 +31,7 @@
                 class="v-chip--select-multi"
                 @input="data.parent.selectItem(data.item)"
               >
-                <v-avatar
+                <v-avatar left
                   class="primary white--text"
                   v-text="data.item.value.slice(0, 1).toUpperCase()"
                 ></v-avatar>
@@ -47,7 +47,7 @@
               <template v-slot:item.time="{item}">{{ item.startTime }} - {{ item.endTime }}</template>
               <template v-slot:item.status="{item}">
                 <v-chip :color="colorStatus(item.status)" text-color="white">
-                  <v-avatar>
+                  <v-avatar left>
                     <v-icon>check</v-icon>
                   </v-avatar>
                   {{ item.status }}
@@ -60,7 +60,7 @@
                   <v-icon left>search</v-icon>View
                 </v-btn> -->
 
-                <v-btn
+                <v-btn class="ma-1"
                   @click="openFormMentoring(item.id, 'accept')"
                   small
                   color="green"
@@ -70,7 +70,7 @@
                   {{ $vuetify.lang.t('$vuetify.mentoring.accept') }}
                 </v-btn>
 
-                <v-btn
+                <v-btn class="ma-1"
                   @click="openFormMentoring(item.id, 'offer')"
                   small
                   color="warning"
@@ -80,7 +80,7 @@
                   {{ $vuetify.lang.t('$vuetify.mentoring.offer') }}
                 </v-btn>
 
-                <v-btn
+                <v-btn class="ma-1"
                   @click="openFormMentoring(item.id, 'reject')"
                   small
                   color="red"
@@ -301,7 +301,7 @@ export default {
         },
         { text: "Date/Time", value: "time", sortable: false },
         { text: "Status", value: "status", sortable: false },
-        { text: "", value: "action", sortable: false }
+        { text: "", value: "action", sortable: false , align: "right"}
       ],
       date: "",
       time: "",
@@ -321,7 +321,7 @@ export default {
         { displayName: "Rejected", value: "rej" },
         { displayName: "Offered", value: "off" }
       ],
-      select: [{ displayName: "Proposed", value: "pro" }],
+      select: [],
       queryurl: ""
     };
   },

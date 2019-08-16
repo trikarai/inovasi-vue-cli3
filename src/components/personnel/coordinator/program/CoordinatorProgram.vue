@@ -11,7 +11,7 @@
           class="elevation-1"
         >
           <template v-slot:item.action="{item}">
-              <v-btn small @click="openParticipant(item.programme.id)">
+              <v-btn small @click="openParticipant(item.programme.id)" color="primary">
                 <v-icon small left>people_outline</v-icon>
                 <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
                 Participants
@@ -57,7 +57,7 @@ export default {
           value: "programme.name"
         },
         { text: "Curriculum", value: "programme.curriculum.name", sortable: false },
-        { text: "", value: "action", sortable: false }
+        { text: "", value: "action", sortable: false, align:"right" }
       ],
       program: {
         total: 0,

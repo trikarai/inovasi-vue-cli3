@@ -22,17 +22,17 @@
           <template v-slot:item.status="{item}">
 
             <v-chip :color="setColor(item.status)" text-color="white">
-              <v-avatar>
+              <v-avatar left>
                 <v-icon>{{setIcon(item.status)}}</v-icon>
               </v-avatar>
               {{ item.status }}
             </v-chip>
           </template>
           <template v-slot:item.action="{item}">
-            <v-btn rounded small @click.stop="openDetail(item.id)">
+            <v-btn rounded small @click.stop="openDetail(item.id)" class="ma-1">
               <v-icon small>search</v-icon>
             </v-btn>
-            <v-btn v-if="item.status == 'applied'" small color="green" @click="acceptAct(item.id)">
+            <v-btn v-if="item.status == 'applied'" small color="green" @click="acceptAct(item.id)" class="ma-1">
               <v-icon small>check_circle_outline</v-icon>Accept
             </v-btn>
             <v-btn
@@ -52,7 +52,7 @@
               <v-expand-transition>
                 <div v-show="item.id == selectedIndexAcc" style="white-space: nowrap">
                   Confirm to Accept!
-                  <v-btn color="green" @click="acceptParticipant(item.id)">
+                  <v-btn color="green" @click="acceptParticipant(item.id)" class="ma-2">
                     <v-icon>check</v-icon>
                   </v-btn>
                   <v-btn color="red" @click="selectedIndexAcc = null">
@@ -66,7 +66,7 @@
               <v-expand-transition>
                 <div v-show="item.id == selectedIndexRej" style="white-space: nowrap">
                   Confirm to Reject!
-                  <v-btn color="green" @click="rejectParticipant(item.id)">
+                  <v-btn color="green" @click="rejectParticipant(item.id)" class="ma-2">
                     <v-icon>check</v-icon>
                   </v-btn>
                   <v-btn color="red" @click="selectedIndexRej = null">
@@ -80,7 +80,7 @@
               <v-expand-transition>
                 <div v-show="item.id == selectedIndexExp" style="white-space: nowrap">
                   Confirm to Expell!
-                  <v-btn color="green" @click="expellParticipant(item.id)">
+                  <v-btn color="green" @click="expellParticipant(item.id)" class="ma-2">
                     <v-icon>check</v-icon>
                   </v-btn>
                   <v-btn color="red" @click="selectedIndexExp = null">
@@ -173,7 +173,7 @@ export default {
           value: "team.name"
         },
         { text: "Status", value: "status", sortable: false },
-        { text: "Actions", value: "action", sortable: false }
+        { text: "Actions", value: "action", sortable: false, align: "right" }
       ],
       participants: {
         total: 0,
