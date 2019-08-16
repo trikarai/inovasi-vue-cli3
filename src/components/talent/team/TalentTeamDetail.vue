@@ -16,12 +16,10 @@
         <v-layout align-start justify-start fill-height>
           <v-flex md6>
             <v-card>
-              <v-card-title>
-                {{params.team.name}}
-              </v-card-title>
+              <v-card-title>{{params.team.name}}</v-card-title>
               <v-card-text>
                 {{params.position}}
-                <v-divider/>
+                <v-divider />
                 {{params.status.displayName}}
               </v-card-text>
             </v-card>
@@ -30,10 +28,10 @@
 
         <v-layout align-start justify-start fill-height>
           <v-flex md6>
-            <v-btn @click="openSearch()">
+            <v-btn @click="openSearch()" class="mt-3">
               <v-icon>add</v-icon>Add Members
             </v-btn>
-          <v-divider></v-divider>
+            <v-divider></v-divider>
             <!-- {{memberlist.list}} -->
             <v-data-table
               :loading="loader"
@@ -41,8 +39,25 @@
               :items="memberlist.list"
               class="elevation-1"
             >
-              <template v-slot:items="props">
-                <td>{{ props.item.talent.name }}</td>
+              <template v-slot:item.action="{item}">
+                <v-btn small color="warning" @click="cancelAct(item.id)" v-if="item.status.value == 'inv'">
+                  <v-icon left small>cancel</v-icon>Cancel
+                </v-btn>
+                <v-btn small color="red" @click="removeAct(item.id)" v-if="item.status.value == 'act'">
+                  <v-icon left small>block</v-icon>Remove
+                </v-btn>
+                <v-expand-transition>
+                  <div v-if="item.id == selectRemove">
+                    <v-btn class="ma-2" color="red" @click="removeTalent(item.id)">Yes</v-btn>
+                    <v-btn @click="selectRemove = null">No</v-btn>
+                  </div>
+                </v-expand-transition>
+                <v-expand-transition>
+                  <div v-if="item.id == selectCancel">
+                    <v-btn class="ma-2" color="warning" @click="cancelTalent(item.id)">Yes</v-btn>
+                    <v-btn @click="selectCancel = null">No</v-btn>
+                  </div>
+                </v-expand-transition>
               </template>
             </v-data-table>
           </v-flex>
@@ -81,13 +96,26 @@ export default {
       edit: false,
       view: false,
       expand: false,
-      selectedIndex: null,
+      selectRemove: null,
+      selectCancel: null,
       headers: [
         {
           text: "Name",
           align: "left",
           sortable: false,
           value: "talent.name"
+        },
+        {
+          text: "Status",
+          align: "left",
+          sortable: false,
+          value: "status.displayName"
+        },
+        {
+          text: "Actions",
+          align: "right",
+          sortable: false,
+          value: "action"
         }
       ]
     };
@@ -148,6 +176,67 @@ export default {
       this.$router.push({
         path: "/talent/team/" + this.params.team.id + "/search"
       });
+    },
+    removeAct: function(id) {
+      this.selectCancel = null;
+      if (this.selectRemove == id) {
+        this.selectRemove = null;
+      } else {
+        this.selectRemove = id;
+      }
+    },
+    removeTalent: function(id) {
+      notif.reset(this);
+      this.loader = true;
+      net
+        .deleteData(
+          this,
+          "/talent/as-team-member/" + this.params.team.id + "/members/" + id
+        )
+        .then(res => {
+          this.refreshMember();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+          this.selectRemove = null;
+        });
+    },
+    cancelAct: function(id) {
+      this.selectRemove = null;
+      if (this.selectCancel == id) {
+        this.selectCancel = null;
+      } else {
+        this.selectCancel = id;
+      }
+    },
+    cancelTalent: function(id) {
+      notif.reset(this);
+      this.loader = true;
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.params.team.id +
+            "/members/" +
+            id +
+            "/cancel-invitation"
+        )
+        .then(res => {
+          this.refreshMember();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+          this.selectCancel = null;
+        });
+    },
+    refreshMember: function() {
+      this.getMemberList();
     }
   }
 };
