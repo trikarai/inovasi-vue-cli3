@@ -19,7 +19,7 @@
             <v-btn small @click="gotoSection(item.id)" class="mr-1">
               <v-icon small>extension</v-icon>Section
             </v-btn>
-            <v-btn small @click="gotoField(item.id)">
+            <v-btn small @click="gotoField(item.id, item.type.value)">
               <v-icon small>art_track</v-icon>Field
             </v-btn>
         </template>
@@ -106,7 +106,8 @@ export default {
     this.getDataList();
   },
   methods: {
-    gotoField: function(id) {
+    gotoField: function(id, type) {
+      this.$store.commit("setFormtype", type)
       this.$router.push({ path: "/administrator/form/" + id + "/field" });
     },
     gotoSection: function(id) {

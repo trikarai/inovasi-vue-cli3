@@ -6,6 +6,7 @@
           <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
+              {{$store.state.formType}}
               <div>
                 <v-form v-model="valid" ref="form">
                   <v-text-field

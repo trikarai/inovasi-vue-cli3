@@ -23,8 +23,12 @@ export default new Vuex.Store({
     teamMemberships: [],
     teamId: "",
     programId: "",
+    formType: ""
   },
   mutations: {
+    setFormtype(state, payload){
+      state.formType = payload;
+    },
     setTeamId(state, payload){
       state.teamId = payload;
     },
