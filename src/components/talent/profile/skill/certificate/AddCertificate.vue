@@ -82,7 +82,7 @@
                   <v-layout justify-space-between v-if="!view">
                     <v-btn
                       v-if="edit == false"
-                      @click.prevent="submit"
+                      @click.once="submit"
                       :class=" { 'primary white--text' : valid}"
                       :disabled="!valid"
                       block
@@ -183,7 +183,7 @@ export default {
         .catch(error => {
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
