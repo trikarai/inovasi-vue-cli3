@@ -8,7 +8,7 @@
             <v-card-text class="pt-4">
               {{$store.state.formType}}
               <br />
-              params.position : {{params.position}}
+              <!-- params.position : {{params.position}} -->
               <!-- <br /> -->
               <!-- total : {{total}} -->
               <div>
