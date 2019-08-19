@@ -19,13 +19,13 @@
     <!-- <v-container>
       <pre>{{ canvas }}</pre>
     </v-container> -->
-    <v-container style="display: grid; justify-items: stretch;" class="pa-0">
+    <v-container style="display: grid; justify-items: stretch; grid-gap: 5px 5px;">
       <template v-for="field in canvas.fields">
         <div
           :key="field.id"
-          :style="'border: 1px solid grey; grid-area:' + getGridPosition(field.field.position) + '; background-color: grey'"
+          :style="'grid-area:' + getGridPosition(field.field.position) + ''"
         >
-          <v-card elevation="2" :hover="hover" height="100%" class="ma-1 pa-0">
+          <v-card class="elevation-3" :hover="hover" height="100%">
             <v-card-text>
               {{field.value}}
             </v-card-text>
