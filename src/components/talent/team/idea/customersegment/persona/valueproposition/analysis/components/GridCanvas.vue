@@ -11,7 +11,7 @@
         </v-card>
       </v-dialog>
       <v-btn @click="openBusinessForm" color="primary">
-        <v-icon left>add</v-icon>
+        <v-icon left>edit</v-icon>
         <!-- {{canvas.form.name}} -->
       </v-btn>
     </v-container>
@@ -19,11 +19,11 @@
     <!-- <v-container>
       <pre>{{ canvas }}</pre>
     </v-container> -->
-    <v-container style="display: grid" class="pa-0">
-      <template v-for="field in canvas.textAreaFieldRecords">
+    <v-container style="display: grid; justify-items: stretch;" class="pa-0">
+      <template v-for="field in canvas.fields">
         <div
           :key="field.id"
-          :style="'border: 1px solid grey; grid-area:' + field.field.position + '; background-color: grey'"
+          :style="'border: 1px solid grey; grid-area:' + getGridPosition(field.field.position) + '; background-color: grey'"
         >
           <v-card elevation="2" :hover="hover" height="100%" class="ma-1 pa-0">
             <v-card-text>
@@ -68,6 +68,10 @@ export default {
     this.getCanvas();
   },
   methods: {
+    getGridPosition: function(position){
+      var position = JSON.parse(position);
+      return position.grid;
+    },
     getCanvas: function() {
       this.loader = true;
       net
@@ -91,7 +95,8 @@ export default {
           this.canvas = res.data.data;
         })
         .catch(error => {
-          console.log(error);
+          // console.log(error);
+          notif.showError(this, error);
         })
         .finally(() => {
           this.loader = false;
