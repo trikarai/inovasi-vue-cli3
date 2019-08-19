@@ -67,6 +67,7 @@
       :data="singleData"
       :edit="edit"
       :view="view"
+      :total="field.total"
       v-if="dialogForm"
       @close="dialogForm = false"
       @refresh="refresh()"
