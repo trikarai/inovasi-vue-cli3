@@ -10,7 +10,7 @@
         </v-btn>
       </transition>
 
-      <v-data-table :loading="loader" :headers="headers" :items="field.list">
+      <v-data-table :loading="loader" :headers="headers" :items="field.list" class="elevation-1">
         <template v-slot:item.option="{item}">
           <v-btn
             @click="openOption(item.id)"
@@ -50,6 +50,21 @@
         </template>
       </v-data-table>
     </v-container>
+    <template v-if="!optionShow">
+      <v-container
+        style="display: grid; justify-items: stretch; grid-gap: 5px 5px"
+        v-if="$store.state.formType == 'can'"
+      >
+        <template v-for="field in field.list">
+          <div :key="field.id" :style="'grid-area:' + getGridPosition(field.position) + ''">
+            <v-card class="elevation-3" height="100%">
+              <v-card-text>{{field.name}}</v-card-text>
+            </v-card>
+          </div>
+        </template>
+      </v-container>
+    </template>
+
     <transition name="fade">
       <v-container v-if="optionShow">
         <v-divider></v-divider>
@@ -132,6 +147,10 @@ export default {
     this.getDataList();
   },
   methods: {
+    getGridPosition: function(position) {
+      var position = JSON.parse(position);
+      return position.grid;
+    },
     getDataList: function() {
       this.loader = true;
       net
