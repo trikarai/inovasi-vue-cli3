@@ -1,39 +1,42 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="primary" class="mb-3">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} Region
       </v-btn>
-      
-      <v-data-table dark :loading="loader" :headers="headers" :items="region.list" class="elevation-1">
-        <template v-slot:items="props">
-          <td>{{ props.item.name }}</td>
-          <td class="text-xs-right">
-            <v-btn @click="openEdit(props.index)" small>
-              <v-icon small>edit</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.edit') }}
-            </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
-              <v-icon small>delete</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.delete') }}
-            </v-btn>
-            <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                </v-btn>
-                <v-btn @click="deleteAct(null)">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                </v-btn>
-              </div>
-            </v-expand-transition>
-          </td>
+
+      <v-data-table
+        dark
+        :loading="loader"
+        :headers="headers"
+        :items="region.list"
+        class="elevation-1"
+      >
+        <template v-slot:item.action="{item}">
+          <v-btn @click="openEdit(item)" small class="ma-1">
+            <v-icon small>edit</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.edit') }}
+          </v-btn>
+          <v-btn small dark color="warning" @click="deleteAct(item.id)">
+            <v-icon small>delete</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.delete') }}
+          </v-btn>
+          <v-expand-transition>
+            <div v-show="item.id == selectedIndex">
+              {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.yes') }}
+              </v-btn>
+              <v-btn @click="deleteAct(null)">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+              </v-btn>
+            </div>
+          </v-expand-transition>
         </template>
       </v-data-table>
     </v-container>
@@ -50,6 +53,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import RegionForm from "./region/AddRegion";
 import Notification from "@/components/Notification";
 
@@ -66,7 +70,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -84,7 +88,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id" }
+        { text: "Actions", value: "action", align: "right" }
       ]
     };
   },
@@ -94,24 +98,20 @@ export default {
   methods: {
     getRegionList: function() {
       this.loader = true;
+      notif.reset(this);
       net
         .getData(this, "/administrator/regions")
-        .then(
-          res => {
-            if(res.data.data){
-              this.region = res.data.data;
-            }else{
-              this.region.list = []; 
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.region = res.data.data;
+          } else {
+            this.region.list = [];
           }
-        )
-        .catch(function() {})
-        .finally(function() {
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -119,7 +119,7 @@ export default {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleRegion = this.region.list[index];
+      this.singleRegion = index;
     },
     openAdd: function() {
       this.dialogForm = true;
@@ -138,8 +138,10 @@ export default {
       net
         .deleteData(this, "/administrator/regions/" + id)
         .then()
-        .catch(function() {})
-        .finally(function() {
+        .catch(error=> {
+          notif.showError(this, error);
+        })
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });

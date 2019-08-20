@@ -93,7 +93,7 @@ export default {
       this.params.formId = this.$route.params.formId;
       net
         .getData(this, "/talent/forms/id/" + this.$route.params.formId)
-        .then(function(res) {
+        .then(res => {
           if (res.data.data) {
             this.formTemplate = res.data.data;
             this.setFormJSONTemplate(res.data.data);
@@ -101,11 +101,10 @@ export default {
             this.formTemplate = "";
           }
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(error => {
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -119,17 +118,6 @@ export default {
     submit: function() {
       if (this.$refs.form.validate()) {
         this.addData();
-      } else {
-        this.$vuetify.goTo(this.$refs.notif, {
-          duration: 500,
-          offset: 0,
-          easing: "linear"
-        });
-      }
-    },
-    update: function() {
-      if (this.$refs.form.validate()) {
-        // this.updateData();
       } else {
         this.$vuetify.goTo(this.$refs.notif, {
           duration: 500,
@@ -175,7 +163,7 @@ export default {
     },
     addData: function() {
       this.loader = true;
-      this.status.error = false;
+      notif.reset(this);
       net
         .patchData(
           this,
@@ -193,61 +181,12 @@ export default {
           this.params
         )
         .then(res => {
-          console.log(res);
           this.$emit("refresh");
         })
         .catch(error => {
-          console.log(error);
-          // notif.showError(this, error);
-          this.error = error.body;
+          notif.showError(this, error);
         })
-        .finally(function() {
-          this.loader = false;
-        });
-    },
-    updateData: function() {
-      var app = this;
-      this.loader = true;
-      this.status.error = false;
-      net
-        .putData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.data.id,
-          this.params
-        )
-        .then(
-          res => {
-            console.log(res);
-            this.$emit("refresh");
-          },
-          error => {
-            console.log(error);
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch(function(error) {
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.status.error = true;
-        })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     }

@@ -16,7 +16,7 @@
         <!-- {{program.list}} -->
         <v-data-table :headers="headers" :items="program.list" class="elevation-1">
           <template v-slot:item.action="{ item }">
-              <v-btn small color="primary" v-if="isTeam" @click="registerProgram(item.id)">
+              <v-btn small color="primary" v-if="isTeam" @click="registerProgram(item.id)" class="ma-1">
                 <v-icon small left>how_to_reg</v-icon>
                 {{ $vuetify.lang.t("$vuetify.action.register") }}
               </v-btn>
@@ -76,7 +76,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "Actions", value: "action", sortable: false }
+        { text: "Actions", value: "action", align: "right", sortable: false }
       ],
       program: {
         total: 0,

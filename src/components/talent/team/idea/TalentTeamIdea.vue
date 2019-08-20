@@ -1,11 +1,9 @@
 <template>
   <div>
     <v-container>
-      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
-        <v-icon>add</v-icon>
-        {{ $vuetify.lang.t('$vuetify.action.add') }} {{$vuetify.lang.t('$vuetify.idea.idea')}}
-      </v-btn>
+      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
+      
+
       <v-dialog v-model="loader" hide-overlay persistent width="300">
         <v-card color="primary">
           <v-card-text>
@@ -14,47 +12,51 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+
+      <v-btn @click="openAdd()" color="blue" class="mb-2">
+        <v-icon>add</v-icon>
+        {{ $vuetify.lang.t('$vuetify.action.add') }} {{$vuetify.lang.t('$vuetify.idea.idea')}}
+      </v-btn>
+
       <v-data-table :headers="headers" :items="data.list" class="elevation-1">
-        <template v-slot:items="props">
-          <td>
-            {{ props.item.name }}
-            <v-icon color="yellow" small v-if="props.item.aMainIdea">start</v-icon>
-          </td>
-          <td class="text-xs-right">
-            <v-btn @click="setMain(props.item.id)" small v-if="!props.item.aMainIdea">
-              <v-icon small>swap_calls</v-icon>
-              {{ $vuetify.lang.t('$vuetify.idea.setMainIdea') }}
-            </v-btn>
-            <v-btn @click="openEdit(props.index)" small>
-              <v-icon small>edit</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.edit') }}
-            </v-btn>
-            <v-btn @click="openDetail(props.item.id)" small>
-              <v-icon small>pageview</v-icon> 
-              {{ $vuetify.lang.t('$vuetify.action.view') }}
-            </v-btn>
-            <v-btn small color="warning" @click="deleteAct(props.index)">
-              <v-icon small>delete</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.delete') }}
-            </v-btn>
-            <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                </v-btn>
-                <v-btn @click="deleteAct(null)">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                </v-btn>
-              </div>
-            </v-expand-transition>
-          </td>
+        <template v-slot:item.name="{item}">
+          <v-btn @click="openDetail(item.id)" small fab text>
+            <v-icon>pageview</v-icon>
+            <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
+          </v-btn> 
+          {{ item.name }}
+          <v-icon color="yellow" small v-if="item.aMainIdea">start</v-icon>
+        </template>
+        <template v-slot:item.action="{item}">
+          <v-btn @click="setMain(item.id)" small v-if="!item.aMainIdea" class="ma-1">
+            <v-icon small>swap_calls</v-icon>
+            {{ $vuetify.lang.t('$vuetify.idea.setMainIdea') }}
+          </v-btn>
+          <v-btn @click="openEdit(item.id)" small class="ma-1">
+            <v-icon small>edit</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.edit') }}
+          </v-btn>
+
+          <v-btn small color="warning" @click="deleteAct(item.id)">
+            <v-icon small>delete</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.delete') }}
+          </v-btn>
+          <v-expand-transition>
+            <div v-show="item.id == selectedIndex">
+              {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.yes') }}
+              </v-btn>
+              <v-btn @click="deleteAct(null)">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+              </v-btn>
+            </div>
+          </v-expand-transition>
         </template>
       </v-data-table>
-      <br>
-
+      <br />
     </v-container>
 
     <IdeaForm
@@ -66,12 +68,13 @@
       @refresh="refresh()"
     />
     <v-container>
-    <span v-html="error.body" v-if="status.error"></span>
+      <span v-html="error.body" v-if="status.error"></span>
     </v-container>
   </div>
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import IdeaForm from "./IdeaForm";
 import Notification from "@/components/Notification";
 
@@ -88,7 +91,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       error: "error",
       loader: false,
       dialogDel: false,
@@ -107,7 +110,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "", value: "action", sortable: false, align: "right" }
       ]
     };
   },
@@ -117,59 +120,36 @@ export default {
   methods: {
     getDataList: function() {
       this.loader = true;
-      // this.status.error = false;
-      // this.status.success = false;
-      var app = this;
+      notif.reset(this);
       net
         .getData(
           this,
-          "/talent/as-team-member/" + this.$route.params.teamId + "/ideas/"
+          "/talent/as-team-member/" + this.$route.params.teamId + "/ideas"
         )
-        .then(
-          res => {
-            if (res.data.data) {
-              this.data = res.data.data;
-            } else {
-              this.data.list = [];
-            }
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.error = error;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.data = res.data.data;
+          } else {
+            this.data.list = [];
           }
-        )
-        .catch(function(error) {
-          console.log(error);
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.error = error;
-          app.status.error = true;
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
-    openDetail: function(id){
-      this.$router.push({path: "/talent/team/"+ this.$route.params.teamId + "/idea/" + id})
+    openDetail: function(id) {
+      this.$router.push({
+        path: "/talent/team/" + this.$route.params.teamId + "/idea/" + id
+      });
     },
     openEdit: function(index) {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.data.list[index];
+      this.singleData.id = index;
     },
     openAdd: function() {
       this.dialogForm = true;
@@ -190,17 +170,19 @@ export default {
           this,
           "/talent/as-team-member/" + this.$route.params.teamId + "/ideas/" + id
         )
-        .then()
-        .catch(function() {})
-        .finally(function() {
+        .then(res => {
+          this.refresh();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });
     },
     setMain: function(id) {
-      var app = this;
-      this.status.error = false;
-      this.status.success = false;
+      notif.reset(this);
       net
         .putData(
           this,
@@ -210,40 +192,13 @@ export default {
             id +
             "/assign-as-main-idea"
         )
-        .then(
-          res => {
-            console.log(res);
-          },
-          error => {
-            console.log(error);
-            if (error.status > 400) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-            this.error = error;
-          }
-        )
-        .catch(function(error) {
-          console.log(error);
-          if (error.status !== 200) {
-            app.err_msg = {
-              code: error.status,
-              type: error.statusText,
-              details: [error.statusText]
-            };
-          } else {
-            app.err_msg = error.body.meta;
-          }
-          app.error = error;
-          app.status.error = true;
+        .then(res => {
+          this.refresh();
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });

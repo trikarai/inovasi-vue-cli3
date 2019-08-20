@@ -10,16 +10,12 @@
           :items="programmeCoordinatorships.list"
           class="elevation-1"
         >
-          <template v-slot:items="props">
-            <td>{{ props.item.programme.name }}</td>
-            <td>{{ props.item.programme.curriculum.name }}</td>
-            <td class="text-xs-right">
-              <v-btn small @click="openParticipant(props.item.programme.id)">
+          <template v-slot:item.action="{item}">
+              <v-btn small @click="openParticipant(item.programme.id)" color="primary">
                 <v-icon small left>people_outline</v-icon>
                 <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
                 Participants
               </v-btn>
-            </td>
           </template>
         </v-data-table>
       </v-container>
@@ -58,10 +54,10 @@ export default {
           text: "Program Name",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "programme.name"
         },
-        { text: "Curriculum", value: "curriculum", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Curriculum", value: "programme.curriculum.name", sortable: false },
+        { text: "", value: "action", sortable: false, align:"right" }
       ],
       program: {
         total: 0,

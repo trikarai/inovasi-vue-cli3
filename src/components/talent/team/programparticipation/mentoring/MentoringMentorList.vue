@@ -124,7 +124,7 @@
           class="elevation-1"
         >
           <template v-slot:item.action="{item}">
-              <v-btn small color="primary" rounded @click="proposeMentoring(item.id)">
+              <v-btn small color="primary" rounded @click="proposeMentoring(item.id)" class="ma-1">
                 <v-icon left small>today</v-icon>Propose
               </v-btn>
               <v-btn small rounded @click="gotomentorsession(item.id)">
@@ -176,7 +176,7 @@ export default {
           sortable: false,
           value: "talent.name"
         },
-        { text: "Actions", value: "action", sortable: false }
+        { text: "Actions", value: "action", sortable: false, align: "right" }
       ],
       date: "",
       time: "",

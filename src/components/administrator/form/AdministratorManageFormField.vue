@@ -4,56 +4,67 @@
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <!-- {{res}}<br> -->
       <transition name="fade">
-        <v-btn @click="openAdd()" color="blue" style="left: -8px" v-if="!optionShow">
+        <v-btn @click="openAdd()" color="primary" class="mb-3" v-if="!optionShow">
           <v-icon>add</v-icon>
           {{ $vuetify.lang.t('$vuetify.action.add') }} Field
         </v-btn>
       </transition>
 
-      <v-data-table :loading="loader" :headers="headers" :items="field.list">
-        <template v-slot:items="props">
-          <td>{{props.item.position}}</td>
-          <td>{{props.item.name}}</td>
-          <td>{{props.item.type.displayName}}</td>
-          <td>
-            <v-btn
-              @click="openOption(props.item.id)"
-              color="blue"
-              right
-              small
-              fab
-              v-show="props.item.type.value === 'sel'"
-            >
-              <v-icon>playlist_add</v-icon>
-            </v-btn>
-          </td>
-          <td class="text-xs-right" v-visible="!optionShow">
-            <v-btn @click="openEdit(props.item.id)" small>
-              <v-icon small>edit</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.edit') }}
-            </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.item.id)" v-show="!optionShow">
-              <v-icon small>delete</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.delete') }}
-            </v-btn>
+      <v-data-table :loading="loader" :headers="headers" :items="field.list" class="elevation-1">
+        <template v-slot:item.option="{item}">
+          <v-btn
+            @click="openOption(item.id)"
+            color="blue"
+            right
+            small
+            fab
+            v-show="item.type.value === 'sel'"
+          >
+            <v-icon>playlist_add</v-icon>
+          </v-btn>
+        </template>
 
-            <v-expand-transition>
-              <div v-show="props.item.id == selectedIndex">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                </v-btn>
-                <v-btn @click="deleteAct(null)">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                </v-btn>
-              </div>
-            </v-expand-transition>
-          </td>
+        <template v-slot:item.action="{item}">
+          <v-btn @click="openEdit(item.id)" small class="mr-1">
+            <v-icon small>edit</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.edit') }}
+          </v-btn>
+          <v-btn small dark color="warning" @click="deleteAct(item.id)" v-show="!optionShow">
+            <v-icon small>delete</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.delete') }}
+          </v-btn>
+
+          <v-expand-transition>
+            <div v-show="item.id == selectedIndex">
+              {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.yes') }}
+              </v-btn>
+              <v-btn @click="deleteAct(null)">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+              </v-btn>
+            </div>
+          </v-expand-transition>
         </template>
       </v-data-table>
     </v-container>
+    <template v-if="!optionShow">
+      <v-container
+        style="display: grid; justify-items: stretch; grid-gap: 5px 5px"
+        v-if="$store.state.formType == 'can'"
+      >
+        <template v-for="field in field.list">
+          <div :key="field.id" :style="'grid-area:' + getGridPosition(field.position) + ''">
+            <v-card class="elevation-3" height="100%">
+              <v-card-text>{{field.name}}</v-card-text>
+            </v-card>
+          </div>
+        </template>
+      </v-container>
+    </template>
+
     <transition name="fade">
       <v-container v-if="optionShow">
         <v-divider></v-divider>
@@ -71,6 +82,7 @@
       :data="singleData"
       :edit="edit"
       :view="view"
+      :total="field.total"
       v-if="dialogForm"
       @close="dialogForm = false"
       @refresh="refresh()"
@@ -126,8 +138,8 @@ export default {
           value: "name"
         },
         { text: "Type", value: "type.displayName", sortable: false },
-        { text: "Option", value: "type.value", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Option", value: "option", sortable: false },
+        { text: "", value: "action", sortable: false, align: "right" }
       ]
     };
   },
@@ -135,6 +147,10 @@ export default {
     this.getDataList();
   },
   methods: {
+    getGridPosition: function(position) {
+      var position = JSON.parse(position);
+      return position.grid;
+    },
     getDataList: function() {
       this.loader = true;
       net
@@ -182,10 +198,10 @@ export default {
           "/administrator/forms/" + this.$route.params.formId + "/fields/" + id
         )
         .then()
-        .catch(error=>{
+        .catch(error => {
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });

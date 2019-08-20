@@ -35,9 +35,9 @@
                       v-model="password"
                       min="8"
                       :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                      :append-icon-cb="() => (e1 = !e1)"
                       :type="e1 ? 'password' : 'text'"
                       :rules="passwordRules"
+                      @click:append="e1 = !e1"
                       v-on:keyup.enter="submit"
                       counter
                       required
@@ -94,7 +94,7 @@ export default {
         warning: false
       },
       valid: false,
-      e1: false,
+      e1: true,
       password: "",
       passwordRules: [v => !!v || "Password is required"],
       email: "",

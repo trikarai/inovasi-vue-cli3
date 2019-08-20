@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+      <v-btn @click="openAdd()" color="primary" class="mb-3 mt-3">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} Options
       </v-btn>
@@ -15,32 +15,28 @@
         </v-card>
       </v-dialog>
       <v-data-table dark :headers="headers" :items="option.list" class="elevation-1">
-        <template v-slot:items="props">
-          <td>{{ props.item.position }}</td>
-          <td>{{ props.item.name }}</td>
-          <td class="text-xs-right">
-            <v-btn @click="openEdit(props.item.id)" small>
-              <v-icon small>edit</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.edit') }}
-            </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
-              <v-icon small>delete</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.delete') }}
-            </v-btn>
-            <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                </v-btn>
-                <v-btn @click="deleteAct(null)">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                </v-btn>
-              </div>
-            </v-expand-transition>
-          </td>
+        <template v-slot:item.action="{item}">
+          <v-btn @click="openEdit(item.id)" small class="mr-1">
+            <v-icon small>edit</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.edit') }}
+          </v-btn>
+          <v-btn small dark color="warning" @click="deleteAct(item.id)">
+            <v-icon small>delete</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.delete') }}
+          </v-btn>
+          <v-expand-transition>
+            <div v-show="item.id == selectedIndex">
+              {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.yes') }}
+              </v-btn>
+              <v-btn @click="deleteAct(null)">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+              </v-btn>
+            </div>
+          </v-expand-transition>
         </template>
       </v-data-table>
     </v-container>
@@ -57,14 +53,15 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import OptionForm from "./AddOption";
 
 export default {
-  props: ['fieldId'],
+  props: ["fieldId"],
   components: {
     "notification-alert": Notification,
-     OptionForm
+    OptionForm
   },
   data() {
     return {
@@ -75,7 +72,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -99,7 +96,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "", value: "action", sortable: false, align: "right" }
       ]
     };
   },
@@ -109,25 +106,27 @@ export default {
   methods: {
     getDataList: function() {
       this.loader = true;
+      notif.reset(this);
       net
-        .getData(this, "/administrator/forms/" + this.$route.params.formId + "/fields/" + this.fieldId + "/options/")
-        .then(
-          res => {
-            if(res.data.data){
-              this.option = res.data.data;
-            }else{
-              this.option.list = []; 
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
-          }
+        .getData(
+          this,
+          "/administrator/forms/" +
+            this.$route.params.formId +
+            "/fields/" +
+            this.fieldId +
+            "/options/"
         )
-        .catch(function() {
+        .then(res => {
+          if (res.data.data) {
+            this.option = res.data.data;
+          } else {
+            this.option.list = [];
+          }
         })
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -151,11 +150,22 @@ export default {
       }
     },
     deleteData: function(id) {
+      notif.reset(this);
       net
-        .deleteData(this, "/administrator/forms/" + this.$route.params.formId + "/fields/" + this.fieldId + "/options/" + id)
+        .deleteData(
+          this,
+          "/administrator/forms/" +
+            this.$route.params.formId +
+            "/fields/" +
+            this.fieldId +
+            "/options/" +
+            id
+        )
         .then()
-        .catch(function() {})
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });

@@ -57,7 +57,7 @@
                     <v-expand-transition>
                       <div v-show="index == selectedIndex">
                         <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }} -->
-                        <v-btn small @click="deleteData(item.id)" color="red">
+                        <v-btn small @click="deleteData(item.id)" color="red" class="ma-2">
                           <v-icon></v-icon>
                           {{ $vuetify.lang.t('$vuetify.action.yes') }}
                         </v-btn>
@@ -67,9 +67,9 @@
                         </v-btn>
                       </div>
                     </v-expand-transition>
-                    <v-expand-x-transition>
+                    <v-expand-transition>
                       <div v-show="index != selectedIndex">
-                        <v-btn small @click="gotoBusinessAnalysis(item.id)">
+                        <v-btn small @click="gotoBusinessAnalysis(item.id)" class="ma-2">
                           <v-icon>business_center</v-icon>
                           <span class="hidden-sm-and-down">Analysis</span>
                         </v-btn>
@@ -78,7 +78,7 @@
                           <span class="hidden-sm-and-down">Experiment</span>
                         </v-btn>
                       </div>
-                    </v-expand-x-transition>
+                    </v-expand-transition>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-btn text @click="deleteAct(index)" small>
@@ -94,7 +94,7 @@
               </v-list-item>
             </template>
           </v-list>
-          <v-btn color="primary" @click="openAdd">
+          <v-btn color="primary" @click="openAdd" class="ml-2">
             <v-icon>add</v-icon>
             {{$vuetify.lang.t("$vuetify.action.add")}}
           </v-btn>

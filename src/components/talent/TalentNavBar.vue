@@ -33,7 +33,7 @@
               <v-icon>chevron_right</v-icon>
             </v-list-item-action>
           </v-list-item>
-          <v-list-item avatar>
+          <v-list-item>
             <v-list-item-avatar>
               <img src="/img/avatar.png" />
             </v-list-item-avatar>

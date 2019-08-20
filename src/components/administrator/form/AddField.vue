@@ -6,6 +6,11 @@
           <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
+              {{$store.state.formType}}
+              <br />
+              <!-- params.position : {{params.position}} -->
+              <!-- <br /> -->
+              <!-- total : {{total}} -->
               <div>
                 <v-form v-model="valid" ref="form">
                   <v-text-field
@@ -37,8 +42,23 @@
 
                   <v-text-field
                     :disabled="view"
-                    label="Position"
-                    v-model="params.position"
+                    label="Order"
+                    v-model="position.order"
+                    type="number"
+                    hint="field order"
+                    min="1"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    v-if="$store.state.formType == 'can'"
+                    :disabled="view"
+                    label="Grid Position"
+                    v-model="position.grid"
+                    hint="row-start / column-start / row-end / column-end"
+                    persistent-hint
+                    placeholder="row-start / column-start / row-end / column-end"
+                    v-mask="gridMask"
+                    :rules="gridRules"
                     required
                   ></v-text-field>
                   <template v-if="minmax">
@@ -47,7 +67,6 @@
                       label="min Value"
                       v-model="params.minValue"
                       type="number"
-                      required
                     ></v-text-field>
                     <v-text-field
                       :disabled="view"
@@ -100,9 +119,11 @@
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
+import { mask } from "@rj-pkgs/vue-the-mask";
 
 export default {
-  props: ["id", "edit", "view", "data"],
+  props: ["id", "edit", "view", "data", "total"],
+  directives: { mask },
   data: function() {
     return {
       valid: false,
@@ -114,7 +135,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       response: "",
       params: {
         name: "",
@@ -124,6 +145,9 @@ export default {
         minValue: 0,
         maxValue: 0
       },
+      position: { order: "", grid: "" },
+      gridMask: "# / # / # / #",
+      gridRules: [v => v.length == 13 || "Grid Position must valid : row-start / column-start / row-end / column-end"],
       nameRules: [
         v => !!v || "Name is required",
         v => v.length >= 3 || "Name must be more than 3 characters"
@@ -161,6 +185,8 @@ export default {
   mounted: function() {
     if (this.edit) {
       this.getSingleData(this.data.id);
+    } else {
+      this.position.order = this.total + 1;
     }
   },
   computed: {
@@ -177,6 +203,8 @@ export default {
     }
   },
   watch: {
+    "position.order": "makePostParams",
+    "position.grid": "makePostParams",
     "params.type": function() {
       if (this.params.type === "sel") {
         this.params.minValue = 1;
@@ -194,6 +222,14 @@ export default {
     }
   },
   methods: {
+    makePostParams: function() {
+      this.params.position =
+        '{ "order": "' +
+        this.position.order +
+        '", "grid": "' +
+        this.position.grid +
+        '"}';
+    },
     submit: function() {
       if (this.$refs.form.validate()) {
         this.addData();
@@ -263,9 +299,13 @@ export default {
           res => {
             this.params = res.data.data;
             this.params.type = res.data.data.type.value;
-            if(this.params.minValue === 1){
+            var position = JSON.parse(this.params.position);
+            this.position.order = position.order;
+            this.position.grid = position.grid;
+
+            if (this.params.minValue === 1) {
               this.checkbox = false;
-            }else{
+            } else {
               this.checkbox = true;
             }
           },

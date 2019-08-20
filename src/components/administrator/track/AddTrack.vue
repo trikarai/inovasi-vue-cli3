@@ -12,8 +12,8 @@
                       label="Track Name"
                       v-model="params.name"
                       :rules="nameRules"
-                      :counter="25"
-                      maxlength="25"
+                      :counter="50"
+                      maxlength="50"
                       required
                     ></v-text-field>
                     <v-layout justify-space-between>

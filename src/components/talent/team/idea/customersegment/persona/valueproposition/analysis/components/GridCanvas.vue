@@ -2,7 +2,7 @@
   <div>
     <v-container>
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
+      <v-dialog v-model="loader" persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
             {{ $vuetify.lang.t('$vuetify.info.standby') }}
@@ -10,64 +10,174 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      <v-btn @click="openBusinessForm" color="primary">
-        <v-icon left>add</v-icon>
-        <!-- {{canvas.form.name}} -->
+
+      <!-- <v-btn @click="openBusinessForm" color="primary" v-if="isCanvas">
+        <v-icon>edit</v-icon>
+      </v-btn>-->
+
+      <v-btn @click="isEdit = !isEdit" color="primary" v-if="isCanvas">
+        <v-icon>edit</v-icon>
       </v-btn>
+
+      <v-fade-transition>
+        <template v-if="!isEdit">
+          <v-btn @click="selectedDel = !selectedDel" color="red" class="ml-2" v-if="isCanvas">
+            <v-icon>delete</v-icon>
+          </v-btn>
+        </template>
+      </v-fade-transition>
+
+      <v-expand-transition>
+        <v-layout wrap v-if="isEdit">
+          <v-flex>
+            <v-btn class="mt-3" @click.prevent="submit" color="primary">
+              <v-icon>save</v-icon>
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-expand-transition>
+
+      <v-expand-transition>
+        <v-layout wrap v-if="selectedDel">
+          <v-flex>
+            Are You Sure ?
+            <br />
+            <v-btn class="ma-2" color="red" @click="deleteCanvas">Yes</v-btn>
+            <v-btn class="ma-2" @click="selectedDel = !selectedDel">No</v-btn>
+          </v-flex>
+        </v-layout>
+      </v-expand-transition>
     </v-container>
 
-    <!-- <v-container>
-      <pre>{{ canvas }}</pre>
-    </v-container> -->
-    <v-container style="display: grid" class="pa-0">
-      <template v-for="field in canvas.textAreaFieldRecords">
-        <div
-          :key="field.id"
-          :style="'border: 1px solid grey; grid-area:' + field.field.position + '; background-color: grey'"
-        >
-          <v-card elevation="2" :hover="hover" height="100%" class="ma-1 pa-0">
-            <v-card-text>
-              {{field.value}}
-            </v-card-text>
-          </v-card>
-        </div>
+    <v-container style="display: grid; justify-items: stretch; grid-gap: 5px 5px;" v-if="isCanvas">
+      <template v-if="!isEdit">
+        <template v-for="field in canvas.fields" id="viewCanvas">
+          <div :key="field.id" :style="'grid-area:' + getGridPosition(field.field.position) + ''">
+            <v-card class="elevation-3" :hover="hover" height="100%">
+              <v-card-title>{{field.field.name}}</v-card-title>
+              <v-card-text>{{field.value}}</v-card-text>
+            </v-card>
+          </div>
+        </template>
       </template>
+      <template v-if="isEdit">
+        <template v-for="(field, index) in canvas.fields" id="editCanvas">
+          <div :key="field.id" :style="'grid-area:' + getGridPosition(field.field.position) + ''">
+            <v-card class="elevation-3" :hover="hover" height="100%">
+              <v-card-title>{{field.field.name}}</v-card-title>
+              <v-card-text>
+                <fieldcanedit-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></fieldcanedit-modul>
+              </v-card-text>
+            </v-card>
+          </div>
+        </template>
+      </template>
+      <!-- <pre>{{canvas}}</pre> -->
+      <pre>{{params}}</pre>
     </v-container>
+
+    <v-form v-model="valid" ref="form" v-if="!isCanvas">
+      <v-btn
+        class="ml-3"
+        @click.prevent="submit"
+        :class=" { 'primary white--text' : valid, disabled: !valid }"
+      >
+        <v-icon>save</v-icon>
+      </v-btn>
+      <v-container style="display: grid; justify-items: stretch; grid-gap: 5px 5px;">
+        <template v-for="(field, index) in canvasForm.fields">
+          <div :key="field.id" :style="'grid-area:' + getGridPosition(field.position) + ''">
+            <v-card class="elevation-3" :hover="hover" height="100%">
+              <v-card-title>{{field.name}}</v-card-title>
+              <v-card-text>
+                <field-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></field-modul>
+              </v-card-text>
+            </v-card>
+          </div>
+        </template>
+        <!-- <pre>{{params}}</pre> -->
+      </v-container>
+    </v-form>
 
     <business-form v-if="dialogForm" @close="dialogForm = false" @refresh="refresh"></business-form>
   </div>
 </template>
 <script>
+import bus from "@/bus";
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
+
+import FieldModul from "@/components/field/field";
+import FieldCanEditModul from "@/components/field/fieldCanEdit";
 
 import BusinessForm from "./BusinessForm";
 
 export default {
   data: function() {
     return {
-      canvas: "",
+      valid: false,
+      canvas: { fields: [] },
+      canvasForm: "",
+      params: {
+        formId: "",
+        fieldEntries: []
+      },
+      isCanvas: true,
+      isEdit: false,
       loader: false,
       hover: false,
       dialogForm: false,
+      selectedDel: false,
       status: {
         success: false,
         error: false,
         info: false,
         warning: false
       },
-      err_msg: {details:[""]}
+      err_msg: { details: [""] }
     };
   },
   components: {
     BusinessForm,
-    "notification-alert": Notification
+    "notification-alert": Notification,
+    "field-modul": FieldModul,
+    "fieldcanedit-modul": FieldCanEditModul
   },
   mounted: function() {
     this.getCanvas();
   },
+  watch: {
+    // isCanvas: "getCanvasForm"
+  },
+  created: function() {
+    bus.$on("getValue", (params, index) => {
+      this.params.fieldEntries.splice(index, 1, params);
+    });
+  },
   methods: {
+    submit: function() {
+      if (this.$refs.form.validate()) {
+        this.addData();
+      } else {
+        this.$vuetify.goTo(this.$refs.notif, {
+          duration: 500,
+          offset: 0,
+          easing: "linear"
+        });
+      }
+    },
+    getGridPosition: function(position) {
+      var position = JSON.parse(position);
+      return position.grid;
+    },
+    setFormJSONTemplate: function(data) {
+      var array = [];
+      for (var i = 0; i < data.fields.length; i++) {
+        array.push(new Object({ id: data.fields[i].id, value: "" }));
+      }
+      this.params.fieldEntries = array;
+    },
     getCanvas: function() {
       this.loader = true;
       net
@@ -89,18 +199,109 @@ export default {
         )
         .then(res => {
           this.canvas = res.data.data;
+          this.isCanvas = true;
         })
         .catch(error => {
-          console.log(error);
+          notif.showError(this, error);
+          this.isCanvas = false;
+          this.getCanvasForm();
         })
         .finally(() => {
           this.loader = false;
         });
     },
+    getCanvasForm: function() {
+      this.loader = true;
+      this.params.formId = this.$route.params.formId;
+      net
+        .getData(this, "/talent/forms/id/" + this.$route.params.formId)
+        .then(res => {
+          if (res.data.data) {
+            this.canvasForm = res.data.data;
+            this.setFormJSONTemplate(res.data.data);
+          } else {
+            this.canvasForm = "";
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    addData: function() {
+      this.params.formId = this.$route.params.formId;
+      this.loader = true;
+      notif.reset(this);
+      net
+        .patchData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/business-canvases",
+          this.params
+        )
+        .then(res => {
+          this.refresh();
+          this.showSuccess(this, res, ["Data Canvas Saved"]);
+          this.isCanvas = true;
+          this.isEdit = false;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    deleteCanvas: function() {
+      this.loader = true;
+      net
+        .deleteData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/business-canvases/" +
+            this.$route.params.formId
+        )
+        .then(res => {
+          notif.showInfo(this, res, ["Canvas Data Deleted"]);
+          this.getCanvasForm();
+          this.canvas = { fields: [] };
+          this.isCanvas = false;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+          this.selectedDel = false;
+        });
+    },
     openBusinessForm: function() {
       this.dialogForm = true;
     },
-    refresh: function() {}
+    refresh: function() {
+      this.dialogForm = false;
+      this.getCanvas();
+    }
   }
 };
 </script>

@@ -36,17 +36,12 @@
         :server-items-length="talents.total"
         class="elevation-1"
       >
-        <template v-slot:items="props">
-          <td>{{ props.item.name }}</td>
-          <td>{{ props.item.username }}</td>
-          <td>{{ props.item.email }}</td>
-          <td class="text-xs-right">
-            <v-btn @click="openDetail(props.index)" small>
-              <v-icon small>add</v-icon>
-              <!-- {{ $vuetify.lang.t('$vuetify.action.add') }} -->
-              Assign
-            </v-btn>
-          </td>
+        <template v-slot:item.action="{item}">
+          <v-btn @click="openDetail(item)" small>
+            <v-icon small>add</v-icon>
+            <!-- {{ $vuetify.lang.t('$vuetify.action.add') }} -->
+            Assign
+          </v-btn>
         </template>
       </v-data-table>
     </v-container>
@@ -82,7 +77,7 @@ export default {
         info: true,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -100,11 +95,11 @@ export default {
           text: "Name",
           align: "left",
           sortable: false,
-          value: "talent.name"
+          value: "name"
         },
-        { text: "username", value: "username", sortable: false },
-        { text: "email", value: "email", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Username", value: "username", sortable: false },
+        { text: "E-mail", value: "email", sortable: false },
+        { text: "", value: "action", sortable: false }
       ],
       pagination: {},
       querypage: ""
@@ -167,7 +162,7 @@ export default {
           this.talents.list = [];
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -187,7 +182,7 @@ export default {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -195,7 +190,7 @@ export default {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.talents.list[index];
+      this.singleData = index;
     },
     refresh: function() {
       this.dialogForm = false;

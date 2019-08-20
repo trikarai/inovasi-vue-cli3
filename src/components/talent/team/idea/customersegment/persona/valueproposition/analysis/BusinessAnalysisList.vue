@@ -12,14 +12,10 @@
     <v-layout>
       <v-flex>
         <v-data-table :headers="headers" :items="canvas.list" class="elevation-1">
-          <template v-slot:items="props">
-            <td>{{ props.item.name }}</td>
-            <td></td>
-            <td>
-              <v-btn @click="gotoCanvas(props.item.id)" color="primary" small fab>
+          <template v-slot:item.action="{item}">
+              <v-btn @click="gotoCanvas(item.id)" color="primary" rounded>
                 <v-icon>pageview</v-icon>
               </v-btn>
-            </td>
           </template>
         </v-data-table>
       </v-flex>
@@ -52,7 +48,7 @@ export default {
           value: "name"
         },
         { text: "", value: "", sortable: false },
-        { text: "", value: "", sortable: false }
+        { text: "", value: "action", sortable: false }
       ],
       err_msg: { details: [""] },
       error: "error",

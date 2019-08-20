@@ -38,7 +38,7 @@
                 class="v-chip--select-multi"
                 @input="data.parent.selectItem(data.item)"
               >
-                <v-avatar
+                <v-avatar left
                   class="primary white--text"
                   v-text="data.item.value.slice(0, 1).toUpperCase()"
                 ></v-avatar>
@@ -59,52 +59,64 @@
         >
           <template v-slot:item.status="{ item }">
             <v-chip :color="setColor(item.status)" text-color="white">
-                <v-avatar>
-                  <v-icon>{{setIcon(item.status)}}</v-icon>
-                </v-avatar>
-                {{ item.status }}
-              </v-chip>
+              <v-avatar left>
+                <v-icon>{{setIcon(item.status)}}</v-icon>
+              </v-avatar>
+              {{ item.status }}
+            </v-chip>
           </template>
 
           <template v-slot:item.action="{ item }" class="text-xs-right">
-              <v-btn v-if="item.status == 'active'" small @click="openMentoring(item.programme.id, item.id)">
-                <v-icon small left>today</v-icon>
-                {{ $vuetify.lang.t('$vuetify.mentoring.mentoringsession') }}
-              </v-btn>
-              <v-btn v-if="item.status === 'applied'" small dark color="warning" @click="cancelAct(item.id)">
-                <v-icon small>outlined_flag</v-icon>
-                {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-              </v-btn>
-              <v-btn v-if="item.status == 'active'"  small dark color="red" @click="quitAct(item.id)">
-                <v-icon small>outlined_flag</v-icon>
-                {{ $vuetify.lang.t('$vuetify.team.quit') }}
-              </v-btn>
-              <v-expand-transition>
-                <div v-show="item.id == selectedQui">
-                  {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }}
-                  <v-btn @click="quitData(item.id)" color="red">
-                    <v-icon></v-icon>
-                    {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                  </v-btn>
-                  <v-btn @click="quitAct(null)">
-                    <v-icon></v-icon>
-                    {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                  </v-btn>
-                </div>
-              </v-expand-transition>
-              <v-expand-transition>
-                <div v-show="item.id == selectedCan">
-                  {{ $vuetify.lang.t('$vuetify.action.confirmationtocancel') }}
-                  <v-btn @click="cancelData(item.id)" color="red">
-                    <v-icon></v-icon>
-                    {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                  </v-btn>
-                  <v-btn @click="cancelAct(null)">
-                    <v-icon></v-icon>
-                    {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                  </v-btn>
-                </div>
-              </v-expand-transition>
+            <v-btn
+              v-if="item.status == 'active'"
+              small
+              @click="openMentoring(item.programme.id, item.id)"
+              class="ma-1"
+            >
+              <v-icon small left>today</v-icon>
+              {{ $vuetify.lang.t('$vuetify.mentoring.mentoringsession') }}
+            </v-btn>
+            <v-btn
+              v-if="item.status === 'applied'"
+              small
+              dark
+              color="warning"
+              @click="cancelAct(item.id)"
+              class="ma-1"
+            >
+              <v-icon small>outlined_flag</v-icon>
+              {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+            </v-btn>
+            <v-btn v-if="item.status == 'active'" small dark color="red" @click="quitAct(item.id)">
+              <v-icon small>outlined_flag</v-icon>
+              {{ $vuetify.lang.t('$vuetify.team.quit') }}
+            </v-btn>
+            <v-expand-transition>
+              <div v-show="item.id == selectedQui">
+                {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }}
+                <v-btn @click="quitData(item.id)" color="red" class="ma-2">
+                  <v-icon></v-icon>
+                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
+                </v-btn>
+                <v-btn @click="quitAct(null)">
+                  <v-icon></v-icon>
+                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+                </v-btn>
+              </div>
+            </v-expand-transition>
+            <v-expand-transition>
+              <div v-show="item.id == selectedCan">
+                {{ $vuetify.lang.t('$vuetify.action.confirmationtocancel') }}
+                <v-btn @click="cancelData(item.id)" color="red" class="ma-2">
+                  <v-icon></v-icon>
+                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
+                </v-btn>
+                <v-btn @click="cancelAct(null)">
+                  <v-icon></v-icon>
+                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+                </v-btn>
+              </div>
+            </v-expand-transition>
           </template>
         </v-data-table>
       </v-container>
@@ -147,7 +159,7 @@ export default {
           value: "programme.name"
         },
         { text: "Status", value: "status", sortable: false },
-        { text: "Actions", value: "action", sortable: false }
+        { text: "Actions", value: "action", align: "right", sortable: false }
       ],
       program: {
         total: 0,

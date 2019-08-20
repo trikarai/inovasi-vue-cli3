@@ -10,6 +10,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@rj-pkgs/vue-the-mask": "^0.12.1",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "core-js": "^2.6.5",
@@ -18,7 +19,6 @@
     "register-service-worker": "^1.6.2",
     "svg-country-flags": "^1.2.6",
     "vue": "^2.6.10",
-    "vue-i18n": "^8.14.0",
     "vue-lodash": "^2.0.2",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.1.2",

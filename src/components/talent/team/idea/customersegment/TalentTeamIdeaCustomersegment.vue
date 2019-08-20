@@ -15,7 +15,7 @@
           <v-card elevation="1" style="margin:10px">
             <v-card-title>
               <h3>{{parentData.name}}</h3>
-              <v-btn color="blue" fab small @click="openEditParent(parentData.id)">
+              <v-btn color="blue" fab small @click="openEditParent(parentData.id)" class="ml-3">
                 <v-icon small>edit</v-icon>
               </v-btn>
             </v-card-title>
@@ -48,7 +48,7 @@
                 <v-scale-transition>
                   <div v-show="index == selectedIndex">
                     <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }} -->
-                    <v-btn small @click="deleteData(item.id)" color="red">
+                    <v-btn small @click="deleteData(item.id)" color="red" class="ma-2">
                       <v-icon></v-icon>
                       {{ $vuetify.lang.t('$vuetify.action.yes') }}
                     </v-btn>
@@ -66,7 +66,7 @@
               </v-list-item>
             </template>
           </v-list>
-          <v-btn color="primary" @click="openAdd">
+          <v-btn color="primary" @click="openAdd" class="ml-3">
             <v-icon>add</v-icon>
             {{$vuetify.lang.t("$vuetify.action.add")}}
           </v-btn>

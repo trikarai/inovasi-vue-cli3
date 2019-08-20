@@ -3,7 +3,7 @@
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       <!-- {{res}}<br> -->
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="primary" class="mb-3">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} {{ $vuetify.lang.t('$vuetify.personnel.mentor') }}
       </v-btn>
@@ -15,21 +15,19 @@
         :items="coordinator.list"
         class="elevation-1"
       >
-        <template v-slot:items="props">
-          <td>{{ props.item.talent.name }}</td>
-          <td class="text-xs-right">
-            <v-btn @click="openDetail(props.index)" small>
+        <template v-slot:item.action="{item}">
+            <!-- <v-btn @click="openDetail(item)" small>
               <v-icon small>search</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.view') }}
-            </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
+              {{ $vuetify.lang.t('$vuetify.action.view') }} 
+             </v-btn> -->
+            <v-btn small dark color="warning" @click="deleteAct(item.id)">
               <v-icon small>delete</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
+              <div v-show="item.id == selectedIndex">
                 {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
+                <v-btn @click="deleteData(item.id)" color="red">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
@@ -39,7 +37,6 @@
                 </v-btn>
               </div>
             </v-expand-transition>
-          </td>
         </template>
       </v-data-table>
     </v-container>
@@ -81,7 +78,7 @@ export default {
           sortable: false,
           value: "talent.name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "", value: "action", sortable: false }
       ]
     };
   },
@@ -91,6 +88,7 @@ export default {
   methods: {
     getDataList: function() {
       this.loader = true;
+      notif.reset(this);
       net
         .getData(
           this,
@@ -98,7 +96,7 @@ export default {
             this.$route.params.programId +
             "/mentors"
         )
-        .then(function(res) {
+        .then(res=> {
           if (res.data.data) {
             this.coordinator = res.data.data;
           } else {
@@ -106,10 +104,9 @@ export default {
           }
         })
         .catch(error => {
-          console.log("Error : " + error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -117,7 +114,7 @@ export default {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.coordinator.list[index];
+      this.singleData = index;
     },
     openAdd: function() {
       this.$router.push({
@@ -145,10 +142,9 @@ export default {
         )
         .then()
         .catch(error => {
-          console.log("Error : " + error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });

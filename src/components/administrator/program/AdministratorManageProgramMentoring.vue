@@ -25,7 +25,7 @@
         </v-card>
       </v-dialog>
 
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="primary" class="mb-3">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} Mentoring Event
       </v-btn>
@@ -37,22 +37,20 @@
         :items="mentoring.list"
         class="elevation-1"
       >
-        <template v-slot:items="props">
-          <td>{{ props.item.name }}</td>
-          <td class="text-xs-right">
-            <v-btn @click="openDetail(props.item.id)" small fab>
+        <template v-slot:item.action="{item}">
+            <v-btn @click="openDetail(item.id)" small fab class="ma-1">
               <v-icon>search</v-icon>
             </v-btn>
 
-            <v-btn color="red" @click="deleteAct(props.item.id)" small>
+            <v-btn color="red" @click="deleteAct(item.id)" small>
               <v-icon small left>delete</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
 
             <v-expand-transition>
-              <div v-show="props.item.id == selectedIndex">
+              <div v-show="item.id == selectedIndex">
                 {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
+                <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
@@ -62,7 +60,6 @@
                 </v-btn>
               </div>
             </v-expand-transition>
-          </td>
         </template>
       </v-data-table>
     </v-container>
@@ -118,9 +115,9 @@ export default {
           text: "Name",
           align: "left",
           sortable: false,
-          value: "order"
+          value: "name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "", value: "action", sortable: false, align:"right" }
       ]
     };
   },

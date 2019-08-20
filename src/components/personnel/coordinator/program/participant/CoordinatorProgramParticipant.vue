@@ -12,94 +12,83 @@
             </v-card-text>
           </v-card>
         </v-dialog>
-
+        <!-- {{participants.list}} -->
         <v-data-table
           :loading="loader"
           :headers="headers"
           :items="participants.list"
           class="elevation-1"
         >
-          <template v-slot:items="props">
-            <td>{{ props.item.team.name }}</td>
-            <td>
-              <v-chip :color="setColor(props.item.status)" text-color="white">
-                <v-avatar>
-                  <v-icon>{{setIcon(props.item.status)}}</v-icon>
-                </v-avatar>
-                {{ props.item.status }}
-              </v-chip>
-            </td>
-            <td class="text-xs-right">
-              <v-btn
-                v-if="props.item.status == 'applied'"
-                small
-                color="green"
-                @click="acceptAct(props.item.id)"
-              >
-                <v-icon small>check_circle_outline</v-icon>Accept
-              </v-btn>
-              <v-btn
-                v-if="props.item.status == 'applied'"
-                small
-                color="warning"
-                @click="rejectAct(props.item.id)"
-              >
-                <v-icon small>highlight_off</v-icon>Reject
-              </v-btn>
-              <v-btn
-                v-if="props.item.status == 'active'"
-                small
-                color="red"
-                @click="expellAct(props.item.id)"
-              >
-                <v-icon small>block</v-icon>Expell
-              </v-btn>
-              <v-btn rounded small @click.stop="openDetail(props.item.id)">
-                <v-icon small>search</v-icon>
-              </v-btn>
+          <template v-slot:item.status="{item}">
 
-              <v-flex shrink>
-                <v-expand-transition>
-                  <div v-show="props.item.id == selectedIndexAcc" style="white-space: nowrap">
-                    Confirm to Accept!
-                    <v-btn color="green" @click="acceptParticipant(props.item.id)">
-                      <v-icon>check</v-icon>
-                    </v-btn>
-                    <v-btn color="red" @click="selectedIndexAcc = null">
-                      <v-icon>close</v-icon>
-                    </v-btn>
-                  </div>
-                </v-expand-transition>
-              </v-flex>
+            <v-chip :color="setColor(item.status)" text-color="white">
+              <v-avatar left>
+                <v-icon>{{setIcon(item.status)}}</v-icon>
+              </v-avatar>
+              {{ item.status }}
+            </v-chip>
+          </template>
+          <template v-slot:item.action="{item}">
+            <v-btn rounded small @click.stop="openDetail(item.id)" class="ma-1">
+              <v-icon small>search</v-icon>
+            </v-btn>
+            <v-btn v-if="item.status == 'applied'" small color="green" @click="acceptAct(item.id)" class="ma-1">
+              <v-icon small>check_circle_outline</v-icon>Accept
+            </v-btn>
+            <v-btn
+              v-if="item.status == 'applied'"
+              small
+              color="warning"
+              @click="rejectAct(item.id)"
+            >
+              <v-icon small>highlight_off</v-icon>Reject
+            </v-btn>
+            <v-btn v-if="item.status == 'active'" small color="red" @click="expellAct(item.id)">
+              <v-icon small>block</v-icon>Expell
+            </v-btn>
+            
 
-              <v-flex shrink>
-                <v-expand-transition>
-                  <div v-show="props.item.id == selectedIndexRej" style="white-space: nowrap">
-                    Confirm to Reject!
-                    <v-btn color="green" @click="rejectParticipant(props.item.id)">
-                      <v-icon>check</v-icon>
-                    </v-btn>
-                    <v-btn color="red" @click="selectedIndexRej = null">
-                      <v-icon>close</v-icon>
-                    </v-btn>
-                  </div>
-                </v-expand-transition>
-              </v-flex>
+            <v-flex shrink>
+              <v-expand-transition>
+                <div v-show="item.id == selectedIndexAcc" style="white-space: nowrap">
+                  Confirm to Accept!
+                  <v-btn color="green" @click="acceptParticipant(item.id)" class="ma-2">
+                    <v-icon>check</v-icon>
+                  </v-btn>
+                  <v-btn color="red" @click="selectedIndexAcc = null">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </div>
+              </v-expand-transition>
+            </v-flex>
 
-              <v-flex shrink>
-                <v-expand-transition>
-                  <div v-show="props.item.id == selectedIndexExp" style="white-space: nowrap">
-                    Confirm to Expell!
-                    <v-btn color="green" @click="expellParticipant(props.item.id)">
-                      <v-icon>check</v-icon>
-                    </v-btn>
-                    <v-btn color="red" @click="selectedIndexExp = null">
-                      <v-icon>close</v-icon>
-                    </v-btn>
-                  </div>
-                </v-expand-transition>
-              </v-flex>
-            </td>
+            <v-flex shrink>
+              <v-expand-transition>
+                <div v-show="item.id == selectedIndexRej" style="white-space: nowrap">
+                  Confirm to Reject!
+                  <v-btn color="green" @click="rejectParticipant(item.id)" class="ma-2">
+                    <v-icon>check</v-icon>
+                  </v-btn>
+                  <v-btn color="red" @click="selectedIndexRej = null">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </div>
+              </v-expand-transition>
+            </v-flex>
+
+            <v-flex shrink>
+              <v-expand-transition>
+                <div v-show="item.id == selectedIndexExp" style="white-space: nowrap">
+                  Confirm to Expell!
+                  <v-btn color="green" @click="expellParticipant(item.id)" class="ma-2">
+                    <v-icon>check</v-icon>
+                  </v-btn>
+                  <v-btn color="red" @click="selectedIndexExp = null">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </div>
+              </v-expand-transition>
+            </v-flex>
           </template>
         </v-data-table>
       </v-container>
@@ -181,10 +170,10 @@ export default {
           text: "Participant",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "team.name"
         },
         { text: "Status", value: "status", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Actions", value: "action", sortable: false, align: "right" }
       ],
       participants: {
         total: 0,
@@ -312,7 +301,7 @@ export default {
         .catch(error => {
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.selectedIndexAcc = null;
           this.loader2 = false;
           this.refresh();

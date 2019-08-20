@@ -3,7 +3,7 @@
     <v-container>
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
       <!-- {{res}}<br> -->
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="blue" class="mb-3">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} Phase
       </v-btn>
@@ -14,32 +14,28 @@
         :items="phase.list"
         class="elevation-1"
       >
-        <template v-slot:items="props">
-          <td>{{ props.item.order }}</td>
-          <td>{{ props.item.name }}</td>
-          <td class="text-xs-right">
-            <v-btn @click="openEdit(props.index)" small>
-              <v-icon small>edit</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.edit') }}
-            </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
-              <v-icon small>delete</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.delete') }}
-            </v-btn>
-            <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                </v-btn>
-                <v-btn @click="deleteAct(null)">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                </v-btn>
-              </div>
-            </v-expand-transition>
-          </td>
+        <template v-slot:item.action="{item}">
+          <v-btn @click="openEdit(item.id)" small class="ma-1">
+            <v-icon small>edit</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.edit') }}
+          </v-btn>
+          <v-btn small dark color="warning" @click="deleteAct(item.id)">
+            <v-icon small>delete</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.delete') }}
+          </v-btn>
+          <v-expand-transition>
+            <div v-show="item.id == selectedIndex">
+              {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.yes') }}
+              </v-btn>
+              <v-btn @click="deleteAct(null)">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+              </v-btn>
+            </div>
+          </v-expand-transition>
         </template>
       </v-data-table>
     </v-container>
@@ -73,7 +69,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -97,7 +93,7 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id", sortable: false }
+        { text: "Actions", value: "action", sortable: false, align:"right" }
       ]
     };
   },
@@ -114,18 +110,17 @@ export default {
             this.$route.params.curriculumId +
             "/phase-plans"
         )
-        .then(function(res) {
+        .then(res => {
           if (res.data.data) {
             this.phase = res.data.data;
           } else {
             this.phase.list = [];
           }
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(error => {
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -133,7 +128,7 @@ export default {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singlePhase = this.phase.list[index];
+      this.singlePhase.id = index;
     },
     openAdd: function() {
       this.dialogForm = true;
@@ -158,11 +153,10 @@ export default {
             id
         )
         .then()
-        .catch(function(error) {
-          console.log(error);
+        .catch(error => {
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });

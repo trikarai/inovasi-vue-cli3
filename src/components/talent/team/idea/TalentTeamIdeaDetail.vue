@@ -14,14 +14,14 @@
         <v-flex xs12 md6>
           <v-card elevation="1" style="margin:10px">
             <v-card-title>
-              <v-badge v-model="parentData.aMainIdea" left>
+              <v-badge v-model="parentData.aMainIdea" left class="ml-4 mt-1" >
                 <template v-slot:badge>
                   <v-icon small color="yellow">star</v-icon>
                 </template>
                 <h3>{{parentData.name}}</h3>
               </v-badge>
-              <v-btn fab color="blue" small @click="openEditParent(parentData)">
-                <v-icon>edit</v-icon>
+              <v-btn small fab color="blue" @click="openEditParent(parentData)" class="ml-2 mt-0">
+                <v-icon small>edit</v-icon>
               </v-btn>
             </v-card-title>
             <v-card-text>
@@ -51,7 +51,7 @@
               <v-scale-transition>
                 <div v-show="index == selectedIndex">
                   <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }} -->
-                  <v-btn @click="deleteData(item.id)" color="red">
+                  <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
                     <v-icon></v-icon>
                     {{ $vuetify.lang.t('$vuetify.action.yes') }}
                   </v-btn>
@@ -63,7 +63,7 @@
               </v-scale-transition>
             </v-list-item>
           </v-list>
-          <v-btn color="primary" @click="openAdd">
+          <v-btn color="primary" @click="openAdd" class="ml-3">
             <v-icon>add</v-icon>
             {{$vuetify.lang.t("$vuetify.action.add")}}
           </v-btn>

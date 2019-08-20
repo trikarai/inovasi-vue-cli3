@@ -117,7 +117,7 @@
                       </v-menu>
                     </v-flex>
                     <v-text-field
-                      mask="(###) #### #####"
+                      v-mask="phoneMask"
                       label="Phone Number"
                       v-model="params.phone"
                       autocomplete="tel-local"
@@ -183,9 +183,11 @@
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
+import { mask } from "@rj-pkgs/vue-the-mask"; 
 
 export default {
   name: "SignUp",
+  directives: { mask },
   data: function() {
     return {
       loader: false,
@@ -225,6 +227,7 @@ export default {
         v => !!v || "Phone Number is required",
         v => /\d/ || "Number Only"
       ],
+      phoneMask: "(###) ##########",
       passwordRules: [v => !!v || "Password is required"],
       passwordConfirmationRules: [
         v => !!v || "Confirmation Password is required",

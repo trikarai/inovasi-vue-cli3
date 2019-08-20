@@ -1,45 +1,48 @@
 <template>
   <div>
     <v-container>
-      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
+      <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
-      <v-btn @click="openAdd()" color="blue" style="left: -8px">
+      <v-btn @click="openAdd()" color="primary" class="mb-3">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} track
       </v-btn>
-    
-      <v-data-table dark :loading="loader" :headers="headers" :items="track.list" class="elevation-1">
-        <template v-slot:items="props">
-          <td>{{ props.item.name }}</td>
-          <td class="text-xs-right">
-            <v-btn small @click="gotoskill(props.item.id)">
-              <v-icon small>extension</v-icon>
-              {{ $vuetify.lang.t('$vuetify.profile.skill') }}
-            </v-btn>
-          </td>
-          <td class="text-xs-right">
-            <v-btn @click="openEdit(props.index)" small>
-              <v-icon small>edit</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.edit') }}
-            </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(props.index)">
-              <v-icon small>delete</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.delete') }}
-            </v-btn>
-            <v-expand-transition>
-              <div v-show="props.index == selectedIndex">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                </v-btn>
-                <v-btn @click="deleteAct(null)">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                </v-btn>
-              </div>
-            </v-expand-transition>
-          </td>
+
+      <v-data-table
+        dark
+        :loading="loader"
+        :headers="headers"
+        :items="track.list"
+        class="elevation-1"
+      >
+        <template v-slot:item.skill="{item}">
+          <v-btn small @click="gotoskill(item.id)">
+            <v-icon small>extension</v-icon>
+            {{ $vuetify.lang.t('$vuetify.profile.skill') }}
+          </v-btn>
+        </template>
+        <template v-slot:item.action="{item}">
+          <v-btn @click="openEdit(item)" small class="ma-1">
+            <v-icon small>edit</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.edit') }}
+          </v-btn>
+          <v-btn small dark color="warning" @click="deleteAct(item.id)">
+            <v-icon small>delete</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.delete') }}
+          </v-btn>
+          <v-expand-transition>
+            <div v-show="item.id == selectedIndex">
+              {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.yes') }}
+              </v-btn>
+              <v-btn @click="deleteAct(null)">
+                <v-icon></v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+              </v-btn>
+            </div>
+          </v-expand-transition>
         </template>
       </v-data-table>
     </v-container>
@@ -56,6 +59,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import TrackForm from "./track/AddTrack";
 import Notification from "@/components/Notification";
 
@@ -72,7 +76,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details: [""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -90,8 +94,8 @@ export default {
           sortable: false,
           value: "name"
         },
-        { text: "", value: "id", sortable: false },
-        { text: "", value: "id", sortable: false }
+        { text: "Manage", value: "skill", sortable: false },
+        { text: "", value: "action", sortable: false, align: "right" }
       ]
     };
   },
@@ -99,29 +103,25 @@ export default {
     this.getDataList();
   },
   methods: {
-    gotoskill: function(id){
-      this.$router.push({ path: "/administrator/track/"+id+"/skill-reference"})
+    gotoskill: function(id) {
+      this.$router.push({
+        path: "/administrator/track/" + id + "/skill-reference"
+      });
     },
     getDataList: function() {
       this.loader = true;
+      notif.reset(this);
       net
         .getData(this, "/administrator/tracks")
-        .then(
-          res => {
-            if(res.data.data){
-              this.track = res.data.data;
-            }else{
-              this.track.list = []; 
-            }
-          },
-          error => {
-            console.log(error);
-            this.err_msg = error.body.meta;
-            this.status.error = true;
+        .then(res => {
+          if (res.data.data) {
+            this.track = res.data.data;
+          } else {
+            this.track.list = [];
           }
-        )
-        .catch(function() {})
-        .finally(function() {
+        })
+        .catch(error => {})
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -129,7 +129,7 @@ export default {
       this.dialogForm = true;
       this.view = false;
       this.edit = true;
-      this.singleTrack = this.track.list[index];
+      this.singleTrack = index;
     },
     openAdd: function() {
       this.dialogForm = true;
@@ -148,8 +148,10 @@ export default {
       net
         .deleteData(this, "/administrator/tracks/" + id)
         .then()
-        .catch(function() {})
-        .finally(function() {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });
