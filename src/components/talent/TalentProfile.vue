@@ -4,11 +4,11 @@
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <v-layout>
         <v-dialog v-model="loader" hide-overlay persistent width="300">
-          <v-card color="primary" dark>
-            <v-card-text>
-              {{ $vuetify.lang.t('$vuetify.info.standby') }}
-              <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-            </v-card-text>
+          <v-card color="omikti" dark>
+            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>  
+            <v-card-title class="justify-center">
+              <v-icon>autorenew</v-icon> &nbsp;{{ $vuetify.lang.t('$vuetify.info.standby') }}
+            </v-card-title>                 
           </v-card>
         </v-dialog>
       </v-layout>
