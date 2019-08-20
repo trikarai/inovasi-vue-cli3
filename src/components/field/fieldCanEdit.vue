@@ -7,7 +7,7 @@
 <script>
   // import integer from './type/integer'
   // import string from './type/string'
-  import text from './type/text'
+  import text from './type/textEdit'
   // import select from './type/select'
   // import attachment from './type/attachment'
 

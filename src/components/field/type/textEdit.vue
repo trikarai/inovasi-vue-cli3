@@ -33,7 +33,7 @@ export default {
   },
   watch: {
     value: function() {
-      var params = { id: this.field.id, value: this.value };
+      var params = { id: this.field.field.id, value: this.value };
       bus.$emit("getValue", params, this.index);
     }
   }

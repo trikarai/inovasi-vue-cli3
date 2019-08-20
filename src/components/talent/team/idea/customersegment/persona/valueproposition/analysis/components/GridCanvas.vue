@@ -30,7 +30,7 @@
       <v-expand-transition>
         <v-layout wrap v-if="isEdit">
           <v-flex>
-            <v-btn class="mt-3" @click.prevent="submit" color="primary">
+            <v-btn class="mt-3" @click.prevent="update" color="warning">
               <v-icon>save</v-icon>
             </v-btn>
           </v-flex>
@@ -48,7 +48,7 @@
         </v-layout>
       </v-expand-transition>
     </v-container>
-
+    <v-form v-model="valid" ref="form2">
     <v-container style="display: grid; justify-items: stretch; grid-gap: 5px 5px;" v-if="isCanvas">
       <template v-if="!isEdit">
         <template v-for="field in canvas.fields" id="viewCanvas">
@@ -60,21 +60,23 @@
           </div>
         </template>
       </template>
+      <!-- grid edit view -->
       <template v-if="isEdit">
-        <template v-for="(field, index) in canvas.fields" id="editCanvas">
-          <div :key="field.id" :style="'grid-area:' + getGridPosition(field.field.position) + ''">
-            <v-card class="elevation-3" :hover="hover" height="100%">
-              <v-card-title>{{field.field.name}}</v-card-title>
-              <v-card-text>
-                <fieldcanedit-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></fieldcanedit-modul>
-              </v-card-text>
-            </v-card>
-          </div>
-        </template>
+          <template v-for="(field, index) in canvas.fields" id="editCanvas">
+            <div :key="field.id" :style="'grid-area:' + getGridPosition(field.field.position) + ''">
+              <v-card class="elevation-3" :hover="hover" height="100%">
+                <v-card-title>{{field.field.name}}</v-card-title>
+                <v-card-text>
+                  <fieldcanedit-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></fieldcanedit-modul>
+                </v-card-text>
+              </v-card>
+            </div>
+          </template>
       </template>
       <!-- <pre>{{canvas}}</pre> -->
-      <pre>{{params}}</pre>
+      <!-- <pre>{{params}}</pre> -->
     </v-container>
+    </v-form>
 
     <v-form v-model="valid" ref="form" v-if="!isCanvas">
       <v-btn
@@ -167,6 +169,17 @@ export default {
         });
       }
     },
+    update: function() {
+      if (this.$refs.form2.validate()) {
+        this.updateData();
+      } else {
+        this.$vuetify.goTo(this.$refs.notif, {
+          duration: 500,
+          offset: 0,
+          easing: "linear"
+        });
+      }
+    },
     getGridPosition: function(position) {
       var position = JSON.parse(position);
       return position.grid;
@@ -251,8 +264,40 @@ export default {
           this.params
         )
         .then(res => {
+          notif.showSuccess(this, res, ["Data Canvas Saved"]);
+          this.isCanvas = true;
+          this.isEdit = false;
           this.refresh();
-          this.showSuccess(this, res, ["Data Canvas Saved"]);
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    updateData: function() {
+      this.params.formId = this.$route.params.formId;
+      this.loader = true;
+      notif.reset(this);
+      net
+        .patchData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/business-canvases",
+          this.params
+        )
+        .then(res => {
+          notif.showSuccess(this, res, ["Data Canvas Updated"]);
           this.isCanvas = true;
           this.isEdit = false;
         })
