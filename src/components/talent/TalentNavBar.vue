@@ -303,7 +303,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .disabled {
   color: grey;
   pointer-events: none;
@@ -313,23 +313,23 @@ export default {
   width: 15px !important;
   background-color: #f5f5f5 !important;
 }
-#navdrawtalents::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important; */
+  /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important; */
   border-radius: 10px !important;
   background-color: #f5f5f5 !important;
 }
 
-#navdrawtalents::-webkit-scrollbar {
-  width: 5px !important;
+::-webkit-scrollbar {
+  width: 10px !important;
   background-color: #f5f5f5 !important;
 }
 
-#navdrawtalents::-webkit-scrollbar-thumb {
-  border-radius: 10px !important;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
-  background-color: #a5a5a5 !important;
+::-webkit-scrollbar-thumb {
+  /* border-radius: 5px !important; */
+  /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important; */
+  /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important; */
+  background-color: #e2e2e2 !important;
 }
 .v-toolbar {
   z-index:3 !important;

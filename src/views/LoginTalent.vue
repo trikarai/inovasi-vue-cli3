@@ -30,7 +30,7 @@
               </v-toolbar-title>
               <!-- </v-toolbar-items> -->
             </v-toolbar>
-            <v-card style="padding:20px 30px 30px 30px;">
+            <v-card style="padding:20px 30px 30px 30px;" class="text-center">
               <h3 class="font-weight-light mt-4 mb-1">Login</h3>
               <v-card-text style="pa-4">
                 <div>

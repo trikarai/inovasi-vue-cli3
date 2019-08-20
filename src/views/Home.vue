@@ -19,7 +19,7 @@
       <v-app-bar-nav-icon class="hidden-sm-and-up" light @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-toolbar>
 
-    <v-navigation-drawer v-model="drawer" temporary right fixed width="20 0">
+    <v-navigation-drawer v-model="drawer" temporary right fixed width="200">
       <v-list class="pa-1">
         <v-list-item avatar>
           <v-list-item-content>
