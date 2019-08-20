@@ -1,6 +1,6 @@
 <template>
   <v-app light>
-    <v-toolbar color="white" :fixed="true" height="64px">
+    <v-toolbar style="position:fixed;" color="white" absolute="true" height="64px">
       <v-img
         class="ml-2"
         src="/img/logostartmikti.png"
@@ -19,7 +19,7 @@
       <v-app-bar-nav-icon class="hidden-sm-and-up" light @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-toolbar>
 
-    <v-navigation-drawer v-model="drawer" temporary right fixed width="150">
+    <v-navigation-drawer v-model="drawer" temporary right fixed width="20 0">
       <v-list class="pa-1">
         <v-list-item avatar>
           <v-list-item-content>
@@ -51,7 +51,7 @@
     <v-content>
       <section>
         <v-parallax src="/img/ino-landingpage2.jpg" height="670">
-          <v-container grid-list-xl style="margin-top:170px" class="hidden-xs-only">
+          <v-container grid-list-xl style="margin-top:100px" class="d-flex d-sm-none">
             <v-layout row wrap>
               <v-flex xs12 sm12 md7></v-flex>
               <v-flex xs12 sm12 md5>
@@ -80,7 +80,7 @@
               </v-flex>
             </v-layout>
           </v-container>
-          <v-container grid-list-xl style="margin-top:75px" class="hidden-sm-and-up">
+          <v-container grid-list-xl style="margin-top:35px" class="d-none d-sm-flex">
             <v-layout row wrap>
               <v-flex xs12 sm12 md7></v-flex>
               <v-flex xs12 sm12 md5>
@@ -118,7 +118,7 @@
             <v-container grid-list-xl>
               <v-layout row wrap align-center>
                 <v-flex xs12 md4>
-                  <v-card text class="transparent">
+                  <v-card text class="transparent" elevation="0">
                     <v-card-text>
                       <v-img
                         style="margin:0 auto !important"
@@ -136,7 +136,7 @@
                   </v-card>
                 </v-flex>
                 <v-flex xs12 md4>
-                  <v-card text class="transparent">
+                  <v-card text class="transparent" elevation="0">
                     <v-card-text class="text-center">
                       <v-img
                         style="margin:0 auto !important"
@@ -154,7 +154,7 @@
                   </v-card>
                 </v-flex>
                 <v-flex xs12 md4>
-                  <v-card text class="transparent">
+                  <v-card text class="transparent" elevation="0">
                     <v-card-text class="text-center">
                       <v-img
                         style="margin:0 auto !important"
@@ -181,7 +181,7 @@
         <v-container>
           <v-layout row wrap align-center>
             <v-flex xs12 md8>
-              <v-card text class="transparent">
+              <v-card text class="transparent" elevation="0">
                 <v-card-text class="title text-center">
                   <h2 class="font-weight-light">AYO, Segera Daftarkan STARTUP-mu Sekarang, GRATIS !</h2>
                 </v-card-text>
@@ -192,10 +192,10 @@
                 <v-img style="margin:0 auto !important" src="/img/daftar.png" max-width="150px"></v-img>
               </v-card-text>
             </v-flex>
-            <v-flex xs12 md2>
-              <v-card text class="transparent text-center">
+            <v-flex xs12 md2 class="text-center">
+
                 <v-btn color="blue lighten-2" dark router to="/signup">Daftar disini !</v-btn>
-              </v-card>
+
             </v-flex>
           </v-layout>
         </v-container>
@@ -218,7 +218,7 @@
             <v-carousel-item v-for="(data, i) in mentor" :key="i">
               <v-layout align-center justify-center wrap fill-height>
                 <v-flex xs12 md3 v-for="(data, i) in data.groups" :key="i">
-                  <v-card text class="transparent">
+                  <v-card text class="transparent" elevation="0">
                     <v-card-text>
                       <v-img style="margin:0 auto !important" :src="data.photo" max-width="150px"></v-img>
                     </v-card-text>
@@ -232,7 +232,7 @@
             </v-carousel-item>
           </v-carousel>
           <v-img
-            style="margin:0 auto !important"
+            style="margin:0 auto !important;margin-bottom:100px;"
             src="/img/bawah.png"
             aspect-ratio="10"
             max-width="900"
