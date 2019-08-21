@@ -15,6 +15,9 @@ import "vuetify/dist/vuetify.min.css"; // Ensure you are using css-loader
 import VueVisible from "vue-visible";
 import UUID from 'vue-uuid';
 
+//loader global
+import LoaderDialog from "@/components/Loader";
+
 //font
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret, faAddressBook } from '@fortawesome/free-solid-svg-icons'
@@ -22,7 +25,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faUserSecret, faAddressBook)
 
-Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component('loader-dialog', LoaderDialog);
 
 //Translation 
 import en from '@/config/lang/en';
