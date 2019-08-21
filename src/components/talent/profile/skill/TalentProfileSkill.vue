@@ -3,7 +3,7 @@
     <v-container ref="tabletop">
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
       <transition name="fade">
-        <v-btn dark @click="openAdd()" color="primary" style="left: -8px" v-if="!certificateShow">
+        <v-btn dark @click="openAdd()" color="primary" v-if="!certificateShow">
           <v-icon>add</v-icon>
           {{ $vuetify.lang.t('$vuetify.action.add') }} Skills
         </v-btn>
@@ -12,23 +12,23 @@
         :headers="headers"
         :items="data.list"
         :loading="loader"
-        class="elevation-1 mt-1"
+        class="elevation-1 mt-2"
       >
         <template v-slot:item.score="{item}">
           <v-rating :readonly="true" v-model="item.score"></v-rating>
         </template>
         <template v-slot:item.action="{item}">
-          <div class="text-xs-right" v-visible="!certificateShow">
+          <v-container class="text-end" v-visible="!certificateShow">
             <!-- <v-btn @click="openEdit(item.id)" small>
-              <v-icon small>edit</v-icon>
+              <v-icon small left>edit</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>-->
-            <v-btn @click="openCertificate(item.id)" small>
+            <v-btn dark class="ma-2" @click="openCertificate(item.id)" small>
               <v-icon small left>card_membership</v-icon>
               {{ $vuetify.lang.t('$vuetify.profile.certificate') }}
             </v-btn>
-            <v-btn small dark color="warning" @click="deleteAct(item.id)">
-              <v-icon small>delete</v-icon>
+            <v-btn class="ma-2" small dark color="warning" @click="deleteAct(item.id)">
+              <v-icon small left>delete</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
 
@@ -38,17 +38,17 @@
                   <v-icon>warning</v-icon>
                   <span>{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
                 </div>
-                <v-btn dark text @click="deleteData(item.id)" color="red">
+                <v-btn class="ma-2" dark text @click="deleteData(item.id)" color="red">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn text @click="deleteAct(null)">
+                <v-btn class="ma-2" text @click="deleteAct(null)">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-scale-transition>
-          </div>
+          </v-container>
         </template>
       </v-data-table>
     </v-container>
@@ -56,8 +56,8 @@
     <transition name="fade">
       <v-container v-if="certificateShow">
         <v-divider></v-divider>
-        <v-btn small @click="closeCertificate" color="warning">
-          <v-icon>close</v-icon>Close
+        <v-btn style="float:right;font-size: 12px !important;" small @click="closeCertificate" color="warning">
+          close
         </v-btn>
         <v-layout>
           <CertificateComp :skillId="skillId" />

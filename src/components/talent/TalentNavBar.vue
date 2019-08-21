@@ -201,12 +201,12 @@ export default {
           route: "/talent/work"
         },
         {
-          icon: "group_work",
+          icon: "device_hub",
           text: "Organization",
           route: "/talent/organization"
         },
         {
-          icon: "business",
+          icon: "wb_incandescent",
           text: "Entrepreneurship",
           route: "/talent/entrepreneurship"
         },

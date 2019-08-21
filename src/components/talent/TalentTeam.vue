@@ -4,8 +4,8 @@
       <v-container>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
         
-        <v-btn color="blue" append to="/talent/create/team" class="mb-2">
-          <v-icon>add</v-icon>
+        <v-btn dark color="primary" append to="/talent/create/team" class="mb-2">
+          <v-icon class="mr-4" left>group_add</v-icon> 
           {{ $vuetify.lang.t('$vuetify.action.create') }} {{ $vuetify.lang.t('$vuetify.team.team') }}
         </v-btn>
 
@@ -36,7 +36,7 @@
             </template>
           </v-combobox>
         </v-flex>
-        <v-divider></v-divider>
+        <!-- <v-divider></v-divider> -->
         <v-data-table :loading="loader" :headers="headers" :items="team.list" class="elevation-1">
           <template v-slot:item.status="{ item }">
             <v-chip :color="colorStatus(item.status.value)" text-color="white">
@@ -47,18 +47,18 @@
             </v-chip>
           </template>
           <template v-slot:item.action="{ item }">
-            <v-btn class="ma-1"
+            <v-container class="text-end">
+            <v-btn color="primary" class="ma-1"
               v-if="ifShow(item.status.value)"
               small
               @click="openIdea(item.team.id)"
-            >{{$vuetify.lang.t('$vuetify.idea.idea')}}</v-btn>
+            ><v-icon class="muter" small left>wb_incandescent</v-icon> {{$vuetify.lang.t('$vuetify.idea.idea')}}</v-btn>
             <v-btn class="ma-1"
               v-if="ifShow(item.status.value)"
               small
               @click="openParticipation(item.team.id)"
             >{{$vuetify.lang.t('$vuetify.team.programParticipation')}}</v-btn>
             <v-btn class="ma-1" small @click="openDetail(item.id)" v-if="ifShow(item.status.value)">
-              <v-icon small>pageview</v-icon>
               <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
               Manage
             </v-btn>
@@ -68,18 +68,19 @@
               @click="deleteAct(item.id)"
               v-if="ifShow(item.status.value)"
             >
-              <v-icon small>outlined_flag</v-icon>
               {{ $vuetify.lang.t('$vuetify.team.quit') }}
             </v-btn>
 
             <v-expand-transition>
-              <div v-show="item.id == selectedQuit">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }}
-                <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
+              <div class="mt-3" v-show="item.id == selectedQuit">
+                <div>
+                  <v-icon>warning</v-icon> <span> {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }}</span>
+                </div>
+                <v-btn small text @click="deleteData(item.id)" color="red" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn @click="deleteAct(null)">
+                <v-btn small text flat @click="deleteAct(null)">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
@@ -129,6 +130,7 @@
                 </v-btn>
               </div>
             </v-expand-transition>
+            </v-container>
           </template>
         </v-data-table>
       </v-container>
@@ -175,7 +177,7 @@ export default {
         },
         { text: "Position", value: "position", sortable: false },
         { text: "Status", value: "status", sortable: false },
-        { text: "Actions", value: "action", align: "right", sortable: false }
+        { text: "", value: "action", align: "right", sortable: false }
       ],
       items: [
         { displayName: "Active", value: "act" },
