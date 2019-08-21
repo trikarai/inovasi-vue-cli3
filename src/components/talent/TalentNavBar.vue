@@ -305,7 +305,7 @@ export default {
 
 <style>
 .disabled {
-  color: grey;
+  color: grey !important;
   pointer-events: none;
 }
 
