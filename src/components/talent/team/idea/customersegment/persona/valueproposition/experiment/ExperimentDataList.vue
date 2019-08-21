@@ -10,22 +10,17 @@
       </v-card>
     </v-dialog>
 
-    <v-btn @click="openExperimentForm" color="primary">
+    <v-btn @click="openExperimentForm" color="primary" class="mb-3">
       <v-icon left>add</v-icon>Add
     </v-btn>
-
+      <!-- {{experiments.list}} -->
     <v-layout>
       <v-flex>
         <v-data-table :headers="headers" :items="experiments.list" class="elevation-1">
-          <template v-slot:items="props">
-            <td>{{ props.item.date }}</td>
-            <td>{{ props.item.form.name }}</td>
-            <td></td>
-            <td>
-              <v-btn @click="gotoExp(props.item.id)" color="primary" small fab>
-                <v-icon>pageview</v-icon>
-              </v-btn>
-            </td>
+          <template v-slot:item.action="{item}">
+            <v-btn @click="gotoExp(item.id)" color="primary" small fab>
+              <v-icon>pageview</v-icon>
+            </v-btn>
           </template>
         </v-data-table>
       </v-flex>
@@ -60,18 +55,17 @@ export default {
           text: "Date",
           align: "left",
           sortable: true,
-          value: "name"
+          value: "date"
         },
         {
           text: "Experiment Name",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "form.name"
         },
-        { text: "", value: "", sortable: false },
-        { text: "", value: "", sortable: false }
+        { text: "", value: "action", sortable: false, align: "right" }
       ],
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       error: "error",
       loader: false,
       selectedIndex: null,
@@ -137,7 +131,7 @@ export default {
           this.loader = false;
         });
     },
-    refresh: function(){
+    refresh: function() {
       this.dialogForm = false;
       this.getExperiments();
     }
