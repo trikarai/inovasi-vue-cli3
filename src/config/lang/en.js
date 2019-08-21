@@ -87,7 +87,8 @@ var _default = {
   },
   team: {
     team: "Team",
-    position: "Position",
+    teamInformation: "Team Information",
+    position: "Your Position in Team",
     teamName: "Team Name",
     vision: "Vision",
     mission: "Mission",
@@ -95,7 +96,8 @@ var _default = {
     founderAgreement: "Founder Agreement",
     resign: "Resign",
     quit: "Quit",
-    programParticipation: "Program Participation"
+    programParticipation: "Program Participation",
+    writeHere: "write here..."
   },
   idea: {
     idea: "Idea",

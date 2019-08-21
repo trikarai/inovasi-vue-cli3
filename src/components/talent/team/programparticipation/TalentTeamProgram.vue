@@ -3,22 +3,15 @@
     <div>
       <v-container>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-        <v-btn
-          color="blue"
+        <v-btn dark
+          color="primary"
           append
           :to="'/talent/team/'+ $route.params.teamId + '/participation/register'"
-          style="left: -8px"
         >
-          <v-icon>add</v-icon>Register a Program
+          <v-icon>add</v-icon> Register a Program
         </v-btn>
-        <v-dialog v-model="loader" :hide-overlay="false" persistent width="300">
-          <v-card color="primary">
-            <v-card-text>
-              {{ $vuetify.lang.t('$vuetify.info.standby') }}
-              <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
+        
+        <loader-dialog v-model="loader"></loader-dialog>
 
         <v-flex xs12 md4>
           <v-combobox
@@ -47,7 +40,7 @@
             </template>
           </v-combobox>
         </v-flex>
-        <v-divider></v-divider>
+        <!-- <v-divider></v-divider> -->
         <!-- {{program.list}} -->
         <v-data-table
           :loading="loader"
@@ -67,11 +60,12 @@
           </template>
 
           <template v-slot:item.action="{ item }" class="text-xs-right">
+            <v-container>
             <v-btn
               v-if="item.status == 'active'"
               small
               @click="openMentoring(item.programme.id, item.id)"
-              class="ma-1"
+              class="ma-2"
             >
               <v-icon small left>today</v-icon>
               {{ $vuetify.lang.t('$vuetify.mentoring.mentoringsession') }}
@@ -82,23 +76,24 @@
               dark
               color="warning"
               @click="cancelAct(item.id)"
-              class="ma-1"
+              class="ma-2"
             >
               <v-icon small>outlined_flag</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.cancel') }}
             </v-btn>
-            <v-btn v-if="item.status == 'active'" small dark color="red" @click="quitAct(item.id)">
-              <v-icon small>outlined_flag</v-icon>
+            <v-btn v-if="item.status == 'active'" small dark color="warning" @click="quitAct(item.id)">
               {{ $vuetify.lang.t('$vuetify.team.quit') }}
             </v-btn>
             <v-expand-transition>
               <div v-show="item.id == selectedQui">
-                {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }}
-                <v-btn @click="quitData(item.id)" color="red" class="ma-2">
+                <div>
+                  <v-icon>warning</v-icon>{{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }}
+                </div>
+                <v-btn text small @click="quitData(item.id)" color="red" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn @click="quitAct(null)">
+                <v-btn text small @click="quitAct(null)" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
@@ -111,12 +106,13 @@
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn @click="cancelAct(null)">
+                <v-btn @click="cancelAct(null)" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>
+            </v-container>
           </template>
         </v-data-table>
       </v-container>
@@ -159,7 +155,7 @@ export default {
           value: "programme.name"
         },
         { text: "Status", value: "status", sortable: false },
-        { text: "Actions", value: "action", align: "right", sortable: false }
+        { text: "", value: "action", align: "right", sortable: false }
       ],
       program: {
         total: 0,

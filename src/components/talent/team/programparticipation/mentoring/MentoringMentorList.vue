@@ -2,24 +2,23 @@
   <v-container>
     <!-- {{$store.state.programId}} -->
     <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-    <v-dialog v-model="loader2" :hide-overlay="false" persistent width="300">
-      <v-card color="primary" dark>
-        <v-card-text>
-          {{ $vuetify.lang.t('$vuetify.info.standby') }}
-          <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    
+    <loader-dialog v-model="loader2"></loader-dialog>
 
     <!-- propose dialog modal-->
-    <v-dialog v-model="dialogPropose" max-width="600">
+    <v-dialog persistent content-class="operplow" v-model="dialogPropose" max-width="450">
       <v-form v-model="valid" ref="form">
-        <v-card>
-          <v-card-title class="headline">Propose</v-card-title>
+        <v-card style="padding:0px 30px 30px 30px;">
+          <v-card class="taitel2 primary white--text elevation-5">
+            <v-btn style="float:right;left: 20px;bottom: 20px;" small fab color="white" text @click="dialogPropose = false">
+                  <v-icon small>close</v-icon>
+              </v-btn>
+              <h3 class="headline mb-0 font-weight-light">Propose to Mentor</h3>
+         </v-card>
           <v-card-text v-if="loaderDetail">
             <v-progress-linear :indeterminate="true"></v-progress-linear>
           </v-card-text>
-          <v-card-text v-else>
+          <v-card-text class="ma-0 pa-0" v-else>
             <v-container grid-list-md>
               <v-layout wrap>
                 <!-- {{proposeParams}} -->
@@ -82,16 +81,17 @@
                   </v-menu>
                 </v-flex>
 
-                <v-flex xs12 sm6 md4>
+                <v-flex xs12 sm6 md6>
                   <v-textarea
                     label="Media"
+                    placeholder="whatsapp etc or an address"
                     :rules="[v => !!v || 'Media is required']"
                     v-model="proposeParams.media"
                     required
                   ></v-textarea>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-textarea label="Note" v-model="proposeParams.note" required></v-textarea>
+                <v-flex xs12 sm6 md6>
+                  <v-textarea placeholder="write here..." label="Note" v-model="proposeParams.note" required></v-textarea>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -101,11 +101,13 @@
               @click="propose()"
               color="primary"
               :disabled="!valid"
+              block
+              v-if="!loaderDetail"
             >{{$vuetify.lang.t('$vuetify.action.add')}}</v-btn>
             <v-spacer></v-spacer>
-            <v-btn small fab color="red" text @click="dialogPropose = false">
+            <!-- <v-btn small fab color="red" text @click="dialogPropose = false">
               <v-icon>close</v-icon>
-            </v-btn>
+            </v-btn> -->
           </v-card-actions>
         </v-card>
       </v-form>
@@ -115,7 +117,7 @@
     <!-- desktop layout-->
     <!-- <v-layout hidden-sm-and-down> -->
     <v-layout>
-      <v-flex md6>
+      <v-flex md12>
         <v-data-table
           :loading="loader"
           :headers="headers"
@@ -124,10 +126,10 @@
           class="elevation-1"
         >
           <template v-slot:item.action="{item}">
-              <v-btn small color="primary" rounded @click="proposeMentoring(item.id)" class="ma-1">
+              <v-btn small color="primary" @click="proposeMentoring(item.id)" class="ma-2">
                 <v-icon left small>today</v-icon>Propose
               </v-btn>
-              <v-btn small rounded @click="gotomentorsession(item.id)">
+              <v-btn small @click="gotomentorsession(item.id)" class="ma-2">
                 <v-icon left small>search</v-icon>View Schedule
               </v-btn>
           </template>
@@ -176,7 +178,7 @@ export default {
           sortable: false,
           value: "talent.name"
         },
-        { text: "Actions", value: "action", sortable: false, align: "right" }
+        { text: "", value: "action", sortable: false, align: "right" }
       ],
       date: "",
       time: "",
@@ -278,4 +280,14 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.taitel2 {
+  padding: 24px;
+  /* width: 90%; */
+  margin: 0 auto;
+  bottom: 39px;
+  z-index: 2;
+}
+</style>
 

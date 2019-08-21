@@ -4,7 +4,11 @@
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
           <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-          <v-card elevation="0" width="400">
+          <v-card style="padding:0px 30px 20px 30px" class="mt-5" elevation="0" width="400">
+            <v-card class="taitel primary white--text elevation-5">
+              <h3 v-if="edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.edit') }} Idea</h3>
+              <h3 v-if="!edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.add') }} Idea</h3>    
+            </v-card>
             <v-card-text class="pt-4">
               <div>
                 <!-- {{params}} -->
@@ -49,6 +53,12 @@
                     maxlength="25"
                     required
                   ></v-text-field>-->
+                  <v-tooltip max-width="250" right>
+                    <template v-slot:activator="{ on }">
+                      <v-btn style="float:right;width:24px;height:24px;top: 20px;" fab dark small elevation="0" color="primary" dark v-on="on"><v-icon small>priority_high</v-icon></v-btn>
+                    </template>
+                    <span>Elevator pitch merupakan deskripsi singkat mengenai ide, produk, ataupun perusaahan kalian dengan pemaparan yang mudah dimengerti dalam waktu singkat.</span>
+                  </v-tooltip>
                   <v-textarea
                     :auto-grow="grow"
                     counter
@@ -59,23 +69,23 @@
                     <v-btn
                       v-if="edit == false"
                       @click.prevent="submit"
-                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                      class="mt-5"
+                      :class=" { 'primary white--text' : valid}"
+                      :disabled="!valid"
+                      block
                     >{{ $vuetify.lang.t('$vuetify.action.add')}}</v-btn>
 
                     <v-btn
                       v-else
                       @click="update"
-                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                      class="mt-5"
+                      :class=" { 'primary white--text' : valid}"
+                      :disabled="!valid"
+                      block
                     >{{ $vuetify.lang.t('$vuetify.action.update')}}</v-btn>
 
-                    <v-dialog v-model="loader" hide-overlay persistent width="300">
-                      <v-card color="primary" dark>
-                        <v-card-text>
-                          {{ $vuetify.lang.t('$vuetify.info.standby')}}
-                          <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-                        </v-card-text>
-                      </v-card>
-                    </v-dialog>
+                    <loader-dialog v-model="loader"></loader-dialog>
+
                   </v-layout>
                 </v-form>
               </div>
@@ -219,4 +229,12 @@ export default {
 </script>
 <style scoped>
 @import "../../../css/modal.css";
+
+.taitel {
+  padding: 24px;
+  width: 90%;
+  margin: 0 auto;
+  bottom: 27px;
+  z-index: 2;
+}
 </style>

@@ -3,27 +3,23 @@
     <div>
       <v-container>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-        <v-dialog v-model="loader" hide-overlay persistent width="300">
-          <v-card color="primary">
-            <v-card-text>
-              {{ $vuetify.lang.t('$vuetify.info.standby') }}
-              <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
+        
+        <loader-dialog v-model="loader"></loader-dialog>
 
-        <v-alert :value="!isTeam" type="info">Please Register in Team Menu</v-alert>
+        <v-alert :value="!isTeam" type="info" max-width="400">Please Register in Team Menu</v-alert>
         <!-- {{program.list}} -->
         <v-data-table :headers="headers" :items="program.list" class="elevation-1">
           <template v-slot:item.action="{ item }">
-              <v-btn small color="primary" v-if="isTeam" @click="registerProgram(item.id)" class="ma-1">
+            <v-container>
+              <v-btn small color="primary" v-if="isTeam" @click="registerProgram(item.id)" class="ma-2">
                 <v-icon small left>how_to_reg</v-icon>
                 {{ $vuetify.lang.t("$vuetify.action.register") }}
               </v-btn>
-              <v-btn small @click="openDetail(item.id)">
+              <v-btn small @click="openDetail(item.id)" class="ma-2">
                 <v-icon small left>search</v-icon>
                 {{ $vuetify.lang.t("$vuetify.action.view") }}
               </v-btn>
+            </v-container>
           </template>
         </v-data-table>
       </v-container>

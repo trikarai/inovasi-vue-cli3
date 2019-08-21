@@ -2,14 +2,9 @@
   <div>
     <v-container>
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-dialog v-model="loader" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.lang.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+     
+      <loader-dialog v-model="loader"></loader-dialog>
+
       <v-layout row wrap>
         <v-flex xs12 md6>
           <v-card elevation="1" style="margin:10px">

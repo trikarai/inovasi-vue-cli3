@@ -3,14 +3,8 @@
     <div>
       <v-container>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-        <v-dialog v-model="loader" hide-overlay persistent width="300">
-          <v-card color="primary">
-            <v-card-text>
-              {{ $vuetify.lang.t('$vuetify.info.standby') }}
-              <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
+        
+        <loader-dialog v-model="loader"></loader-dialog>
 
         <v-form v-model="valid" ref="form">
           <v-container>
@@ -18,7 +12,7 @@
             <v-layout column fill-height>
               <v-card style="padding:10px 50px 50px 50px">
                 <v-card class="taitel primary white--text elevation-5">
-                  <h3 class="headline mb-0 font-weight-light">Team Information</h3>
+                  <h3 class="headline mb-0 font-weight-light">{{$vuetify.lang.t('$vuetify.team.teamInformation')}}</h3>
                 </v-card>
               <v-flex>
                   <v-text-field
@@ -65,7 +59,7 @@
                 <v-textarea
                   v-model="params.vision"
                   :label="$vuetify.lang.t('$vuetify.team.vision')"
-                  :placeholder="$vuetify.lang.t('$vuetify.team.vision')"
+                  :placeholder="$vuetify.lang.t('$vuetify.team.writeHere')"
                   counter
                 ></v-textarea>    
               </v-flex>
@@ -79,7 +73,7 @@
                 <v-textarea
                   v-model="params.mission"
                   :label="$vuetify.lang.t('$vuetify.team.mission')"
-                  :placeholder="$vuetify.lang.t('$vuetify.team.mission')"
+                  :placeholder="$vuetify.lang.t('$vuetify.team.writeHere')"
                   counter
                 ></v-textarea>
               </v-flex>
@@ -93,7 +87,7 @@
                 <v-textarea
                   v-model="params.culture"
                   :label="$vuetify.lang.t('$vuetify.team.culture')"
-                  :placeholder="$vuetify.lang.t('$vuetify.team.culture')"
+                  :placeholder="$vuetify.lang.t('$vuetify.team.writeHere')"
                   counter
                 ></v-textarea>
               </v-flex>
@@ -101,7 +95,7 @@
                 <v-textarea
                   v-model="params.founderAgreement"
                   :label="$vuetify.lang.t('$vuetify.team.founderAgreement')"
-                  :placeholder="$vuetify.lang.t('$vuetify.team.founderAgreement')"
+                  :placeholder="$vuetify.lang.t('$vuetify.team.writeHere')"
                   counter
               ></v-textarea>
               </v-flex>

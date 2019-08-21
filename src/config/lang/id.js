@@ -88,7 +88,8 @@ var _default = {
   },
   team: {
     team: "Tim",
-    position: "Posisi",
+    teamInformation: "Informasi Tim",
+    position: "Posisi Anda dalam Tim",
     teamName: "Nama Tim",
     vision: "Visi",
     mission: "Misi",
@@ -96,7 +97,8 @@ var _default = {
     founderAgreement: "Kesepakatan dengan Pendiri",
     resign: "Mengundurkan diri",
     quit: "Keluar",
-    programParticipation: "Partisipasi Program"
+    programParticipation: "Partisipasi Program",
+    writeHere: "tulis disini..."
   },
   idea: {
     idea: "Ide",

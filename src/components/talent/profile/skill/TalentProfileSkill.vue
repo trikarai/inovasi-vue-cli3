@@ -32,7 +32,7 @@
               {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
 
-            <v-scale-transition>
+            <v-expand-transition>
               <div v-show="item.id == selectedIndex">
                 <div>
                   <v-icon>warning</v-icon>
@@ -47,7 +47,7 @@
                   {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
-            </v-scale-transition>
+            </v-expand-transition>
           </v-container>
         </template>
       </v-data-table>

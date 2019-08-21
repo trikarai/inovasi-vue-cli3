@@ -4,12 +4,38 @@
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
           <notification-alert v-bind:err_msg="err_msg" v-bind:status="status"/>
-          <v-card elevation="0" width="400">
-            <v-card-text class="pt-4">
-              <p>{{params.description}}</p>
-              <p>{{params.curriculum.name}}</p>
-              <p>{{params.curriculum.description}}</p>
-            </v-card-text>
+          <v-card style="padding:0px 30px 20px 30px" class="mt-5" elevation="0" width="400">
+            <v-card class="taitel primary white--text elevation-5">
+              <h3 class="headline mb-0 font-weight-light">View Programme Detail</h3>
+            </v-card>
+            <v-card elevation="0" width="400">
+              <v-card-text>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Programme Name</v-list-item-title>
+                    <v-list-item-subtitle>{{params.name}}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Programme Description</v-list-item-title>
+                    <v-list-item-subtitle>{{params.description}}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Curriculum Name</v-list-item-title>
+                    <v-list-item-subtitle>{{params.curriculum.name}}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Curriculum description</v-list-item-title>
+                    <v-list-item-subtitle>{{params.curriculum.description}}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card-text>
+            </v-card>
           </v-card>
         </div>
       </div>
@@ -72,4 +98,12 @@ export default {
 </script>
 <style scoped>
 @import "../../css/modal.css";
+
+.taitel {
+  padding: 24px;
+  /* width: 90%; */
+  margin: 0 auto;
+  bottom: 27px;
+  z-index: 2;
+}
 </style>

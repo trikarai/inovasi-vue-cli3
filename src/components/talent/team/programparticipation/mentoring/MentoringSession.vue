@@ -4,14 +4,7 @@
       <!-- {{$store.state.programId}} -->
       <notification-notif v-bind:err_msg="err_msg" v-bind:status="status" />
 
-      <v-dialog v-model="loader2" :hide-overlay="false" persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.lang.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+      <loader-dialog v-model="loader"></loader-dialog>
 
       <!-- propose dialog modal-->
       <v-dialog v-model="dialogPropose" max-width="600">
@@ -95,6 +88,7 @@
             </v-card-text>
             <v-card-actions>
               <v-btn
+                v-show="!loaderDetail"
                 @click="propose()"
                 color="primary"
                 :disabled="!valid"
@@ -185,8 +179,9 @@
               <v-chip :color="colorStatus(item.status)" text-color="white">{{ item.status }}</v-chip>
             </template>
             <template v-slot:item.action="{item}">
-              <v-btn
-                class="ma-1"
+              
+              <v-btn dark
+                class="ma-2"
                 @click="acceptAct(item.id)"
                 small
                 color="green"
@@ -197,7 +192,7 @@
               </v-btn>
 
               <v-btn
-                class="ma-1"
+                class="ma-2"
                 @click="rescheduleAct(item.id)"
                 small
                 color="warning"
@@ -207,7 +202,7 @@
                 {{ $vuetify.lang.t('$vuetify.mentoring.reschedule') }}
               </v-btn>
 
-              <v-btn @click="cancelAct(item.id)" small color="red" v-if="checkCancel(item.status)">
+              <v-btn dark @click="cancelAct(item.id)" small color="red" v-if="checkCancel(item.status)">
                 <v-icon small left>cancel</v-icon>
                 {{ $vuetify.lang.t('$vuetify.mentoring.cancel') }}
               </v-btn>
@@ -226,7 +221,7 @@
                 </div>
               </v-expand-transition>
 
-              <v-fade-transition>
+              <v-expand-transition>
                 <div v-if="item.id == selectedCan">
                   {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtocancel') }}
                   <v-btn @click="cancelMentoring(item.id)" color="red" class="ma-2">
@@ -238,7 +233,8 @@
                     {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                   </v-btn>
                 </div>
-              </v-fade-transition>
+              </v-expand-transition>
+        
             </template>
           </v-data-table>
         </v-flex>
@@ -281,7 +277,7 @@
               </v-card-actions>
 
               <v-card-actions>
-                <v-fade-transition>
+                <v-expand-transition>
                   <div v-if="data.id == selectedAcc">
                     {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtoaccept') }}
                     <br />
@@ -294,8 +290,8 @@
                       {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                     </v-btn>
                   </div>
-                </v-fade-transition>
-                <v-fade-transition>
+                </v-expand-transition>
+                <v-expand-transition>
                   <div v-if="data.id == selectedCan">
                     {{ $vuetify.lang.t('$vuetify.mentoring.confirmationtocancel') }}
                     <br />
@@ -308,7 +304,7 @@
                       {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                     </v-btn>
                   </div>
-                </v-fade-transition>
+                </v-expand-transition>
               </v-card-actions>
 
               <v-card-actions style="visibility:hidden">
@@ -364,7 +360,7 @@ export default {
         },
         { text: "Mentor", value: "mentor", sortable: false },
         { text: "Status", value: "status", sortable: false },
-        { text: "Actions", value: "action", sortable: false, align: "right" }
+        { text: "", value: "action", sortable: false, align: "right" }
       ],
       mentoring: {
         total: 0,
