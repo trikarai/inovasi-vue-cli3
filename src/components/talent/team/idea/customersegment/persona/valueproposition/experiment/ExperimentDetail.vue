@@ -11,7 +11,14 @@
     </v-dialog>
 
     <v-layout>
-      <v-flex>{{experiment}}</v-flex>
+      <v-card>
+        <v-card-title>{{experiment.form.name}}</v-card-title>
+        <v-card-text>
+          <template v-for="data in experiment.fields">
+          {{data.field.name}} : {{data.value}} <br>
+          </template>
+        </v-card-text>
+      </v-card>
     </v-layout>
   </v-container>
 </template>
@@ -29,7 +36,7 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       experiment: ""
     };
   },

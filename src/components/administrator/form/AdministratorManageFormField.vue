@@ -10,7 +10,18 @@
         </v-btn>
       </transition>
 
-      <v-data-table :loading="loader" :headers="headers" :items="field.list" class="elevation-1">
+      <v-data-table
+        :sort-by="['position']"
+        :loading="loader"
+        :headers="headers"
+        :items="field.list"
+        class="elevation-1"
+      >
+        <template v-slot:item.order="{item}">
+          {{getOrderPosition(item.position)}}
+          <!-- {{(item.position)}} -->
+        </template>
+        <template v-slot:item.grid="{item}">{{getGridPosition(item.position)}}</template>
         <template v-slot:item.option="{item}">
           <v-btn
             @click="openOption(item.id)"
@@ -126,10 +137,16 @@ export default {
       singleData: { id: "", name: "" },
       headers: [
         {
-          text: "position",
+          text: "Order",
           align: "left",
-          sortable: true,
-          value: "position"
+          sortable: false,
+          value: "order"
+        },
+        {
+          text: "Grid",
+          align: "left",
+          sortable: false,
+          value: "grid"
         },
         {
           text: "Name",
@@ -147,6 +164,10 @@ export default {
     this.getDataList();
   },
   methods: {
+    getOrderPosition: function(position) {
+      var position = JSON.parse(position);
+      return position.order;
+    },
     getGridPosition: function(position) {
       var position = JSON.parse(position);
       return position.grid;

@@ -300,6 +300,7 @@ export default {
           notif.showSuccess(this, res, ["Data Canvas Updated"]);
           this.isCanvas = true;
           this.isEdit = false;
+          this.getCanvas();
         })
         .catch(error => {
           notif.showError(this, error);

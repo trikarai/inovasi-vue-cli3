@@ -6,7 +6,7 @@
           <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400">
             <v-card-text class="pt-4">
-              {{$store.state.formType}}
+              <!-- {{$store.state.formType}} -->
               <br />
               <!-- params.position : {{params.position}} -->
               <!-- <br /> -->
@@ -31,15 +31,16 @@
                     required
                   ></v-text-field>
 
-                  <v-autocomplete
-                    :disabled="edit"
-                    v-model="params.type"
-                    label="Field Type"
-                    :items="type"
-                    item-text="name"
-                    item-value="value"
-                  ></v-autocomplete>
-
+                  <template v-if="$store.state.formType !== 'can'">
+                    <v-autocomplete
+                      :disabled="edit"
+                      v-model="params.type"
+                      label="Field Type"
+                      :items="type"
+                      item-text="name"
+                      item-value="value"
+                    ></v-autocomplete>
+                  </template>
                   <v-text-field
                     :disabled="view"
                     label="Order"
@@ -147,7 +148,11 @@ export default {
       },
       position: { order: "", grid: "" },
       gridMask: "# / # / # / #",
-      gridRules: [v => v.length == 13 || "Grid Position must valid : row-start / column-start / row-end / column-end"],
+      gridRules: [
+        v =>
+          v.length == 13 ||
+          "Grid Position must valid : row-start / column-start / row-end / column-end"
+      ],
       nameRules: [
         v => !!v || "Name is required",
         v => v.length >= 3 || "Name must be more than 3 characters"
@@ -187,6 +192,9 @@ export default {
       this.getSingleData(this.data.id);
     } else {
       this.position.order = this.total + 1;
+      if (this.$store.state.formType == "can") {
+        this.params.type = "txt";
+      }
     }
   },
   computed: {

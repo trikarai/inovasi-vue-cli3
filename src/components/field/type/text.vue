@@ -6,7 +6,7 @@
         v-model="value"
         :id="field.id"
         :name="field.id"
-        :label="field.name"
+        :label="field.description"
         counter
         :clearable="clearable"
       ></v-textarea>
