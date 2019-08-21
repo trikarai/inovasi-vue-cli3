@@ -13,7 +13,7 @@
         </v-card>
       </v-dialog>
 
-      <v-btn @click="openAdd()" color="blue" class="mb-2">
+      <v-btn dark  @click="openAdd()" color="primary" class="mb-2">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} {{$vuetify.lang.t('$vuetify.idea.idea')}}
       </v-btn>
@@ -24,36 +24,40 @@
             <v-icon>pageview</v-icon>
             <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
           </v-btn> 
-          {{ item.name }}
-          <v-icon color="yellow" small v-if="item.aMainIdea">start</v-icon>
+          {{ item.name }} &nbsp;
+          <v-icon color="primary" small v-if="item.aMainIdea">start</v-icon>
         </template>
         <template v-slot:item.action="{item}">
-          <v-btn @click="setMain(item.id)" small v-if="!item.aMainIdea" class="ma-1">
-            <v-icon small>swap_calls</v-icon>
+          <v-container>
+          <v-btn @click="setMain(item.id)" small v-if="!item.aMainIdea" class="ma-2">
+            <v-icon small left>star_border</v-icon> 
             {{ $vuetify.lang.t('$vuetify.idea.setMainIdea') }}
           </v-btn>
-          <v-btn @click="openEdit(item.id)" small class="ma-1">
-            <v-icon small>edit</v-icon>
+          <v-btn @click="openEdit(item.id)" small class="ma-2">
+            <v-icon small left>edit</v-icon> 
             {{ $vuetify.lang.t('$vuetify.action.edit') }}
           </v-btn>
 
-          <v-btn small color="warning" @click="deleteAct(item.id)">
-            <v-icon small>delete</v-icon>
+          <v-btn small color="warning" @click="deleteAct(item.id)" class="ma-2">
+            <v-icon small left>delete</v-icon> 
             {{ $vuetify.lang.t('$vuetify.action.delete') }}
           </v-btn>
           <v-expand-transition>
             <div v-show="item.id == selectedIndex">
-              {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-              <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
+              <div>
+                <v-icon>warning</v-icon> <span> {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
+              </div>
+              <v-btn small text @click="deleteData(item.id)" color="red" class="ma-2">
                 <v-icon></v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.yes') }}
               </v-btn>
-              <v-btn @click="deleteAct(null)">
+              <v-btn small text @click="deleteAct(null)">
                 <v-icon></v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.cancel') }}
               </v-btn>
             </div>
           </v-expand-transition>
+          </v-container>
         </template>
       </v-data-table>
       <br />

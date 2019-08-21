@@ -2,19 +2,20 @@
   <div>
     <v-container>
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-btn dark @click="openAdd()" color="primary" style="left: -8px">
+      <v-btn dark @click="openAdd()" color="primary">
         <v-icon>add</v-icon>
         {{ $vuetify.lang.t('$vuetify.action.add') }} Training Experiences
       </v-btn>
 
-      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1 mt-1">
+      <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1 mt-2">
         <template v-slot:item.action="{item}">
-            <v-btn @click="openEdit(item.id)" small>
-              <v-icon small>edit</v-icon>
+          <v-container class="text-end">
+            <v-btn class="ma-2" @click="openEdit(item.id)" small>
+              <v-icon small left>edit</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>
-            <v-btn small color="warning" @click="deleteAct(item.id)">
-              <v-icon small>delete</v-icon>
+            <v-btn class="ma-2" small color="warning" @click="deleteAct(item.id)">
+              <v-icon small left>delete</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
@@ -22,16 +23,17 @@
                 <div>
                    <v-icon>warning</v-icon> <span> {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
                 </div>
-                <v-btn dark text @click="deleteData(item.id)" color="red">
+                <v-btn class="ma-2" dark text @click="deleteData(item.id)" color="red">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn text @click="deleteAct(null)">
+                <v-btn class="ma-2" text @click="deleteAct(null)">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>
+          </v-container>
         </template>
       </v-data-table>
     </v-container>
@@ -78,10 +80,16 @@ export default {
       singleData: { id: "", name: "" },
       headers: [
         {
-          text: "Business Name",
+          text: "Training Name",
           align: "left",
           sortable: false,
           value: "name"
+        },
+        {
+          text: "Position",
+          align: "left",
+          sortable: false,
+          value: "position"
         },
         { text: "", value: "action", sortable: false }
       ]
