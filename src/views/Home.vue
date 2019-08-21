@@ -1,6 +1,6 @@
 <template>
   <v-app light>
-    <v-toolbar style="position:fixed;" color="white" absolute="true" height="64px">
+    <v-toolbar style="position:fixed;" color="white" :absolute="true" height="64px">
       <v-img
         class="ml-2"
         src="/img/logostartmikti.png"
