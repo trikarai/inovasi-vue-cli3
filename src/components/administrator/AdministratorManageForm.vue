@@ -16,9 +16,9 @@
         class="elevation-1"
       >
         <template v-slot:item.manage="{item}">
-            <v-btn small @click="gotoSection(item.id)" class="mr-1">
+            <!-- <v-btn small @click="gotoSection(item.id)" class="mr-1">
               <v-icon small>extension</v-icon>Section
-            </v-btn>
+            </v-btn> -->
             <v-btn small @click="gotoField(item.id, item.type.value)">
               <v-icon small>art_track</v-icon>Field
             </v-btn>

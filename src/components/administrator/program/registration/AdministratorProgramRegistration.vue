@@ -30,7 +30,7 @@
             <v-expand-transition>
               <div v-show="item.id == selectedIndex">
                 {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-                <v-btn @click="deleteData(props.item.id)" color="red" class="ma-2">
+                <v-btn @click="deleteData(item.id)" color="red" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>

@@ -16,13 +16,12 @@
                     maxlength="25"
                     required
                   ></v-text-field>
-                  <v-text-field
+                  <v-textarea
                     label="Description"
                     v-model="params.description"
-                    :counter="25"
-                    maxlength="25"
+                    counter
                     required
-                  ></v-text-field>
+                  ></v-textarea>
                   <v-layout justify-space-between>
                     <v-btn
                       v-if="edit == false"

@@ -1,6 +1,6 @@
 <template>
   <v-app light>
-    <v-toolbar style="position:fixed;" color="white" :absolute="true" height="64px">
+    <v-app-bar style="position:fixed;" color="white" :absolute="true" height="64px">
       <v-img
         class="ml-2"
         src="/img/logostartmikti.png"
@@ -17,7 +17,7 @@
         <!-- <button @click="setLang('en')">EN</button>  <button @click="setLang('id')">ID</button> -->
       </v-toolbar-items>
       <v-app-bar-nav-icon class="hidden-sm-and-up" light @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-    </v-toolbar>
+    </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" temporary right fixed width="200">
       <v-list class="pa-1">

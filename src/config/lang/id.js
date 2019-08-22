@@ -100,6 +100,10 @@ var _default = {
     programParticipation: "Partisipasi Program",
     writeHere: "tulis disini..."
   },
+  program:{
+    program: "Program",
+    programParticipation: "Partisipasi Program",
+  },
   idea: {
     idea: "Ide",
     setMainIdea: "Jadikan Ide Utama",
