@@ -99,6 +99,10 @@ var _default = {
     programParticipation: "Program Participation",
     writeHere: "write here..."
   },
+  program:{
+    program: "Program",
+    programParticipation: "Program Participation",
+  },
   idea: {
     idea: "Idea",
     setMainIdea: "Set as Main",
