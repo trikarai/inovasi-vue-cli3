@@ -52,7 +52,7 @@
                 />-->
                 <v-tooltip max-width="250" right>
                   <template v-slot:activator="{ on }">
-                    <v-btn style="float:right;width:24px;height:24px;" fab dark small elevation="0" color="primary" dark v-on="on"><v-icon small>priority_high</v-icon></v-btn>
+                    <v-btn style="float:right;width:24px;height:24px;" fab small elevation="0" color="primary" dark v-on="on"><v-icon small>priority_high</v-icon></v-btn>
                   </template>
                   <span>Vision Statement adalah kalimat yang mendeskripsikan masa depan dari bisnis anda. Contoh Vision Statement dari Amazon: To be Earth’s most customer-centric company, where customers can find and discover anything they might want to buy online.</span>
                 </v-tooltip>
@@ -66,7 +66,7 @@
               <v-flex>
                 <v-tooltip max-width="250" right>
                   <template v-slot:activator="{ on }">
-                    <v-btn style="float:right;width:24px;height:24px;" fab dark small elevation="0" color="primary" dark v-on="on"><v-icon small>priority_high</v-icon></v-btn>
+                    <v-btn style="float:right;width:24px;height:24px;" fab small elevation="0" color="primary" dark v-on="on"><v-icon small>priority_high</v-icon></v-btn>
                   </template>
                   <span>Mission Statement adalah kalimat yang mendeskripsikan tentang bisnis anda, tujuan serta cara perusahaan anda untuk mencapai tujuan tersebut. Contoh Mission Statement dari Amazon: We strive to offer our customers the lowest possible prices, the best available selection, and the utmost convenience.</span>
                 </v-tooltip>
@@ -80,7 +80,7 @@
               <v-flex>
                 <v-tooltip max-width="250" right>
                   <template v-slot:activator="{ on }">
-                    <v-btn style="float:right;width:24px;height:24px;" fab dark small elevation="0" color="primary" dark v-on="on"><v-icon small>priority_high</v-icon></v-btn>
+                    <v-btn style="float:right;width:24px;height:24px;" fab small elevation="0" color="primary" dark v-on="on"><v-icon small>priority_high</v-icon></v-btn>
                   </template>
                   <span>Culture/Budaya menjelaskan karakter dari perusahaan anda. Menjelaskan bagaimana perusahaan anda bekerja. Company Culture memiliki berbagai unsur, termasuk lingkungan kerja, tujuan perusahaan, etos kerja, dan value dari perusahaan.</span>
                 </v-tooltip>
@@ -112,14 +112,8 @@
           </v-container>
           <v-layout justify-space-between>
             
-            <v-dialog v-model="loader" hide-overlay persistent width="300">
-              <v-card color="primary" dark>
-                <v-card-text>
-                  {{ $vuetify.lang.t('$vuetify.info.standby')}}
-                  <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-                </v-card-text>
-              </v-card>
-            </v-dialog>
+           <loader-dialog v-model="loader"></loader-dialog>
+
           </v-layout>
         </v-form>
       </v-container>

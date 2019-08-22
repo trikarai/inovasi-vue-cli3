@@ -104,7 +104,8 @@ var _default = {
     setMainIdea: "Set as Main",
     customersegment: "Customer Segment",
     persona: "Persona",
-    valueproposition: "Value Proposition"
+    valueproposition: "Value Proposition",
+    ideaName: "Idea Name"
   },
   personnel: {
     mentor: "Mentor",

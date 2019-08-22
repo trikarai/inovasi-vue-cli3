@@ -55,7 +55,7 @@
                   ></v-text-field>-->
                   <v-tooltip max-width="250" right>
                     <template v-slot:activator="{ on }">
-                      <v-btn style="float:right;width:24px;height:24px;top: 20px;" fab dark small elevation="0" color="primary" dark v-on="on"><v-icon small>priority_high</v-icon></v-btn>
+                      <v-btn style="float:right;width:24px;height:24px;top: 20px;" fab small elevation="0" color="primary" dark v-on="on"><v-icon small>priority_high</v-icon></v-btn>
                     </template>
                     <span>Elevator pitch merupakan deskripsi singkat mengenai ide, produk, ataupun perusaahan kalian dengan pemaparan yang mudah dimengerti dalam waktu singkat.</span>
                   </v-tooltip>
