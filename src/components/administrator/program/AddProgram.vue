@@ -27,14 +27,13 @@
                     maxlength="25"
                     required
                   ></v-text-field>
-                  <v-text-field
+                  <v-textarea
                     :disabled="view"
                     label="Description"
                     v-model="params.description"
-                    :counter="25"
-                    maxlength="25"
+                    counter
                     required
-                  ></v-text-field>
+                  ></v-textarea>
                   <v-autocomplete
                     v-model="params.curriculumId"
                     label="Curriculum"
