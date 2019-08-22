@@ -13,7 +13,6 @@
           :loading="loader"
           item-text="team.name"
           item-value="team.id"
-          :cache-items="true"
           label="Team"
           outlined
           class="pr-3"
