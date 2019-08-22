@@ -2,10 +2,10 @@
   <v-container>
     <v-layout>
       <!-- {{teamId}} -->
-      <v-flex md6>
+      <v-flex md2>
         <v-switch v-model="reverse" label="Toggle reverse"></v-switch>
       </v-flex>
-      <v-flex md6>
+      <v-flex md2>
         <v-switch v-model="dense" label="Toggle dense"></v-switch>
       </v-flex>
     </v-layout>
