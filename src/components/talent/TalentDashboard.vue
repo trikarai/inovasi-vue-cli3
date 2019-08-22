@@ -87,7 +87,7 @@ export default {
       this.loader = true;
       notif.reset(this);
       net
-        .getData(this, "/talent/team-memberships?statuses[]=active")
+        .getData(this, "/talent/team-memberships?status[]=act")
         .then(res => {
           if (res.data.data) {
             this.team = res.data.data;
