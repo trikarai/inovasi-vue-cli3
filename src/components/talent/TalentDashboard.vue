@@ -34,7 +34,13 @@
         ></v-select>
       </v-flex>
     </v-layout>
-    <dashboard-timeline v-if="dashboardMode== '1'" v-bind:teamId="teamId"/>
+    <v-layout>
+      <v-flex>
+        <div v-html="error.body"></div>
+      </v-flex>
+    </v-layout>
+
+    <dashboard-timeline v-if="dashboardMode== '1'" v-bind:teamId="teamId" />
     <dashboard-stepper v-if="dashboardMode == '2'" />
   </v-container>
 </template>
@@ -53,7 +59,7 @@ export default {
       {
         text: "Timeline",
         value: 1
-      },
+      }
       // {
       //   text: "Stepper",
       //   value: 2
@@ -68,6 +74,7 @@ export default {
       info: false,
       warning: false
     },
+    error: "",
     err_msg: { details: [""] }
   }),
   components: {
@@ -101,6 +108,8 @@ export default {
           }
         })
         .catch(error => {
+          console.log(error);
+          this.error = error;
           notif.showError(this, error);
         })
         .finally(() => {
