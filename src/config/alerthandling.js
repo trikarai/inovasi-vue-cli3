@@ -1,10 +1,10 @@
 export default {
     showError: function (context, res) {
-        if (res.status > 500) {
+        if (res.status >= 500) {
             context.err_msg = {
                 code: res.status,
                 type: res.statusText,
-                details: ["Internal Server Error"]
+                details: ["Internal Server Error | Don't Panic it's not your fault..."]
             };
         } else if (res.status === 405) {
             context.err_msg = {
