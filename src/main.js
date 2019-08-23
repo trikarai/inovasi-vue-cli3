@@ -40,6 +40,13 @@ Vue.use(UUID);
 Vue.use(VueResource);
 Vue.use(VueVisible);
 
+const moment = require('moment')
+require('moment/locale/id')
+ 
+Vue.use(require('vue-moment'), {
+    moment
+})
+
 const opts = {
   lang: {
     locales: { en, id },

@@ -109,7 +109,9 @@ var _default = {
     customersegment: "Customer Segment",
     persona: "Persona",
     valueproposition: "Value Proposition",
-    ideaName: "Idea Name"
+    ideaName: "Idea Name",
+    analysis: "Analysis",
+    experiment: "Experiment"
   },
   personnel: {
     mentor: "Mentor",

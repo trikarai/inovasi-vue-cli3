@@ -107,10 +107,12 @@ var _default = {
   idea: {
     idea: "Ide",
     setMainIdea: "Jadikan Ide Utama",
-    customersegment: "Customer Segment",
+    customersegment: "Segmen Pelanggan",
     persona: "Persona",
     valueproposition: "Value Proposition",
-    ideaName: "Nama Ide"
+    ideaName: "Nama Ide",
+    analysis: "Analisa",
+    experiment: "Eksperimen"
   },
   personnel: {
     mentor: "Mentor",
