@@ -7,113 +7,101 @@
       <loader-dialog v-model="loader"></loader-dialog>
 
       <!-- propose dialog modal-->
-    <v-dialog persistent content-class="operplow" v-model="dialogPropose" max-width="450">
-      <v-form v-model="valid" ref="form">
-        <v-card style="padding:0px 30px 30px 30px;">
-          <v-card class="taitel2 primary white--text elevation-5">
-            <v-btn style="float:right;left: 20px;bottom: 20px;" small fab color="white" text @click="dialogPropose = false">
-                  <v-icon small>close</v-icon>
-              </v-btn>
-              <h3 class="headline mb-0 font-weight-light">Propose to Mentor</h3>
-         </v-card>
-          <v-card-text v-if="loaderDetail">
-            <v-progress-linear :indeterminate="true"></v-progress-linear>
-          </v-card-text>
-          <v-card-text class="ma-0 pa-0" v-else>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <!-- {{proposeParams}} -->
-                <v-flex xs12 sm12 md6>
-                  <v-menu
-                    v-model="menu1"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
+      <v-dialog v-model="dialogPropose" max-width="600">
+        <v-form v-model="valid" ref="form">
+          <v-card>
+            <v-card-title class="headline">Reschedule</v-card-title>
+            <v-card-text v-if="loaderDetail">
+              <v-progress-linear :indeterminate="true" color="omikti"></v-progress-linear>
+            </v-card-text>
+            <v-card-text v-else>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <!-- {{proposeParams}} -->
+                  <v-flex xs12 sm12 md6>
+                    <v-menu
+                      v-model="menu1"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="date"
+                          label="Date"
+                          prepend-icon="today"
+                          readonly
+                          :rules="[v => !!v || 'Date is required']"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        color="blue"
+                        :locale="$vuetify.lang.current"
                         v-model="date"
-                        label="Date"
-                        prepend-icon="today"
-                        readonly
-                        :rules="[v => !!v || 'Date is required']"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      color="blue"
-                      :locale="$vuetify.lang.current"
-                      v-model="date"
-                      @input="menu1 = false"
-                    ></v-date-picker>
-                  </v-menu>
-                </v-flex>
-                <v-flex xs12 sm12 md6>
-                  <v-menu
-                    v-model="menu2"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="time"
-                        label="Time"
-                        prepend-icon="schedule"
-                        readonly
-                        :rules="[v => !!v || 'Time is required']"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-time-picker
-                      format="24hr"
-                      color="blue"
-                      :locale="$vuetify.lang.current"
-                      v-model="time"
-                    ></v-time-picker>
-                  </v-menu>
-                </v-flex>
+                        @input="menu1 = false"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs12 sm12 md6>
+                    <v-menu
+                      v-model="menu2"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="time"
+                          label="Time"
+                          prepend-icon="schedule"
+                          readonly
+                          :rules="[v => !!v || 'Time is required']"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker color="blue" :locale="$vuetify.lang.current" v-model="time" format="24hr"></v-time-picker>
+                    </v-menu>
+                  </v-flex>
 
-                <v-flex xs12 sm6 md6>
-                  <v-textarea
-                    label="Media"
-                    placeholder="whatsapp etc or an address"
-                    :rules="[v => !!v || 'Media is required']"
-                    v-model="proposeParams.media"
-                    required
-                  ></v-textarea>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-textarea placeholder="write here..." label="Note" v-model="proposeParams.note" required></v-textarea>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              @click="propose()"
-              color="primary"
-              :disabled="!valid"
-              block
-              v-if="!loaderDetail"
-            >{{$vuetify.lang.t('$vuetify.action.add')}}</v-btn>
-            <v-spacer></v-spacer>
-            <!-- <v-btn small fab color="red" text @click="dialogPropose = false">
-              <v-icon>close</v-icon>
-            </v-btn> -->
-          </v-card-actions>
-        </v-card>
-      </v-form>
-    </v-dialog>
-    <!-- end propose dialog modal-->
+                  <v-flex xs12 sm6 md4>
+                    <v-textarea
+                      label="Media"
+                      :rules="[v => !!v || 'Media is required']"
+                      v-model="proposeParams.media"
+                      required
+                    ></v-textarea>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-textarea label="Note" v-model="proposeParams.note" required></v-textarea>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                v-show="!loaderDetail"
+                @click="propose()"
+                color="primary"
+                :disabled="!valid"
+              >{{$vuetify.lang.t('$vuetify.action.add')}}</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn small fab color="red" text @click="dialogPropose = false">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-form>
+      </v-dialog>
+      <!-- end propose dialog modal-->
 
       <v-dialog v-model="dialogDetail" max-width="350">
         <v-card>

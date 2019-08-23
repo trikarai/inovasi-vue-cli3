@@ -4,7 +4,11 @@
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
                 <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-          <v-card elevation="0" width="550" style="top:50px">
+          <v-card elevation="0" width="400" style="padding:0px 30px 20px 30px">
+            <v-card class="taitel primary white--text elevation-5">
+              <h3 v-if="edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.edit') }} Persona</h3>
+              <h3 v-if="!edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.add') }} Persona</h3>    
+            </v-card>
             <v-card-text class="pt-4">
               <div>
                 <v-flex xs12>
@@ -21,7 +25,6 @@
                     single-line
                   ></v-select>
                 </v-flex>
-                <v-divider></v-divider>
                 <v-form v-model="valid" ref="form">
                   <div>
                     <v-flex xs12 sm12>
@@ -37,7 +40,6 @@
                         :rules="rules"
                       ></v-text-field>
                     </v-flex>
-                    <v-divider></v-divider>
                     <template v-for="(field, index) in formTemplate.fields">
                       <field-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></field-modul>
                     </template>
@@ -47,7 +49,10 @@
                     <v-btn
                       v-if="params.formId"
                       @click.prevent="submit"
-                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                      class="mt-5"
+                      :class=" { 'primary white--text' : valid}"
+                      :disabled="!valid"
+                      block
                     >{{ $vuetify.lang.t('$vuetify.action.add')}}</v-btn>
 
                     <loader-dialog v-model="loader"></loader-dialog>
@@ -309,4 +314,12 @@ export default {
 </script>
 <style scoped>
 @import "../../../../../css/modal.css";
+
+.taitel {
+  padding: 24px;
+  width: 90%;
+  margin: 0 auto;
+  bottom: 27px;
+  z-index: 2;
+}
 </style>

@@ -81,19 +81,8 @@
                         </v-card>
                       </v-dialog>
 
-                      <v-dialog v-model="activate" :hide-overlay="false" persistent width="400">
-                        <v-card>
-                          <v-card-title>
-                            <h3>Please check your email for account activation before login.</h3>
-                          </v-card-title>
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn small fab color="red" @click="activate = false">
-                              <v-icon>close</v-icon>
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
+                      <loader-dialog v-model="loader"></loader-dialog>
+
                     </v-layout>
                   </v-form>
                 </div>

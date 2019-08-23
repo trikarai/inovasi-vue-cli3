@@ -10,7 +10,7 @@
           <v-card class="pb-5" elevation="3" style="margin:10px">
             <v-card class="taitel primary white--text elevation-5 pt-2">
               <v-list-item three-line="true">
-                <v-list-item-avatar>
+                <v-list-item-avatar v-if="parentData.aMainIdea">
                   <v-badge v-model="parentData.aMainIdea" left class="ml-4 mt-1">
                     <template v-slot:badge>
                       <v-icon size="25" color="omikti">star</v-icon>
@@ -52,7 +52,7 @@
               </v-list-item-content>
             </v-list-item>
 
-            <v-card-text style="padding-left:26px;padding-right:26px">
+            <v-card-text class="caption" style="padding-left:26px;padding-right:26px">
               <!-- <v-divider /> -->
               Initiator :
               <b>{{parentData.initiator.talent.name}}</b>
@@ -64,7 +64,7 @@
             <v-card class="taitelcs primary white--text elevation-5">
               <v-list-item>
                 <v-list-item-content>
-                  <h3 class="headline mb-0 font-weight-light white--text">Customer Segment</h3>
+                  <h3 class="headline mb-0 font-weight-light white--text">{{ $vuetify.lang.t('$vuetify.idea.customersegment') }}</h3>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-btn small fab @click="openAdd" class="ml-2 mt-1">
@@ -73,7 +73,7 @@
                 </v-list-item-action>
               </v-list-item>
             </v-card>
-            <v-list subheader style="margin:10px">
+            <v-list subheader style="margin:0px 10px 10px 10px">
               <!-- <v-subheader>Customer Segments</v-subheader> -->
               <v-list-item v-for="(item, index) in data.list" :key="item.id">
                 <v-list-item-avatar>
@@ -354,5 +354,8 @@ export default {
   margin: 0 auto;
   bottom: 27px;
   z-index: 2;
+}
+.v-list-item__subtitle {
+    max-height: 60px !important;
 }
 </style>

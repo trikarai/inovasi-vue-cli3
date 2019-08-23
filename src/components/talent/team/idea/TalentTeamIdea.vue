@@ -12,7 +12,7 @@
 
       <v-data-table :headers="headers" :items="data.list" class="elevation-1">
         <template v-slot:item.name="{item}">
-          <v-btn @click="openDetail(item.id)" small fab text>
+          <v-btn @click="openDetail(item.id)" large fab text>
             <v-icon>pageview</v-icon>
             <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
           </v-btn> 
