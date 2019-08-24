@@ -245,7 +245,7 @@ export default {
           this.parentData = res.data.data;
         })
         .catch(error => {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(() => {
@@ -339,10 +339,10 @@ export default {
             id
         )
         .then(res => {
-          console.log(res);
+          
         })
         .catch(error => {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(() => {
@@ -364,10 +364,10 @@ export default {
             "/set_as_main_idea"
         )
         .then(res => {
-          console.log(res);
+          
         })
         .catch(error => {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(() => {

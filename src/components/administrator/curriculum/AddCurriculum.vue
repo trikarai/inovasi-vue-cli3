@@ -120,11 +120,11 @@ export default {
       net
         .postData(this, "/administrator/curriculums", this.params)
         .then(function(res) {
-          console.log(res);
+          
           this.$emit("refresh");
         })
         .catch(function(error) {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(()=> {
@@ -140,11 +140,11 @@ export default {
           this.params
         )
         .then(function(res) {
-          console.log(res);
+          
           this.$emit("refresh");
         })
         .catch(function(error) {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(()=> {
@@ -158,7 +158,7 @@ export default {
           this.params = res.data.data;
         })
         .catch(function(error) {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally();

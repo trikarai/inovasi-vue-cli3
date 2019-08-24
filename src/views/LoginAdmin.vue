@@ -137,7 +137,7 @@ export default {
           }
         )
         .catch(error=>{
-            console.log(error);
+            
             alert.showError(this, error)
         })
         .finally(()=> {

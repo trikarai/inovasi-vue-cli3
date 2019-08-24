@@ -200,7 +200,7 @@ export default {
           "/talent/as-team-member/" + this.params.team.id + "/members"
         )
         .then(res => {
-          console.log(res);
+          
           if (res.data) {
             this.memberlist = res.data.data;
           } else {

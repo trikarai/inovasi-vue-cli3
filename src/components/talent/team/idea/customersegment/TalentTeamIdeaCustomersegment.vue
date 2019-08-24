@@ -323,7 +323,7 @@ export default {
         )
         .then(
           res => {
-            console.log(res);
+            
           }
         )
         .catch(error=> {

@@ -132,7 +132,7 @@ export default {
       net
         .postData(this, "/talent/working-experiences", this.params)
         .then(res => {
-          console.log(res);
+          
           this.$store.commit("incrementWork");
           this.$emit("refresh");
         })

@@ -201,7 +201,7 @@ export default {
       net
         .getData(this, "/talent/tracks/" + trackId + "/skill-references")
         .then(res => {
-          console.log(res);
+          
           this.skill = res.data.data;
         })
         .catch(error => {

@@ -443,7 +443,7 @@ export default {
           this.params
         )
         .then(res => {
-          console.log(res);
+          
           this.refresh();
         })
         .catch(error => {
@@ -488,7 +488,7 @@ export default {
           this.params
         )
         .then(res => {
-          console.log(res);
+          
           this.refresh();
         })
         .catch(error => {

@@ -124,7 +124,7 @@ export default {
             this.data = res.data.data;
           },
           error => {
-            console.log(error);
+            
             this.error_msg = error.body.meta;
           }
         )

@@ -179,7 +179,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(() => {

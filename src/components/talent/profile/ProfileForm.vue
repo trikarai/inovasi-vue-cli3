@@ -136,11 +136,11 @@ export default {
         .putData(this, "/talent/profile/update", this.params)
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
             this.err_msg = error.body.meta;
             this.status.error = true;
           }

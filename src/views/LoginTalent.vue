@@ -151,7 +151,7 @@ export default {
           this.$router.replace("/talent/dashboard");
         })
         .catch(error => {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(() => {

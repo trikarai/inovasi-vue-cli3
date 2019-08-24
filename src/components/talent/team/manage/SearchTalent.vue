@@ -138,7 +138,7 @@ export default {
       net
         .getData(this, "/talent/other-talent/?email=" + encodeURI(this.search))
         .then(res => {
-          console.log(res);
+          
           if (res.data) {
             this.talent = res.data.data;
             notif.showInfo(this, res);
@@ -147,7 +147,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          
           this.talent = null;
           //   alert.showError(this, error);
         })

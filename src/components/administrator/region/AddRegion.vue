@@ -91,7 +91,7 @@ export default {
       net
         .postData(this, "/administrator/regions", this.params)
         .then(res => {
-          console.log(res);
+          
           this.$emit("refresh");
         })
         .catch(error => {
@@ -106,7 +106,7 @@ export default {
       net
         .putData(this, "/administrator/regions/" + this.data.id, this.params)
         .then(res => {
-          console.log(res);
+          
           this.$emit("refresh");
         })
         .catch(error => {

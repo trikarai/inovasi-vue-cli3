@@ -142,7 +142,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(() => {
@@ -167,7 +167,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          
           this.singleData = error.status;
           notif.showError(this, error);
         })
@@ -200,11 +200,11 @@ export default {
             id
         )
         .then(res => {
-          console.log(res);
+          
           this.refresh();
         })
         .catch(error => {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(()=> {

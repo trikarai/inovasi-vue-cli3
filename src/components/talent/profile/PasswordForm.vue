@@ -113,11 +113,11 @@ export default {
         .putData(this, "/talent/profile/change-password/", this.password)
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
             this.err_msg = error.body.meta;
             this.status.error = true;
           }

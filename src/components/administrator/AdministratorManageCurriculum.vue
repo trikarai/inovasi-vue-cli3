@@ -150,7 +150,7 @@ export default {
         .deleteData(this, "/administrator/curriculums/" + id)
         .then()
         .catch(function(error) {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(()=> {

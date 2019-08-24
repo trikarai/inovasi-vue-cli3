@@ -150,7 +150,7 @@ export default {
       net
         .getData(this, "/talent/educational-backgrounds/" + this.data.id)
         .then(res => {
-          console.log(res);
+          
           this.params = res.data.data;
         })
         .catch(error => {
@@ -166,7 +166,7 @@ export default {
       net
         .postData(this, "/talent/educational-backgrounds", this.params)
         .then(res => {
-          console.log(res);
+          
           this.$store.commit("incrementEdu");
           this.$emit("refresh");
         })
@@ -188,7 +188,7 @@ export default {
           this.params
         )
         .then(res => {
-          console.log(res);
+          
           this.$emit("refresh");
         })
         .catch(error => {

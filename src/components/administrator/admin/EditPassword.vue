@@ -118,11 +118,11 @@ export default {
       net
         .putData(this, "/administrator/profile/change-password", this.password)
         .then(res => {
-          console.log(res);
+          
           this.$emit("refresh");
         })
         .catch(error => {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(()=> {

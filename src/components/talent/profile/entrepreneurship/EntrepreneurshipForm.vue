@@ -149,7 +149,7 @@ export default {
       net
         .getData(this, "/talent/entrepreneurship-experiences/" + this.data.id)
         .then(res => {
-          console.log(res);
+          
           this.params = res.data.data;
           this.params.businessCategory = res.data.data.businessCategory.value;
         })

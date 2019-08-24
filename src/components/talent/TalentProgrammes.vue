@@ -114,7 +114,7 @@ export default {
             }
           },
           error => {
-            console.log(error);
+            
             this.err_msg = error.body.meta;
             this.status.error = true;
           }
@@ -159,12 +159,12 @@ export default {
           { programmeId: id }
         )
         .then(res => {
-          console.log(res);
+          
           var details = ["Register Success"];
           alert.showSuccess(this, res, details)
         })
         .catch(error => {
-          console.log(error);
+          
           alert.showError(this, error)
         })
         .finally(()=> {

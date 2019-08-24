@@ -66,7 +66,7 @@ export default {
           this.experiment = res.data.data;
         })
         .catch(error => {
-          console.log(error);
+          
           notif.showError(this, error);
         })
         .finally(() => {

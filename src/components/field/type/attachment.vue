@@ -141,13 +141,13 @@ export default {
           }
         )
         .then(res => {
-          console.log(res);
+          
           this.value[0] = res.data.data.fileInfo.id;
           this.fileInfo = res.data.data.fileInfo;
           this.uploaded = true;
         })
         .catch(error => {
-          console.log(error);
+          
           notif.showError(this, error);
           this.uploaded = false;
         })

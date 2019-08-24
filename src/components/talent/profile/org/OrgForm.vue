@@ -118,7 +118,7 @@ export default {
       net
         .getData(this, "/talent/organizational-experiences/" + this.data.id)
         .then(res => {
-          console.log(res);
+          
           this.params = res.data.data;
         })
         .catch(error => {
@@ -154,7 +154,7 @@ export default {
           this.params
         )
         .then(res => {
-          console.log(res);
+          
           this.$emit("refresh");
         })
         .catch(error => {

@@ -131,11 +131,11 @@ export default {
         )
         .then(
           res => {
-            console.log(res);
+            
             this.params = res.data.data;
           },
           error => {
-            console.log(error);
+            
             if (error.status === 500) {
               this.err_msg = {
                 code: error.status,
@@ -172,11 +172,11 @@ export default {
         )
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
             if (error.status === 500) {
               this.err_msg = {
                 code: error.status,
@@ -215,11 +215,11 @@ export default {
         )
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
             if (error.status === 500) {
               this.err_msg = {
                 code: error.status,

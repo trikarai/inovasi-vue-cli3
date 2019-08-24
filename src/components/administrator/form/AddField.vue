@@ -258,11 +258,11 @@ export default {
         )
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
             notif.showError(this, error);
           }
         )
@@ -284,11 +284,11 @@ export default {
         )
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
             notif.showError(this, error);
           }
         )
@@ -318,7 +318,7 @@ export default {
             }
           },
           error => {
-            console.log(error);
+            
           }
         )
         .catch()

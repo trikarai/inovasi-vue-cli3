@@ -149,7 +149,7 @@ export default {
       net
         .postData(this, "/administrator/administrators", this.params)
         .then(res => {
-          console.log(res);
+          
           this.$emit("refresh");
         })
         .catch(error => {

@@ -141,7 +141,7 @@ export default {
         .postData(this, "/administrator/forms", this.params)
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           }          
         )
@@ -158,11 +158,11 @@ export default {
         .putData(this, "/administrator/forms/" + this.data.id, this.params)
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
           }
         )
         .catch()
@@ -179,7 +179,7 @@ export default {
             this.params.type = res.data.data.type.value;
           },
           error => {
-            console.log(error);
+            
           }
         )
         .catch()

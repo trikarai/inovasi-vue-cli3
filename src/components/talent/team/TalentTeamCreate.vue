@@ -192,11 +192,11 @@ export default {
       net
         .postData(this, "/talent/teams", this.params)
         .then(function(res) {
-          console.log(res);
+          
           app.$router.push({ path: "/talent/team" });
         })
         .catch(function(error) {
-          console.log(error);
+          
           app.err_msg = error.body.meta;
           app.status.error = true;
         })

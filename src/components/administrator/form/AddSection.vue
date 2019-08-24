@@ -92,11 +92,11 @@ export default {
         )
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
           }
         )
         .catch()
@@ -117,11 +117,11 @@ export default {
         )
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
           }
         )
         .catch()
@@ -140,7 +140,7 @@ export default {
             this.params = res.data.data;
           },
           error => {
-            console.log(error);
+            
           }
         )
         .catch()

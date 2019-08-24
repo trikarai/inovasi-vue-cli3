@@ -99,7 +99,7 @@ export default {
         .getData(this, "/administrator/curriculums")
         .then(
           res => {
-            console.log(res);
+            
             if (res.data.data) {
               this.curriculum = res.data.data;
             } else {
@@ -107,7 +107,7 @@ export default {
             }
           },
           error => {
-            console.log(error);
+            
           }
         )
         .catch()
@@ -121,11 +121,11 @@ export default {
         .postData(this, "/administrator/programmes", this.params)
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
           }
         )
         .catch()
@@ -139,11 +139,11 @@ export default {
         .putData(this, "/administrator/programmes/" + this.data.id, this.params)
         .then(
           res => {
-            console.log(res);
+            
             this.$emit("refresh");
           },
           error => {
-            console.log(error);
+            
           }
         )
         .catch()
@@ -160,7 +160,7 @@ export default {
             this.params.curriculum_id = res.data.data.curriculum.id
           },
           error => {
-            console.log(error);
+            
           }
         )
         .catch()
