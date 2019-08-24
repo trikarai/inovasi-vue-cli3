@@ -9,11 +9,11 @@
         <v-select
           v-model="teamId"
           :items="team.list"
-          no-data-text="No Team Please Create First"
+          :no-data-text="$vuetify.lang.t('$vuetify.noDataText')"
           :loading="loader"
           item-text="team.name"
           item-value="team.id"
-          label="Team"
+          :label="$vuetify.lang.t('$vuetify.team.team')"
           outlined
           class="pr-3"
           @change="changeTeam"
