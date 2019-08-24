@@ -113,6 +113,9 @@ var _default = {
     analysis: "Analysis",
     experiment: "Experiment"
   },
+  customersegment: {
+    name: "Customer Segment Name"
+  },
   personnel: {
     mentor: "Mentor",
     coordinator: "Coordinator",
