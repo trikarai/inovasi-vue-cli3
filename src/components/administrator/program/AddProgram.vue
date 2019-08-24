@@ -131,7 +131,6 @@ export default {
       net
         .getData(this, "/administrator/curriculums")
         .then(res => {
-          
           if (res.data.data) {
             this.curriculum = res.data.data;
           } else {
@@ -139,7 +138,6 @@ export default {
           }
         })
         .catch(error => {
-          
           notif.showError(this, res);
         })
         .finally(() => {
@@ -150,15 +148,13 @@ export default {
       this.loader = true;
       net
         .postData(this, "/administrator/programmes", this.params)
-        .then(res=> {
-          
+        .then(res => {
           this.$emit("refresh");
         })
-        .catch(error=> {
-          
+        .catch(error => {
           notif.showError(this, res);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -166,15 +162,13 @@ export default {
       this.loader = true;
       net
         .putData(this, "/administrator/programmes/" + this.data.id, this.params)
-        .then(function(res) {
-          
+        .then(res => {
           this.$emit("refresh");
         })
-        .catch(function(error) {
-          
+        .catch(error => {
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -187,11 +181,9 @@ export default {
           this.params.curriculumId = res.data.data.curriculum.id;
         })
         .catch(error => {
-          
           notif.showError(this, error);
         })
         .finally(() => {
-          console.log("OK");
           this.loader = false;
         });
     }

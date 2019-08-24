@@ -167,7 +167,6 @@ export default {
           this.$emit("refresh");
         })
         .catch(error => {
-          console.log("Error : " + error);
           notif.showError(this, error);
         })
         .finally(()=> {

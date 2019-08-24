@@ -581,7 +581,6 @@ router.beforeEach((to, from, next) => {
       if (authUser.role_id === 'TALENT') {
         next()
       } else {
-        console.log('Im in admin')
         next('/administrator/dashboard')
       }
     }

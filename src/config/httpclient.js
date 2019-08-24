@@ -22,8 +22,8 @@ export default {
             }, error => {
                 context.err_msg = error.body.meta;
                 context.alert = true;
-            }).catch(function (error) {
-                console.log(error)
+            }).catch(error => {
+                //TODO       
             }).finally(function () {
                 context.dialog = false
             })
@@ -50,9 +50,9 @@ export default {
                 context.err_msg = error.body.meta;
                 context.alert = true;
                 context.dialog = false;
-            }).catch(function (error) {
-                console.log(error)
-            }).finally(function () {
+            }).catch(error=> {
+                //TODO
+            }).finally(()=> {
                 app.dialog = false;
             })
     },
@@ -62,22 +62,22 @@ export default {
     getDataPublic: function (context, path) {
         return context.$http.get(config.APIENDPOINT + path)
     },
-    postData: function(context, path, params){
-        return context.$http.post(config.APIENDPOINT + path, params, {headers: auth.getAuthHeaders()})
+    postData: function (context, path, params) {
+        return context.$http.post(config.APIENDPOINT + path, params, { headers: auth.getAuthHeaders() })
     },
-    patchData: function(context, path, params){
-        return context.$http.patch(config.APIENDPOINT + path, params, {headers: auth.getAuthHeaders()})
+    patchData: function (context, path, params) {
+        return context.$http.patch(config.APIENDPOINT + path, params, { headers: auth.getAuthHeaders() })
     },
-    postDataPublic: function(context, path, params){
+    postDataPublic: function (context, path, params) {
         return context.$http.post(config.APIENDPOINT + path, params)
     },
-    putData: function(context, path, params){
-        return context.$http.put(config.APIENDPOINT + path, params, {headers: auth.getAuthHeaders()})
+    putData: function (context, path, params) {
+        return context.$http.put(config.APIENDPOINT + path, params, { headers: auth.getAuthHeaders() })
     },
-    putDataPublic: function(context, path, params){
+    putDataPublic: function (context, path, params) {
         return context.$http.put(config.APIENDPOINT + path, params)
     },
-    deleteData: function(context, path){
-        return context.$http.delete(config.APIENDPOINT + path, {headers: auth.getAuthHeaders()})
+    deleteData: function (context, path) {
+        return context.$http.delete(config.APIENDPOINT + path, { headers: auth.getAuthHeaders() })
     }
 }

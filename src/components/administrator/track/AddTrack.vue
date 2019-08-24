@@ -49,7 +49,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
-
+//TODO
 export default {
   props: ["id", "edit", "view", "data"],
   data: function() {
@@ -83,12 +83,11 @@ export default {
       this.loader = true;
       net.postData(this, '/administrator/tracks', this.params)
       .then(res=>{
-        console.log(res)
         this.$emit('refresh')
-      }, error=>{
-        console.log(error)
       })
-      .catch().finally(()=>{
+      .catch(error=>{
+
+      }).finally(()=>{
         this.loader = false
       })
     },
@@ -96,12 +95,11 @@ export default {
       this.loader = true;
       net.putData(this, '/administrator/tracks/' + this.data.id , this.params)
       .then(res=>{
-        console.log(res)
         this.$emit('refresh')
-      }, error=>{
-        console.log(error)
       })
-      .catch().finally(()=>{
+      .catch(error=>{
+        //TODO
+      }).finally(()=>{
         this.loader = false
       })
     }

@@ -60,7 +60,6 @@ export default new Vuex.Store({
         window.sessionStorage.setItem("breadpos", payload.level);
         window.sessionStorage.setItem("breadcrumb", state.breads);
       } else if ((payload.level - state.breads.level) > state.breads.pos) {
-        console.log("state 2: ")
         state.breads.pos = payload.level;
         state.breads.item.splice(payload.level);
         state.breads.item.push(payload.to);
@@ -71,7 +70,6 @@ export default new Vuex.Store({
         window.sessionStorage.setItem("breadpos", payload.level);
         window.sessionStorage.setItem("breadcrumb", state.breads);
       } else if ((payload.level - state.breads.level) < state.breads.pos) {
-        console.log("state 3: " + (payload.level - state.breads.level))
         state.breads.pos = payload.level;
         state.breads.item.splice(payload.level)
         state.breads.item.push(payload.to);
@@ -82,7 +80,6 @@ export default new Vuex.Store({
         window.sessionStorage.setItem("breadpos", payload.level);
         window.sessionStorage.setItem("breadcrumb", state.breads);
       } else if (payload.level === state.breads.pos) {
-        console.log("state 4: " + (payload.level - state.breads.level))
         state.breads.pos = payload.level;
         state.breads.item.splice(payload.level)
         state.breads.item.push(payload.to);
@@ -90,7 +87,6 @@ export default new Vuex.Store({
         window.sessionStorage.setItem("breadpos", payload.level);
         window.sessionStorage.setItem("breadcrumb", state.breads);
       } else {
-        console.log("state 5: " + (payload.level - state.breads.level))
       }
     },
     setProfile(state, payload) {
