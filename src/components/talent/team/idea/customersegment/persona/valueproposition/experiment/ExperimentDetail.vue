@@ -15,7 +15,7 @@
         <v-card-title>{{experiment.form.name}}</v-card-title>
         <v-card-text>
           <template v-for="data in experiment.fields">
-          {{data.field.name}} : {{data.value}} <br>
+          {{data.field.name}} : {{data.value}} 
           </template>
         </v-card-text>
       </v-card>

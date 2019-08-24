@@ -2,7 +2,7 @@
   <div>
     <v-container>
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-      
+
       <loader-dialog v-model="loader"></loader-dialog>
 
       <v-layout row wrap>
@@ -14,7 +14,7 @@
                   <v-list-item-title
                     class="font-weight-light white--text body-2"
                   >{{ $vuetify.lang.t('$vuetify.idea.persona') }}</v-list-item-title>
-                  
+
                   <v-list-item-subtitle>
                     <h4 class="headline mb-0 white--text">{{parentData.name}}</h4>
                   </v-list-item-subtitle>
@@ -26,8 +26,12 @@
                 </v-list-item-action>
               </v-list-item>
             </v-card>
-            
-            <v-list-item v-for="field in parentData.fields" style="padding-left:26px;padding-right:26px">
+
+            <v-list-item
+              v-for="field in parentData.fields"
+              style="padding-left:26px;padding-right:26px"
+              :key="field.id"
+            >
               <v-list-item-content :key="field.id">
                 <v-list-item-title>{{field.field.name}}</v-list-item-title>
                 <v-text class="grey--text font-weight-light">{{field.value}}</v-text>
@@ -45,12 +49,12 @@
               <template v-for="field in parentData.fields">
                 <div :key="field.id">{{field.field.name}} : {{field.value}} </div>
               </template> 
-            </v-card-text> -->
+            </v-card-text>-->
 
             <v-card-text class="caption" style="padding-left:26px;padding-right:26px">
-              <b>created time:</b> {{parentData.createdTime | moment("Do MMMM YYYY")}}
+              <b>created time:</b>
+              {{parentData.createdTime | moment("Do MMMM YYYY")}}
             </v-card-text>
-
           </v-card>
         </v-flex>
         <v-flex xs12 md6>
@@ -58,7 +62,9 @@
             <v-card class="taitelcs primary white--text elevation-5">
               <v-list-item>
                 <v-list-item-content>
-                  <h3 class="headline mb-0 font-weight-light white--text">{{ $vuetify.lang.t('$vuetify.idea.valueproposition') }}</h3>
+                  <h3
+                    class="headline mb-0 font-weight-light white--text"
+                  >{{ $vuetify.lang.t('$vuetify.idea.valueproposition') }}</h3>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-btn small fab @click="openAdd" class="ml-2 mt-1">
@@ -67,69 +73,82 @@
                 </v-list-item-action>
               </v-list-item>
             </v-card>
-          <v-list style="margin:0px 10px 10px 10px">
-            <template v-if="data.total != 0">
-              <v-list-group v-for="(item, index) in data.list" :key="item.id" no-action>
-                <template v-slot:activator>
-                  <v-list-item>
-                    <v-list-item-avatar>
-                      <v-btn text>
-                        <v-icon large>pageview</v-icon>
-                      </v-btn>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title>{{ item.description }}</v-list-item-title>
-                    </v-list-item-content>
-                    <v-list-item-action></v-list-item-action>
-                  </v-list-item>
-                </template>
+            <v-list style="margin:0px 10px 10px 10px">
+              <template v-if="data.total != 0">
+                <v-list-group v-for="(item, index) in data.list" :key="item.id" no-action>
+                  <template v-slot:activator>
+                    <v-list-item>
+                      <v-list-item-avatar>
+                        <v-btn text>
+                          <v-icon large>pageview</v-icon>
+                        </v-btn>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>{{ item.description }}</v-list-item-title>
+                      </v-list-item-content>
+                      <v-list-item-action></v-list-item-action>
+                    </v-list-item>
+                  </template>
 
-                <v-list-item three-line>
-                  <v-list-item-content>
-                    <v-expand-transition>
-                      <div v-show="index == selectedIndex">
-                        Are u sure want to delete ?!
-                        <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }} -->
-                        <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
-                          <v-icon></v-icon>
-                          {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                        </v-btn>
-                        <v-btn small text @click="deleteAct(null)">
-                          <v-icon></v-icon>
-                          {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                        </v-btn>
-                      </div>
-                    </v-expand-transition>
-                    <v-expand-transition>
-                      <div v-show="index != selectedIndex">
-                        <v-btn color="primary" @click="gotoBusinessAnalysis(item.id)" class="ma-2">
-                          <v-icon left>assessment</v-icon>
-                          <span class="hidden-sm-and-down">{{ $vuetify.lang.t('$vuetify.idea.analysis') }}</span>
-                        </v-btn>
-                        <v-btn color="primary" @click="gotoExperiment(item.id)">
-                          <v-icon left>assignment</v-icon>
-                          <span class="hidden-sm-and-down">{{ $vuetify.lang.t('$vuetify.idea.experiment') }}</span>
-                        </v-btn>
-                      </div>
-                    </v-expand-transition>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-btn text fab style="top:8px;" v-if="selectedIndex == null" @click="deleteAct(index)" small>
-                      <v-icon color="warning">delete</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list-group>
-            </template>
-            <template v-else>
+                  <v-list-item three-line>
+                    <v-list-item-content>
+                      <v-expand-transition>
+                        <div v-show="index == selectedIndex">
+                          Are u sure want to delete ?!
+                          <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }} -->
+                          <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
+                            <v-icon></v-icon>
+                            {{ $vuetify.lang.t('$vuetify.action.yes') }}
+                          </v-btn>
+                          <v-btn small text @click="deleteAct(null)">
+                            <v-icon></v-icon>
+                            {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+                          </v-btn>
+                        </div>
+                      </v-expand-transition>
+                      <v-expand-transition>
+                        <div v-show="index != selectedIndex">
+                          <v-btn
+                            color="primary"
+                            @click="gotoBusinessAnalysis(item.id)"
+                            class="ma-2"
+                          >
+                            <v-icon left>assessment</v-icon>
+                            <span
+                              class="hidden-sm-and-down"
+                            >{{ $vuetify.lang.t('$vuetify.idea.analysis') }}</span>
+                          </v-btn>
+                          <v-btn color="primary" @click="gotoExperiment(item.id)">
+                            <v-icon left>assignment</v-icon>
+                            <span
+                              class="hidden-sm-and-down"
+                            >{{ $vuetify.lang.t('$vuetify.idea.experiment') }}</span>
+                          </v-btn>
+                        </div>
+                      </v-expand-transition>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-btn
+                        text
+                        fab
+                        style="top:8px;"
+                        v-if="selectedIndex == null"
+                        @click="deleteAct(index)"
+                        small
+                      >
+                        <v-icon color="warning">delete</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list-group>
+              </template>
+              <template v-else>
                 <p
-                class="text-center"
-                style="margin-top:30px;"
-              >{{ $vuetify.lang.t('$vuetify.noDataText') }}</p>
-            </template>
-          </v-list>
-          
-          </v-btn>
+                  class="text-center"
+                  style="margin-top:30px;"
+                >{{ $vuetify.lang.t('$vuetify.noDataText') }}</p>
+              </template>
+            </v-list>
           </v-card>
         </v-flex>
       </v-layout>
@@ -245,7 +264,6 @@ export default {
           this.parentData = res.data.data;
         })
         .catch(error => {
-          
           notif.showError(this, error);
         })
         .finally(() => {
@@ -271,7 +289,7 @@ export default {
           if (res.data.data) {
             this.data = res.data.data;
           } else {
-            this.data = {total:0,list:[]};
+            this.data = { total: 0, list: [] };
           }
         })
         .catch(error => {
@@ -338,11 +356,8 @@ export default {
             "/value-propositions/" +
             id
         )
-        .then(res => {
-          
-        })
+        .then(res => {})
         .catch(error => {
-          
           notif.showError(this, error);
         })
         .finally(() => {
@@ -363,11 +378,8 @@ export default {
             id +
             "/set_as_main_idea"
         )
-        .then(res => {
-          
-        })
+        .then(res => {})
         .catch(error => {
-          
           notif.showError(this, error);
         })
         .finally(() => {
