@@ -95,6 +95,11 @@ export default new Vuex.Store({
     },
     setProfile(state, payload) {
       state.profile[0].total = payload.data.educationalBackgrounds.length;
+      state.profile[1].total = payload.data.workingExperiences.length;
+      state.profile[2].total = payload.data.organizationalExperiences.length;
+      state.profile[3].total = payload.data.entrepreneurshipExperiences.length;
+      state.profile[4].total = payload.data.trainingExperiences.length;
+      state.profile[5].total = payload.data.skills.length;
       state.teamMemberships = payload.data.teamMemberships;
     },
     incrementEdu(state){
