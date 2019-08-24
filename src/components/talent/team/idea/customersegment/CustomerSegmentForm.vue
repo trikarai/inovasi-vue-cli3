@@ -149,7 +149,7 @@ export default {
           }
         )
         .catch()
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -186,7 +186,7 @@ export default {
           }
         )
         .catch()
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -232,7 +232,7 @@ export default {
           };
           app.status.error = true;
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     }

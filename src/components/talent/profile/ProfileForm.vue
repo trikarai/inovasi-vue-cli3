@@ -146,7 +146,7 @@ export default {
           }
         )
         .catch()
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     }

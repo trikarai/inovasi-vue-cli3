@@ -153,7 +153,7 @@ export default {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });

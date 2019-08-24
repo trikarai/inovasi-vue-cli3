@@ -127,7 +127,7 @@ export default {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -147,7 +147,7 @@ export default {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },

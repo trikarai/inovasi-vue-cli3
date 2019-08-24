@@ -80,7 +80,7 @@
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn small text flat @click="deleteAct(null)">
+                <v-btn small text @click="deleteAct(null)">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
@@ -261,7 +261,7 @@ export default {
         .catch(error => {
           notif.showErrow(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },

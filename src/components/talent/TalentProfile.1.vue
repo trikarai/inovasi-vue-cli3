@@ -129,7 +129,7 @@ export default {
           }
         )
         .catch(function(error) {})
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },

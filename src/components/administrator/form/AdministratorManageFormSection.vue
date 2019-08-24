@@ -126,7 +126,7 @@ export default {
         )
         .catch(function() {
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -154,7 +154,7 @@ export default {
         .deleteData(this, "/administrator/forms/" + this.$route.params.formId + "/sections/" + id)
         .then()
         .catch(function() {})
-        .finally(function() {
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });

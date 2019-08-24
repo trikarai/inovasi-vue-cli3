@@ -135,7 +135,7 @@ export default {
           }
         )
         .catch(function() {})
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -175,7 +175,7 @@ export default {
         .deleteData(this, "/administrator/administrators/" + id)
         .then()
         .catch(function() {})
-        .finally(function() {
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });

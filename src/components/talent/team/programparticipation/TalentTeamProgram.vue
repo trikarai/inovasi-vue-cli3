@@ -260,13 +260,13 @@ export default {
           if (res.data.data) {
             this.program = res.data.data;
           } else {
-            this.program.list = [];
+            this.program = {total:0, list:[]};
           }
         })
         .catch(error => {
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },

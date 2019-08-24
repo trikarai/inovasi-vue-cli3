@@ -120,7 +120,7 @@ export default {
           }
         )
         .catch()
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -167,7 +167,7 @@ export default {
           console.log(error);
           alert.showError(this, error)
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     }

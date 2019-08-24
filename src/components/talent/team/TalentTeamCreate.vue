@@ -200,7 +200,7 @@ export default {
           app.err_msg = error.body.meta;
           app.status.error = true;
         })
-        .finally(function() {
+        .finally(()=> {
           app.loader = false;
         });
     }

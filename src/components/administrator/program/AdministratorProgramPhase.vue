@@ -101,7 +101,7 @@ export default {
           }
         )
         .catch(function() {})
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -135,7 +135,7 @@ export default {
         )
         .then()
         .catch(function() {})
-        .finally(function() {
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });

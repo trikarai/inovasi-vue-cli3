@@ -142,7 +142,7 @@ export default {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loadingPersona = false;
         });
     },
@@ -163,7 +163,7 @@ export default {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -230,7 +230,7 @@ export default {
           }
         )
         .catch()
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -259,7 +259,7 @@ export default {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     },
@@ -305,7 +305,7 @@ export default {
           };
           app.status.error = true;
         })
-        .finally(function() {
+        .finally(()=> {
           this.loader = false;
         });
     }

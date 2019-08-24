@@ -88,7 +88,7 @@ export default {
       }, error=>{
         console.log(error)
       })
-      .catch().finally(function(){
+      .catch().finally(()=>{
         this.loader = false
       })
     },
@@ -101,7 +101,7 @@ export default {
       }, error=>{
         console.log(error)
       })
-      .catch().finally(function(){
+      .catch().finally(()=>{
         this.loader = false
       })
     }

@@ -75,7 +75,7 @@
             </v-card>
             <v-list subheader style="margin:0px 10px 10px 10px">
               <!-- <v-subheader>Customer Segments</v-subheader> -->
-              <v-list-item v-for="(item, index) in data.list" :key="item.id">
+              <v-list-item v-for="item in data.list" :key="item.id">
                 <v-list-item-avatar>
                   <v-btn text @click="openDetail(item.id)">
                     <v-icon large>pageview</v-icon>
@@ -323,7 +323,7 @@ export default {
           console.log(error);
           notif.showError(this, error);
         })
-        .finally(function() {
+        .finally(()=> {
           this.selectedIndex = null;
           this.refresh();
         });
