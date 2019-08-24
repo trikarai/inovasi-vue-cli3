@@ -129,7 +129,7 @@ const routes = [
     children: [
       {
         path: "/talent/dashboard",
-        name: "Dashboard",
+        name: "Talent Dashboard",
         component: TalentDashboard,
         meta: {
           requiresAuth: true, talentAuth: true, adminAuth: false,
@@ -167,7 +167,7 @@ const routes = [
       },
       {
         path: "/talent/organization",
-        name: "Working Experiences",
+        name: "Organization Experiences",
         component: TalentProfileOrganization,
         meta: {
           level: 1,
@@ -212,7 +212,7 @@ const routes = [
       },
       {
         path: "/talent/team/:membershipId",
-        name: "Team",
+        name: "Team Detail",
         component: TalentTeamDetail,
         meta: {
           requiresAuth: true, talentAuth: true, adminAuth: false,
@@ -236,12 +236,12 @@ const routes = [
         component: TalentTeamProgram,
         meta: {
           level: 2,
-          text: "Participation"
+          text: "Participation List"
         }
       },
       {
         path: "/talent/team/:teamId/participation/register",
-        name: "Team Program Participation",
+        name: "Team Register Program",
         component: TalentTeamProgramRegister,
         meta: {
           level: 3,
@@ -376,7 +376,7 @@ const routes = [
       },
       {
         path: "/talent/program",
-        name: "Feedback",
+        name: "Available Program",
         component: TalentProgrammes,
         meta: {
           level: 1,
@@ -407,7 +407,7 @@ const routes = [
     meta: { requiresAuth: true, talentAuth: false, adminAuth: true },
     children: [
       {
-        name: "Dashboard",
+        name: "Administrator Dashboard",
         path: "/administrator/dashboard",
         component: AdministratorDashboard,
         meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
