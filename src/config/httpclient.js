@@ -19,12 +19,10 @@ export default {
                 context.$store.state.isLoggedIn = true;
                 window.localStorage.setItem("lbUser", JSON.stringify(authUser));
                 context.$router.replace('/talent/dashboard');
-            }, error => {
+            }).catch(error => {
                 context.err_msg = error.body.meta;
                 context.alert = true;
-            }).catch(error => {
-                //TODO       
-            }).finally(function () {
+            }).finally(() => {
                 context.dialog = false
             })
     },
@@ -46,13 +44,11 @@ export default {
                 context.$store.state.isLoggedIn = true;
                 window.localStorage.setItem("lbUser", JSON.stringify(authUser));
                 context.$router.replace('/administrator/dashboard');
-            }, error => {
+            }).catch(error => {
                 context.err_msg = error.body.meta;
                 context.alert = true;
                 context.dialog = false;
-            }).catch(error=> {
-                //TODO
-            }).finally(()=> {
+            }).finally(() => {
                 app.dialog = false;
             })
     },
