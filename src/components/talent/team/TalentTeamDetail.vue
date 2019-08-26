@@ -4,14 +4,7 @@
       <v-container>
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
-        <v-dialog v-model="loader" hide-overlay persistent width="300">
-          <v-card color="primary">
-            <v-card-text>
-              {{ $vuetify.lang.t('$vuetify.info.standby') }}
-              <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
+        <loader-dialog v-model="loader"></loader-dialog>
 
         <v-layout align-start justify-start fill-height>
           <v-flex md6>
@@ -32,7 +25,7 @@
               <v-icon>add</v-icon>Add Members
             </v-btn>
             <v-divider></v-divider>
-            <!-- {{memberlist.list}} -->
+            {{memberlist.list}}
             <v-data-table
               :loading="loader"
               :headers="headers"

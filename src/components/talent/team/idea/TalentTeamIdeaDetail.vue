@@ -95,12 +95,14 @@
                     </v-btn>
 
                     <v-flex v-show="item.id == selectedIndex">
-                      <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }} -->
-                      <v-btn small dark @click="deleteData(item.id)" color="red" class="mr-2">
+                      <v-icon>warning</v-icon>
+                      <v-text class="caption">{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</v-text>
+                      <br>
+                      <v-btn small dark @click="deleteData(item.id)" color="red" class="ml-10">
                         <v-icon></v-icon>
                         {{ $vuetify.lang.t('$vuetify.action.yes') }}
                       </v-btn>
-                      <v-btn small text @click="deleteAct(null)">
+                      <v-btn class="ml-2" small text @click="deleteAct(null)">
                         <v-icon></v-icon>
                         {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                       </v-btn>

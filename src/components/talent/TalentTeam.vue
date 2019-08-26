@@ -76,7 +76,7 @@
                 <div>
                   <v-icon>warning</v-icon> <span> {{ $vuetify.lang.t('$vuetify.action.confirmationtoquit') }}</span>
                 </div>
-                <v-btn small text @click="deleteData(item.id)" color="red" class="ma-2">
+                <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>

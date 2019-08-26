@@ -3,7 +3,7 @@
 style="background: rgb(0,0,0);
 background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(204,204,204,1) 0%, rgba(233,233,233,1) 100%);">
   <v-container>
-    <v-layout align-center justify-center wrap fill-height>
+    <v-layout style="margin-top: 100px;" align-center justify-center wrap fill-height>
       <!-- <v-flex>
         <v-card xs12>
           <v-card-title class="red darken-3 white--text subheading" primary-title>

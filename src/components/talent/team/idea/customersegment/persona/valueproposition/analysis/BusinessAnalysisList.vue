@@ -1,20 +1,15 @@
 <template>
   <v-container>
     <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-    <v-dialog v-model="loader" hide-overlay persistent width="300">
-      <v-card color="primary" dark>
-        <v-card-text>
-          {{ $vuetify.lang.t('$vuetify.info.standby') }}
-          <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    
+    <loader-dialog v-model="loader"></loader-dialog>
+
     <v-layout>
       <v-flex>
         <v-data-table :headers="headers" :items="canvas.list" class="elevation-1">
           <template v-slot:item.action="{item}">
-              <v-btn @click="gotoCanvas(item.id)" color="primary" rounded>
-                <v-icon>pageview</v-icon>
+              <v-btn @click="gotoCanvas(item.id)" color="primary">
+                <v-icon left>pageview</v-icon> view
               </v-btn>
           </template>
         </v-data-table>

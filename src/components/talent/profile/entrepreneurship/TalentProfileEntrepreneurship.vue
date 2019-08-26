@@ -9,7 +9,7 @@
 
       <v-data-table :headers="headers" :items="data.list" :loading="loader" class="elevation-1 mt-2">
         <template v-slot:item.action="{item}">
-          <v-container class="text-end">
+          <v-flex class="text-end">
             <v-btn class="ma-2" @click="openEdit(item.id)" small>
               <v-icon small left>edit</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.edit') }}
@@ -23,17 +23,17 @@
                 <div>
                    <v-icon>warning</v-icon> <span> {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
                 </div>
-                <v-btn class="ma-2" dark text @click="deleteData(item.id)" color="red">
+                <v-btn class="ma-2" dark small @click="deleteData(item.id)" color="red">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn class="ma-2" text @click="deleteAct(null)">
+                <v-btn class="ma-2" text small @click="deleteAct(null)">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>
-          </v-container>
+          </v-flex>
         </template>
       </v-data-table>
     </v-container>

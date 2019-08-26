@@ -115,13 +115,22 @@
     </v-dialog>
     <!-- end propose dialog modal-->
 
-      <v-dialog v-model="dialogDetail" max-width="350">
+      <v-dialog content-class="operplow" v-model="dialogDetail" max-width="400">
+         
         <v-card>
-          <v-card-title v-if="!loaderDetail" class="headline">{{mentoringDetail.mentoring.name}}</v-card-title>
-          <v-card-title v-if="loaderDetail" class="headline"></v-card-title>
+          <v-card class="taitel2 primary white--text elevation-5">
+                  <v-btn style="float:right;left: 20px;bottom: 20px;" small fab color="white" text @click="dialogPropose = false">
+                      <v-icon small>close</v-icon>
+                  </v-btn>
+                  <h3 class="headline mb-0 font-weight-light white--text">{{mentoringDetail.mentoring.name}}</h3>
+          </v-card>
+          <!-- <v-card-title v-if="!loaderDetail" class="headline">{{mentoringDetail.mentoring.name}}</v-card-title>
+          <v-card-title v-if="loaderDetail" class="headline"></v-card-title> -->
+
+         
 
           <v-card-text v-if="loaderDetail">
-            <v-progress-linear :indeterminate="true" color="omikti"></v-progress-linear>
+            <v-progress-linear :indeterminate="true" color="primary"></v-progress-linear>
           </v-card-text>
           <template v-if="!loaderDetail">
             <v-card-text>{{mentoringDetail.mentor.talent.name}}</v-card-text>
@@ -646,3 +655,4 @@ export default {
   }
 };
 </script>
+

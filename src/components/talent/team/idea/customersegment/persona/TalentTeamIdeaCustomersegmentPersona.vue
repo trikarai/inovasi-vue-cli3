@@ -94,8 +94,9 @@
                     <v-list-item-content>
                       <v-expand-transition>
                         <div v-show="index == selectedIndex">
-                          Are u sure want to delete ?!
-                          <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }} -->
+                          <v-icon>warning</v-icon>
+                          <span class="caption">{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
+                          <span style="display:inline-block">
                           <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
                             <v-icon></v-icon>
                             {{ $vuetify.lang.t('$vuetify.action.yes') }}
@@ -104,6 +105,7 @@
                             <v-icon></v-icon>
                             {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                           </v-btn>
+                          </span>
                         </div>
                       </v-expand-transition>
                       <v-expand-transition>

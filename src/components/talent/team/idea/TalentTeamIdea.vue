@@ -13,7 +13,7 @@
       <v-data-table :headers="headers" :items="data.list" class="elevation-1">
         <template v-slot:item.name="{item}">
           <v-btn @click="openDetail(item.id)" large fab text>
-            <v-icon>pageview</v-icon>
+            <v-icon large>pageview</v-icon>
             <!-- {{ $vuetify.lang.t('$vuetify.action.view') }} -->
           </v-btn>
           {{ item.name }} &nbsp;
@@ -40,7 +40,7 @@
                   <v-icon>warning</v-icon>
                   <span>{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
                 </div>
-                <v-btn small text @click="deleteData(item.id)" color="red" class="ma-2">
+                <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>

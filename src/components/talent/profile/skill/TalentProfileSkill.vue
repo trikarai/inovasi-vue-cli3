@@ -18,7 +18,7 @@
           <v-rating :readonly="true" v-model="item.score"></v-rating>
         </template>
         <template v-slot:item.action="{item}">
-          <v-container class="text-end" v-visible="!certificateShow">
+          <v-flex class="text-end" v-visible="!certificateShow">
             <!-- <v-btn @click="openEdit(item.id)" small>
               <v-icon small left>edit</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.edit') }}
@@ -38,17 +38,17 @@
                   <v-icon>warning</v-icon>
                   <span>{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
                 </div>
-                <v-btn class="ma-2" dark text @click="deleteData(item.id)" color="red">
+                <v-btn class="ma-2" dark small @click="deleteData(item.id)" color="red">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.yes') }}
                 </v-btn>
-                <v-btn class="ma-2" text @click="deleteAct(null)">
+                <v-btn class="ma-2" text small @click="deleteAct(null)">
                   <v-icon></v-icon>
                   {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                 </v-btn>
               </div>
             </v-expand-transition>
-          </v-container>
+          </v-flex>
         </template>
       </v-data-table>
     </v-container>

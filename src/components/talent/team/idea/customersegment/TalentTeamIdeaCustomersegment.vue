@@ -59,7 +59,7 @@
             <template v-if="data.total != 0">
               <v-list-item v-for="(item, index) in data.list" :key="item.id">
                 <v-list-item-avatar>
-                  <v-btn fab text @click="openDetail(item.id)">
+                  <v-btn text @click="openDetail(item.id)">
                     <v-icon large>pageview</v-icon>
                   </v-btn>
                 </v-list-item-avatar>
@@ -83,12 +83,14 @@
                     </v-btn>
 
                     <v-flex v-show="index == selectedIndex">
-                      <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }} -->
-                      <v-btn small dark @click="deleteData(item.id)" color="red" class="mr-2">
+                      <v-icon>warning</v-icon>
+                      <v-text class="caption">{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</v-text>
+                      <br>
+                      <v-btn small dark @click="deleteData(item.id)" color="red" class="ml-10">
                         <v-icon></v-icon>
                         {{ $vuetify.lang.t('$vuetify.action.yes') }}
                       </v-btn>
-                      <v-btn small text @click="deleteAct(null)">
+                      <v-btn small text @click="deleteAct(null)" class="ml-2">
                         <v-icon></v-icon>
                         {{ $vuetify.lang.t('$vuetify.action.cancel') }}
                       </v-btn>

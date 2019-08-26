@@ -2,27 +2,22 @@
   <div>
     <v-container>
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-      <v-dialog v-model="loader" persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            {{ $vuetify.lang.t('$vuetify.info.standby') }}
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+      
+      <loader-dialog v-model="loader"></loader-dialog>
 
       <!-- <v-btn @click="openBusinessForm" color="primary" v-if="isCanvas">
         <v-icon>edit</v-icon>
       </v-btn>-->
 
       <v-btn @click="isEdit = !isEdit" color="primary" v-if="isCanvas">
-        <v-icon>edit</v-icon>
+        <span v-show="isEdit"><v-icon left>clear</v-icon> Cancel</span>
+        <span v-show="!isEdit"><v-icon left>edit</v-icon> edit</span>
       </v-btn>
 
       <v-fade-transition>
         <template v-if="!isEdit">
-          <v-btn @click="selectedDel = !selectedDel" color="red" class="ml-2" v-if="isCanvas">
-            <v-icon>delete</v-icon>
+          <v-btn dark @click="selectedDel = !selectedDel" color="warning" class="ml-2" v-if="isCanvas">
+            <v-icon left>delete</v-icon> delete
           </v-btn>
         </template>
       </v-fade-transition>
@@ -30,20 +25,20 @@
       <v-expand-transition>
         <v-layout wrap v-if="isEdit">
           <v-flex>
-            <v-btn class="mt-3" @click.prevent="update" color="warning">
-              <v-icon>save</v-icon>
+            <v-btn dark class="mt-3" @click.prevent="update" color="blue">
+              <v-icon left>save</v-icon> save
             </v-btn>
           </v-flex>
         </v-layout>
       </v-expand-transition>
 
       <v-expand-transition>
-        <v-layout wrap v-if="selectedDel">
+        <v-layout class="mt-5 ml-3" wrap v-if="selectedDel">
           <v-flex>
-            Are You Sure ?
-            <br />
-            <v-btn class="ma-2" color="red" @click="deleteCanvas">Yes</v-btn>
-            <v-btn class="ma-2" @click="selectedDel = !selectedDel">No</v-btn>
+            <v-icon>warning</v-icon>
+            {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+            <v-btn small dark class="ma-2" color="red" @click="deleteCanvas">Yes</v-btn>
+            <v-btn text small class="ma-2 ml-0" @click="selectedDel = !selectedDel">Cancel</v-btn>
           </v-flex>
         </v-layout>
       </v-expand-transition>
@@ -54,7 +49,8 @@
         <template v-for="field in canvas.fields" id="viewCanvas">
           <div :key="field.id" :style="'grid-area:' + getGridPosition(field.field.position) + ''">
             <v-card class="elevation-3" :hover="hover" height="100%">
-              <v-card-title>{{field.field.name}}</v-card-title>
+              <v-card-title class="title"><span style="color: #00667f !important">{{field.field.name}}</span></v-card-title>
+              <div class="lain"></div>
               <v-card-text>{{field.value}}</v-card-text>
             </v-card>
           </div>
@@ -65,7 +61,8 @@
           <template v-for="(field, index) in canvas.fields" id="editCanvas">
             <div :key="field.id" :style="'grid-area:' + getGridPosition(field.field.position) + ''">
               <v-card class="elevation-3" :hover="hover" height="100%">
-                <v-card-title>{{field.field.name}}</v-card-title>
+                <v-card-title class="title"><span style="color: #00667f !important">{{field.field.name}}</span></v-card-title>
+                <div class="lain"></div>
                 <v-card-text>
                   <fieldcanedit-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></fieldcanedit-modul>
                 </v-card-text>
@@ -84,7 +81,7 @@
         @click.prevent="submit"
         :class=" { 'primary white--text' : valid, disabled: !valid }"
       >
-        <v-icon>save</v-icon>
+        <v-icon left>save</v-icon> save
       </v-btn>
       <v-container style="display: grid; justify-items: stretch; grid-gap: 5px 5px;">
         <template v-for="(field, index) in canvasForm.fields">
@@ -353,4 +350,10 @@ export default {
 </script>
 
 <style scoped>
+.lain {
+  background: #fb8c00;
+  width: 35px;
+  height: 4px;
+  margin-left: 17px;
+}
 </style>
