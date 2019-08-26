@@ -117,34 +117,61 @@
 
       <v-dialog content-class="operplow" v-model="dialogDetail" max-width="400">
          
-        <v-card>
+        <v-card style="padding:0px 30px 30px 30px;">
           <v-card class="taitel2 primary white--text elevation-5">
-                  <v-btn style="float:right;left: 20px;bottom: 20px;" small fab color="white" text @click="dialogPropose = false">
-                      <v-icon small>close</v-icon>
-                  </v-btn>
-                  <h3 class="headline mb-0 font-weight-light white--text">{{mentoringDetail.mentoring.name}}</h3>
+            <!-- <v-btn style="float:right;left: 20px;bottom: 20px;" small fab color="white" text @click="dialogDetail = false">
+                <v-icon small>close</v-icon>
+            </v-btn> -->
+            <h3 class="headline mb-0 font-weight-light white--text">{{mentoringDetail.mentoring.name}}</h3>
           </v-card>
-          <!-- <v-card-title v-if="!loaderDetail" class="headline">{{mentoringDetail.mentoring.name}}</v-card-title>
-          <v-card-title v-if="loaderDetail" class="headline"></v-card-title> -->
-
-         
 
           <v-card-text v-if="loaderDetail">
             <v-progress-linear :indeterminate="true" color="primary"></v-progress-linear>
           </v-card-text>
           <template v-if="!loaderDetail">
-            <v-card-text>{{mentoringDetail.mentor.talent.name}}</v-card-text>
-            <v-card-text>{{mentoringDetail.startTime}}</v-card-text>
-            <v-card-text>{{mentoringDetail.status}}</v-card-text>
-            <v-card-text>{{mentoringDetail.media}}</v-card-text>
-            <v-card-text>{{mentoringDetail.note}}</v-card-text>
+            <v-flex class="text-center">
+              <v-chip :color="colorStatus(mentoringDetail.status)" text-color="white">{{ mentoringDetail.status }}</v-chip>
+            </v-flex>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-icon>person</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{mentoringDetail.mentor.talent.name}}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action></v-list-item-action>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-icon>today</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{mentoringDetail.startTime | moment('dddd - Do MMM YYYY')}}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action></v-list-item-action>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-icon>query_builder</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{mentoringDetail.startTime | moment('HH:mm')}}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action></v-list-item-action>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-icon>note</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{mentoringDetail.media}}</v-list-item-title>
+                <v-list-item-subtitle>{{mentoringDetail.note}}</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action></v-list-item-action>
+            </v-list-item>
+            
           </template>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn small fab color="red" text @click="dialogDetail = false">
-              <v-icon small>close</v-icon>
-            </v-btn>
-          </v-card-actions>
+          
         </v-card>
       </v-dialog>
 
@@ -189,11 +216,13 @@
             :items="mentoring.list"
             class="elevation-1"
           >
-            <template v-slot:item.startTime="{item}">
-              <v-btn text small @click="openDetail(item.id)">
+            <template v-slot:item.view="{item}">
+              <v-btn text large @click="openDetail(item.id)">
                 <v-icon large>pageview</v-icon>
               </v-btn>
-              {{ item.startTime }}
+            </template>
+            <template v-slot:item.startTime="{item}">              
+              {{ item.startTime | moment('dddd - Do MMM YYYY')}}
             </template>
             <template v-slot:item.mentor="{item}">{{ item.mentor.talent.name }}</template>
             <template v-slot:item.status="{item}">
@@ -373,6 +402,7 @@ export default {
       selectedCan: null,
       selectedRes: null,
       headers: [
+        { text: "", value: "view", sortable: false },
         {
           text: "Date/Time",
           align: "left",
