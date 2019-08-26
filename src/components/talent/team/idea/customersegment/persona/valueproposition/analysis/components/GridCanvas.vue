@@ -8,8 +8,10 @@
       <!-- <v-btn @click="openBusinessForm" color="primary" v-if="isCanvas">
         <v-icon>edit</v-icon>
       </v-btn>-->
-
-      <v-btn @click="isEdit = !isEdit" color="primary" v-if="isCanvas">
+      <!-- {{canvas.form.name}} -->
+      <v-flex>
+      <h4>Lean Canvas</h4>
+      <v-btn @click="isEdit = !isEdit" color="primary" v-if="isCanvas" v-show="!selectedDel">
         <span v-show="isEdit"><v-icon left>clear</v-icon> Cancel</span>
         <span v-show="!isEdit"><v-icon left>edit</v-icon> edit</span>
       </v-btn>
@@ -42,6 +44,7 @@
           </v-flex>
         </v-layout>
       </v-expand-transition>
+      </v-flex>
     </v-container>
     <v-form v-model="valid" ref="form2">
     <v-container style="display: grid; justify-items: stretch; grid-gap: 5px 5px;" v-if="isCanvas">
