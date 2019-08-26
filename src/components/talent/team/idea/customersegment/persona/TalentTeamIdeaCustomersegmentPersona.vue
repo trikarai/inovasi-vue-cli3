@@ -139,7 +139,7 @@
         </v-flex>
       </v-layout>
 
-      <v-dialog v-model="dialogPersona" max-width="500">
+      <v-dialog content-class="operplow" v-model="dialogPersona" max-width="500">
         <v-card elevation="0" width="500" style="padding:0px 30px 20px 30px">
           <v-card class="taitel primary white--text elevation-5">
             <h3
