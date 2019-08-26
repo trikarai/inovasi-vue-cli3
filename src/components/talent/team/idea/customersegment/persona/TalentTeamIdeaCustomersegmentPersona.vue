@@ -20,7 +20,7 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-btn small fab @click="openEditParent(parentData)" class="ml-2">
+                  <v-btn small fab @click.stop="openEditParent(parentData)" class="ml-2">
                     <v-icon>edit</v-icon>
                   </v-btn>
                 </v-list-item-action>
