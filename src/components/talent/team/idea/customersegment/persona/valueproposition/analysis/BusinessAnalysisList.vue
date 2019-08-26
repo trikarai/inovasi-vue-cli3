@@ -91,7 +91,6 @@ export default {
           }
         })
         .catch(error => {
-          
           notif.showError(this, error);
         })
         .finally(() => {
