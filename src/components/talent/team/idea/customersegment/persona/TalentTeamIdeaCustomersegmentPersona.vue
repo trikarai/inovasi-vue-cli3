@@ -20,7 +20,7 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-btn small fab @click="openEditParent(parentData.id)" class="ml-2">
+                  <v-btn small fab @click="openEditParent(parentData)" class="ml-2">
                     <v-icon>edit</v-icon>
                   </v-btn>
                 </v-list-item-action>
@@ -37,19 +37,6 @@
                 <v-text class="grey--text font-weight-light">{{field.value}}</v-text>
               </v-list-item-content>
             </v-list-item>
-
-            <!-- <v-card-text>
-              {{parentData.aMainPersona}}
-              <br />
-              {{parentData.createdTime}}
-              <br />
-              {{parentData.form.name}}
-              <br />
-              <v-divider></v-divider>
-              <template v-for="field in parentData.fields">
-                <div :key="field.id">{{field.field.name}} : {{field.value}} </div>
-              </template> 
-            </v-card-text>-->
 
             <v-card-text class="caption" style="padding-left:26px;padding-right:26px">
               <b>created time:</b>
@@ -94,8 +81,7 @@
                     <v-list-item-content>
                       <v-expand-transition>
                         <div v-show="index == selectedIndex">
-                          Are u sure want to delete ?!
-                          <!-- {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }} -->
+                          {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
                           <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
                             <v-icon></v-icon>
                             {{ $vuetify.lang.t('$vuetify.action.yes') }}
@@ -152,6 +138,27 @@
           </v-card>
         </v-flex>
       </v-layout>
+
+      <v-dialog v-model="dialogPersona" max-width="500">
+        <v-card elevation="0" width="500" style="padding:0px 30px 20px 30px">
+          <v-card class="taitel primary white--text elevation-5">
+            <h3
+              class="headline mb-0 font-weight-light"
+            >{{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.idea.persona') }}</h3>
+          </v-card>
+          <v-card-text class="pt-4">
+            <!-- {{singleData}} -->
+            <template v-for="(field, index) in singleData.fields">
+              {{index}} - {{field}} 
+              <v-divider :key="index"></v-divider>
+            <!-- <fieldedit-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></fieldedit-modul> -->
+            </template>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary"><v-icon small left>edit</v-icon> {{ $vuetify.lang.t('$vuetify.action.update') }}</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
     <v-container>
       <span v-html="error.body" v-if="status.error"></span>
@@ -172,13 +179,17 @@ import net from "@/config/httpclient";
 import Notification from "@/components/Notification";
 import ValuePropositionForm from "./valueproposition/ValuePropositionForm";
 
+import FieldCanEditModul from "@/components/field/fieldCanEdit";
+
 export default {
   components: {
     ValuePropositionForm,
+    "fieldedit-modul": FieldCanEditModul,
     "notification-alert": Notification
   },
   data() {
     return {
+      dialogPersona: false,
       status: {
         success: false,
         error: false,
@@ -314,11 +325,12 @@ export default {
           id
       });
     },
-    openEditParent: function(index) {
-      this.dialogFormParent = true;
-      this.view = false;
-      this.edit = true;
-      this.singleData = this.parentData;
+    openEditParent: function(data) {
+      // this.dialogFormParent = true;
+      // this.view = false;
+      // this.edit = true;
+      this.singleData = data;
+      this.dialogPersona = true;
     },
     openEdit: function(index) {
       this.dialogForm = true;
