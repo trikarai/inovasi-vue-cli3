@@ -184,7 +184,7 @@
           </v-card-actions>-->
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary">
+      <v-timeline-item color="primary" ref="customersegment">
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.customersegment')}}</v-card-title>
           <v-card-text>
@@ -214,7 +214,7 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary">
+      <v-timeline-item color="primary" ref="persona">
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.persona')}}</v-card-title>
           <v-card-text>
@@ -247,7 +247,7 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary">
+      <v-timeline-item color="primary" ref="valueproposition">
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.valueproposition')}}</v-card-title>
           <v-card-text>
@@ -280,7 +280,7 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary">
+      <v-timeline-item color="primary" ref="analysis">
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.analysis')}}</v-card-title>
           <v-card-text>
@@ -299,6 +299,18 @@
               v-if="teamId == ''"
             >Create or Join Team First</v-alert>
           </v-card-text>
+          <v-card-text>
+            <v-layout row>
+              <template v-for="canvas in canvas.list">
+                <v-flex :key="canvas.id" md2 class="mr-1 ml-1">
+                  <v-btn @click="gotoCanvas(canvas.id)" color="primary">
+                    <v-icon left>pageview</v-icon>
+                    {{canvas.name}}
+                  </v-btn>
+                </v-flex>
+              </template>
+            </v-layout>
+          </v-card-text>
         </v-card>
       </v-timeline-item>
       <v-timeline-item color="primary">
@@ -316,6 +328,18 @@
               type="warning"
               v-if="teamId == ''"
             >Create or Join Team First</v-alert>
+          </v-card-text>
+          <v-card-text>
+            <v-layout row>
+              <template v-for="exp in experiments.list">
+                <v-flex :key="exp.id" md2 class="mr-1 ml-1">
+                  <v-btn @click="gotoExp(exp.id)" color="primary">
+                    <v-icon left>pageview</v-icon>
+                    {{exp.name}}
+                  </v-btn>
+                </v-flex>
+              </template>
+            </v-layout>
           </v-card-text>
         </v-card>
       </v-timeline-item>
@@ -365,7 +389,9 @@ export default {
     persona: { total: 0, list: [] },
     personaId: "",
     valueproposition: { total: 0, list: [] },
-    valuepropositionId: ""
+    valuepropositionId: "",
+    canvas: { total: 0, list: [] },
+    experiments: { total: 0, list: [] }
   }),
   components: {
     Notification
@@ -390,6 +416,15 @@ export default {
       sessionStorage.personaId = this.personaId;
       sessionStorage.removeItem("valuepropositionId");
       this.getValueproposition();
+    },
+    valuepropositionId: function() {
+      this.getBusinessCanvas();
+      this.getExperiments();
+      this.$vuetify.goTo(this.$refs.analysis, {
+        duration: 500,
+        offset: 10,
+        easing: "linear"
+      });
     }
   },
   mounted: function() {
@@ -480,6 +515,11 @@ export default {
         .then(res => {
           if (res.data.data) {
             this.customersegment = res.data.data;
+            this.$vuetify.goTo(this.$refs.customersegment, {
+              duration: 500,
+              offset: 10,
+              easing: "linear"
+            });
           } else {
             this.customersegment = { total: 0, list: [] };
           }
@@ -510,6 +550,11 @@ export default {
         .then(res => {
           if (res.data.data) {
             this.persona = res.data.data;
+            this.$vuetify.goTo(this.$refs.persona, {
+              duration: 500,
+              offset: 10,
+              easing: "linear"
+            });
           } else {
             this.persona = { total: 0, list: [] };
           }
@@ -542,6 +587,11 @@ export default {
         .then(res => {
           if (res.data.data) {
             this.valueproposition = res.data.data;
+            this.$vuetify.goTo(this.$refs.valueproposition, {
+              duration: 500,
+              offset: 10,
+              easing: "linear"
+            });
           } else {
             this.valueproposition = { total: 0, list: [] };
           }
@@ -562,7 +612,76 @@ export default {
       var id = localStorage.teamId;
       this.$store.commit("setTeamId", id);
       this.$router.push({ path: "/talent/team/" + id + "/idea" });
-    }
+    },
+    getBusinessCanvas: function() {
+      this.loader = true;
+      net
+        .getData(this, "/talent/forms?types[]=can")
+        .then(res => {
+          if (res.data.data) {
+            this.canvas = res.data.data;
+          } else {
+            this.canvas = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    gotoCanvas: function(id) {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.teamId +
+          "/idea/" +
+          this.ideaId +
+          "/customersegment/" +
+          this.customersegmentId +
+          "/persona/" +
+          this.personaId +
+          "/vp/" +
+          this.valuepropositionId +
+          "/analysis/" +
+          id
+      });
+    },
+    getExperiments: function() {
+      this.loader = true;
+      net
+        .getData(this, "/talent/forms?types[]=exp")
+        .then(res => {
+          if (res.data.data) {
+            this.experiments = res.data.data;
+          } else {
+            this.experiments = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    gotoExp: function(id){
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.teamId +
+          "/idea/" +
+          this.ideaId +
+          "/customersegment/" +
+          this.customersegmentId +
+          "/persona/" +
+          this.personaId +
+          "/vp/" +
+          this.valuepropositionId +
+          "/experiment/" + id
+      });
+    },
   }
 };
 </script>
