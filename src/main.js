@@ -40,9 +40,10 @@ Vue.use(UUID);
 Vue.use(VueResource);
 Vue.use(VueVisible);
 
-const moment = require('moment')
-require('moment/locale/id')
- 
+const moment = require('moment');
+require('moment/locale/id');
+require('moment/locale/en-gb');
+
 Vue.use(require('vue-moment'), {
     moment
 })
