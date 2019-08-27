@@ -2,69 +2,82 @@
   <div>
     <v-container>
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-      
+
       <loader-dialog v-model="loader"></loader-dialog>
 
-      <!-- <v-btn @click="openBusinessForm" color="primary" v-if="isCanvas">
-        <v-icon>edit</v-icon>
-      </v-btn>-->
-      <!-- {{canvas.form.name}} -->
       <v-flex>
-      <h4>Lean Canvas</h4>
-      <v-btn @click="isEdit = !isEdit" color="primary" v-if="isCanvas" v-show="!selectedDel">
-        <span v-show="isEdit"><v-icon left>clear</v-icon> Cancel</span>
-        <span v-show="!isEdit"><v-icon left>edit</v-icon> edit</span>
-      </v-btn>
+        <h4>{{canvasName}}</h4>
+        <v-btn @click="isEdit = !isEdit" color="primary" v-if="isCanvas" v-show="!selectedDel">
+          <span v-show="isEdit">
+            <v-icon left>clear</v-icon>Cancel
+          </span>
+          <span v-show="!isEdit">
+            <v-icon left>edit</v-icon>edit
+          </span>
+        </v-btn>
 
-      <v-fade-transition>
-        <template v-if="!isEdit">
-          <v-btn dark @click="selectedDel = !selectedDel" color="warning" class="ml-2" v-if="isCanvas">
-            <v-icon left>delete</v-icon> delete
-          </v-btn>
-        </template>
-      </v-fade-transition>
-
-      <v-expand-transition>
-        <v-layout wrap v-if="isEdit">
-          <v-flex>
-            <v-btn dark class="mt-3" @click.prevent="update" color="blue">
-              <v-icon left>save</v-icon> save
+        <v-fade-transition>
+          <template v-if="!isEdit">
+            <v-btn
+              dark
+              @click="selectedDel = !selectedDel"
+              color="warning"
+              class="ml-2"
+              v-if="isCanvas"
+            >
+              <v-icon left>delete</v-icon>delete
             </v-btn>
-          </v-flex>
-        </v-layout>
-      </v-expand-transition>
+          </template>
+        </v-fade-transition>
 
-      <v-expand-transition>
-        <v-layout class="mt-5 ml-3" wrap v-if="selectedDel">
-          <v-flex>
-            <v-icon>warning</v-icon>
-            {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
-            <v-btn small dark class="ma-2" color="red" @click="deleteCanvas">Yes</v-btn>
-            <v-btn text small class="ma-2 ml-0" @click="selectedDel = !selectedDel">Cancel</v-btn>
-          </v-flex>
-        </v-layout>
-      </v-expand-transition>
+        <v-expand-transition>
+          <v-layout wrap v-if="isEdit">
+            <v-flex>
+              <v-btn dark class="mt-3" @click.prevent="update" color="blue">
+                <v-icon left>save</v-icon>save
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-expand-transition>
+
+        <v-expand-transition>
+          <v-layout class="mt-5 ml-3" wrap v-if="selectedDel">
+            <v-flex>
+              <v-icon>warning</v-icon>
+              {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+              <v-btn small dark class="ma-2" color="red" @click="deleteCanvas">Yes</v-btn>
+              <v-btn text small class="ma-2 ml-0" @click="selectedDel = !selectedDel">Cancel</v-btn>
+            </v-flex>
+          </v-layout>
+        </v-expand-transition>
       </v-flex>
     </v-container>
     <v-form v-model="valid" ref="form2">
-    <v-container style="display: grid; justify-items: stretch; grid-gap: 5px 5px;" v-if="isCanvas">
-      <template v-if="!isEdit">
-        <template v-for="field in canvas.fields" id="viewCanvas">
-          <div :key="field.id" :style="'grid-area:' + getGridPosition(field.field.position) + ''">
-            <v-card class="elevation-3" :hover="hover" height="100%">
-              <v-card-title class="title"><span style="color: #00667f !important">{{field.field.name}}</span></v-card-title>
-              <div class="lain"></div>
-              <v-card-text>{{field.value}}</v-card-text>
-            </v-card>
-          </div>
+      <v-container
+        style="display: grid; justify-items: stretch; grid-gap: 5px 5px;"
+        v-if="isCanvas"
+      >
+        <template v-if="!isEdit">
+          <template v-for="field in canvas.fields" id="viewCanvas">
+            <div :key="field.id" :style="'grid-area:' + getGridPosition(field.field.position) + ''">
+              <v-card class="elevation-3" :hover="hover" height="100%">
+                <v-card-title class="title">
+                  <span style="color: #00667f !important">{{field.field.name}}</span>
+                </v-card-title>
+                <div class="lain"></div>
+                <v-card-text>{{field.value}}</v-card-text>
+              </v-card>
+            </div>
+          </template>
         </template>
-      </template>
-      <!-- grid edit view -->
-      <template v-if="isEdit">
+        <!-- grid edit view -->
+        <template v-if="isEdit">
           <template v-for="(field, index) in canvas.fields" id="editCanvas">
             <div :key="field.id" :style="'grid-area:' + getGridPosition(field.field.position) + ''">
               <v-card class="elevation-3" :hover="hover" height="100%">
-                <v-card-title class="title"><span style="color: #00667f !important">{{field.field.name}}</span></v-card-title>
+                <v-card-title class="title">
+                  <span style="color: #00667f !important">{{field.field.name}}</span>
+                </v-card-title>
                 <div class="lain"></div>
                 <v-card-text>
                   <fieldcanedit-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></fieldcanedit-modul>
@@ -72,10 +85,10 @@
               </v-card>
             </div>
           </template>
-      </template>
-      <!-- <pre>{{canvas}}</pre> -->
-      <!-- <pre>{{params}}</pre> -->
-    </v-container>
+        </template>
+        <!-- <pre>{{canvas}}</pre> -->
+        <!-- <pre>{{params}}</pre> -->
+      </v-container>
     </v-form>
 
     <v-form v-model="valid" ref="form" v-if="!isCanvas">
@@ -84,7 +97,7 @@
         @click.prevent="submit"
         :class=" { 'primary white--text' : valid, disabled: !valid }"
       >
-        <v-icon left>save</v-icon> save
+        <v-icon left>save</v-icon>save
       </v-btn>
       <v-container style="display: grid; justify-items: stretch; grid-gap: 5px 5px;">
         <template v-for="(field, index) in canvasForm.fields">
@@ -120,6 +133,7 @@ export default {
     return {
       valid: false,
       canvas: { fields: [] },
+      canvasName: "",
       canvasForm: "",
       params: {
         formId: "",
@@ -212,10 +226,15 @@ export default {
         )
         .then(res => {
           this.canvas = res.data.data;
+          this.canvasName = this.canvas.form.name;
           this.isCanvas = true;
         })
         .catch(error => {
-          notif.showError(this, error);
+          if (error.status == 404) {
+            notif.showInfo(this, error, ["No Canvas Data, Please Sumbit"]);
+          } else {
+            notif.showError(this, error);
+          }
           this.isCanvas = false;
           this.getCanvasForm();
         })
@@ -231,6 +250,7 @@ export default {
         .then(res => {
           if (res.data.data) {
             this.canvasForm = res.data.data;
+            this.canvasName = this.canvasForm.name;
             this.setFormJSONTemplate(res.data.data);
           } else {
             this.canvasForm = "";
