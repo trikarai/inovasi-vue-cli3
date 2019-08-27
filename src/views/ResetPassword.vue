@@ -73,9 +73,9 @@
                 <v-icon style="font-size:128px;" color="omikti">check</v-icon>
               </div>
               <div class="shadow scale"></div>
-              <v-text>
+              <v-card-text>
                 <h1 class="text-center mt-5 font-weight-light">Reset Password Sukses</h1>
-              </v-text>
+              </v-card-text>
               <v-card-text class="text-center">Terima Kasih! Anda bisa mencoba untuk login</v-card-text>
               <v-card-action>
                 <v-btn block color="primary" to="/login">Login</v-btn>

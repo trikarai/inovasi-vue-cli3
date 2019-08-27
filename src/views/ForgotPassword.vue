@@ -69,9 +69,9 @@
                 <v-icon style="font-size:128px;" color="omikti">email</v-icon>
               </div>                
               <div class="shadow scale"></div>
-              <v-text>
+              <v-card-text>
                 <h1 class="text-center mt-5 font-weight-light">Sukses</h1>
-              </v-text>
+              </v-card-text>
               <v-card-text class="text-center">Terima Kasih! Mohon untuk memeriksa email untuk mendapatkan link reset</v-card-text>
               <v-card-action>
                  <v-btn block dark color="bmikti" style="text-decoration:none !important" :href="'https://'+getEmailDomain"> go to {{getEmailDomain}}</v-btn> 
