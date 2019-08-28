@@ -28,9 +28,14 @@
                 </v-list-item-content>
 
                 <v-list-item-action>
+                  <div>
+                  <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
+                    <v-icon>share</v-icon>
+                  </v-btn>
                   <v-btn small fab @click="openEditParent(parentData)" class="ml-2 mt-1">
                     <v-icon small>edit</v-icon>
-                  </v-btn>
+                  </v-btn> 
+                  </div>
                 </v-list-item-action>
               </v-list-item>
             </v-card>
@@ -51,7 +56,22 @@
                 <v-text class="grey--text font-weight-light">{{parentData.elevatorPitch}}</v-text>
               </v-list-item-content>
             </v-list-item>
-
+            <v-divider v-show="collaborators.list"></v-divider>
+            <v-card-title v-show="collaborators.list">
+              <!-- <v-btn small fab class="mb-0 mr-2" @click="loadColaboration">
+                <v-icon>refresh</v-icon>
+              </v-btn> -->
+              {{ $vuetify.lang.t('$vuetify.collaboration.collaboration') }}
+            </v-card-title>
+            <v-data-table v-show="collaborators.list" :headers="collaboratorHeaders" :items="collaborators.list" no-data-text="please refresh to load data">
+                <template v-slot:item.action="{item}">
+                  <v-btn
+                    @click="removeCollaborator(item.mentor.id)"
+                    small
+                    color="warning"
+                  >{{ $vuetify.lang.t('$vuetify.action.cancel') }}</v-btn>
+                </template>
+              </v-data-table>
             <v-card-text class="caption" style="padding-left:26px;padding-right:26px">
               <!-- <v-divider /> -->
               Initiator :
@@ -126,7 +146,7 @@
         </v-flex>
       </v-layout>
       <v-layout>
-        <v-flex xs12 md6>
+        <!-- <v-flex xs12 md6>
           <v-card>
             <v-card-actions>
               <v-btn small fab class="mb-0" @click="loadColaboration">
@@ -138,8 +158,8 @@
             </v-card-actions>
             <v-card-title>{{ $vuetify.lang.t('$vuetify.collaboration.collaboration') }}</v-card-title>
             <v-card-text>
-              <!-- {{collaborators}} -->
-              <v-data-table :headers="collaboratorHeaders" :items="collaborators.list" no-data-text="please refresh to load data"
+              {{collaborators}}
+              <v-data-table v-show="collaborators.list" :headers="collaboratorHeaders" :items="collaborators.list" no-data-text="please refresh to load data"
 >
                 <template v-slot:item.action="{item}">
                   <v-btn
@@ -151,7 +171,7 @@
               </v-data-table>
             </v-card-text>
           </v-card>
-        </v-flex>
+        </v-flex> -->
 
         <!--start collaboration form dialog-->
         <v-dialog content-class="operplow" v-model="collaboratorDialog" width="500">
@@ -286,7 +306,7 @@ export default {
       },
       collaboratorHeaders: [
         {
-          text: "Name",
+          text: "Mentor Name",
           value: "mentor.talent.name",
           sortable: false,
           align: "left"
@@ -314,6 +334,7 @@ export default {
   mounted: function() {
     this.getParentData();
     this.getDataList();
+    this.loadColaboration();
   },
   methods: {
     getParentData: function() {

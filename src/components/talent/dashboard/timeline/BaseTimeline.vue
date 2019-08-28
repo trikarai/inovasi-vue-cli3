@@ -14,7 +14,12 @@
     </v-layout>
 
     <v-timeline :reverse="reverse" :dense="dense">
-      <v-timeline-item color="primary">
+      <v-timeline-item color="primary" icon="person" large>
+        <template v-slot:opposite>
+          <span class="subtitle-2 font-weight-bold">
+            Rayu Investor dengan Profil Anda
+          </span>
+        </template>
         <v-card>
           <v-card-title class="title">
             <v-menu
@@ -25,8 +30,8 @@
               :offset-y="true"
             >
               <template v-slot:activator="{ on }">
-                <v-btn text small v-on="on">
-                  <v-icon small>edit</v-icon>
+                <v-btn dark color="omikti" class="mr-2" fab x-small v-on="on">
+                  <v-icon small>keyboard_arrow_down</v-icon>
                 </v-btn>
               </template>
               <v-list color="accent">
@@ -40,10 +45,10 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-            {{ $vuetify.lang.t('$vuetify.profile.profile')}}
+            <span class="headline">{{ $vuetify.lang.t('$vuetify.profile.profile')}}</span>
           </v-card-title>
           <v-card-text>
-            <p>Rayu Investor dengan Profil Anda</p>
+            <p v-show="dense">Rayu Investor dengan Profil Anda</p>
             <p>
               Mengapa langkah ini penting? Karena investor, mentor, dan inkubator
               sangat menganggap penting profil dari pendiri Startup. Oleh karena itu
@@ -52,7 +57,12 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary">
+      <v-timeline-item color="primary" icon="group" large>
+        <template v-slot:opposite>
+          <span class="subtitle-2 font-weight-bold">
+            Buatlah Tim yang Solid
+          </span>
+        </template>
         <v-card>
           <v-card-title class="title">
             <v-menu
@@ -63,8 +73,8 @@
               :offset-y="true"
             >
               <template v-slot:activator="{ on }">
-                <v-btn text small v-on="on">
-                  <v-icon small>pageview</v-icon>
+                <v-btn dark color="omikti" class="mr-2" fab x-small v-on="on">
+                  <v-icon small>keyboard_arrow_down</v-icon>
                 </v-btn>
               </template>
               <v-list color="accent">
@@ -77,7 +87,7 @@
             {{ $vuetify.lang.t('$vuetify.team.team')}}
           </v-card-title>
           <v-card-text>
-            <p>Buatlah Tim yang Solid</p>
+            <p v-show="dense">Buatlah Tim yang Solid</p>
             <p>Tim yang solid sangatlah penting bagi keberhasilan sebuah startup. Oleh karena itu lengkapi tim anda dan bentuk "Dream Team" anda.</p>
             <v-alert
               dense
@@ -88,7 +98,12 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary">
+      <v-timeline-item color="primary" icon="local_library" large>
+        <template v-slot:opposite>
+          <span class="subtitle-2 font-weight-bold">
+            Bergabung pada Program Inkubasi
+          </span>
+        </template>
         <v-card>
           <v-card-title class="title">
             <v-menu
@@ -99,8 +114,8 @@
               :offset-y="true"
             >
               <template v-slot:activator="{ on }">
-                <v-btn text small v-on="on">
-                  <v-icon small>pageview</v-icon>
+                <v-btn dark color="omikti" class="mr-2" fab x-small v-on="on">
+                  <v-icon small>keyboard_arrow_down</v-icon>
                 </v-btn>
               </template>
               <v-list color="accent">
@@ -121,7 +136,7 @@
             {{ $vuetify.lang.t('$vuetify.program.programParticipation')}}
           </v-card-title>
           <v-card-text>
-            <p>Bergabung pada Program Inkubasi</p>
+            <p v-show="dense">Bergabung pada Program Inkubasi</p>
             <p>Program Inkubasi akan sangat bermanfaat untuk membantu startup terutama pada tahap awal. Maka bergabunglah pada program yang tersedia dan sesuai dengan startup anda untuk mempercepat pertumbuhan startup anda.</p>
             <v-alert
               dense
@@ -140,16 +155,21 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary">
+      <v-timeline-item color="primary" icon="wb_incandescent" large>
+        <template v-slot:opposite>
+          <span class="subtitle-2 font-weight-bold">
+            Tuliskan ide terbaik anda
+          </span>
+        </template>
         <v-card>
           <v-card-title class="title">
-            <v-btn text @click="openIdea" :disabled="teamId == ''">
-              <v-icon small>view_list</v-icon>
+            <v-btn dark color="omikti" class="mr-2" fab x-small @click="openIdea" :disabled="teamId == ''">
+              <v-icon small>search</v-icon>
             </v-btn>
             {{ $vuetify.lang.t('$vuetify.idea.idea')}}
           </v-card-title>
           <v-card-text>
-            <p>Tuliskan ide terbaik anda</p>
+            <p v-show="dense">Tuliskan ide terbaik anda</p>
             <p>Sebelum membuat suatu produk/jasa semua diawali oleh ide. Tuliskan ide terbaik kalian dan jadilah "The Next Unicorn"!</p>
             <v-alert
               dense
@@ -184,11 +204,16 @@
           </v-card-actions>-->
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary" ref="customersegment">
+      <v-timeline-item color="primary" ref="customersegment" icon="person_pin" large>
+        <template v-slot:opposite>
+          <span class="subtitle-2 font-weight-bold">
+            Tuliskan siapa pengguna produk/jasa anda
+          </span>
+        </template>
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.customersegment')}}</v-card-title>
           <v-card-text>
-            <p>Tuliskan siapa pengguna produk/jasa anda</p>
+            <p v-show="dense">Tuliskan siapa pengguna produk/jasa anda</p>
             <p>Ide tanpa adanya pengguna tidak memiliki nilai. Maka anda perlu mendeskripsikan siapa saja yang nantinya akan menggunakan ide anda.</p>
             <v-alert
               dense
@@ -214,11 +239,16 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary" ref="persona">
+      <v-timeline-item color="primary" ref="persona"  icon="sentiment_very_satisfied" large>
+        <template v-slot:opposite>
+          <span class="subtitle-2 font-weight-bold">
+            Kenali lebih dalam siapa pelanggan anda
+          </span>
+        </template>
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.persona')}}</v-card-title>
           <v-card-text>
-            <p>Kenali lebih dalam siapa pelanggan anda</p>
+            <p v-show="dense">Kenali lebih dalam siapa pelanggan anda</p>
             <p>
               Tak kenal maka tak sayang. Kenali terlebih dahulu pelanggan anda dan pahami
               Apa yang mereka rasakan, sehingga solusi yang nantinya anda tawarkan
@@ -247,11 +277,16 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary" ref="valueproposition">
+      <v-timeline-item color="primary" ref="valueproposition" icon="table_chart" large>
+        <template v-slot:opposite>
+          <span class="subtitle-2 font-weight-bold">
+            Rayu pelanggan anda dengan value proposition
+          </span>
+        </template>
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.valueproposition')}}</v-card-title>
           <v-card-text>
-            <p>Rayu pelanggan anda dengan value proposition</p>
+            <p v-show="dense">Rayu pelanggan anda dengan value proposition</p>
             <p>
               Rayu pelanggan anda dengan sesuatu yang tidak bisa mereka tolak. Beritahu
               Pelanggan anda mengapa produk/jasa yang anda buat merupakan
@@ -280,11 +315,16 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary" ref="analysis">
+      <v-timeline-item color="primary" ref="analysis" icon="show_chart" large>
+        <template v-slot:opposite>
+          <span class="subtitle-2 font-weight-bold">
+            Buatlah Hipotesa Untuk Bisnis Anda
+          </span>
+        </template>
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.analysis')}}</v-card-title>
           <v-card-text>
-            <p>Buatlah Hipotesa Untuk Bisnis Anda</p>
+            <p v-show="dense">Buatlah Hipotesa Untuk Bisnis Anda</p>
             <p>
               Melakukan bisnis tanpa menganalisa keadaan yang mungkin terjadi seperti layaknya
               Anda berlari ke area ranjau darat, anda bisa kapan saja terkena ranjau dan meledak
@@ -313,11 +353,16 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary">
+      <v-timeline-item color="primary" icon="beenhere" large>
+        <template v-slot:opposite>
+          <span class="subtitle-2 font-weight-bold">
+            Validasi Ide Anda
+          </span>
+        </template>
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.experiment')}}</v-card-title>
           <v-card-text>
-            <p>Validasi Ide Anda</p>
+            <p v-show="dense">Validasi Ide Anda</p>
             <p>
               Ide yang tidak tervalidasi memiliki banyak sekali celah untuk gagal.
               Seperti ketidakcocokan antara solusi yang ditawarkan dengan kebutuhan yang dirasakan oleh pelanggan atau menawarkan solusi pada segmen pasar yang salah. Kedua hal tersebut sangat fatal dan akan mengakibatkan gagalnya startup anda. Oleh karena itu melakukan validasi sangatlah penting sebelum anda melangkah ke tahap selanjutnya. Ini adalah level yang paling sulit, karena mengakui bahwa idealisme anda salah dan perlu melakukan pivot merupakan hal yang sangat sulit. Namun, kami yakin startup anda dapat melewati tahap ini untuk berkembang menjadi “The Next Unicorn”.
@@ -367,7 +412,7 @@ export default {
     loaderPersona: false,
     loaderVp: false,
     reverse: false,
-    dense: true,
+    dense: false,
     items: [
       { title: "Education", to: "/talent/education" },
       { title: "Work", to: "/talent/work" },

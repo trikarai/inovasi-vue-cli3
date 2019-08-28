@@ -144,10 +144,10 @@
         </v-flex>
       </v-layout>
 
-      <v-dialog content-class="operplow" v-model="dialogPersona" max-width="500">
+      <v-dialog content-class="operplow" v-model="dialogPersona" max-width="400">
         <v-card elevation="0" width="500" style="padding:0px 30px 20px 30px">
           <v-form ref="form" v-model="valid">
-            <v-card class="taitel primary white--text elevation-5">
+            <v-card class="taitel2 primary white--text elevation-5">
               <h3
                 class="headline mb-0 font-weight-light"
               >{{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.idea.persona') }}</h3>
