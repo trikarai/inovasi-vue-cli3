@@ -1,14 +1,15 @@
 <template>
-    <!-- {{field}} -->
     <v-flex xs12 sm12>
-      <v-textarea
+      <v-text-field
         v-model="value"
-        :id="field.id"
-        :name="field.id"
         :label="field.field.name"
-        counter
         :clearable="clearable"
-      ></v-textarea>
+        type="number"
+      ></v-text-field>
+      <!-- :hint="field.description"
+        :max="field.maxValue"
+        :min="field.minValue"
+        :rules="rules" -->
     </v-flex>
 </template>
 <script>
@@ -22,11 +23,13 @@ export default {
       clearable: true,
       value: "",
       rules: [
-        v => !!v || "This field is required"
+        v => !!v || "This field is required",
+        v => v >= this.field.minValue || "Min value is " + this.field.minValue,
+        v => v <= this.field.maxValue || "Max value is " + this.field.maxValue
       ]
     };
   },
-  mounted: function(){
+  created: function(){
     this.value = this.field.value;
   },
   watch: {
