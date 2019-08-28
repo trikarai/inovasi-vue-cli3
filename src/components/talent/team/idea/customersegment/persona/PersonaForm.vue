@@ -3,11 +3,17 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
-                <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
+          <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400" style="padding:0px 30px 20px 30px">
             <v-card class="taitel primary white--text elevation-5">
-              <h3 v-if="edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.edit') }} Persona</h3>
-              <h3 v-if="!edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.add') }} Persona</h3>    
+              <h3
+                v-if="edit"
+                class="headline mb-0 font-weight-light"
+              >{{ $vuetify.lang.t('$vuetify.action.edit') }} Persona</h3>
+              <h3
+                v-if="!edit"
+                class="headline mb-0 font-weight-light"
+              >{{ $vuetify.lang.t('$vuetify.action.add') }} Persona</h3>
             </v-card>
             <v-card-text class="pt-4">
               <div>
@@ -56,7 +62,6 @@
                     >{{ $vuetify.lang.t('$vuetify.action.add')}}</v-btn>
 
                     <loader-dialog v-model="loader"></loader-dialog>
-
                   </v-layout>
                 </v-form>
               </div>
@@ -82,7 +87,7 @@ export default {
       rules: [
         v => !!v || "This field is required",
         v => v.length >= 3 || "Min 3 characters long",
-        v => v.length <= 25 || "Max 25 characters long"
+        v => v.length <= 50 || "Max 50 characters long"
       ],
       clearable: true,
       valid: false,
@@ -139,10 +144,9 @@ export default {
           }
         })
         .catch(function(error) {
-          
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loadingPersona = false;
         });
     },
@@ -160,10 +164,9 @@ export default {
           }
         })
         .catch(function(error) {
-          
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -173,9 +176,6 @@ export default {
         array.push(new Object({ id: data.fields[i].id, value: "" }));
       }
       this.params.fieldEntries = array;
-    },
-    testBus: function() {
-      // bus.$emit("validateChild");
     },
     submit: function() {
       if (this.$refs.form.validate()) {
@@ -212,11 +212,9 @@ export default {
         )
         .then(
           res => {
-            
             this.params = res.data.data;
           },
           error => {
-            
             if (error.status === 500) {
               this.err_msg = {
                 code: error.status,
@@ -230,7 +228,7 @@ export default {
           }
         )
         .catch()
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -244,29 +242,24 @@ export default {
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
-            "/customer-segments/" + 
-            this.$route.params.customersegmentId + 
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
             "/personas",
           this.params
         )
-        .then(
-          res => {
-            
-            this.$emit("refresh");
-          }            
-        )
-        .catch(error=>{
-          
+        .then(res => {
+          this.$emit("refresh");
+        })
+        .catch(error => {
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
     updateData: function() {
-      var app = this;
       this.loader = true;
-      this.status.error = false;
+      notif.reset(this);
       net
         .putData(
           this,
@@ -278,34 +271,13 @@ export default {
             this.data.id,
           this.params
         )
-        .then(
-          res => {
-            
-            this.$emit("refresh");
-          },
-          error => {
-            
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch(function(error) {
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.status.error = true;
+        .then(res => {
+          this.$emit("refresh");
         })
-        .finally(()=> {
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
           this.loader = false;
         });
     }
