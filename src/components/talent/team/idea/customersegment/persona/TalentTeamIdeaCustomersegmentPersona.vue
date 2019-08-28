@@ -82,16 +82,18 @@
                       <v-expand-transition>
                         <div v-show="index == selectedIndex">
                           <v-icon>warning</v-icon>
-                          <span class="caption">{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
+                          <span
+                            class="caption"
+                          >{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
                           <span style="display:inline-block">
-                          <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
-                            <v-icon></v-icon>
-                            {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                          </v-btn>
-                          <v-btn small text @click="deleteAct(null)">
-                            <v-icon></v-icon>
-                            {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                          </v-btn>
+                            <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
+                              <v-icon></v-icon>
+                              {{ $vuetify.lang.t('$vuetify.action.yes') }}
+                            </v-btn>
+                            <v-btn small text @click="deleteAct(null)">
+                              <v-icon></v-icon>
+                              {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+                            </v-btn>
                           </span>
                         </div>
                       </v-expand-transition>
@@ -144,22 +146,34 @@
 
       <v-dialog content-class="operplow" v-model="dialogPersona" max-width="500">
         <v-card elevation="0" width="500" style="padding:0px 30px 20px 30px">
-          <v-card class="taitel primary white--text elevation-5">
-            <h3
-              class="headline mb-0 font-weight-light"
-            >{{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.idea.persona') }}</h3>
-          </v-card>
-          <v-card-text class="pt-4">
-            <!-- {{singleData}} -->
-            <template v-for="(field, index) in singleData.fields">
-              {{index}} - {{field}} 
-              <v-divider :key="index"></v-divider>
-            <!-- <fieldedit-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></fieldedit-modul> -->
-            </template>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary"><v-icon small left>edit</v-icon> {{ $vuetify.lang.t('$vuetify.action.update') }}</v-btn>
-          </v-card-actions>
+          <v-form ref="form" v-model="valid">
+            <v-card class="taitel primary white--text elevation-5">
+              <h3
+                class="headline mb-0 font-weight-light"
+              >{{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.idea.persona') }}</h3>
+            </v-card>
+            <v-card-text class="pt-4">
+              <v-flex xs12 sm12>
+                <v-text-field
+                  v-model="params.name"
+                  label="Persona Name"
+                  hint="Persona Name"
+                  :rules="rules"
+                  counter="50"
+                  maxlength="50"
+                ></v-text-field>
+              </v-flex>
+              <template v-for="(field, index) in singleData.fields">
+                <fieldedit-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></fieldedit-modul>
+              </template>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn @click="update" block :class=" { 'primary white--text' : valid}" :disabled="!valid">
+                <v-icon small left>edit</v-icon>
+                {{ $vuetify.lang.t('$vuetify.action.update') }}
+              </v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
     </v-container>
@@ -178,7 +192,9 @@
   </div>
 </template>
 <script>
+import bus from "@/bus";
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import ValuePropositionForm from "./valueproposition/ValuePropositionForm";
 
@@ -192,6 +208,11 @@ export default {
   },
   data() {
     return {
+      rules: [
+        v => !!v || "This field is required",
+        v => v.length >= 3 || "Min 3 characters long",
+        v => v.length <= 50 || "Max 50 characters long"
+      ],
       dialogPersona: false,
       status: {
         success: false,
@@ -217,12 +238,23 @@ export default {
         createdTime: "",
         form: { name: "" }
       },
-      singleData: { id: "", name: "" }
+      singleData: { id: "", name: "" },
+      valid: false,
+      params: {
+        formId: "",
+        name: "",
+        fieldEntries: []
+      }
     };
   },
   mounted: function() {
     this.getParentData();
     this.getDataList();
+  },
+  created: function() {
+    bus.$on("getValue", (params, index) => {
+      this.params.fieldEntries.splice(index, 1, params);
+    });
   },
   methods: {
     gotoBusinessAnalysis: function(id) {
@@ -259,9 +291,7 @@ export default {
     },
     getParentData: function() {
       this.loader = true;
-      // this.status.error = false;
-      // this.status.success = false;
-      var app = this;
+      notif.reset(this);
       net
         .getData(
           this,
@@ -329,10 +359,10 @@ export default {
       });
     },
     openEditParent: function(data) {
-      // this.dialogFormParent = true;
-      // this.view = false;
-      // this.edit = true;
       this.singleData = data;
+      this.params.formId = data.form.id;
+      this.params.name = data.name;
+      this.setFormJSONTemplate(data);
       this.dialogPersona = true;
     },
     openEdit: function(index) {
@@ -348,7 +378,6 @@ export default {
       this.singleData = { id: "", name: "" };
     },
     deleteAct: function(index) {
-      // alert(index)
       if (this.selectedIndex == index) {
         this.selectedIndex = null;
       } else {
@@ -408,7 +437,47 @@ export default {
     },
     refreshParent: function() {
       this.dialogFormParent = false;
+      this.dialogPersona = false;
       this.getParentData();
+    },
+    setFormJSONTemplate: function(data) {
+      var array = [];
+      for (var i = 0; i < data.fields.length; i++) {
+        array.push(new Object({ id: data.fields[i].id, value: "" }));
+      }
+      this.params.fieldEntries = array;
+    },
+    update: function() {
+      if (this.$refs.form.validate()) {
+        this.updateData();
+      }
+    },
+    updateData: function() {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/update",
+          this.params
+        )
+        .then(res => {
+          this.refreshParent();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
     }
   }
 };
