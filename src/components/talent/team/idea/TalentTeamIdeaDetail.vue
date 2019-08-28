@@ -157,7 +157,7 @@
         <v-dialog content-class="operplow" v-model="collaboratorDialog" width="500">
           <v-card :loading="collaboratorLoader" style="padding:0px 30px 30px 30px;">
             <v-card class="taitel2 primary white--text elevation-5">
-              <h3 class="headline mb-0 font-weight-light white--text"></h3>
+              <h3 class="headline mb-0 font-weight-light white--text">{{ $vuetify.lang.t('$vuetify.collaboration.share') }} {{ $vuetify.lang.t('$vuetify.idea.idea') }}</h3>
             </v-card>
             <v-card-text>
               <v-container>
@@ -169,6 +169,7 @@
                       item-text="programme.name"
                       item-value="programme.id"
                       :rules="rules"
+                      :label="$vuetify.lang.t('$vuetify.team.programParticipation')"
                     ></v-select>
                   </v-flex>
                   <v-flex>
@@ -180,6 +181,7 @@
                       item-text="talent.name"
                       item-value="id"
                       :rules="rules"
+                      label="Mentor"
                     ></v-autocomplete>
                   </v-flex>
                   <v-layout justify-space-between>

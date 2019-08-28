@@ -134,7 +134,8 @@ var _default = {
     reject: "Tolak"
   },
   collaboration: {
-    collaboration: "Kolaborasi"
+    collaboration: "Kolaborasi",
+    share: "Bagikan"
   }
 };
 exports.default = _default;

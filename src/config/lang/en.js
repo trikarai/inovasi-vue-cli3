@@ -133,7 +133,8 @@ var _default = {
     reject: "reject"
   },
   collaboration: {
-    collaboration: "Collaboration"
+    collaboration: "Collaboration",
+    share: "Share"
   }
 };
 exports.default = _default;
