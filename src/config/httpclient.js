@@ -75,5 +75,11 @@ export default {
     },
     deleteData: function (context, path) {
         return context.$http.delete(config.APIENDPOINT + path, { headers: auth.getAuthHeaders() })
+    },
+    getProgram: function (context, teamId) {
+        return context.$http.get(config.APIENDPOINT + "/talent/as-team-member/" + teamId + "/programme-participations?statuses[]=act", { headers: auth.getAuthHeaders() })
+    },
+    getMentorList: function(context, programId){
+        return context.$http.get(config.APIENDPOINT + "/talent/programmes/" + programId + "/mentors", { headers: auth.getAuthHeaders() })
     }
 }

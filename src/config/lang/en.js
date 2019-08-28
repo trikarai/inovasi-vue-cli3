@@ -131,6 +131,9 @@ var _default = {
     cancel: "Cancel",
     offer: "Offer",
     reject: "reject"
+  },
+  collaboration: {
+    collaboration: "Collaboration"
   }
 };
 exports.default = _default;

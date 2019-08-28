@@ -97,7 +97,7 @@ export default {
     return {
       loader: false,
       response: "",
-      valid: false,
+      valid: true,
       alert: false,
       err_msg: { details: [""] },
       status: {

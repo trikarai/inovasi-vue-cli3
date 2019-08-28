@@ -132,6 +132,9 @@ var _default = {
     cancel: "Batalkan",
     offer: "Ajukan Jadwal",
     reject: "Tolak"
+  },
+  collaboration: {
+    collaboration: "Kolaborasi"
   }
 };
 exports.default = _default;

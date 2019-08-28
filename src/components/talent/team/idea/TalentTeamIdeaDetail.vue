@@ -64,7 +64,9 @@
             <v-card class="taitelcs primary white--text elevation-5">
               <v-list-item>
                 <v-list-item-content>
-                  <h3 class="headline mb-0 font-weight-light white--text">{{ $vuetify.lang.t('$vuetify.idea.customersegment') }}</h3>
+                  <h3
+                    class="headline mb-0 font-weight-light white--text"
+                  >{{ $vuetify.lang.t('$vuetify.idea.customersegment') }}</h3>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-btn small fab @click="openAdd" class="ml-2 mt-1">
@@ -96,8 +98,10 @@
 
                     <v-flex v-show="item.id == selectedIndex">
                       <v-icon>warning</v-icon>
-                      <v-text class="caption">{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</v-text>
-                      <br>
+                      <v-text
+                        class="caption"
+                      >{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</v-text>
+                      <br />
                       <v-btn small dark @click="deleteData(item.id)" color="red" class="ml-10">
                         <v-icon></v-icon>
                         {{ $vuetify.lang.t('$vuetify.action.yes') }}
@@ -119,11 +123,82 @@
               >{{ $vuetify.lang.t('$vuetify.noDataText') }}</p>
             </template>
           </v-card>
-          <!-- <v-btn  color="primary" @click="openAdd">
-            <v-icon>add</v-icon>
-            {{$vuetify.lang.t("$vuetify.action.add")}}
-          </v-btn>-->
         </v-flex>
+      </v-layout>
+      <v-layout>
+        <v-flex xs12 md6>
+          <v-card>
+            <v-card-actions>
+              <v-btn small fab class="mb-0" @click="loadColaboration">
+                <v-icon>refresh</v-icon>
+              </v-btn>
+              <v-btn color="primary" small fab class="ml-3 mb-0" @click="openCollaborator()">
+                <v-icon>share</v-icon>
+              </v-btn>
+            </v-card-actions>
+            <v-card-title>{{ $vuetify.lang.t('$vuetify.collaboration.collaboration') }}</v-card-title>
+            <v-card-text>
+              <!-- {{collaborators}} -->
+              <v-data-table :headers="collaboratorHeaders" :items="collaborators.list" no-data-text="please refresh to load data"
+>
+                <template v-slot:item.action="{item}">
+                  <v-btn
+                    @click="removeCollaborator(item.mentor.id)"
+                    small
+                    color="warning"
+                  >{{ $vuetify.lang.t('$vuetify.action.delete') }}</v-btn>
+                </template>
+              </v-data-table>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+
+        <!--start collaboration form dialog-->
+        <v-dialog content-class="operplow" v-model="collaboratorDialog" width="500">
+          <v-card :loading="collaboratorLoader" style="padding:0px 30px 30px 30px;">
+            <v-card class="taitel2 primary white--text elevation-5">
+              <h3 class="headline mb-0 font-weight-light white--text"></h3>
+            </v-card>
+            <v-card-text>
+              <v-container>
+                <v-form ref="form" v-model="valid">
+                  <v-flex>
+                    <v-select
+                      v-model="collaboratorParams.programmeId"
+                      :items="program.list"
+                      item-text="programme.name"
+                      item-value="programme.id"
+                      :rules="rules"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex>
+                    <v-autocomplete
+                      :loading="mentorLoader"
+                      :disabled="mentorDisable"
+                      v-model="collaboratorParams.mentorId"
+                      :items="mentor.list"
+                      item-text="talent.name"
+                      item-value="id"
+                      :rules="rules"
+                    ></v-autocomplete>
+                  </v-flex>
+                  <v-layout justify-space-between>
+                    <v-btn
+                      @click="setUp"
+                      block
+                      :class=" { 'primary white--text' : valid}"
+                      :disabled="!valid"
+                      color="primary"
+                    >
+                      <v-icon left small>share</v-icon>Share
+                    </v-btn>
+                  </v-layout>
+                </v-form>
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <!--end coolaboration form dialog-->
       </v-layout>
     </v-container>
     <v-container>
@@ -163,6 +238,7 @@ export default {
   },
   data() {
     return {
+      valid: false,
       status: {
         success: false,
         error: false,
@@ -198,8 +274,40 @@ export default {
         },
         aMainIdea: false
       },
-      singleData: { id: "", name: "" }
+      singleData: { id: "", name: "" },
+      collaborators: "this is collaborator placeholder",
+      collaboratorDialog: false,
+      collaboratorLoader: false,
+      collaboratorParams: {
+        programmeId: "",
+        mentorId: ""
+      },
+      collaboratorHeaders: [
+        {
+          text: "Name",
+          value: "mentor.talent.name",
+          sortable: false,
+          align: "left"
+        },
+        { text: "", value: "action", sortable: false, align: "right" }
+      ],
+      rules: [v => !!v || "Field is required"],
+      program: {
+        total: 0,
+        list: []
+      },
+      mentor: {
+        total: 0,
+        list: []
+      },
+      mentorLoader: false,
+      mentorDisable: true
     };
+  },
+  watch: {
+    "collaboratorParams.programmeId": function() {
+      this.getMentorList();
+    }
   },
   mounted: function() {
     this.getParentData();
@@ -208,8 +316,7 @@ export default {
   methods: {
     getParentData: function() {
       this.loader = true;
-      this.status.error = false;
-      this.status.success = false;
+      notif.reset(this);
       net
         .getData(
           this,
@@ -297,7 +404,6 @@ export default {
         )
         .then()
         .catch(error => {
-          
           notif.showError(this, error);
         })
         .finally(() => {
@@ -318,14 +424,11 @@ export default {
             id +
             "/set_as_main_idea"
         )
-        .then(res => {
-          
-        })
+        .then(res => {})
         .catch(error => {
-          
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.selectedIndex = null;
           this.refresh();
         });
@@ -337,6 +440,122 @@ export default {
     refreshParent: function() {
       this.dialogFormParent = false;
       this.getParentData();
+    },
+    loadColaboration: function() {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .getData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/collaborators"
+        )
+        .then(res => {
+          if (res.data.data) {
+            this.collaborators = res.data.data;
+          } else {
+            this.collaborators = "";
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    openCollaborator: function() {
+      this.collaboratorDialog = true;
+      this.collaboratorLoader = true;
+      net
+        .getProgram(this, this.$route.params.teamId)
+        .then(res => {
+          if (res.data.data) {
+            this.program = res.data.data;
+          } else {
+            this.program = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.collaboratorLoader = false;
+        });
+    },
+    getMentorList: function() {
+      this.mentorLoader = true;
+      this.mentorDisable = true;
+      net
+        .getMentorList(this, this.collaboratorParams.programmeId)
+        .then(res => {
+          if (res.data.data) {
+            this.mentor = res.data.data;
+          } else {
+            this.mentor = { total: 0, list: [] };
+          }
+          this.mentorDisable = false;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.mentorLoader = false;
+        });
+    },
+    setUp: function() {
+      if (this.$refs.form.validate()) {
+        this.setUpCollaboration();
+      }
+    },
+    setUpCollaboration: function() {
+      this.collaboratorDialog = true;
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/collaborators",
+          this.collaboratorParams
+        )
+        .then(res => {
+          this.collaboratorDialog = false;
+          this.loadColaboration();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.collaboratorLoader = false;
+        });
+    },
+    removeCollaborator: function(mentorId) {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .deleteData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/collaborators/" +
+            mentorId
+        )
+        .then(res => {
+          this.loadColaboration();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
     }
   }
 };
@@ -358,6 +577,6 @@ export default {
   z-index: 2;
 }
 .v-list-item__subtitle {
-    max-height: 60px !important;
+  max-height: 60px !important;
 }
 </style>
