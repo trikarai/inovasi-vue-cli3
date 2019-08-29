@@ -75,6 +75,7 @@ import Mentor from "./views/Mentor.vue";
 import MentorDashboard from "./components/personnel/mentor/MentorDashboard";
 import MentorProgram from "./components/personnel/mentor/program/MentorProgram";
 import MentorProgramMentoring from "./components/personnel/mentor/program/mentoring/MentorProgramMentoring";
+import MentorProgramCollaboration from "./components/personnel/mentor/program/collaboration/MentorProgramCollaboration";
 
 Vue.use(Router);
 
@@ -551,6 +552,11 @@ const routes = [
         path: "/mentor/program/:programId/mentoring",
         name: "Mentoring Session",
         component: MentorProgramMentoring
+      },
+      {
+        path: "/mentor/program/:programId/collaboration",
+        name: "Collaborations List",
+        component: MentorProgramCollaboration
       },
     ]
   },
