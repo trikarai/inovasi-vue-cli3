@@ -4,6 +4,7 @@
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
 
       <loader-dialog v-model="loader"></loader-dialog>
+      <form-collaboration v-model="collaboratorForm" @setUpCollaboration="setUpCollaboration"></form-collaboration>
 
       <v-layout row wrap>
         <v-flex xs12 md6>
@@ -20,9 +21,14 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-btn small fab @click.stop="openEditParent(parentData)" class="ml-2">
-                    <v-icon>edit</v-icon>
-                  </v-btn>
+                  <div>
+                    <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
+                      <v-icon>share</v-icon>
+                    </v-btn>
+                    <v-btn small fab @click.stop="openEditParent(parentData)" class="ml-2 mt-1">
+                      <v-icon>edit</v-icon>
+                    </v-btn>
+                  </div>
                 </v-list-item-action>
               </v-list-item>
             </v-card>
@@ -42,6 +48,14 @@
               <b>created time:</b>
               {{parentData.createdTime | moment("Do MMMM YYYY")}}
             </v-card-text>
+
+            <!-- start collaborator module-->
+            <base-collaboration
+              v-if="collaborators.total != 0"
+              v-bind:collaborators="collaborators"
+              @removeCollaborator="removeCollaborator"
+            />
+            <!-- end collaborator module-->
           </v-card>
         </v-flex>
         <v-flex xs12 md6>
@@ -168,7 +182,12 @@
               </template>
             </v-card-text>
             <v-card-actions>
-              <v-btn @click="update" block :class=" { 'primary white--text' : valid}" :disabled="!valid">
+              <v-btn
+                @click="update"
+                block
+                :class=" { 'primary white--text' : valid}"
+                :disabled="!valid"
+              >
                 <v-icon small left>edit</v-icon>
                 {{ $vuetify.lang.t('$vuetify.action.update') }}
               </v-btn>
@@ -199,10 +218,14 @@ import Notification from "@/components/Notification";
 import ValuePropositionForm from "./valueproposition/ValuePropositionForm";
 
 import FieldCanEditModul from "@/components/field/fieldCanEdit";
+import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
+import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
   components: {
     ValuePropositionForm,
+    BaseCollaboration,
+    FormCollaboration,
     "fieldedit-modul": FieldCanEditModul,
     "notification-alert": Notification
   },
@@ -244,12 +267,15 @@ export default {
         formId: "",
         name: "",
         fieldEntries: []
-      }
+      },
+      collaboratorForm: false,
+      collaborators: { total: 0, list: [] }
     };
   },
   mounted: function() {
     this.getParentData();
     this.getDataList();
+    this.loadCollaborator();
   },
   created: function() {
     bus.$on("getValue", (params, index) => {
@@ -471,6 +497,91 @@ export default {
         )
         .then(res => {
           this.refreshParent();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    loadCollaborator: function() {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .getData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/collaborators"
+        )
+        .then(res => {
+          if (res.data.data) {
+            this.collaborators = res.data.data;
+          } else {
+            this.collaborators = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    openCollaborator: function() {
+      this.collaboratorForm = true;
+    },
+    setUpCollaboration: function(params) {
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/collaborators",
+          params
+        )
+        .then(res => {
+          this.collaboratorForm = false;
+          this.loadCollaborator();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.collaboratorForm = false;
+        });
+    },
+    removeCollaborator: function(mentorId) {
+      this.loader = true;
+      net
+        .deleteData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/collaborators/" +
+            mentorId
+        )
+        .then(res => {
+          this.loadCollaborator();
         })
         .catch(error => {
           notif.showError(this, error);
