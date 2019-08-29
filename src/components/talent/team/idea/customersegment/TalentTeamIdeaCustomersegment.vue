@@ -405,7 +405,8 @@ export default {
             this.$route.params.ideaId +
             "/customer-segments/" +
             this.$route.params.customersegmentId +
-            "/collaborators/" + mentorId
+            "/collaborators/" +
+            mentorId
         )
         .then(res => {
           this.loadCollaborator();
