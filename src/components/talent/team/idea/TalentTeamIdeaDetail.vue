@@ -29,56 +29,36 @@
 
                 <v-list-item-action>
                   <div>
-                  <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
-                    <v-icon>share</v-icon>
-                  </v-btn>
-                  <v-btn small fab @click="openEditParent(parentData)" class="ml-2 mt-1">
-                    <v-icon small>edit</v-icon>
-                  </v-btn> 
+                    <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
+                      <v-icon>share</v-icon>
+                    </v-btn>
+                    <v-btn small fab @click="openEditParent(parentData)" class="ml-2 mt-1">
+                      <v-icon small>edit</v-icon>
+                    </v-btn>
                   </div>
                 </v-list-item-action>
               </v-list-item>
             </v-card>
-            <!-- <v-card-title>
-              <v-badge v-model="parentData.aMainIdea" left class="ml-4 mt-1" >
-                <template v-slot:badge>
-                  <v-icon small color="yellow">star</v-icon>
-                </template>
-                <h3>{{parentData.name}}</h3>
-              </v-badge>
-              <v-btn small fab color="blue" @click="openEditParent(parentData)" class="ml-2 mt-0">
-                <v-icon small>edit</v-icon>
-              </v-btn>
-            </v-card-title>-->
             <v-list-item style="padding-left:26px;padding-right:26px" three-line="true">
               <v-list-item-content>
                 <v-list-item-title>Elevator Pitch</v-list-item-title>
                 <v-text class="grey--text font-weight-light">{{parentData.elevatorPitch}}</v-text>
               </v-list-item-content>
             </v-list-item>
-            <v-divider v-show="collaborators.list"></v-divider>
-            <v-card-title v-show="collaborators.list">
-              <!-- <v-btn small fab class="mb-0 mr-2" @click="loadColaboration">
-                <v-icon>refresh</v-icon>
-              </v-btn> -->
-              {{ $vuetify.lang.t('$vuetify.collaboration.collaboration') }}
-            </v-card-title>
-            <v-data-table v-show="collaborators.list" :headers="collaboratorHeaders" :items="collaborators.list" no-data-text="please refresh to load data">
-                <template v-slot:item.action="{item}">
-                  <v-btn
-                    @click="removeCollaborator(item.mentor.id)"
-                    small
-                    color="warning"
-                  >{{ $vuetify.lang.t('$vuetify.action.cancel') }}</v-btn>
-                </template>
-              </v-data-table>
             <v-card-text class="caption" style="padding-left:26px;padding-right:26px">
-              <!-- <v-divider /> -->
               Initiator :
               <b>{{parentData.initiator.talent.name}}</b>
             </v-card-text>
+            <!-- start collaborator module-->
+            <base-collaboration
+              v-if="collaborators.total != 0"
+              v-bind:collaborators="collaborators"
+              @removeCollaborator="removeCollaborator"
+            />
+            <!-- end collaborator module-->
           </v-card>
         </v-flex>
+
         <v-flex xs12 md6>
           <v-card class="pb-5" elevation="3" style="margin:10px" min-height="270">
             <v-card class="taitelcs primary white--text elevation-5">
@@ -96,7 +76,6 @@
               </v-list-item>
             </v-card>
             <v-list subheader style="margin:0px 10px 10px 10px">
-              <!-- <v-subheader>Customer Segments</v-subheader> -->
               <v-list-item v-for="item in data.list" :key="item.id">
                 <v-list-item-avatar>
                   <v-btn text @click="openDetail(item.id)">
@@ -146,38 +125,13 @@
         </v-flex>
       </v-layout>
       <v-layout>
-        <!-- <v-flex xs12 md6>
-          <v-card>
-            <v-card-actions>
-              <v-btn small fab class="mb-0" @click="loadColaboration">
-                <v-icon>refresh</v-icon>
-              </v-btn>
-              <v-btn color="primary" small fab class="ml-3 mb-0" @click="openCollaborator()">
-                <v-icon>share</v-icon>
-              </v-btn>
-            </v-card-actions>
-            <v-card-title>{{ $vuetify.lang.t('$vuetify.collaboration.collaboration') }}</v-card-title>
-            <v-card-text>
-              {{collaborators}}
-              <v-data-table v-show="collaborators.list" :headers="collaboratorHeaders" :items="collaborators.list" no-data-text="please refresh to load data"
->
-                <template v-slot:item.action="{item}">
-                  <v-btn
-                    @click="removeCollaborator(item.mentor.id)"
-                    small
-                    color="warning"
-                  >{{ $vuetify.lang.t('$vuetify.action.delete') }}</v-btn>
-                </template>
-              </v-data-table>
-            </v-card-text>
-          </v-card>
-        </v-flex> -->
-
         <!--start collaboration form dialog-->
         <v-dialog content-class="operplow" v-model="collaboratorDialog" width="500">
           <v-card :loading="collaboratorLoader" style="padding:0px 30px 30px 30px;">
             <v-card class="taitel2 primary white--text elevation-5">
-              <h3 class="headline mb-0 font-weight-light white--text">{{ $vuetify.lang.t('$vuetify.collaboration.share') }} {{ $vuetify.lang.t('$vuetify.idea.idea') }}</h3>
+              <h3
+                class="headline mb-0 font-weight-light white--text"
+              >{{ $vuetify.lang.t('$vuetify.collaboration.share') }} {{ $vuetify.lang.t('$vuetify.idea.idea') }}</h3>
             </v-card>
             <v-card-text>
               <v-container>
@@ -252,10 +206,13 @@ import Notification from "@/components/Notification";
 import CustomerSegmentForm from "./customersegment/CustomerSegmentForm";
 import IdeaForm from "./IdeaForm";
 
+import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
+
 export default {
   components: {
     IdeaForm,
     CustomerSegmentForm,
+    BaseCollaboration,
     "notification-alert": Notification
   },
   data() {
@@ -297,22 +254,13 @@ export default {
         aMainIdea: false
       },
       singleData: { id: "", name: "" },
-      collaborators: "this is collaborator placeholder",
+      collaborators: { total: 0, list: [] },
       collaboratorDialog: false,
       collaboratorLoader: false,
       collaboratorParams: {
         programmeId: "",
         mentorId: ""
       },
-      collaboratorHeaders: [
-        {
-          text: "Mentor Name",
-          value: "mentor.talent.name",
-          sortable: false,
-          align: "left"
-        },
-        { text: "", value: "action", sortable: false, align: "right" }
-      ],
       rules: [v => !!v || "Field is required"],
       program: {
         total: 0,
