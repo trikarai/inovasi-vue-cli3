@@ -4,12 +4,13 @@
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
 
       <loader-dialog v-model="loader"></loader-dialog>
+      <form-collaboration v-model="collaboratorForm" @setUpCollaboration="setUpCollaboration"></form-collaboration>
 
       <v-layout row wrap>
         <v-flex xs12 md6>
           <v-card class="pb-5" elevation="3" style="margin:10px">
             <v-card class="taitel primary white--text elevation-5 pt-2">
-              <v-list-item three-line="true">
+              <v-list-item :three-line="true">
                 <v-list-item-avatar v-if="parentData.aMainIdea">
                   <v-badge v-model="parentData.aMainIdea" left class="ml-4 mt-1">
                     <template v-slot:badge>
@@ -39,10 +40,10 @@
                 </v-list-item-action>
               </v-list-item>
             </v-card>
-            <v-list-item style="padding-left:26px;padding-right:26px" three-line="true">
+            <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
               <v-list-item-content>
                 <v-list-item-title>Elevator Pitch</v-list-item-title>
-                <v-text class="grey--text font-weight-light">{{parentData.elevatorPitch}}</v-text>
+                <text class="grey--text font-weight-light">{{parentData.elevatorPitch}}</text>
               </v-list-item-content>
             </v-list-item>
             <v-card-text class="caption" style="padding-left:26px;padding-right:26px">
@@ -97,9 +98,9 @@
 
                     <v-flex v-show="item.id == selectedIndex">
                       <v-icon>warning</v-icon>
-                      <v-text
+                      <text
                         class="caption"
-                      >{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</v-text>
+                      >{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</text>
                       <br />
                       <v-btn small dark @click="deleteData(item.id)" color="red" class="ml-10">
                         <v-icon></v-icon>
@@ -126,7 +127,7 @@
       </v-layout>
       <v-layout>
         <!--start collaboration form dialog-->
-        <v-dialog content-class="operplow" v-model="collaboratorDialog" width="500">
+        <!-- <v-dialog content-class="operplow" v-model="collaboratorDialog" width="500">
           <v-card :loading="collaboratorLoader" style="padding:0px 30px 30px 30px;">
             <v-card class="taitel2 primary white--text elevation-5">
               <h3
@@ -173,7 +174,7 @@
               </v-container>
             </v-card-text>
           </v-card>
-        </v-dialog>
+        </v-dialog>-->
         <!--end coolaboration form dialog-->
       </v-layout>
     </v-container>
@@ -207,12 +208,14 @@ import CustomerSegmentForm from "./customersegment/CustomerSegmentForm";
 import IdeaForm from "./IdeaForm";
 
 import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
+import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
   components: {
     IdeaForm,
     CustomerSegmentForm,
     BaseCollaboration,
+    FormCollaboration,
     "notification-alert": Notification
   },
   data() {
@@ -255,34 +258,14 @@ export default {
       },
       singleData: { id: "", name: "" },
       collaborators: { total: 0, list: [] },
-      collaboratorDialog: false,
-      collaboratorLoader: false,
-      collaboratorParams: {
-        programmeId: "",
-        mentorId: ""
-      },
-      rules: [v => !!v || "Field is required"],
-      program: {
-        total: 0,
-        list: []
-      },
-      mentor: {
-        total: 0,
-        list: []
-      },
-      mentorLoader: false,
-      mentorDisable: true
+      collaboratorForm: false
     };
   },
-  watch: {
-    "collaboratorParams.programmeId": function() {
-      this.getMentorList();
-    }
-  },
+  watch: {},
   mounted: function() {
     this.getParentData();
     this.getDataList();
-    this.loadColaboration();
+    this.loadCollaborator();
   },
   methods: {
     getParentData: function() {
@@ -355,7 +338,6 @@ export default {
       this.singleData = { id: "", name: "" };
     },
     deleteAct: function(index) {
-      // alert(index)
       if (this.selectedIndex == index) {
         this.selectedIndex = null;
       } else {
@@ -382,28 +364,6 @@ export default {
           this.refresh();
         });
     },
-    setMain: function(id) {
-      var app = this;
-      this.status.error = false;
-      this.status.success = false;
-      net
-        .putData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            id +
-            "/set_as_main_idea"
-        )
-        .then(res => {})
-        .catch(error => {
-          notif.showError(this, error);
-        })
-        .finally(() => {
-          this.selectedIndex = null;
-          this.refresh();
-        });
-    },
     refresh: function() {
       this.dialogForm = false;
       this.getDataList();
@@ -412,7 +372,7 @@ export default {
       this.dialogFormParent = false;
       this.getParentData();
     },
-    loadColaboration: function() {
+    loadCollaborator: function() {
       this.loader = true;
       notif.reset(this);
       net
@@ -428,7 +388,7 @@ export default {
           if (res.data.data) {
             this.collaborators = res.data.data;
           } else {
-            this.collaborators = "";
+            this.collaborators = { total: 0, list: [] };
           }
         })
         .catch(error => {
@@ -439,51 +399,9 @@ export default {
         });
     },
     openCollaborator: function() {
-      this.collaboratorDialog = true;
-      this.collaboratorLoader = true;
-      net
-        .getProgram(this, this.$route.params.teamId)
-        .then(res => {
-          if (res.data.data) {
-            this.program = res.data.data;
-          } else {
-            this.program = { total: 0, list: [] };
-          }
-        })
-        .catch(error => {
-          notif.showError(this, error);
-        })
-        .finally(() => {
-          this.collaboratorLoader = false;
-        });
+      this.collaboratorForm = true;
     },
-    getMentorList: function() {
-      this.mentorLoader = true;
-      this.mentorDisable = true;
-      net
-        .getMentorList(this, this.collaboratorParams.programmeId)
-        .then(res => {
-          if (res.data.data) {
-            this.mentor = res.data.data;
-          } else {
-            this.mentor = { total: 0, list: [] };
-          }
-          this.mentorDisable = false;
-        })
-        .catch(error => {
-          notif.showError(this, error);
-        })
-        .finally(() => {
-          this.mentorLoader = false;
-        });
-    },
-    setUp: function() {
-      if (this.$refs.form.validate()) {
-        this.setUpCollaboration();
-      }
-    },
-    setUpCollaboration: function() {
-      this.collaboratorDialog = true;
+    setUpCollaboration: function(params) {
       net
         .putData(
           this,
@@ -492,17 +410,17 @@ export default {
             "/ideas/" +
             this.$route.params.ideaId +
             "/collaborators",
-          this.collaboratorParams
+          params
         )
         .then(res => {
-          this.collaboratorDialog = false;
-          this.loadColaboration();
+          this.collaboratorForm = false;
+          this.loadCollaborator();
         })
         .catch(error => {
           notif.showError(this, error);
         })
         .finally(() => {
-          this.collaboratorLoader = false;
+          this.collaboratorForm = false;
         });
     },
     removeCollaborator: function(mentorId) {
@@ -519,7 +437,7 @@ export default {
             mentorId
         )
         .then(res => {
-          this.loadColaboration();
+          this.loadCollaborator();
         })
         .catch(error => {
           notif.showError(this, error);

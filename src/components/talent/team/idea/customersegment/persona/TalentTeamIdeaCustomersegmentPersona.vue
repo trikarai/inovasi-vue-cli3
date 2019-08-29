@@ -34,7 +34,7 @@
             >
               <v-list-item-content :key="field.id">
                 <v-list-item-title>{{field.field.name}}</v-list-item-title>
-                <v-text class="grey--text font-weight-light">{{field.value}}</v-text>
+                <text class="grey--text font-weight-light">{{field.value}}</text>
               </v-list-item-content>
             </v-list-item>
 
@@ -77,7 +77,7 @@
                     </v-list-item>
                   </template>
 
-                  <v-list-item three-line>
+                  <v-list-item :three-line="true">
                     <v-list-item-content>
                       <v-expand-transition>
                         <div v-show="index == selectedIndex">
