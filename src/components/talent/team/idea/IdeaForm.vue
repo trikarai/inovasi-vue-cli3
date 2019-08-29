@@ -6,8 +6,14 @@
           <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card style="padding:0px 30px 20px 30px" class="mt-5" elevation="0" width="400">
             <v-card class="taitel primary white--text elevation-5">
-              <h3 v-if="edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.edit') }} Idea</h3>
-              <h3 v-if="!edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.add') }} Idea</h3>    
+              <h3
+                v-if="edit"
+                class="headline mb-0 font-weight-light"
+              >{{ $vuetify.lang.t('$vuetify.action.edit') }} Idea</h3>
+              <h3
+                v-if="!edit"
+                class="headline mb-0 font-weight-light"
+              >{{ $vuetify.lang.t('$vuetify.action.add') }} Idea</h3>
             </v-card>
             <v-card-text class="pt-4">
               <div>
@@ -21,41 +27,19 @@
                     maxlength="100"
                     required
                   ></v-text-field>
-                  <!-- <v-text-field
-                    label="Target Customer"
-                    v-model="params.targetCustomer"
-                    :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    label="Problem Confront"
-                    v-model="params.problemConfront"
-                    :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    label="Value Proposed"
-                    v-model="params.valueProposed"
-                    :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    label="Revenue Model"
-                    v-model="params.revenueModel"
-                    :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
-                    required
-                  ></v-text-field>-->
                   <v-tooltip max-width="250" right>
                     <template v-slot:activator="{ on }">
-                      <v-btn style="float:right;width:24px;height:24px;top: 20px;" fab small elevation="0" color="primary" dark v-on="on"><v-icon small>priority_high</v-icon></v-btn>
+                      <v-btn
+                        style="float:right;width:24px;height:24px;top: 20px;"
+                        fab
+                        small
+                        elevation="0"
+                        color="primary"
+                        dark
+                        v-on="on"
+                      >
+                        <v-icon small>priority_high</v-icon>
+                      </v-btn>
                     </template>
                     <span>Elevator pitch merupakan deskripsi singkat mengenai ide, produk, ataupun perusaahan kalian dengan pemaparan yang mudah dimengerti dalam waktu singkat.</span>
                   </v-tooltip>
@@ -85,7 +69,6 @@
                     >{{ $vuetify.lang.t('$vuetify.action.update')}}</v-btn>
 
                     <loader-dialog v-model="loader"></loader-dialog>
-
                   </v-layout>
                 </v-form>
               </div>
