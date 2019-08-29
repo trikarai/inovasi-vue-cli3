@@ -1,28 +1,27 @@
 <template>
   <transition name="slide" mode="out-in">
-    <div>
-      <v-container>
-        <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-        <v-dialog v-model="loader" hide-overlay persistent width="300">
-          <v-card color="primary" dark>
-            <v-card-text>
-              {{ $vuetify.lang.t('$vuetify.info.standby') }}
-              <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-
+    <v-container>
+      <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
+      <loader-dialog v-model="loader" />
+      <v-layout>
+        <v-flex md12>
         <v-data-table :headers="headers" :items="programmeMentorship.list" class="elevation-1">
           <template v-slot:item.action="{item}">
-              <v-btn small @click="gotoMentoring(item.id)" color="primary">
-                <v-icon small left>today</v-icon>
-                {{ $vuetify.lang.t('$vuetify.action.view') }}
-                Mentoring
-              </v-btn>
+            <v-btn small @click="gotoMentoring(item.id)" color="primary">
+              <v-icon small left>today</v-icon>
+              {{ $vuetify.lang.t('$vuetify.action.view') }}
+              Mentoring
+            </v-btn>
+            <v-btn small @click="gotoCollaboration(item.programme.id)" color="primary" class="ml-2">
+              <v-icon small left>folder_shared</v-icon>
+              {{ $vuetify.lang.t('$vuetify.action.view') }}
+              {{ $vuetify.lang.t('$vuetify.collaboration.collaboration') }}
+            </v-btn>
           </template>
         </v-data-table>
-      </v-container>
-    </div>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </transition>
 </template>
 <script>
@@ -43,7 +42,7 @@ export default {
         warning: false
       },
       singleData: { id: "", name: "" },
-      err_msg: {details:[""]},
+      err_msg: { details: [""] },
       loader: false,
       dialogDel: false,
       dialogForm: false,
@@ -58,7 +57,7 @@ export default {
           sortable: false,
           value: "programme.name"
         },
-        { text: "", value: "action", sortable: false, align:"right" }
+        { text: "", value: "action", sortable: false, align: "right" }
       ],
       program: {
         total: 0,
@@ -70,8 +69,7 @@ export default {
       }
     };
   },
-  created: function() {
-  },
+  created: function() {},
   mounted: function() {
     this.getDataList();
   },
@@ -80,28 +78,29 @@ export default {
       this.loader = true;
       this.status.error = false;
       net
-        .getData(
-          this,
-          "/talent/programme-mentorships"
-        )
+        .getData(this, "/talent/programme-mentorships")
         .then(res => {
           if (res.data.data) {
             this.programmeMentorship = res.data.data;
           } else {
-            this.programmeMentorship = {total:0, list:[]};
+            this.programmeMentorship = { total: 0, list: [] };
           }
         })
         .catch(error => {
-          
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
     gotoMentoring: function(id) {
       this.$router.push({
         path: "/mentor/program/" + id + "/mentoring"
+      });
+    },
+    gotoCollaboration: function(id) {
+      this.$router.push({
+        path: "/mentor/program/" + id + "/collaboration"
       });
     },
     refresh: function() {
