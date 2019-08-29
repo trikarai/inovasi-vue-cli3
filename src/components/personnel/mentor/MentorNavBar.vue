@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-toolbar text app color="primary">
+    <v-app-bar text app color="primary">
       <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
       <!-- <v-toolbar fixed app :clipped-left="clipped" dark color="primary">
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -23,7 +23,7 @@
       <v-btn text @click="rightDrawer =! rightDrawer">
         <v-icon>settings</v-icon>
       </v-btn>
-    </v-toolbar>
+    </v-app-bar>
 
     <!-- <div>
       <v-breadcrumbs :items="items" divider=">"></v-breadcrumbs>
