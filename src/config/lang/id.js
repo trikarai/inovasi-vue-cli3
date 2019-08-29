@@ -112,7 +112,9 @@ var _default = {
     valueproposition: "Value Proposition",
     ideaName: "Nama Ide",
     analysis: "Analisa",
-    experiment: "Eksperimen"
+    experiment: "Eksperimen",
+    competitor: "Kompetitor"
+
   },
   customersegment: {
     name: "Name Segmen Pelanggan"
