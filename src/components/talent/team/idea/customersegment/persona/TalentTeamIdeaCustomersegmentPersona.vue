@@ -113,7 +113,7 @@
                       </v-expand-transition>
                       <v-expand-transition>
                         <div v-show="index != selectedIndex">
-                          <v-btn
+                          <!-- <v-btn
                             color="primary"
                             @click="gotoBusinessAnalysis(item.id)"
                             class="ma-2"
@@ -134,6 +134,12 @@
                             <span
                               class="hidden-sm-and-down"
                             >{{ $vuetify.lang.t('$vuetify.idea.competitor') }}</span>
+                          </v-btn> -->
+                          <v-btn color="primary" @click="gotoVp(item.id)">
+                            <v-icon left>pageview</v-icon>
+                            <span
+                              class="hidden-sm-and-down"
+                            >{{ $vuetify.lang.t('$vuetify.action.view') }}</span>
                           </v-btn>
                         </div>
                       </v-expand-transition>
@@ -335,6 +341,21 @@ export default {
           "/vp/" +
           id +
           "/competitor"
+      });
+    },
+    gotoVp: function(id) {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/idea/" +
+          this.$route.params.ideaId +
+          "/customersegment/" +
+          this.$route.params.customersegmentId +
+          "/persona/" +
+          this.$route.params.personaId +
+          "/vp/" +
+          id
       });
     },
     getParentData: function() {
