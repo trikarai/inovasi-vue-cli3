@@ -76,94 +76,40 @@
             </v-card>
             <v-list style="margin:0px 10px 10px 10px">
               <template v-if="data.total != 0">
-                <v-list-group v-for="(item, index) in data.list" :key="item.id" no-action>
-                  <template v-slot:activator>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-btn text>
-                          <v-icon large>pageview</v-icon>
-                        </v-btn>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>{{ item.description }}</v-list-item-title>
-                      </v-list-item-content>
-                      <v-list-item-action></v-list-item-action>
-                    </v-list-item>
-                  </template>
-
-                  <v-list-item :three-line="true">
-                    <v-list-item-content>
-                      <v-expand-transition>
-                        <div v-show="index == selectedIndex">
-                          <v-icon>warning</v-icon>
-                          <span
-                            class="caption"
-                          >{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
-                          <span style="display:inline-block">
-                            <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
-                              <v-icon></v-icon>
-                              {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                            </v-btn>
-                            <v-btn small text @click="deleteAct(null)">
-                              <v-icon></v-icon>
-                              {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                            </v-btn>
-                          </span>
-                        </div>
-                      </v-expand-transition>
-                      <v-expand-transition>
-                        <div v-show="index != selectedIndex">
-                          <!-- <v-btn
-                            color="primary"
-                            @click="gotoBusinessAnalysis(item.id)"
-                            class="ma-2"
-                          >
-                            <v-icon left>assessment</v-icon>
-                            <span
-                              class="hidden-sm-and-down"
-                            >{{ $vuetify.lang.t('$vuetify.idea.analysis') }}</span>
-                          </v-btn>
-                          <v-btn color="primary" @click="gotoExperiment(item.id)">
-                            <v-icon left>assignment</v-icon>
-                            <span
-                              class="hidden-sm-and-down"
-                            >{{ $vuetify.lang.t('$vuetify.idea.experiment') }}</span>
-                          </v-btn>
-                          <v-btn color="primary" @click="gotoCompetitor(item.id)">
-                            <v-icon left>assignment</v-icon>
-                            <span
-                              class="hidden-sm-and-down"
-                            >{{ $vuetify.lang.t('$vuetify.idea.competitor') }}</span>
-                          </v-btn> -->
-                          <v-btn color="primary" @click="gotoVp(item.id)">
-                            <v-icon left>pageview</v-icon>
-                            <span
-                              class="hidden-sm-and-down"
-                            >{{ $vuetify.lang.t('$vuetify.action.view') }}</span>
-                          </v-btn>
-                        </div>
-                      </v-expand-transition>
-                    </v-list-item-content>
-                    <v-list-item-action>
+                <v-list-item v-for="(item, index) in data.list" :key="item.id">
+                  <v-list-item-avatar>
+                    <v-btn text @click="gotoVp(item.id)">
+                      <v-icon large>pageview</v-icon>
+                    </v-btn>
+                  </v-list-item-avatar>
+                  <v-list-item-content>{{item.description}}</v-list-item-content>
+                  <v-list-item-action>
+                    <v-flex>
                       <v-btn
-                        text
-                        fab
-                        style="top:8px;"
-                        v-if="selectedIndex == null"
+                        color="warning"
                         @click="deleteAct(index)"
+                        v-if="selectedIndex == null"
                         small
-                      >
-                        <v-icon color="warning">delete</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </v-list-item>
-                </v-list-group>
-              </template>
-              <template v-else>
-                <p
-                  class="text-center"
-                  style="margin-top:30px;"
-                >{{ $vuetify.lang.t('$vuetify.noDataText') }}</p>
+                      >delete</v-btn>
+
+                      <v-flex v-show="index == selectedIndex">
+                        <v-icon>warning</v-icon>
+                        <text
+                          class="caption"
+                        >{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</text>
+                        <br />
+                        <v-btn small dark @click="deleteData(item.id)" color="red" class="ml-10">
+                          <v-icon></v-icon>
+                          {{ $vuetify.lang.t('$vuetify.action.yes') }}
+                        </v-btn>
+                        <v-btn small text @click="deleteAct(null)" class="ml-2">
+                          <v-icon></v-icon>
+                          {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+                        </v-btn>
+                      </v-flex>
+                    </v-flex>
+                  </v-list-item-action>
+                </v-list-item>
               </template>
             </v-list>
           </v-card>
