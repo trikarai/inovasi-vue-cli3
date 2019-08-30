@@ -1,7 +1,12 @@
 <template>
-  <v-dialog width="500" v-model="show">
+  <v-dialog content-class="seraidea" width="400" v-model="show">
     <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-    <v-card>
+    <v-card style="padding:0px 30px 20px 30px" class="mt-7" elevation="0" width="400">
+      <v-card class="taitel2 primary white--text elevation-5">
+              <h3
+                class="headline mb-0 font-weight-light"
+              >{{ $vuetify.lang.t('$vuetify.collaboration.share') }} {{ $vuetify.lang.t('$vuetify.idea.idea') }}</h3>
+            </v-card>
       <v-card-text>
         <v-container>
           <v-form ref="form" v-model="valid">
@@ -33,6 +38,7 @@
               <v-btn
                 @click="setUp"
                 block
+                class="mt-5"
                 :class=" { 'primary white--text' : valid}"
                 :disabled="!valid"
                 color="primary"
@@ -155,5 +161,9 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style>
+.seraidea {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important
+}
 </style>

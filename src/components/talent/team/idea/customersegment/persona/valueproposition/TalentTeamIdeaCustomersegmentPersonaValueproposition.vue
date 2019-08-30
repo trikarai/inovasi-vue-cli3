@@ -10,7 +10,7 @@
         <v-flex xs12 md6>
           <v-card class="pb-5" elevation="3" style="margin:10px 15px 15px 15px">
             <v-card class="taitel primary white--text elevation-5">
-              <v-list-item>
+              <v-list-item :three-line="true">
                 <v-list-item-content>
                   <v-list-item-title
                     class="font-weight-light white--text body-2"
@@ -25,48 +25,48 @@
                     <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
                       <v-icon>share</v-icon>
                     </v-btn>
-                    <!-- <v-btn small fab @click="openEditParent(parentData.id)" class="ml-2 mt-1">
+                    <v-btn small fab @click="" class="ml-2 mt-1">
                       <v-icon>edit</v-icon>
-                    </v-btn>-->
+                    </v-btn>
                   </div>
                 </v-list-item-action>
               </v-list-item>
             </v-card>
             <v-list>
-              <v-list-item style="padding-left:26px;padding-right:26px">
+              <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-subtitle>Customer Jobs</v-list-item-subtitle>
-                  <v-list-item-title>{{parentData.customerJobs}}</v-list-item-title>
+                  <v-list-item-title>Customer Jobs</v-list-item-title>
+                  <v-list-item-subtitle>{{parentData.customerJobs}}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item style="padding-left:26px;padding-right:26px">
+              <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-subtitle>Gain</v-list-item-subtitle>
-                  <v-list-item-title>{{parentData.gains}}</v-list-item-title>
+                  <v-list-item-title>Gain</v-list-item-title>
+                  <v-list-item-subtitle>{{parentData.gains}}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item style="padding-left:26px;padding-right:26px">
+              <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-subtitle>Gain Creators</v-list-item-subtitle>
-                  <v-list-item-title>{{parentData.gainCreators}}</v-list-item-title>
+                  <v-list-item-title>Gain Creators</v-list-item-title>
+                  <v-list-item-subtitle>{{parentData.gainCreators}}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item style="padding-left:26px;padding-right:26px">
+              <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-subtitle>Pain</v-list-item-subtitle>
-                  <v-list-item-title>{{parentData.pains}}</v-list-item-title>
+                  <v-list-item-title>Pain</v-list-item-title>
+                  <v-list-item-subtitle>{{parentData.pains}}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item style="padding-left:26px;padding-right:26px">
+              <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-subtitle>Pain Relievers</v-list-item-subtitle>
-                  <v-list-item-title>{{parentData.painRelievers}}</v-list-item-title>
+                  <v-list-item-title>Pain Relievers</v-list-item-title>
+                  <v-list-item-subtitle>{{parentData.painRelievers}}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item style="padding-left:26px;padding-right:26px">
+              <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-subtitle>Products And Services</v-list-item-subtitle>
-                  <v-list-item-title>{{parentData.productsAndServices}}</v-list-item-title>
+                  <v-list-item-title>Products And Services</v-list-item-title>
+                  <v-list-item-subtitle>{{parentData.productsAndServices}}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </v-list>

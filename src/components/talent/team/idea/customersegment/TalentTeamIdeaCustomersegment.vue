@@ -33,10 +33,10 @@
               </v-list-item>
             </v-card>
 
-            <v-list-item style="padding-left:26px;padding-right:26px">
+            <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
               <v-list-item-content>
                 <v-list-item-title>Description</v-list-item-title>
-                <text class="grey--text font-weight-light">{{parentData.description}}</text>
+                <span class="grey--text font-weight-light">{{parentData.description}}</span>
               </v-list-item-content>
             </v-list-item>
 
@@ -90,9 +90,9 @@
 
                       <v-flex v-show="index == selectedIndex">
                         <v-icon>warning</v-icon>
-                        <text
+                        <span
                           class="caption"
-                        >{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</text>
+                        >{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
                         <br />
                         <v-btn small dark @click="deleteData(item.id)" color="red" class="ml-10">
                           <v-icon></v-icon>

@@ -164,7 +164,7 @@
         <v-card>
           <v-card-title class="title">
             <v-btn dark color="omikti" class="mr-2" fab x-small @click="openIdea" :disabled="teamId == ''">
-              <v-icon small>search</v-icon>
+              <v-icon small>edit</v-icon>
             </v-btn>
             {{ $vuetify.lang.t('$vuetify.idea.idea')}}
           </v-card-title>

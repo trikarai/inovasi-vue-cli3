@@ -10,7 +10,7 @@
         <v-flex xs12 md6>
           <v-card class="pb-5" elevation="3" style="margin:10px">
             <v-card class="taitel primary white--text elevation-5">
-              <v-list-item>
+              <v-list-item :three-line="true">
                 <v-list-item-content>
                   <v-list-item-title
                     class="font-weight-light white--text body-2"
@@ -40,7 +40,7 @@
             >
               <v-list-item-content :key="field.id">
                 <v-list-item-title>{{field.field.name}}</v-list-item-title>
-                <text class="grey--text font-weight-light">{{field.value}}</text>
+                <span class="grey--text font-weight-light">{{field.value}}</span>
               </v-list-item-content>
             </v-list-item>
 
@@ -94,9 +94,9 @@
 
                       <v-flex v-show="index == selectedIndex">
                         <v-icon>warning</v-icon>
-                        <text
+                        <span
                           class="caption"
-                        >{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</text>
+                        >{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
                         <br />
                         <v-btn small dark @click="deleteData(item.id)" color="red" class="ml-10">
                           <v-icon></v-icon>
