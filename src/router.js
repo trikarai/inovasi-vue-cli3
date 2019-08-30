@@ -56,6 +56,7 @@ import TalentTeamIdea from "./components/talent/team/idea/TalentTeamIdea";
 import TalentTeamIdeaDetail from "./components/talent/team/idea/TalentTeamIdeaDetail";
 import TalentTeamIdeaCustomersegment from "./components/talent/team/idea/customersegment/TalentTeamIdeaCustomersegment";
 import TalentTeamIdeaCustomersegmentPersona from "./components/talent/team/idea/customersegment/persona/TalentTeamIdeaCustomersegmentPersona";
+import TalentTeamIdeaCustomersegmentPersonaValueproposition from "./components/talent/team/idea/customersegment/persona/valueproposition/TalentTeamIdeaCustomersegmentPersonaValueproposition";
 
 import CompetitorList from "./components/talent/team/idea/customersegment/persona/valueproposition/competitor/CompetitorList";
 
@@ -325,11 +326,20 @@ const routes = [
         }
       },
       {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId",
+        name: "Value Proposition",
+        component: TalentTeamIdeaCustomersegmentPersonaValueproposition,
+        meta: {
+          level: 6,
+          text: "Value Proposition"
+        }
+      },
+      {
         path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/analysis",
         name: "Business Analysis",
         component: BusinessAnalysis,
         meta: {
-          level: 6,
+          level: 7,
           text: "Business Analysis"
         }
       },
@@ -338,7 +348,7 @@ const routes = [
         name: "Business Analysis Canvas",
         component: BusinessAnalysisCanvas,
         meta: {
-          level: 7,
+          level: 8,
           text: "Canvas"
         }
       },
@@ -347,7 +357,7 @@ const routes = [
         name: "Experiment Form",
         component: ExperimentFormList,
         meta: {
-          level: 6,
+          level: 7,
           text: "Experiment Form"
         }
       },
@@ -356,7 +366,7 @@ const routes = [
         name: "Experiment Data",
         component: ExperimentDataList,
         meta: {
-          level: 7,
+          level: 8,
           text: "Experiment List"
         }
       },
@@ -365,7 +375,7 @@ const routes = [
         name: "Experiment Detail",
         component: ExperimentDetail,
         meta: {
-          level: 8,
+          level: 9,
           text: "Experiment Detail"
         }
       },
@@ -374,7 +384,7 @@ const routes = [
         name: "Competitor",
         component: CompetitorList,
         meta: {
-          level: 6,
+          level: 7,
           text: "Competitor List"
         }
       },
