@@ -6,8 +6,14 @@
           <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
           <v-card elevation="0" width="400" style="padding:0px 30px 20px 30px">
             <v-card class="taitel primary white--text elevation-5">
-              <h3 v-if="edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.edit') }} Value Proposition</h3>
-              <h3 v-if="!edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.add') }} Value Proposition</h3>    
+              <h3
+                v-if="edit"
+                class="headline mb-0 font-weight-light"
+              >{{ $vuetify.lang.t('$vuetify.action.edit') }} Value Proposition</h3>
+              <h3
+                v-if="!edit"
+                class="headline mb-0 font-weight-light"
+              >{{ $vuetify.lang.t('$vuetify.action.add') }} Value Proposition</h3>
             </v-card>
             <v-card-text class="pt-4">
               <div>
@@ -18,10 +24,52 @@
                     hint="Value Proposition adalah sebuah pernyataan terkait value yang akan diperoleh oleh pelanggan dengan menggunakan produk/jasa anda. Isinya dapat berupa manfaat-manfaat yang akan diperoleh pelanggan. Selain menjelaskan manfaat, Value Proposition yang baik juga menjelaskan mengapa produk/jasa anda lebih baik dibandingkan dengan kompetitor."
                     v-model="params.description"
                     :rules="nameRules"
-                    :counter="25"
-                    maxlength="25"
+                    counter
                     required
                     persistent-hint
+                  ></v-textarea>
+
+                  <v-textarea
+                    label="Products And Services"
+                    hint
+                    v-model="params.productsAndServices"
+                    counter
+                    required
+                  ></v-textarea>
+                  <v-textarea
+                    label="Gain Creators"
+                    hint
+                    v-model="params.gainCreators"
+                    counter
+                    required
+                  ></v-textarea>
+                  <v-textarea
+                    label="Pain Relievers"
+                    hint
+                    v-model="params.painRelievers"
+                    counter
+                    required
+                  ></v-textarea>
+                  <v-textarea
+                    label="Gains"
+                    hint
+                    v-model="params.gains"
+                    counter
+                    required
+                  ></v-textarea>
+                  <v-textarea
+                    label="Pains"
+                    hint
+                    v-model="params.pains"
+                    counter
+                    required
+                  ></v-textarea>
+                  <v-textarea
+                    label="Customer Jobs"
+                    hint
+                    v-model="params.customerJobs"
+                    counter
+                    required
                   ></v-textarea>
 
                   <v-layout justify-space-between>
@@ -44,7 +92,6 @@
                     >{{ $vuetify.lang.t('$vuetify.action.update')}}</v-btn>
 
                     <loader-dialog v-model="loader"></loader-dialog>
-
                   </v-layout>
                 </v-form>
               </div>
@@ -74,7 +121,13 @@ export default {
       err_msg: { code: 666, type: "", details: [""] },
       error: "error",
       params: {
-        description: ""
+        description: "",
+        customerJobs: "",
+        pains: "",
+        gains: "",
+        productsAndServices: "",
+        gainCreators: "",
+        painRelievers: ""
       },
       nameRules: [
         v => !!v || "Description is required",
@@ -131,11 +184,9 @@ export default {
         )
         .then(
           res => {
-            
             this.params = res.data.data;
           },
           error => {
-            
             if (error.status === 500) {
               this.err_msg = {
                 code: error.status,
@@ -149,7 +200,7 @@ export default {
           }
         )
         .catch()
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -172,11 +223,9 @@ export default {
         )
         .then(
           res => {
-            
             this.$emit("refresh");
           },
           error => {
-            
             if (error.status === 500) {
               this.err_msg = {
                 code: error.status,
@@ -190,7 +239,7 @@ export default {
           }
         )
         .catch()
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -215,11 +264,9 @@ export default {
         )
         .then(
           res => {
-            
             this.$emit("refresh");
           },
           error => {
-            
             if (error.status === 500) {
               this.err_msg = {
                 code: error.status,
@@ -240,7 +287,7 @@ export default {
           };
           app.status.error = true;
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     }
