@@ -8,7 +8,7 @@
 
       <v-layout row wrap>
         <v-flex xs12 md6>
-          <v-card class="pb-5" elevation="3" style="margin:10px">
+          <v-card class="pb-5" elevation="3" style="margin:10px 15px 15px 15px">
             <v-card class="taitel primary white--text elevation-5">
               <v-list-item>
                 <v-list-item-content>
@@ -81,7 +81,13 @@
         </v-flex>
         <v-layout row wrap>
           <v-flex xs12 md6>
-            <v-card class="pb-5" elevation="3" style="margin:10px" min-height="270">
+            <v-card
+              max-width="280"
+              class="pb-5"
+              elevation="3"
+              style="margin:10px 5px 5px 5px"
+              min-height="270"
+            >
               <v-card class="taitelcs primary white--text elevation-5">
                 <v-list-item>
                   <v-list-item-content>
@@ -91,10 +97,31 @@
                   </v-list-item-content>
                 </v-list-item>
               </v-card>
+
+              <div class="text-center" v-if="loaderCan">
+                <v-progress-circular size="50" color="omikti" indeterminate></v-progress-circular>
+              </div>
+              <v-card-text>
+                <v-list rounded>
+                  <v-list-item v-for="(item, i) in canvas.list" :key="i">
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <v-btn @click="gotoCanvas(item.id)" color="primary" block>{{item.name}}</v-btn>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
             </v-card>
           </v-flex>
           <v-flex xs12 md6>
-            <v-card class="pb-5" elevation="3" style="margin:10px" min-height="270">
+            <v-card
+              max-width="280"
+              class="pb-5"
+              elevation="3"
+              style="margin:10px 5px 5px 5px"
+              min-height="270"
+            >
               <v-card class="taitelcs primary white--text elevation-5">
                 <v-list-item>
                   <v-list-item-content>
@@ -104,31 +131,41 @@
                   </v-list-item-content>
                 </v-list-item>
               </v-card>
+
+              <div class="text-center" v-if="loaderExp">
+                <v-progress-circular size="50" color="omikti" indeterminate></v-progress-circular>
+              </div>
+
+              <v-card-text>
+                <v-list rounded>
+                  <v-list-item v-for="(item, i) in experiments.list" :key="i">
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <v-btn @click="gotoExp(item.id)" color="primary" block>{{item.name}}</v-btn>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
             </v-card>
           </v-flex>
         </v-layout>
+
+        <v-flex md4>
+          <v-card>
+            <v-card-action>
+              <v-btn
+                color="primary"
+                @click="gotoCompetitor()"
+              >{{ $vuetify.lang.t('$vuetify.idea.competitor') }}</v-btn>
+            </v-card-action>
+          </v-card>
+        </v-flex>
       </v-layout>
     </v-container>
     <v-container>
       <span v-html="error.body" v-if="status.error"></span>
     </v-container>
-
-    <!-- <CustomerSegmentForm
-      :data="singleData"
-      v-bind:edit="edit"
-      v-bind:view="view"
-      v-if="dialogFormParent"
-      @close="dialogFormParent = false"
-      @refresh="refreshParent"
-    />
-    <PersonaForm
-      :data="singleData"
-      v-bind:edit="edit"
-      v-bind:view="view"
-      v-if="dialogForm"
-      @close="dialogForm = false"
-      @refresh="refresh"
-    />-->
   </div>
 </template>
 <script>
@@ -165,15 +202,19 @@ export default {
       expand: false,
       dataId: "",
       selectedIndex: null,
-      data: { total: 0, list: [] },
       parentData: "",
       singleData: { id: "", name: "" },
-      collaborators: { total: 0, list: [] }
+      collaborators: { total: 0, list: [] },
+      experiments: { total: 0, list: [] },
+      loaderExp: false,
+      canvas: { total: 0, list: [] },
+      loaderCan: false
     };
   },
   mounted: function() {
     this.getParentData();
-    this.getDataList();
+    this.getBusinessCanvas();
+    this.getExperiments();
     this.loadCollaborator();
   },
   methods: {
@@ -204,47 +245,6 @@ export default {
           this.loader = false;
         });
     },
-    getDataList: function() {
-      this.loader = true;
-      notif.reset(this);
-      net
-        .getData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas"
-        )
-        .then(res => {
-          if (res.data.data) {
-            this.data = res.data.data;
-          } else {
-            this.data = { total: 0, list: [] };
-          }
-        })
-        .catch(error => {
-          notif.showError(this, error);
-        })
-        .finally(() => {
-          this.loader = false;
-        });
-    },
-    openDetail: function(id) {
-      this.$router.push({
-        path:
-          "/talent/team/" +
-          this.$route.params.teamId +
-          "/idea/" +
-          this.$route.params.ideaId +
-          "/customersegment/" +
-          this.$route.params.customersegmentId +
-          "/persona/" +
-          id
-      });
-    },
     openEditParent: function(index) {
       this.dialogFormParent = true;
       this.view = false;
@@ -262,35 +262,6 @@ export default {
       this.view = false;
       this.edit = false;
       this.singleData = { id: "", name: "" };
-    },
-    deleteAct: function(index) {
-      if (this.selectedIndex == index) {
-        this.selectedIndex = null;
-      } else {
-        this.selectedIndex = index;
-      }
-    },
-    deleteData: function(id) {
-      net
-        .deleteData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            id
-        )
-        .then(res => {})
-        .catch(error => {
-          notif.showError(this, error);
-        })
-        .finally(() => {
-          this.selectedIndex = null;
-          this.refresh();
-        });
     },
     refresh: function() {
       this.dialogForm = false;
@@ -389,6 +360,92 @@ export default {
         })
         .finally(() => {
           this.loader = false;
+        });
+    },
+    getBusinessCanvas: function() {
+      this.loaderCan = true;
+      net
+        .getData(this, "/talent/forms?types[]=can")
+        .then(res => {
+          if (res.data.data) {
+            this.canvas = res.data.data;
+          } else {
+            this.canvas = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loaderCan = false;
+        });
+    },
+    gotoCanvas: function(id) {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/idea/" +
+          this.$route.params.ideaId +
+          "/customersegment/" +
+          this.$route.params.customersegmentId +
+          "/persona/" +
+          this.$route.params.personaId +
+          "/vp/" +
+          this.$route.params.valuepropositionId +
+          "/analysis/" +
+          id
+      });
+    },
+    gotoExp: function(id) {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/idea/" +
+          this.$route.params.ideaId +
+          "/customersegment/" +
+          this.$route.params.customersegmentId +
+          "/persona/" +
+          this.$route.params.personaId +
+          "/vp/" +
+          this.$route.params.valuepropositionId +
+          "/experiment/" +
+          id
+      });
+    },
+    gotoCompetitor: function(id) {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          this.$route.params.teamId +
+          "/idea/" +
+          this.$route.params.ideaId +
+          "/customersegment/" +
+          this.$route.params.customersegmentId +
+          "/persona/" +
+          this.$route.params.personaId +
+          "/vp/" +
+          this.$route.params.valuepropositionId +
+          "/competitor"
+      });
+    },
+    getExperiments: function() {
+      this.loaderExp = true;
+      net
+        .getData(this, "/talent/forms?types[]=exp")
+        .then(res => {
+          if (res.data.data) {
+            this.experiments = res.data.data;
+          } else {
+            this.experiments = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loaderExp = false;
         });
     }
   }
