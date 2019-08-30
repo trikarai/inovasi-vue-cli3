@@ -71,7 +71,6 @@
               </v-list-item>
             </v-card>
             <v-list style="margin:0px 10px 10px 10px">
-              <!-- <v-subheader>Persona</v-subheader> -->
               <template v-if="data.total != 0">
                 <v-list-item v-for="(item, index) in data.list" :key="item.id">
                   <v-list-item-avatar>
@@ -81,20 +80,13 @@
                   </v-list-item-avatar>
                   <v-list-item-content>{{item.name}}</v-list-item-content>
                   <v-list-item-action>
-                    <!-- <v-btn text @click="deleteAct(index)" small>
-                    <v-icon color="warning">delete</v-icon>
-                    </v-btn>-->
-
                     <v-flex>
                       <v-btn
                         color="warning"
                         @click="deleteAct(index)"
                         v-if="selectedIndex == null"
                         small
-                      >
-                        <!-- <v-icon>delete</v-icon>  -->
-                        delete
-                      </v-btn>
+                      >delete</v-btn>
 
                       <v-flex v-show="index == selectedIndex">
                         <v-icon>warning</v-icon>
