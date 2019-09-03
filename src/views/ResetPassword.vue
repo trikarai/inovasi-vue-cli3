@@ -77,9 +77,9 @@
                 <h1 class="text-center mt-5 font-weight-light">Reset Password Sukses</h1>
               </v-card-text>
               <v-card-text class="text-center">Terima Kasih! Anda bisa mencoba untuk login</v-card-text>
-              <v-card-action>
+              <v-card-actions>
                 <v-btn block color="primary" to="/login">Login</v-btn>
-              </v-card-action>
+              </v-card-actions>
             </v-card>
           </v-flex>
         </v-layout>
