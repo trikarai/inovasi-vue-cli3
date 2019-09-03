@@ -12,7 +12,7 @@
     </v-btn>
 
     <v-scale-transition>
-      <v-btn v-if="!isEdit" small fab class="ml-4 mb-2" @click="openCollaborator()">
+      <v-btn small fab class="ml-4 mb-2" @click="openCollaborator()">
         <v-icon>share</v-icon>
       </v-btn>
     </v-scale-transition>
