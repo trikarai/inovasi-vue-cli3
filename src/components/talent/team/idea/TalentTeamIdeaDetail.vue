@@ -34,11 +34,13 @@
                       <v-icon>share</v-icon>
                     </v-btn>
                     <v-btn small fab @click="openEditParent(parentData)" class="ml-2 mt-1">
-                      <v-icon small>edit</v-icon>
+                      <v-icon>edit</v-icon>
                     </v-btn>
                   </div>
+                  <div class="grsduasec d-none d-md-flex d-lg-flex"></div>
                 </v-list-item-action>
               </v-list-item>
+              
             </v-card>
             <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
               <v-list-item-content>
@@ -64,6 +66,7 @@
           <v-card class="pb-5" elevation="3" style="margin:10px" min-height="270">
             <v-card class="taitelcs primary white--text elevation-5">
               <v-list-item>
+                <span class="right-arrow d-none d-md-flex d-lg-flex"></span>
                 <v-list-item-content>
                   <h3
                     class="headline mb-0 font-weight-light white--text"
@@ -468,4 +471,42 @@ export default {
 .v-list-item__subtitle {
   max-height: 60px !important;
 }
+.grsduasec {
+    background: #00667f;
+    width: 99px;
+    height: 11px;
+    position: relative;
+    left: 106px;
+    bottom: 23px;
+}
+.right-arrow {
+	border-color: transparent #024e61;
+	border-style: solid;
+	border-width: 20px 0px 20px 25px;
+	height: 0px;
+	width: 0px;
+  position: relative;
+  right: 42px;
+}
+.grsduasec {
+    background: #00667f;
+    width: 99px;
+    height: 11px;
+    position: relative;
+    left: 106px;
+    bottom: 22px;
+}
+.right-arrow {
+	border-color: transparent #fb7307;
+	border-style: solid;
+	border-width: 20px 0px 20px 25px;
+	height: 0px;
+	width: 0px;
+  position: relative;
+  right: 42px;
+}
+</style>
+
+<style>
+
 </style>

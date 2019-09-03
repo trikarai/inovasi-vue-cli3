@@ -2,6 +2,7 @@
   <transition name="slide" mode="out-in">
     <div>
       <v-container>
+        {{params}}
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
         <loader-dialog v-model="loader"></loader-dialog>
