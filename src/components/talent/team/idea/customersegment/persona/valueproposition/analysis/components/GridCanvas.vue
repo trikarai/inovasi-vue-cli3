@@ -2,6 +2,7 @@
   <div>
     <v-container>
       <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
+      <form-collaboration v-model="collaboratorForm" @setUpCollaboration="setUpCollaboration"></form-collaboration>
 
       <loader-dialog v-model="loader"></loader-dialog>
 
@@ -15,6 +16,8 @@
             <v-icon left>edit</v-icon>edit
           </span>
         </v-btn>
+        
+        
 
         <v-fade-transition>
           <template v-if="!isEdit">
@@ -50,6 +53,11 @@
             </v-flex>
           </v-layout>
         </v-expand-transition>
+
+        <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
+          <v-icon>share</v-icon>
+        </v-btn>
+
       </v-flex>
     </v-container>
     <v-form v-model="valid" ref="form2">
@@ -113,6 +121,19 @@
         <!-- <pre>{{params}}</pre> -->
       </v-container>
     </v-form>
+    <v-container>
+      <v-layout>
+        <v-flex>
+          <!-- start collaborator module-->
+          <base-collaboration
+            v-if="collaborators.total != 0"
+            v-bind:collaborators="collaborators"
+            @removeCollaborator="removeCollaborator"
+          />
+          <!-- end collaborator module-->
+        </v-flex>
+      </v-layout>
+    </v-container>
 
     <business-form v-if="dialogForm" @close="dialogForm = false" @refresh="refresh"></business-form>
   </div>
@@ -125,6 +146,9 @@ import Notification from "@/components/Notification";
 
 import FieldModul from "@/components/field/field";
 import FieldCanEditModul from "@/components/field/fieldCanEdit";
+
+import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
+import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 import BusinessForm from "./BusinessForm";
 
@@ -151,10 +175,14 @@ export default {
         info: false,
         warning: false
       },
-      err_msg: { details: [""] }
+      err_msg: { details: [""] },
+      collaborators: { total: 0, list: [] },
+      collaboratorForm: false
     };
   },
   components: {
+    BaseCollaboration,
+    FormCollaboration,
     BusinessForm,
     "notification-alert": Notification,
     "field-modul": FieldModul,
@@ -162,6 +190,7 @@ export default {
   },
   mounted: function() {
     this.getCanvas();
+    this.loadCollaborator();
   },
   watch: {
     // isCanvas: "getCanvasForm"
@@ -367,6 +396,103 @@ export default {
     refresh: function() {
       this.dialogForm = false;
       this.getCanvas();
+    },
+    loadCollaborator: function() {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .getData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/business-canvases/" +
+            this.$route.params.formId +
+            "/collaborators"
+        )
+        .then(res => {
+          if (res.data.data) {
+            this.collaborators = res.data.data;
+          } else {
+            this.collaborators = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    openCollaborator: function() {
+      this.collaboratorForm = true;
+    },
+    setUpCollaboration: function(params) {
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/business-canvases/" +
+            this.$route.params.formId +
+            "/collaborators",
+          params
+        )
+        .then(res => {
+          this.collaboratorForm = false;
+          this.loadCollaborator();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.collaboratorForm = false;
+        });
+    },
+    removeCollaborator: function(mentorId) {
+      this.loader = true;
+      net
+        .deleteData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/business-canvases/" +
+            this.$route.params.formId +
+            "/collaborators/" +
+            mentorId
+        )
+        .then(res => {
+          this.loadCollaborator();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
     }
   }
 };
