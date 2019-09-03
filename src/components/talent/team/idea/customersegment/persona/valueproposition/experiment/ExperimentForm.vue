@@ -81,7 +81,7 @@ import FieldModul from "@/components/field/field";
 import FieldCanEditModul from "@/components/field/fieldCanEdit";
 
 export default {
-  props: ["id", "edit", "view", "data"],
+  props: ["id", "edit", "view", "data", "formId", "formDate"],
   data: function() {
     return {
       rules: [
@@ -127,8 +127,8 @@ export default {
   mounted: function() {
     if (this.edit) {
       this.getSingleData();
-      this.params.formId = this.data.form.id;
-      this.params.date = this.data.date;
+      this.params.formId = this.formId;
+      this.params.date = this.formDate;
     } else {
       this.getForm();
     }
@@ -189,7 +189,7 @@ export default {
             "/value-propositions/" +
             this.$route.params.valuepropositionId +
             "/experiments/" +
-            this.data.id
+            this.data
         )
         .then(res => {
           this.experimentData = res.data.data;
@@ -219,7 +219,7 @@ export default {
               "/value-propositions/" +
               this.$route.params.valuepropositionId +
               "/experiments/" +
-              this.data.id,
+              this.data,
             this.params
           )
           .then(res => {

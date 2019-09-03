@@ -1,53 +1,67 @@
 <template>
   <v-container>
     <notification ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
+    <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
+    <form-collaboration v-model="collaboratorForm" @setUpCollaboration="setUpCollaboration"></form-collaboration>
 
     <loader-dialog v-model="loader2"></loader-dialog>
 
-    <v-btn dark @click="openAdd()" color="primary" class="mb-2">
-      <v-icon>add</v-icon>
-      {{ $vuetify.lang.t('$vuetify.action.add') }} {{$vuetify.lang.t('$vuetify.idea.competitor')}}
+    <v-btn @click="openEdit()" color="primary" class="mb-2">
+      <v-icon small left>edit</v-icon>
+      {{$vuetify.lang.t('$vuetify.action.edit')}}
     </v-btn>
+
+    <v-scale-transition>
+      <v-btn small fab class="ml-4 mb-2" @click="openCollaborator()">
+        <v-icon>share</v-icon>
+      </v-btn>
+    </v-scale-transition>
+
     <v-layout>
-      <v-flex md12>
-        <v-data-table :headers="headers" :loading="loader" :items="competitor.list">
-          <template v-slot:item.action="{item}">
-            <!-- <v-btn small @click="openDetail(item.id)">
-              <v-icon small left>pageview</v-icon>
-              {{$vuetify.lang.t('$vuetify.action.view')}}
-            </v-btn>-->
-
-            <v-btn small @click="gotoDetail(item.id)">
-              <v-icon small left>pageview</v-icon>
-              {{$vuetify.lang.t('$vuetify.action.view')}}
-            </v-btn>
-
-            <v-btn small @click="openEdit(item.id)" class="ml-2">
-              <v-icon small left>edit</v-icon>
-              {{$vuetify.lang.t('$vuetify.action.edit')}}
-            </v-btn>
-            <v-btn small color="warning" @click="deleteAct(item.id)" class="ml-2">
-              <v-icon small left>delete</v-icon>
-              {{ $vuetify.lang.t('$vuetify.action.delete') }}
-            </v-btn>
-            <v-expand-transition>
-              <div v-show="item.id == selectedIndex">
-                <div>
-                  <v-icon>warning</v-icon>
-                  <span>{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
-                </div>
-                <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
-                </v-btn>
-                <v-btn small text @click="deleteAct(null)">
-                  <v-icon></v-icon>
-                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
-                </v-btn>
-              </div>
-            </v-expand-transition>
-          </template>
-        </v-data-table>
+      <v-flex md6>
+        <v-card :loading="loader">
+          <v-list-item two-line>
+            <v-list-item-group>
+              <v-list-item-content>
+                <v-list-item-subtitle>Name</v-list-item-subtitle>
+                <v-list-item-title>{{competitorDetail.name}}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-subtitle>valueProposed</v-list-item-subtitle>
+                <v-list-item-title>{{competitorDetail.valueProposed}}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-subtitle>comparativeAdvantage</v-list-item-subtitle>
+                <v-list-item-title>{{competitorDetail.comparativeAdvantage}}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-subtitle>differentialAdvantage</v-list-item-subtitle>
+                <v-list-item-title>{{competitorDetail.differentialAdvantage}}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-subtitle>focus</v-list-item-subtitle>
+                <v-list-item-title>{{competitorDetail.focus}}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-subtitle>asset</v-list-item-subtitle>
+                <v-list-item-title>{{competitorDetail.asset}}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-subtitle>unfairAdvantage</v-list-item-subtitle>
+                <v-list-item-title>{{competitorDetail.unfairAdvantage}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item-group>
+          </v-list-item>
+        </v-card>
+      </v-flex>
+      <v-flex md6>
+        <!-- start collaborator module-->
+        <base-collaboration
+          v-if="collaborators.total != 0"
+          v-bind:collaborators="collaborators"
+          @removeCollaborator="removeCollaborator"
+        />
+        <!-- end collaborator module-->
       </v-flex>
     </v-layout>
     <!-- start competitor form-->
@@ -141,6 +155,12 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-layout>
+      <v-flex md6>
+        <!-- Feedback Placeholder -->
+      </v-flex>
+    </v-layout>
     <!-- end competitor form -->
   </v-container>
 </template>
@@ -148,6 +168,9 @@
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
+
+import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
+import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
   data() {
@@ -163,7 +186,6 @@ export default {
         info: false,
         warning: false
       },
-      competitor: { total: 0, list: [] },
       competitorId: "",
       competitorDetail: "",
       params: {
@@ -175,14 +197,6 @@ export default {
         asset: "",
         unfairAdvantage: ""
       },
-      headers: [
-        {
-          text: "Competitor Name",
-          value: "name",
-          sortable: false
-        },
-        { text: "", value: "action", sortable: false, align: "right" }
-      ],
       competitorForm: false,
       edit: false,
       view: false,
@@ -190,68 +204,26 @@ export default {
       nameRules: [
         v => !!v || "Name is required",
         v => v.length >= 3 || "Name must be more than 3 characters"
-      ]
+      ],
+      collaborators: { total: 0, list: [] },
+      collaboratorForm: false
     };
   },
   components: {
-    Notification
+    Notification,
+    BaseCollaboration,
+    FormCollaboration
   },
   mounted: function() {
-    this.getDataList();
+    this.getSingleData();
+    this.loadCollaborator();
   },
   methods: {
-    getDataList: function() {
-      this.loader = true;
-      notif.reset(this);
-      net
-        .getData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId +
-            "/competitors"
-        )
-        .then(res => {
-          if (res.data.data) {
-            this.competitor = res.data.data;
-          } else {
-            this.competitor = { total: 0, list: [] };
-          }
-        })
-        .catch(error => {
-          notif.showError(this, error);
-        })
-        .finally(() => {
-          this.loader = false;
-        });
-    },
-    openAdd: function() {
-      this.competitorForm = true;
-      this.edit = false;
-      this.view = false;
-      this.fullDialog = false;
-      this.params = {
-        name: "",
-        valueProposed: "",
-        comparativeAdvantage: "",
-        differentialAdvantage: "",
-        focus: "",
-        asset: "",
-        unfairAdvantage: ""
-      };
-    },
-    openEdit: function(id) {
+    openEdit: function() {
       this.competitorForm = true;
       this.edit = true;
       this.view = false;
-      this.getSingleData(id);
+      this.params = this.competitorDetail;
       this.fullDialog = false;
     },
     openDetail: function(id) {
@@ -259,24 +231,7 @@ export default {
       this.edit = false;
       this.view = true;
       this.fullDialog = true;
-      this.getSingleData(id);
-    },
-    gotoDetail: function(id) {
-      this.$router.push({
-        path:
-          "/talent/team/" +
-          this.$route.params.teamId +
-          "/idea/" +
-          this.$route.params.ideaId +
-          "/customersegment/" +
-          this.$route.params.customersegmentId +
-          "/persona/" +
-          this.$route.params.personaId +
-          "/vp/" +
-          this.$route.params.valuepropositionId +
-          "/competitor/" +
-          id
-      });
+      this.getSingleData();
     },
     submit: function() {
       if (this.$refs.form.validate()) {
@@ -303,66 +258,36 @@ export default {
     addData: function() {
       this.loader2 = true;
       notif.reset(this);
-      if (this.edit) {
-        net
-          .putData(
-            this,
-            "/talent/as-team-member/" +
-              this.$route.params.teamId +
-              "/ideas/" +
-              this.$route.params.ideaId +
-              "/customer-segments/" +
-              this.$route.params.customersegmentId +
-              "/personas/" +
-              this.$route.params.personaId +
-              "/value-propositions/" +
-              this.$route.params.valuepropositionId +
-              "/competitors/" +
-              this.competitorId,
-            this.params
-          )
-          .then(res => {
-            notif.showInfo(this, res, ["OK"]);
-            this.competitorForm = false;
-            this.getDataList();
-          })
-          .catch(error => {
-            notif.showError(this, error);
-          })
-          .finally(() => {
-            this.loader2 = false;
-          });
-      } else {
-        net
-          .postData(
-            this,
-            "/talent/as-team-member/" +
-              this.$route.params.teamId +
-              "/ideas/" +
-              this.$route.params.ideaId +
-              "/customer-segments/" +
-              this.$route.params.customersegmentId +
-              "/personas/" +
-              this.$route.params.personaId +
-              "/value-propositions/" +
-              this.$route.params.valuepropositionId +
-              "/competitors",
-            this.params
-          )
-          .then(res => {
-            notif.showInfo(this, res, ["OK"]);
-            this.competitorForm = false;
-            this.getDataList();
-          })
-          .catch(error => {
-            notif.showError(this, error);
-          })
-          .finally(() => {
-            this.loader2 = false;
-          });
-      }
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/competitors/" +
+            this.$route.params.competitorId,
+          this.params
+        )
+        .then(res => {
+          notif.showInfo(this, res, ["OK"]);
+          this.getSingleData();
+          this.competitorForm = false;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader2 = false;
+        });
     },
-    getSingleData: function(id) {
+    getSingleData: function() {
       this.loader2 = true;
       notif.reset(this);
       net
@@ -379,11 +304,10 @@ export default {
             "/value-propositions/" +
             this.$route.params.valuepropositionId +
             "/competitors/" +
-            id
+            this.$route.params.competitorId
         )
         .then(res => {
-          this.competitorId = res.data.data.id;
-          this.params = res.data.data;
+          this.competitorDetail = res.data.data;
         })
         .catch(error => {
           notif.showError(this, error);
@@ -426,6 +350,103 @@ export default {
         .finally(() => {
           this.selectedIndex = null;
           this.loader2 = false;
+        });
+    },
+    loadCollaborator: function() {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .getData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/competitors/" +
+            this.$route.params.competitorId +
+            "/collaborators"
+        )
+        .then(res => {
+          if (res.data.data) {
+            this.collaborators = res.data.data;
+          } else {
+            this.collaborators = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    openCollaborator: function() {
+      this.collaboratorForm = true;
+    },
+    setUpCollaboration: function(params) {
+      net
+        .putData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/competitors/" +
+            this.$route.params.competitorId +
+            "/collaborators",
+          params
+        )
+        .then(res => {
+          this.collaboratorForm = false;
+          this.loadCollaborator();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.collaboratorForm = false;
+        });
+    },
+    removeCollaborator: function(mentorId) {
+      this.loader = true;
+      net
+        .deleteData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/competitors/" +
+            this.$route.params.competitorId +
+            "/collaborators/" +
+            mentorId
+        )
+        .then(res => {
+          this.loadCollaborator();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
         });
     }
   }

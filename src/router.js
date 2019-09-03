@@ -59,6 +59,7 @@ import TalentTeamIdeaCustomersegmentPersona from "./components/talent/team/idea/
 import TalentTeamIdeaCustomersegmentPersonaValueproposition from "./components/talent/team/idea/customersegment/persona/valueproposition/TalentTeamIdeaCustomersegmentPersonaValueproposition";
 
 import CompetitorList from "./components/talent/team/idea/customersegment/persona/valueproposition/competitor/CompetitorList";
+import CompetitorDetail from "./components/talent/team/idea/customersegment/persona/valueproposition/competitor/CompetitorDetails";
 
 import BusinessAnalysis from "./components/talent/team/idea/customersegment/persona/valueproposition/analysis/BusinessAnalysisList";
 import BusinessAnalysisCanvas from "./components/talent/team/idea/customersegment/persona/valueproposition/analysis/components/GridCanvas";
@@ -366,7 +367,7 @@ const routes = [
         name: "Experiment Data",
         component: ExperimentDataList,
         meta: {
-          level: 8,
+          level: 7,
           text: "Experiment List"
         }
       },
@@ -375,7 +376,7 @@ const routes = [
         name: "Experiment Detail",
         component: ExperimentDetail,
         meta: {
-          level: 9,
+          level: 8,
           text: "Experiment Detail"
         }
       },
@@ -386,6 +387,15 @@ const routes = [
         meta: {
           level: 7,
           text: "Competitor List"
+        }
+      },
+      {
+        path: "/talent/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/competitor/:competitorId",
+        name: "Competitor Detail",
+        component: CompetitorDetail,
+        meta: {
+          level: 8,
+          text: "Competitor Detail"
         }
       },
       {

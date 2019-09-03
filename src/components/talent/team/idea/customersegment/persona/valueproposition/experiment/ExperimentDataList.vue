@@ -29,7 +29,15 @@
       </v-flex>
     </v-layout>
 
-    <experiment-form v-if="dialogForm" :data="singleData" :edit="edit" @close="dialogForm = false" @refresh="refresh"></experiment-form>
+    <experiment-form
+      v-if="dialogForm"
+      :data="singleData"
+      :edit="edit"
+      :formId="formId"
+      :formDate="formDate"
+      @close="dialogForm = false"
+      @refresh="refresh"
+    ></experiment-form>
   </v-container>
 </template>
 
@@ -88,7 +96,9 @@ export default {
       this.edit = false;
     },
     openEdit: function(data) {
-      this.singleData = data;
+      this.singleData = data.id;
+      this.formId = data.id;
+      this.formDate = data.date;
       this.edit = true;
       this.dialogForm = true;
     },
