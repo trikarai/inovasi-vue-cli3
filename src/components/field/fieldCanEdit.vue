@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <!-- {{fields.value}} -->
+    <!-- {{fields}} -->
     <string-field v-bind:index="index" v-bind:field="fields" v-if="fields.field.type.value === 'str'"></string-field>
     <text-field v-bind:index="index" v-bind:field="fields" v-if="fields.field.type.value === 'txt'"></text-field>
     <integer-field v-bind:index="index" v-bind:field="fields" v-if="fields.field.type.value === 'int'"></integer-field>

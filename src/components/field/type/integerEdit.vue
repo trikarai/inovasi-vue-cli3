@@ -1,16 +1,16 @@
 <template>
-    <v-flex xs12 sm12>
-      <v-text-field
-        v-model="value"
-        :label="field.field.name"
-        :clearable="clearable"
-        type="number"
-      ></v-text-field>
-      <!-- :hint="field.description"
-        :max="field.maxValue"
-        :min="field.minValue"
-        :rules="rules" -->
-    </v-flex>
+  <v-flex xs12 sm12>
+    <v-text-field
+      v-model="value"
+      :label="field.field.name"
+      :clearable="clearable"
+      type="number"
+      :hint="field.description"
+      :max="field.maxValue"
+      :min="field.minValue"
+      :rules="rules"
+    ></v-text-field>
+  </v-flex>
 </template>
 <script>
 import bus from "@/bus";
@@ -29,7 +29,7 @@ export default {
       ]
     };
   },
-  created: function(){
+  created: function() {
     this.value = this.field.value;
   },
   watch: {
