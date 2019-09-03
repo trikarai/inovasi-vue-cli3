@@ -86,10 +86,10 @@ export default {
           value: "name"
         },
         {
-          text: "Position",
+          text: "Organizer",
           align: "left",
           sortable: false,
-          value: "position"
+          value: "organizer"
         },
         { text: "", value: "action", sortable: false }
       ]
