@@ -4,7 +4,7 @@
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
           <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-          <v-card elevation="0" width="400" style="padding:0px 30px 20px 30px;margin-top:780px">
+          <v-card elevation="0" width="450" style="padding:0px 30px 20px 30px;margin-top:780px">
             <v-card class="taitel primary white--text elevation-5">
               <h3
                 v-if="edit"
@@ -17,17 +17,16 @@
             </v-card>
             <v-card-text class="pt-4">
               <div>
-                <!-- {{error}} -->
                 <v-form v-model="valid" ref="form">
                   <v-textarea
                     label="Value Proposition"
-                    hint="Value Proposition adalah sebuah pernyataan terkait value yang akan diperoleh oleh pelanggan dengan menggunakan produk/jasa anda. Isinya dapat berupa manfaat-manfaat yang akan diperoleh pelanggan. Selain menjelaskan manfaat, Value Proposition yang baik juga menjelaskan mengapa produk/jasa anda lebih baik dibandingkan dengan kompetitor."
                     v-model="params.description"
                     :rules="nameRules"
                     counter
                     required
-                    persistent-hint
+                    placeholder="Value Proposition adalah sebuah pernyataan terkait value yang akan diperoleh oleh pelanggan dengan menggunakan produk/jasa anda. Isinya dapat berupa manfaat-manfaat yang akan diperoleh pelanggan. Selain menjelaskan manfaat, Value Proposition yang baik juga menjelaskan mengapa produk/jasa anda lebih baik dibandingkan dengan kompetitor."
                   ></v-textarea>
+                  <!-- hint="Value Proposition adalah sebuah pernyataan terkait value yang akan diperoleh oleh pelanggan dengan menggunakan produk/jasa anda. Isinya dapat berupa manfaat-manfaat yang akan diperoleh pelanggan. Selain menjelaskan manfaat, Value Proposition yang baik juga menjelaskan mengapa produk/jasa anda lebih baik dibandingkan dengan kompetitor." -->
 
                   <v-textarea
                     label="Products And Services"
@@ -50,20 +49,8 @@
                     counter
                     required
                   ></v-textarea>
-                  <v-textarea
-                    label="Gains"
-                    hint
-                    v-model="params.gains"
-                    counter
-                    required
-                  ></v-textarea>
-                  <v-textarea
-                    label="Pains"
-                    hint
-                    v-model="params.pains"
-                    counter
-                    required
-                  ></v-textarea>
+                  <v-textarea label="Gains" hint v-model="params.gains" counter required></v-textarea>
+                  <v-textarea label="Pains" hint v-model="params.pains" counter required></v-textarea>
                   <v-textarea
                     label="Customer Jobs"
                     hint
@@ -104,6 +91,7 @@
 </template>
 <script>
 import net from "@/config/httpclient";
+import notif from "@/config/alerthandling";
 import notification from "@/components/Notification";
 
 export default {
@@ -182,24 +170,12 @@ export default {
             "/value-propositions/" +
             this.data.id
         )
-        .then(
-          res => {
-            this.params = res.data.data;
-          },
-          error => {
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch()
+        .then(res => {
+          this.params = res.data.data;
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
         .finally(() => {
           this.loader = false;
         });
@@ -221,24 +197,12 @@ export default {
             "/value-propositions",
           this.params
         )
-        .then(
-          res => {
-            this.$emit("refresh");
-          },
-          error => {
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch()
+        .then(res => {
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
         .finally(() => {
           this.loader = false;
         });
@@ -262,30 +226,11 @@ export default {
             this.data.id,
           this.params
         )
-        .then(
-          res => {
-            this.$emit("refresh");
-          },
-          error => {
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch(function(error) {
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.status.error = true;
+        .then(res => {
+          this.$emit("refresh");
+        })
+        .catch(error => {
+          notif.showError(this, error);
         })
         .finally(() => {
           this.loader = false;

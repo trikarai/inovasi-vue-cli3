@@ -25,7 +25,7 @@
                     <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
                       <v-icon>share</v-icon>
                     </v-btn>
-                    <v-btn small fab @click="" class="ml-2 mt-1">
+                    <v-btn small fab @click="openEditParent(parentData)" class="ml-2 mt-1">
                       <v-icon>edit</v-icon>
                     </v-btn>
                   </div>
@@ -153,15 +153,25 @@
 
         <v-flex md4>
           <v-card>
-            <v-card-action>
+            <v-card-actions>
               <v-btn
                 color="primary"
                 @click="gotoCompetitor()"
               >{{ $vuetify.lang.t('$vuetify.idea.competitor') }}</v-btn>
-            </v-card-action>
+            </v-card-actions>
           </v-card>
         </v-flex>
       </v-layout>
+
+      <ValuePropositionForm
+        :data="singleData"
+        :edit="edit"
+        :view="view"
+        v-if="dialogFormParent"
+        @close="dialogFormParent = false"
+        @refresh="refreshParent"
+      />
+
     </v-container>
     <v-container>
       <span v-html="error.body" v-if="status.error"></span>
@@ -173,6 +183,8 @@ import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 
+import ValuePropositionForm from "./ValuePropositionForm";
+
 import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
@@ -180,6 +192,7 @@ export default {
   components: {
     BaseCollaboration,
     FormCollaboration,
+    ValuePropositionForm,
     "notification-alert": Notification
   },
   data() {
@@ -245,17 +258,11 @@ export default {
           this.loader = false;
         });
     },
-    openEditParent: function(index) {
+    openEditParent: function(data) {
       this.dialogFormParent = true;
       this.view = false;
       this.edit = true;
-      this.singleData = this.parentData;
-    },
-    openEdit: function(index) {
-      this.dialogForm = true;
-      this.view = false;
-      this.edit = true;
-      this.singleData = this.data.list[index];
+      this.singleData = data;
     },
     openAdd: function() {
       this.dialogForm = true;
