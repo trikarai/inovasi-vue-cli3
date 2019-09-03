@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
+    <notification ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
     <v-dialog v-model="loader" hide-overlay persistent width="300">
       <v-card color="primary" dark>
         <v-card-text>
@@ -39,6 +39,9 @@ export default {
       err_msg: { details: [""] },
       experiment: ""
     };
+  },
+  components:{
+    Notification
   },
   mounted: function() {
     this.getExperiment();

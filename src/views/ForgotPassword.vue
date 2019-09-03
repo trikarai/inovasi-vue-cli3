@@ -73,9 +73,9 @@
                 <h1 class="text-center mt-5 font-weight-light">Sukses</h1>
               </v-card-text>
               <v-card-text class="text-center">Terima Kasih! Mohon untuk memeriksa email untuk mendapatkan link reset</v-card-text>
-              <v-card-action>
+              <v-card-actions>
                  <v-btn block dark color="bmikti" style="text-decoration:none !important" :href="'https://'+getEmailDomain"> go to {{getEmailDomain}}</v-btn> 
-              </v-card-action>
+              </v-card-actions>
               
             </v-card>
             

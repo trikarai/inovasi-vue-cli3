@@ -1,18 +1,16 @@
 <template>
-    <v-flex xs12 sm12>
-      <v-text-field
-        v-model="value"
-        :label="field.field.name"
-        :id="field.id"
-        :name="field.id"
-        :clearable="clearable"
-      ></v-text-field>
-      <!--
-        :counter="field.maxValue"
-        :maxlength="field.maxValue"
-        :hint="field.description"
-      -->
-    </v-flex>
+  <v-flex xs12 sm12>
+    <v-text-field
+      v-model="value"
+      :label="field.field.name"
+      :id="field.id"
+      :name="field.id"
+      :clearable="clearable"
+      :counter="field.maxValue"
+      :maxlength="field.maxValue"
+      :hint="field.description"
+    ></v-text-field>
+  </v-flex>
 </template>
 <script>
 import bus from "@/bus";
@@ -26,18 +24,22 @@ export default {
       value: "",
       rules: [
         v => !!v || "This field is required",
-        v => v.length >= this.field.minValue || "Min " + this.field.minValue + " characters",
-        v => v.length <= this.field.maxValue || "Max " + this.field.maxValue + " characters"
+        v =>
+          v.length >= this.field.minValue ||
+          "Min " + this.field.minValue + " characters",
+        v =>
+          v.length <= this.field.maxValue ||
+          "Max " + this.field.maxValue + " characters"
       ]
     };
   },
-  created: function(){
+  created: function() {
     this.value = this.field.value;
   },
   watch: {
-    value: function(){
-      var params = { id: this.field.field.id , value: this.value }
-      bus.$emit("getValue", params, this.index)
+    value: function() {
+      var params = { id: this.field.field.id, value: this.value };
+      bus.$emit("getValue", params, this.index);
     }
   }
 };

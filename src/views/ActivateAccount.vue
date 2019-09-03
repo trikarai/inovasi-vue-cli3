@@ -23,11 +23,11 @@
               </v-card-text>
               <v-card-text class="text-center">{{err_msg}}</v-card-text>
 
-              <v-card-action class="text-center">
+              <v-card-actions class="text-center">
                 <v-btn block dark color="primary" @click="resendAccount">
                   Resend Activation
                 </v-btn>
-              </v-card-action>
+              </v-card-actions>
             </v-card>
             <!-- card sucsess response -->
             <v-card style="padding:30px" v-if="status.success">
@@ -39,9 +39,9 @@
                 <h1 class="text-center mt-5 font-weight-light">Aktivasi Sukses</h1>
               </v-card-text>
               <v-card-text class="text-center">Terima Kasih! Anda bisa mencoba untuk login</v-card-text>
-              <v-card-action>
+              <v-card-actions>
                 <v-btn block color="primary" to="/login">Login</v-btn>
-              </v-card-action>
+              </v-card-actions>
             </v-card>
 
             <v-card style="padding:30px" v-if="status.info">
@@ -53,7 +53,7 @@
                 <h1 class="text-center mt-5 font-weight-light">Aktivasi Dikirim Ulang</h1>
               </v-card-text>
               <v-card-text class="text-center">Cek Email untuk mendapatkan link aktivasi</v-card-text>
-              <v-card-action></v-card-action>
+              <v-card-actions></v-card-actions>
             </v-card>
           </v-flex>
         </v-layout>
