@@ -1,83 +1,110 @@
 <template>
   <v-container>
     <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-    <v-dialog v-model="loader" hide-overlay persistent width="300">
-      <v-card color="primary" dark>
-        <v-card-text>
-          Please stand by
-          <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-layout>
-      <v-flex x12 md12 lg12>
-        <v-card>
-          <v-card-title>
-            <v-spacer></v-spacer>
+     
+    <loader-dialog v-model="loader"></loader-dialog>
+
+    <v-layout row>
+      <v-flex x12 md6 lg6>
+        <v-card class="pb-5" style="margin:15px 15px 15px 15px;">
+          <v-card class="taitel primary white--text elevation-5">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title
+                    class="font-weight-light white--text title"
+                  >{{ $vuetify.lang.t('$vuetify.team.addMember') }} </v-list-item-title>
+                </v-list-item-content>   
+              </v-list-item>
+          </v-card>
+
+          <v-card-text>
             <v-text-field
               v-model="search"
+              hint="example : guest@gmail.com"
               append-icon="search"
               label="Search Talent by email"
               @input="isTyping = true"
-              hide-details
+              style="max-width:400px;margin:0 auto;"
+              persistent-hint
             ></v-text-field>
-          </v-card-title>
-          <v-card-text>
-            <v-progress-circular v-if="async" indeterminate color="primary"></v-progress-circular>
-            <div v-if="!async">
-              <span v-if="talent === null">No talent found</span>
-              <span v-else>
-                {{talent.name}}
-                <br />
-                {{talent.username}}
-                <br />
-                {{talent.email}}
-                <br />
-                {{talent.birthdate}}
-                <br />
-                {{talent.cityOfOrigin}}
-                <br />
-                {{talent.region.name}}
-                <br />
-                {{talent.gender.displayName}}
-                <br />
-              </span>
-              <!-- <v-card-actions v-if="talent !== null"> -->
-            </div>
-            <v-form v-model="valid" ref="form" v-if="talent !== null">
-              <v-layout>
-                <!-- <v-flex xs12 md4>
-                  <v-text-field
-                    v-model="position"
-                    :rules="nameRules"
-                    :counter="10"
-                    label="Position"
-                    required
-                  ></v-text-field>
-                </v-flex>-->
-                <!-- Hustler / Hacker / Hispter -->
-                <v-flex xs12>
-                  <v-combobox
-                    required
-                    :rules="nameRules"
-                    v-model="position"
-                    :items="item"
-                    chips
-                    :label="$vuetify.lang.t('$vuetify.team.position')"
-                  ></v-combobox>
-                </v-flex>
-              </v-layout>
-            </v-form>
           </v-card-text>
-          <v-card-actions v-if="talent !== null">
-            <v-btn
+          <v-card-text class="text-center">
+              <v-chip v-show="talent === null" class="caption" color="omikti" dark small>No talent found</v-chip>
+              <v-chip v-show="talent != null" class="caption" color="blue" dark small>Talent found</v-chip>
+          </v-card-text>
+              
+        </v-card>
+      </v-flex>
+      
+      <v-flex x12 md6 lg6>
+        <v-card
+          class="mx-auto"
+          max-width="400"
+          outlined
+          v-show="talent != null"
+          style="margin-top:15px;"
+        >
+          <v-list-item three-line>
+            <template v-if="!async">
+              <template v-if="talent != null">
+                <v-list-item-content>
+                  <div class="overline mb-4">{{talent.name}}</div>
+                  <v-list-item-title class="headline mb-1">{{talent.email}}</v-list-item-title>
+                  <v-list-item-subtitle><v-icon left>cake</v-icon> {{talent.birthdate}}</v-list-item-subtitle>
+                  <v-list-item-subtitle><v-icon left>wc</v-icon> {{talent.gender.displayName}}</v-list-item-subtitle>
+                  <v-list-item-subtitle><v-icon left>location_city</v-icon> {{talent.cityOfOrigin}}</v-list-item-subtitle>
+                  <v-list-item-subtitle><v-icon left>my_location</v-icon> {{talent.region.name}}</v-list-item-subtitle>
+                </v-list-item-content>
+
+                
+
+                <v-list-item-avatar>
+                  <v-icon x-large>person</v-icon>
+                </v-list-item-avatar>
+              </template>
+            </template>
+          </v-list-item>
+
+          <v-card-actions>
+            <v-form v-model="valid" ref="form" v-if="talent !== null">
+                  <v-layout>
+                    <!-- <v-flex xs12 md4>
+                      <v-text-field
+                        v-model="position"
+                        :rules="nameRules"
+                        :counter="10"
+                        label="Position"
+                        required
+                      ></v-text-field>
+                    </v-flex>-->
+                    <!-- Hustler / Hacker / Hispter -->
+                    <v-flex xs12>
+                      <v-combobox
+                        class="ml-3 mb-3"
+                        required
+                        :rules="nameRules"
+                        v-model="position"
+                        :items="item"
+                        chips
+                        :label="$vuetify.lang.t('$vuetify.team.position')"
+                      ></v-combobox>
+                    </v-flex>
+                  </v-layout>
+                </v-form><br>
+            
+          </v-card-actions>
+          <v-btn
               @click="validate"
-              :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+              :class=" { 'primary white--text' : valid}"
+              :disabled="!valid"
+              class="ma-5"
+              max-width="350"
             >
               <v-icon left>how_to_reg</v-icon>Invite to Team
             </v-btn>
-          </v-card-actions>
+
         </v-card>
+        
       </v-flex>
     </v-layout>
   </v-container>
@@ -187,3 +214,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.taitel {
+  padding: 14px;
+  width: 90%;
+  margin: 0 auto;
+  bottom: 27px;
+  z-index: 2;
+}
+</style>

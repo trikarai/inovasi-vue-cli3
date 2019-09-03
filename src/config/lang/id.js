@@ -89,7 +89,7 @@ var _default = {
   team: {
     team: "Tim",
     teamInformation: "Informasi Tim",
-    position: "Posisi Anda dalam Tim",
+    position: "Posisi dalam Tim",
     teamName: "Nama Tim",
     vision: "Visi",
     mission: "Misi",
@@ -98,7 +98,9 @@ var _default = {
     resign: "Mengundurkan diri",
     quit: "Keluar",
     programParticipation: "Partisipasi Program",
-    writeHere: "tulis disini..."
+    writeHere: "tulis disini...",
+    listMember: "Daftar Anggota",
+    addMember: "Tambah Anggota"
   },
   program:{
     program: "Program",

@@ -2,25 +2,142 @@
   <transition name="slide" mode="out-in">
     <div>
       <v-container>
-        {{params}}
         <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
         <loader-dialog v-model="loader"></loader-dialog>
 
-        <v-layout align-start justify-start fill-height>
+        <v-layout row>
           <v-flex md6>
-            <v-card>
-              <v-card-title>{{params.team.name}}</v-card-title>
-              <v-card-text>
-                {{params.position}}
-                <v-divider />
-                {{params.status.displayName}}
-              </v-card-text>
+            <v-card class="pb-5" elevation="3" style="margin:15px 15px 15px 10px">
+              <v-card class="taitel primary white--text elevation-5">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title
+                    class="font-weight-light white--text body-2"
+                  >{{ $vuetify.lang.t('$vuetify.team.teamName') }} <v-chip small color="omikti" dark>{{params.status.displayName}}</v-chip></v-list-item-title>
+
+                  <v-list-item-subtitle>
+                    <h4 class="headline mb-0 white--text">{{params.team.name}}</h4>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <div>
+                    <v-btn small fab @click="" class="ml-2 mt-1">
+                      <v-icon>edit</v-icon>
+                    </v-btn>
+                  </div>
+                </v-list-item-action>
+              </v-list-item>
             </v-card>
+
+            <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
+              <v-list-item-content>
+                <v-list-item-title>Vision</v-list-item-title>
+                <span class="grey--text font-weight-light">{{params.team.vision}}</span>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
+              <v-list-item-content>
+                <v-list-item-title>Mission</v-list-item-title>
+                <span class="grey--text font-weight-light">{{params.team.mission}}</span>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
+              <v-list-item-content>
+                <v-list-item-title>Culture</v-list-item-title>
+                <span class="grey--text font-weight-light">{{params.team.culture}}</span>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
+              <v-list-item-content>
+                <v-list-item-title>Founder Agreement</v-list-item-title>
+                <span class="grey--text font-weight-light">{{params.team.founderAgreement}}</span>
+              </v-list-item-content>
+            </v-list-item>
+
+            </v-card>
+          </v-flex>
+
+          <v-flex md6>
+            <!-- {{memberlist.list}} -->
+            <v-card class="taitel3 primary white--text elevation-5">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title
+                    class="font-weight-light white--text title"
+                  >{{ $vuetify.lang.t('$vuetify.team.listMember') }} </v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <div>
+                    <v-btn small fab class="ml-2 mt-1" @click="openSearch()">
+                      <v-icon>person_add</v-icon>
+                    </v-btn>
+                  </div>
+                </v-list-item-action>
+              </v-list-item>
+            </v-card>
+            <v-data-table
+              :loading="loader"
+              :headers="headers"
+              :items="memberlist.list"
+              class="elevation-3 pdngats"
+              style="margin:0px 15px 15px 10px;position: relative;bottom: 96px;"
+            >
+              <template v-slot:item.status="{ item }">
+                <v-chip :color="colorStatus(item.status.value)" text-color="white">
+                  <v-avatar left>
+                    <v-icon>{{iconStatus(item.status.value)}}</v-icon>
+                  </v-avatar>
+                  {{ item.status.displayName }}
+                </v-chip>
+              </template>
+              <template v-slot:item.action="{item}">
+                <v-btn
+                  small
+                  dark
+                  color="warning"
+                  @click="cancelAct(item.id)"
+                  v-if="item.status.value == 'inv'"
+                >
+                  <v-icon left small>cancel</v-icon>Cancel
+                </v-btn>
+                <v-btn
+                  small
+                  dark
+                  color="red"
+                  class="mt-2 mb-2"
+                  @click="removeAct(item.id)"
+                  v-if="item.status.value == 'act'"
+                >
+                  <v-icon left small>block</v-icon>Remove
+                </v-btn>
+                <v-expand-transition>              
+                  <div v-if="item.id == selectRemove">
+                    <div class="mt-1">
+                      <v-icon left>warning</v-icon> Are You Sure ?!
+                    </div>
+                    <v-btn small dark class="ma-2" color="red" @click="removeTalent(item.id)">Yes</v-btn>
+                    <v-btn small text @click="selectRemove = null">No</v-btn>
+                  </div>
+                </v-expand-transition>
+                <v-expand-transition>
+                  <div v-if="item.id == selectCancel">
+                    <div class="mt-1">
+                      <v-icon left>warning</v-icon> Are You Sure ?!
+                    </div>
+                    <v-btn small dark class="ma-2" color="warning" @click="cancelTalent(item.id)">Yes</v-btn>
+                    <v-btn small text @click="selectCancel = null">No</v-btn>
+                  </div>
+                </v-expand-transition>
+              </template>
+            </v-data-table>
           </v-flex>
         </v-layout>
 
-        <v-layout align-start justify-start fill-height>
+        <!-- <v-layout align-start justify-start fill-height>
           <v-flex md6>
             <v-btn @click="openSearch()" class="mt-3">
               <v-icon>add</v-icon>Add Members
@@ -73,7 +190,7 @@
               </template>
             </v-data-table>
           </v-flex>
-        </v-layout>
+        </v-layout> -->
       </v-container>
     </div>
   </transition>
@@ -288,5 +405,28 @@ export default {
 .slide-fade-leave-to {
   transform: translateX(10px);
   opacity: 0;
+}
+.taitel {
+  padding: 14px;
+  width: 90%;
+  margin: 0 auto;
+  bottom: 27px;
+  z-index: 2;
+}
+.taitel3 {
+  padding: 14px;
+  width: 89%;
+  margin: 0 auto;
+  bottom: 27px;
+  z-index: 2;
+  margin-top: 16px;
+  margin-left: 5%
+}
+
+</style>
+
+<style>
+.pdngats .v-data-table__wrapper {
+  padding-top: 72px !important;
 }
 </style>

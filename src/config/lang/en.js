@@ -88,7 +88,7 @@ var _default = {
   team: {
     team: "Team",
     teamInformation: "Team Information",
-    position: "Your Position in Team",
+    position: "Position in Team",
     teamName: "Team Name",
     vision: "Vision",
     mission: "Mission",
@@ -97,7 +97,9 @@ var _default = {
     resign: "Resign",
     quit: "Quit",
     programParticipation: "Program Participation",
-    writeHere: "write here..."
+    writeHere: "write here...",
+    listMember: "List Member",
+    addMember: "Add Member"
   },
   program:{
     program: "Program",
