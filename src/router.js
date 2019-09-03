@@ -366,7 +366,7 @@ const routes = [
         name: "Experiment Data",
         component: ExperimentDataList,
         meta: {
-          level: 8,
+          level: 7,
           text: "Experiment List"
         }
       },
@@ -375,7 +375,7 @@ const routes = [
         name: "Experiment Detail",
         component: ExperimentDetail,
         meta: {
-          level: 9,
+          level: 8,
           text: "Experiment Detail"
         }
       },
