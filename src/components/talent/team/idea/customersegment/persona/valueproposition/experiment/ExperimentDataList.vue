@@ -13,11 +13,14 @@
     <v-btn @click="openExperimentForm" color="primary" class="mb-3">
       <v-icon left>add</v-icon>Add
     </v-btn>
-      <!-- {{experiments.list}} -->
+    <!-- {{experiments.list}} -->
     <v-layout>
       <v-flex>
         <v-data-table :headers="headers" :items="experiments.list" class="elevation-1">
           <template v-slot:item.action="{item}">
+            <v-btn @click="openEdit(item)" color="primary" small fab>
+              <v-icon>edit</v-icon>
+            </v-btn>
             <v-btn @click="gotoExp(item.id)" color="primary" small fab>
               <v-icon>pageview</v-icon>
             </v-btn>
@@ -26,7 +29,7 @@
       </v-flex>
     </v-layout>
 
-    <experiment-form v-if="dialogForm" @close="dialogForm = false" @refresh="refresh"></experiment-form>
+    <experiment-form v-if="dialogForm" :data="singleData" :edit="edit" @close="dialogForm = false" @refresh="refresh"></experiment-form>
   </v-container>
 </template>
 
@@ -71,7 +74,8 @@ export default {
       selectedIndex: null,
       experiments: { total: 0, list: [] },
       active: null,
-      dialogForm: false
+      dialogForm: false,
+      singleData: ""
     };
   },
   mounted: function() {
@@ -79,6 +83,13 @@ export default {
   },
   methods: {
     openExperimentForm: function() {
+      this.singleData = "";
+      this.dialogForm = true;
+      this.edit = false;
+    },
+    openEdit: function(data) {
+      this.singleData = data;
+      this.edit = true;
       this.dialogForm = true;
     },
     gotoExp: function(id) {
@@ -124,7 +135,6 @@ export default {
           }
         })
         .catch(error => {
-          
           notif.showError(this, error);
         })
         .finally(() => {

@@ -3,59 +3,64 @@
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
+          <loader-dialog v-model="loader" />
           <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-          <v-card elevation="0" width="550" style="top:50px">
+
+          <v-card elevation="0" width="550" style="top:50px" :loading="loader">
             <v-card-text class="pt-4">
               <div>
                 <v-form v-model="valid" ref="form">
-                  
                   <v-flex xs12>
-                      <v-menu
-                        v-model="menu2"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        transition="scale-transition"
-                        offset-y
-                        full-width
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            v-model="params.date"
-                            label="Date"
-                            prepend-icon="today"
-                            readonly
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          :locale="$vuetify.lang.current"
+                    <v-menu
+                      v-model="menu2"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
                           v-model="params.date"
-                          @input="menu2 = false"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-flex>
+                          label="Date"
+                          prepend-icon="today"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        :locale="$vuetify.lang.current"
+                        v-model="params.date"
+                        @input="menu2 = false"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-flex>
 
-
-                  <div>
+                  <div v-if="!edit">
                     <template v-for="(field, index) in formTemplate.fields">
                       <field-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></field-modul>
                     </template>
                   </div>
+                  <!--start render edit exp-->
+                  <div v-if="edit">
+                    <template v-for="(field, index) in experimentData.fields">
+                      <fieldedit-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></fieldedit-modul>
+                    </template>
+                  </div>
+                  <!--end ender edit exp-->
+
                   <v-layout justify-space-between>
                     <v-btn
+                      v-if="!edit"
                       @click.prevent="submit"
                       :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                     >{{ $vuetify.lang.t('$vuetify.action.add')}}</v-btn>
-
-                    <v-dialog v-model="loader" hide-overlay persistent width="300">
-                      <v-card color="primary" dark>
-                        <v-card-text>
-                          {{ $vuetify.lang.t('$vuetify.info.standby')}}
-                          <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-                        </v-card-text>
-                      </v-card>
-                    </v-dialog>
+                    <v-btn
+                      v-if="edit"
+                      @click.prevent="submit"
+                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                    >{{ $vuetify.lang.t('$vuetify.action.update')}}</v-btn>
                   </v-layout>
                 </v-form>
               </div>
@@ -73,6 +78,7 @@ import notif from "@/config/alerthandling";
 import notification from "@/components/Notification";
 
 import FieldModul from "@/components/field/field";
+import FieldCanEditModul from "@/components/field/fieldCanEdit";
 
 export default {
   props: ["id", "edit", "view", "data"],
@@ -101,12 +107,14 @@ export default {
         date: "",
         fieldEntries: []
       },
-      formTemplate: "form template"
+      formTemplate: "form template",
+      experimentData: ""
     };
   },
   components: {
     "notification-alert": notification,
-    "field-modul": FieldModul
+    "field-modul": FieldModul,
+    "fieldedit-modul": FieldCanEditModul
   },
   created: function() {
     bus.$on("getValue", (params, index) => {
@@ -117,7 +125,13 @@ export default {
     personaForm: "getForm"
   },
   mounted: function() {
-    this.getForm();
+    if (this.edit) {
+      this.getSingleData();
+      this.params.formId = this.data.form.id;
+      this.params.date = this.data.date;
+    } else {
+      this.getForm();
+    }
   },
   methods: {
     getForm: function() {
@@ -134,10 +148,9 @@ export default {
           }
         })
         .catch(function(error) {
-          
           notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
@@ -159,57 +172,11 @@ export default {
         });
       }
     },
-    update: function() {
-      if (this.$refs.form.validate()) {
-        // this.updateData();
-      } else {
-        this.$vuetify.goTo(this.$refs.notif, {
-          duration: 500,
-          offset: 0,
-          easing: "linear"
-        });
-      }
-    },
     getSingleData: function() {
+      this.loader = true;
+      notif.reset(this);
       net
         .getData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.data.id
-        )
-        .then(
-          res => {
-            
-            this.params = res.data.data;
-          },
-          error => {
-            
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch()
-        .finally(()=> {
-          this.loader = false;
-        });
-    },
-    addData: function() {
-      this.loader = true;
-      this.status.error = false;
-      net
-        .postData(
           this,
           "/talent/as-team-member/" +
             this.$route.params.teamId +
@@ -219,69 +186,80 @@ export default {
             this.$route.params.customersegmentId +
             "/personas/" +
             this.$route.params.personaId +
-            "/value-propositions/" + 
+            "/value-propositions/" +
             this.$route.params.valuepropositionId +
-            "/experiments",
-          this.params
+            "/experiments/" +
+            this.data.id
         )
         .then(res => {
-          
-          this.$emit("refresh");
+          this.experimentData = res.data.data;
         })
         .catch(error => {
-          
-          // notif.showError(this, error);
-          this.error = error.body;
+          notif.showError(this, error);
         })
-        .finally(()=> {
+        .finally(() => {
           this.loader = false;
         });
     },
-    updateData: function() {
-      var app = this;
+    addData: function() {
       this.loader = true;
-      this.status.error = false;
-      net
-        .putData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.data.id,
-          this.params
-        )
-        .then(
-          res => {
-            
+      notif.reset(this);
+      if (this.edit) {
+        net
+          .putData(
+            this,
+            "/talent/as-team-member/" +
+              this.$route.params.teamId +
+              "/ideas/" +
+              this.$route.params.ideaId +
+              "/customer-segments/" +
+              this.$route.params.customersegmentId +
+              "/personas/" +
+              this.$route.params.personaId +
+              "/value-propositions/" +
+              this.$route.params.valuepropositionId +
+              "/experiments/" +
+              this.data.id,
+            this.params
+          )
+          .then(res => {
             this.$emit("refresh");
-          },
-          error => {
-            
-            if (error.status === 500) {
-              this.err_msg = {
-                code: error.status,
-                type: error.statusText,
-                details: [error.statusText]
-              };
-            } else {
-              this.err_msg = error.body.meta;
-            }
-            this.status.error = true;
-          }
-        )
-        .catch(function(error) {
-          app.err_msg = {
-            code: error.status,
-            type: error.statusText,
-            details: [error.statusText]
-          };
-          app.status.error = true;
-        })
-        .finally(()=> {
-          this.loader = false;
-        });
+          })
+          .catch(error => {
+            notif.showError(this, error);
+            this.error = error.body;
+          })
+          .finally(() => {
+            this.loader = false;
+          });
+      } else {
+        net
+          .postData(
+            this,
+            "/talent/as-team-member/" +
+              this.$route.params.teamId +
+              "/ideas/" +
+              this.$route.params.ideaId +
+              "/customer-segments/" +
+              this.$route.params.customersegmentId +
+              "/personas/" +
+              this.$route.params.personaId +
+              "/value-propositions/" +
+              this.$route.params.valuepropositionId +
+              "/experiments",
+            this.params
+          )
+          .then(res => {
+            this.$emit("refresh");
+          })
+          .catch(error => {
+            notif.showError(this, error);
+            this.error = error.body;
+          })
+          .finally(() => {
+            this.loader = false;
+          });
+      }
     }
   }
 };
