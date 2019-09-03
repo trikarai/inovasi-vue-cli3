@@ -16,8 +16,6 @@
             <v-icon left>edit</v-icon>edit
           </span>
         </v-btn>
-        
-        
 
         <v-fade-transition>
           <template v-if="!isEdit">
@@ -48,16 +46,20 @@
             <v-flex>
               <v-icon>warning</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
+              <br />
               <v-btn small dark class="ma-2" color="red" @click="deleteCanvas">Yes</v-btn>
               <v-btn text small class="ma-2 ml-0" @click="selectedDel = !selectedDel">Cancel</v-btn>
             </v-flex>
           </v-layout>
         </v-expand-transition>
 
-        <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
-          <v-icon>share</v-icon>
-        </v-btn>
-
+        <v-scale-transition>
+          <template v-if="!selectedDel">
+            <v-btn v-if="!isEdit" small fab class="ml-4" @click="openCollaborator()">
+              <v-icon>share</v-icon>
+            </v-btn>
+          </template>
+        </v-scale-transition>
       </v-flex>
     </v-container>
     <v-form v-model="valid" ref="form2">
@@ -123,7 +125,10 @@
     </v-form>
     <v-container>
       <v-layout>
-        <v-flex>
+        <v-flex md6>
+          <!-- Feedback Placeholder -->
+        </v-flex>
+        <v-flex md6>
           <!-- start collaborator module-->
           <base-collaboration
             v-if="collaborators.total != 0"
