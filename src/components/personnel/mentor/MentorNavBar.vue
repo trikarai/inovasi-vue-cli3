@@ -2,32 +2,19 @@
   <nav>
     <v-app-bar text app color="primary">
       <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <!-- <v-toolbar fixed app :clipped-left="clipped" dark color="primary">
-        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-btn icon @click.stop="miniVariant = !miniVariant">
-          <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-        </v-btn>
-      </v-toolbar>-->
-      <!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>-->
       <v-toolbar-title class="text-uppercase white--text">
         <span class="font-weight-light">START</span>
         <span class>Mikti</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <!-- <v-btn text @click="logout" v-if="checkLogin">
-        <span>{{ $vuetify.lang.t('$vuetify.action.signout') }}</span>
-        <v-icon right>exit_to_app</v-icon>
-      </v-btn>-->
       <v-btn text @click="rightDrawer =! rightDrawer">
         <v-icon>settings</v-icon>
       </v-btn>
     </v-app-bar>
 
-    <!-- <div>
-      <v-breadcrumbs :items="items" divider=">"></v-breadcrumbs>
-    </div>-->
+    <div>
+      <v-breadcrumbs :items="items" divider=">" style="visibility:hidden"></v-breadcrumbs>
+    </div>
 
     <v-navigation-drawer app v-model="drawer" :mini-variant.sync="miniVariant">
       <!-- list head-->
@@ -52,7 +39,7 @@
         </v-list-item>
       </v-list>
       <!-- link router -->
-      <v-list>
+      <v-list :disabled="isValidMenu">
         <!--dashboar-->
         <v-list-item router to="/mentor/dashboard">
           <v-list-item-action>
@@ -85,6 +72,26 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title class="grey--text">{{link.text}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-spacer></v-spacer>
+      <v-divider></v-divider>
+      <v-list dense class="py-0">
+        <v-list-item @click="gotoTalentMenu()">
+          <v-list-item-action>
+            <v-icon color="#676767">pages</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">Talent Menu</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="checkProgramCoordinatoship" @click="gotoCoordinatorMenu()">
+          <v-list-item-action>
+            <v-icon color="#676767">pages</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">Coordinator Menu</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -121,24 +128,6 @@
             <v-switch color="black" @change="switchTheme"></v-switch>
           </v-list-item-action>
         </v-list-item>
-        <v-list-item>
-          <v-list-item-avatar>
-            <v-icon>pages</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>Talent Menu</v-list-item-content>
-          <v-list-item-action>
-            <v-btn router to="/talent/dashboard" small text color="blue"><v-icon small>forward</v-icon></v-btn>
-          </v-list-item-action>
-        </v-list-item>
-        <v-list-item v-if="checkProgramCoordinatoship">
-          <v-list-item-avatar>
-            <v-icon>pages</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>Coordinator Menu</v-list-item-content>
-          <v-list-item-action>
-            <v-btn router to="/coordinator/dashboard" small text color="blue"><v-icon small>forward</v-icon></v-btn>
-          </v-list-item-action>
-        </v-list-item>
       </v-list>
     </v-navigation-drawer>
   </nav>
@@ -151,16 +140,17 @@ export default {
     return {
       drawer: true,
       rightDrawer: false,
-      miniVariant: true,
-      clipped: true,
+      miniVariant: false,
+      clipped: false,
       fixed: false,
+      isValidMenu: false,
       user: "",
       linkProfile: [
         {
           icon: "perm_identity",
           text: "My Profile",
           route: "/mentor/profile"
-          }
+        }
       ],
       links: [
         {
@@ -198,31 +188,44 @@ export default {
   },
   created: function() {
     this.user = JSON.parse(auth.getAuthData());
+    if (localStorage.getItem("dashboard") != "mentor") {
+      this.isValidMenu = true;
+      this.$router.push({ path: "/talent/dashboard" });
+    }
   },
   computed: {
     checkLogin() {
       return this.$store.state.isLoggedIn;
+    },
+    checkProgramCoordinatoship() {
+      var check;
+      if (this.user.data.programmeCoordinatorships.length !== 0) {
+        check = true;
+      } else {
+        check = false;
+      }
+      return check;
     }
   },
   methods: {
     logout: function() {
       var app = this;
-      localStorage.removeItem("lbUser");
+      // localStorage.removeItem("lbUser");
+      localStorage.clear();
       app.$router.replace({ path: "/login" });
       app.$store.state.isLoggedIn = false;
     },
-    switchTheme: function(){
+    switchTheme: function() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
-    checkProgramCoordinatoship() {
-      var check;
-      if(this.user.data.programmeCoordinatorships){
-        check = true;
-      }else{
-        check = false;
-      }
-      return check;
+    gotoTalentMenu: function() {
+      localStorage.removeItem("dashboard");
+      this.$router.push({ path: "/talent/dashboard" });
     },
+    gotoCoordinatorMenu: function() {
+      localStorage.setItem("dashboard", "coordinator");
+      this.$router.push({ path: "/coordinator/dashboard" });
+    }
   }
 };
 </script>
