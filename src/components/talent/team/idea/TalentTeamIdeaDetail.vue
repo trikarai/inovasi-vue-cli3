@@ -28,7 +28,7 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
 
-                <v-list-item-action>
+                <v-list-item-action v-if="checkDashboard">
                   <div>
                     <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
                       <v-icon>share</v-icon>
@@ -40,7 +40,6 @@
                   <div class="grsduasec d-none d-md-flex d-lg-flex"></div>
                 </v-list-item-action>
               </v-list-item>
-              
             </v-card>
             <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
               <v-list-item-content>
@@ -62,7 +61,8 @@
           </v-card>
         </v-flex>
 
-        <v-flex xs12 md6>
+        <v-flex xs12 md6 v-if="checkDashboard">
+          <!-- <v-flex xs12 md6> -->
           <v-card class="pb-5" elevation="3" style="margin:10px" min-height="270">
             <v-card class="taitelcs primary white--text elevation-5">
               <v-list-item>
@@ -118,68 +118,27 @@
                 </v-list-item-action>
               </v-list-item>
             </v-list>
-
-            <template v-if="data.total===0">
-              <p
-                class="text-center"
-                style="margin-top:30px;"
-              >{{ $vuetify.lang.t('$vuetify.noDataText') }}</p>
+            <template v-if="!mentorErrorCS">
+              <template v-if="data.total===0">
+                <p
+                  class="text-center"
+                  style="margin-top:30px;"
+                >{{ $vuetify.lang.t('$vuetify.noDataText') }}</p>
+              </template>
+            </template>
+            <template v-else>
+              <v-alert
+                class="ma-3"
+                outlined
+                type="warning"
+                prominent
+                border="left"
+              >{{err_msg.details[0]}}</v-alert>
             </template>
           </v-card>
         </v-flex>
       </v-layout>
-      <v-layout>
-        <!--start collaboration form dialog-->
-        <!-- <v-dialog content-class="operplow" v-model="collaboratorDialog" width="500">
-          <v-card :loading="collaboratorLoader" style="padding:0px 30px 30px 30px;">
-            <v-card class="taitel2 primary white--text elevation-5">
-              <h3
-                class="headline mb-0 font-weight-light white--text"
-              >{{ $vuetify.lang.t('$vuetify.collaboration.share') }} {{ $vuetify.lang.t('$vuetify.idea.idea') }}</h3>
-            </v-card>
-            <v-card-text>
-              <v-container>
-                <v-form ref="form" v-model="valid">
-                  <v-flex>
-                    <v-select
-                      v-model="collaboratorParams.programmeId"
-                      :items="program.list"
-                      item-text="programme.name"
-                      item-value="programme.id"
-                      :rules="rules"
-                      :label="$vuetify.lang.t('$vuetify.team.programParticipation')"
-                    ></v-select>
-                  </v-flex>
-                  <v-flex>
-                    <v-autocomplete
-                      :loading="mentorLoader"
-                      :disabled="mentorDisable"
-                      v-model="collaboratorParams.mentorId"
-                      :items="mentor.list"
-                      item-text="talent.name"
-                      item-value="id"
-                      :rules="rules"
-                      label="Mentor"
-                    ></v-autocomplete>
-                  </v-flex>
-                  <v-layout justify-space-between>
-                    <v-btn
-                      @click="setUp"
-                      block
-                      :class=" { 'primary white--text' : valid}"
-                      :disabled="!valid"
-                      color="primary"
-                    >
-                      <v-icon left small>share</v-icon>Share
-                    </v-btn>
-                  </v-layout>
-                </v-form>
-              </v-container>
-            </v-card-text>
-          </v-card>
-        </v-dialog>-->
-        <!--end coolaboration form dialog-->
-      </v-layout>
+      <v-layout></v-layout>
     </v-container>
     <v-container>
       <span v-html="error.body" v-if="status.error"></span>
@@ -206,6 +165,9 @@
 <script>
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
+
+import { dashboardMixins } from "@/mixins/dashboardMixins";
+
 import Notification from "@/components/Notification";
 import CustomerSegmentForm from "./customersegment/CustomerSegmentForm";
 import IdeaForm from "./IdeaForm";
@@ -214,6 +176,7 @@ import BaseCollaboration from "@/components/talent/team/components/BaseCollabora
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
+  mixins: [dashboardMixins],
   components: {
     IdeaForm,
     CustomerSegmentForm,
@@ -261,27 +224,41 @@ export default {
       },
       singleData: { id: "", name: "" },
       collaborators: { total: 0, list: [] },
-      collaboratorForm: false
+      collaboratorForm: false,
+      mentorErrorCS: false
     };
   },
   watch: {},
+  computed: {},
   mounted: function() {
     this.getParentData();
-    this.getDataList();
-    this.loadCollaborator();
+    if (this.checkDashboard) {
+      this.getDataList();
+      this.loadCollaborator();
+    }
   },
   methods: {
     getParentData: function() {
       this.loader = true;
       notif.reset(this);
-      net
-        .getData(
-          this,
+      var parent_uri = "";
+      if (localStorage.getItem("dashboard") == "talent") {
+        parent_uri =
           "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId
-        )
+          this.$route.params.teamId +
+          "/ideas/" +
+          this.$route.params.ideaId;
+      } else if (localStorage.getItem("dashboard") == "mentor") {
+        parent_uri =
+          "/talent/as-programme-mentor/" +
+          this.$route.params.programId +
+          "/teams/" +
+          this.$route.params.teamId +
+          "/ideas/" +
+          this.$route.params.ideaId;
+      }
+      net
+        .getData(this, parent_uri)
         .then(res => {
           this.parentData = res.data.data;
         })
@@ -312,6 +289,9 @@ export default {
         })
         .catch(error => {
           notif.showError(this, error);
+          if (localStorage.getItem("dashboard") == "mentor") {
+            this.mentorErrorCS = true;
+          }
         })
         .finally(() => {
           this.loader = false;
@@ -472,41 +452,40 @@ export default {
   max-height: 60px !important;
 }
 .grsduasec {
-    background: #00667f;
-    width: 99px;
-    height: 11px;
-    position: relative;
-    left: 106px;
-    bottom: 23px;
+  background: #00667f;
+  width: 99px;
+  height: 11px;
+  position: relative;
+  left: 106px;
+  bottom: 23px;
 }
 .right-arrow {
-	border-color: transparent #024e61;
-	border-style: solid;
-	border-width: 20px 0px 20px 25px;
-	height: 0px;
-	width: 0px;
+  border-color: transparent #024e61;
+  border-style: solid;
+  border-width: 20px 0px 20px 25px;
+  height: 0px;
+  width: 0px;
   position: relative;
   right: 42px;
 }
 .grsduasec {
-    background: #00667f;
-    width: 99px;
-    height: 11px;
-    position: relative;
-    left: 106px;
-    bottom: 22px;
+  background: #00667f;
+  width: 99px;
+  height: 11px;
+  position: relative;
+  left: 106px;
+  bottom: 22px;
 }
 .right-arrow {
-	border-color: transparent #fb7307;
-	border-style: solid;
-	border-width: 20px 0px 20px 25px;
-	height: 0px;
-	width: 0px;
+  border-color: transparent #fb7307;
+  border-style: solid;
+  border-width: 20px 0px 20px 25px;
+  height: 0px;
+  width: 0px;
   position: relative;
   right: 42px;
 }
 </style>
 
 <style>
-
 </style>
