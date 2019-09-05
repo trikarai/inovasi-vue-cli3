@@ -20,7 +20,7 @@
                     <h4 class="headline mb-0 white--text">{{parentData.description}}</h4>
                   </v-list-item-subtitle>
                 </v-list-item-content>
-                <v-list-item-action>
+                <v-list-item-action v-if="checkDashboard">
                   <div>
                     <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
                       <v-icon>share</v-icon>
@@ -33,7 +33,7 @@
               </v-list-item>
             </v-card>
 
-            <v-card-text class="text-center">
+            <v-card-text class="text-center" v-if="checkDashboard">
               <v-layout row wrap>
                 <v-flex>
                   <v-chip class @click="gotoCompetitor()">
@@ -106,84 +106,83 @@
             <!-- end collaborator module-->
           </v-card>
         </v-flex>
-          <v-flex xs12 md3>
-            <v-card
-              max-width
-              class="pb-5"
-              elevation="3"
-              style="margin:10px 5px 5px 5px"
-              min-height="270"
-              v-if="viewAnalysis"
-            >
-              <v-card class="taitelcs primary white--text elevation-5">
-                <v-list-item>
-                  <v-list-item-content>
-                    <h3
-                      class="headline mb-0 font-weight-light white--text"
-                    >{{ $vuetify.lang.t('$vuetify.idea.analysis') }}</h3>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-card>
-
-              <div class="text-center" v-if="loaderCan">
-                <v-progress-circular size="50" color="omikti" indeterminate></v-progress-circular>
-              </div>
-              <v-card-text>
-                <v-list>
-                  <v-list-item v-for="(item, i) in canvas.list" :key="i">
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        {{item.name}}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                    <v-list-item-icon>
-                      <v-btn small @click="gotoCanvas(item.id)" color="primary"><v-icon>search</v-icon></v-btn>
-                    </v-list-item-icon>
-                  </v-list-item>
-                </v-list>
-              </v-card-text>
+        <v-flex xs12 md3>
+          <v-card
+            max-width
+            class="pb-5"
+            elevation="3"
+            style="margin:10px 5px 5px 5px"
+            min-height="270"
+            v-if="viewAnalysis"
+          >
+            <v-card class="taitelcs primary white--text elevation-5">
+              <v-list-item>
+                <v-list-item-content>
+                  <h3
+                    class="headline mb-0 font-weight-light white--text"
+                  >{{ $vuetify.lang.t('$vuetify.idea.analysis') }}</h3>
+                </v-list-item-content>
+              </v-list-item>
             </v-card>
-          </v-flex>
-          <v-flex xs12 md3 v-if="viewAnalysis">
-            <v-card
-              max-width
-              class="pb-5"
-              elevation="3"
-              style="margin:10px 5px 5px 5px"
-              min-height="270"
-              v-if="viewExp2"
-            >
-              <v-card class="taitelcs primary white--text elevation-5">
-                <v-list-item>
+
+            <div class="text-center" v-if="loaderCan">
+              <v-progress-circular size="50" color="omikti" indeterminate></v-progress-circular>
+            </div>
+            <v-card-text>
+              <v-list>
+                <v-list-item v-for="(item, i) in canvas.list" :key="i">
                   <v-list-item-content>
-                    <h3
-                      class="headline mb-0 font-weight-light white--text"
-                    >{{ $vuetify.lang.t('$vuetify.idea.experiment') }}</h3>
+                    <v-list-item-title>{{item.name}}</v-list-item-title>
                   </v-list-item-content>
+                  <v-list-item-icon>
+                    <v-btn small @click="gotoCanvas(item.id)" color="primary">
+                      <v-icon>search</v-icon>
+                    </v-btn>
+                  </v-list-item-icon>
                 </v-list-item>
-              </v-card>
-
-              <div class="text-center" v-if="loaderExp">
-                <v-progress-circular size="50" color="omikti" indeterminate></v-progress-circular>
-              </div>
-
-              <v-card-text>
-                <v-list>
-                  <v-list-item v-for="(item, i) in experiments.list" :key="i">
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        {{item.name}}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                    <v-list-item-icon>
-                      <v-btn small @click="gotoExp(item.id)" color="primary"><v-icon>search</v-icon></v-btn>
-                    </v-list-item-icon>
-                  </v-list-item>
-                </v-list>
-              </v-card-text>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 v-if="viewAnalysis">
+          <v-card
+            max-width
+            class="pb-5"
+            elevation="3"
+            style="margin:10px 5px 5px 5px"
+            min-height="270"
+            v-if="viewExp2"
+          >
+            <v-card class="taitelcs primary white--text elevation-5">
+              <v-list-item>
+                <v-list-item-content>
+                  <h3
+                    class="headline mb-0 font-weight-light white--text"
+                  >{{ $vuetify.lang.t('$vuetify.idea.experiment') }}</h3>
+                </v-list-item-content>
+              </v-list-item>
             </v-card>
-          </v-flex>
 
+            <div class="text-center" v-if="loaderExp">
+              <v-progress-circular size="50" color="omikti" indeterminate></v-progress-circular>
+            </div>
+
+            <v-card-text>
+              <v-list>
+                <v-list-item v-for="(item, i) in experiments.list" :key="i">
+                  <v-list-item-content>
+                    <v-list-item-title>{{item.name}}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-icon>
+                    <v-btn small @click="gotoExp(item.id)" color="primary">
+                      <v-icon>search</v-icon>
+                    </v-btn>
+                  </v-list-item-icon>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-flex>
       </v-layout>
 
       <ValuePropositionForm
@@ -207,10 +206,13 @@ import Notification from "@/components/Notification";
 
 import ValuePropositionForm from "./ValuePropositionForm";
 
+import { dashboardMixins } from "@/mixins/dashboardMixins";
+
 import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
+  mixins: [dashboardMixins],
   components: {
     BaseCollaboration,
     FormCollaboration,
@@ -251,9 +253,11 @@ export default {
   },
   mounted: function() {
     this.getParentData();
-    this.getBusinessCanvas();
-    this.getExperiments();
-    this.loadCollaborator();
+    if (this.checkDashboard) {
+      this.getBusinessCanvas();
+      this.getExperiments();
+      this.loadCollaborator();
+    }
   },
   methods: {
     viewBtnAna: function() {
@@ -267,20 +271,36 @@ export default {
     getParentData: function() {
       this.loader = true;
       notif.reset(this);
-      net
-        .getData(
-          this,
+      var parent_uri = "";
+      if (localStorage.getItem("dashboard") == "talent") {
+        parent_uri =
           "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId
-        )
+          this.$route.params.teamId +
+          "/ideas/" +
+          this.$route.params.ideaId +
+          "/customer-segments/" +
+          this.$route.params.customersegmentId +
+          "/personas/" +
+          this.$route.params.personaId +
+          "/value-propositions/" +
+          this.$route.params.valuepropositionId;
+      } else if (localStorage.getItem("dashboard") == "mentor") {
+        parent_uri =
+          "/talent/as-programme-mentor/" +
+          this.$route.params.programId +
+          "/teams/" +
+          this.$route.params.teamId +
+          "/ideas/" +
+          this.$route.params.ideaId +
+          "/customer-segments/" +
+          this.$route.params.customersegmentId +
+          "/personas/" +
+          this.$route.params.personaId +
+          "/value-propositions/" +
+          this.$route.params.valuepropositionId;
+      }
+      net
+        .getData(this, parent_uri)
         .then(res => {
           this.parentData = res.data.data;
         })
