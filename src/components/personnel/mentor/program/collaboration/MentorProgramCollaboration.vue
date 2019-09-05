@@ -41,9 +41,12 @@
 
                 <template v-if="item.persona">
                   <v-card-title>Persona</v-card-title>
-                  <v-card-text>{{item.persona.name}}</v-card-text>
+                  <!-- <v-card-text>{{item.persona.name}}</v-card-text> -->
+                  <v-card-text>
+                    <v-treeview :items="personaTree(item)" />
+                  </v-card-text>
                   <v-card-actions>
-                    <v-btn small  @click="gotoPersona(item)">
+                    <v-btn small @click="gotoPersona(item)">
                       <v-icon>pageview</v-icon>
                     </v-btn>
                     <v-btn small color="primary" disabled>
@@ -55,12 +58,15 @@
 
                 <template v-if="item.valueProposition">
                   <v-card-title>Value Proposition</v-card-title>
-                  <v-card-text>{{item.valueProposition.description}}</v-card-text>
+                  <!-- <v-card-text>{{item.valueProposition.description}}</v-card-text> -->
+                  <v-card-text>
+                    <v-treeview :items="vpTree(item)" />
+                  </v-card-text>
                   <v-card-actions>
                     <v-btn small>
                       <v-icon>pageview</v-icon>
                     </v-btn>
-                    <v-btn small color="primary">
+                    <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.valueProposition.persona.customerSegment.idea.team.name}}
                     </v-btn>
@@ -120,7 +126,11 @@
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
+
+import { treeMixins } from "@/mixins/treeMixins.js";
+
 export default {
+  mixins: [treeMixins],
   components: {
     "notification-alert": Notification
   },
@@ -142,21 +152,6 @@ export default {
   },
   computed: {},
   methods: {
-    csTree: function(item) {
-      var data = [
-        {
-          id: item.customerSegment.id,
-          name: item.customerSegment.name,
-          children: [
-            {
-              id: item.customerSegment.idea.id,
-              name: item.customerSegment.idea.name
-            }
-          ]
-        }
-      ];
-      return data;
-    },
     getDataList: function() {
       this.loader = true;
       notif.reset(this);
