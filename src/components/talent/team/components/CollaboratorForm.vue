@@ -154,7 +154,6 @@ export default {
     },
     setUp: function() {
       if (this.$refs.form.validate()) {
-        this.valid = false;
         this.$emit("setUpCollaboration", this.collaboratorParams);
       }
     }
