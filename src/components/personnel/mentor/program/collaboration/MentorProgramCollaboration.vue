@@ -43,10 +43,10 @@
                   <v-card-title>Persona</v-card-title>
                   <v-card-text>{{item.persona.name}}</v-card-text>
                   <v-card-actions>
-                    <v-btn small>
+                    <v-btn small  @click="gotoPersona(item)">
                       <v-icon>pageview</v-icon>
                     </v-btn>
-                    <v-btn small color="primary">
+                    <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.persona.customerSegment.idea.team.name}}
                     </v-btn>
@@ -203,6 +203,21 @@ export default {
           item.customerSegment.idea.id +
           "/customersegment/" +
           item.customerSegment.id
+      });
+    },
+    gotoPersona: function(item) {
+      this.$router.push({
+        path:
+          "/mentor/program/" +
+          this.$route.params.programId +
+          "/team/" +
+          item.persona.customerSegment.idea.team.id +
+          "/idea/" +
+          item.persona.customerSegment.idea.id +
+          "/customersegment/" +
+          item.persona.customerSegment.id +
+          "/persona/" +
+          item.persona.id
       });
     }
   }

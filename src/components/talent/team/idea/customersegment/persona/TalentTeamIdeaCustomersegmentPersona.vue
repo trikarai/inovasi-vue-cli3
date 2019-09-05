@@ -20,7 +20,7 @@
                     <h4 class="headline mb-0 white--text">{{parentData.name}}</h4>
                   </v-list-item-subtitle>
                 </v-list-item-content>
-                <v-list-item-action>
+                <v-list-item-action v-if="checkDashboard">
                   <div>
                     <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
                       <v-icon>share</v-icon>
@@ -60,7 +60,7 @@
             <!-- end collaborator module-->
           </v-card>
         </v-flex>
-        <v-flex xs12 md6>
+        <v-flex xs12 md6 v-if="checkDashboard">
           <v-card class="pb-5" elevation="3" style="margin:10px" min-height="270">
             <v-card class="taitelcs primary white--text elevation-5">
               <v-list-item>
@@ -178,11 +178,14 @@ import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import ValuePropositionForm from "./valueproposition/ValuePropositionForm";
 
+import { dashboardMixins } from "@/mixins/dashboardMixins";
+
 import FieldCanEditModul from "@/components/field/fieldCanEdit";
 import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
+  mixins: [dashboardMixins],
   components: {
     ValuePropositionForm,
     BaseCollaboration,
@@ -235,8 +238,10 @@ export default {
   },
   mounted: function() {
     this.getParentData();
-    this.getDataList();
-    this.loadCollaborator();
+    if (this.checkDashboard) {
+      this.getDataList();
+      this.loadCollaborator();
+    }
   },
   created: function() {
     bus.$on("getValue", (params, index) => {
@@ -310,18 +315,32 @@ export default {
     getParentData: function() {
       this.loader = true;
       notif.reset(this);
-      net
-        .getData(
-          this,
+      var parent_uri = "";
+      if (localStorage.getItem("dashboard") == "talent") {
+        parent_uri =
           "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId
-        )
+          this.$route.params.teamId +
+          "/ideas/" +
+          this.$route.params.ideaId +
+          "/customer-segments/" +
+          this.$route.params.customersegmentId +
+          "/personas/" +
+          this.$route.params.personaId;
+      } else if (localStorage.getItem("dashboard") == "mentor") {
+        parent_uri =
+          "/talent/as-programme-mentor/" +
+          this.$route.params.programId +
+          "/teams/" +
+          this.$route.params.teamId +
+          "/ideas/" +
+          this.$route.params.ideaId +
+          "/customer-segments/" +
+          this.$route.params.customersegmentId +
+          "/personas/" +
+          this.$route.params.personaId;
+      }
+      net
+        .getData(this, parent_uri)
         .then(res => {
           this.parentData = res.data.data;
         })
@@ -602,19 +621,19 @@ export default {
   z-index: 2;
 }
 .grsduasec {
-    background: #00667f;
-    width: 99px;
-    height: 11px;
-    position: relative;
-    left: 106px;
-    bottom: 28px;
+  background: #00667f;
+  width: 99px;
+  height: 11px;
+  position: relative;
+  left: 106px;
+  bottom: 28px;
 }
 .right-arrow {
-	border-color: transparent #fb7307;
-	border-style: solid;
-	border-width: 20px 0px 20px 25px;
-	height: 0px;
-	width: 0px;
+  border-color: transparent #fb7307;
+  border-style: solid;
+  border-width: 20px 0px 20px 25px;
+  height: 0px;
+  width: 0px;
   position: relative;
   right: 42px;
 }

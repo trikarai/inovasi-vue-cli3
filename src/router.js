@@ -84,6 +84,7 @@ import MentorProgramCollaboration from "./components/personnel/mentor/program/co
 
 import MentorTeamIdeaDetail from "./components/talent/team/idea/TalentTeamIdeaDetail";
 import MentorTeamIdeaCustomersegment from "./components/talent/team/idea/customersegment/TalentTeamIdeaCustomersegment";
+import MentorTeamIdeaCustomersegmentPersona from "./components/talent/team/idea/customersegment/persona/TalentTeamIdeaCustomersegmentPersona";
 
 Vue.use(Router);
 
@@ -602,6 +603,11 @@ const routes = [
         path: "/mentor/program/:programId/team/:teamId/idea/:ideaId/customersegment/:customersegmentId",
         name: "Mentor Customer Segment",
         component: MentorTeamIdeaCustomersegment
+      },
+      {
+        path: "/mentor/program/:programId/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId",
+        name: "Mentor Persona",
+        component: MentorTeamIdeaCustomersegmentPersona
       },
     ]
   },
