@@ -32,6 +32,33 @@
                 </v-list-item-action>
               </v-list-item>
             </v-card>
+
+            <v-card-text class="text-center">
+              <v-layout row wrap>
+                <v-flex>
+                  <v-chip class @click="gotoCompetitor()">
+                    <v-icon left>supervised_user_circle</v-icon>
+                    {{ $vuetify.lang.t('$vuetify.idea.competitor') }}
+                  </v-chip>
+                </v-flex>
+                <v-flex>
+                  <v-chip @click="viewBtnAna()">
+                    <v-icon left>timeline</v-icon>
+                    {{ $vuetify.lang.t('$vuetify.idea.analysis') }}
+                  </v-chip>
+                </v-flex>
+                <v-flex v-if="viewExp">
+                  <v-divider color="orange"></v-divider>
+                </v-flex>
+                <v-flex v-if="viewExp">
+                  <v-chip @click="viewBtnExp()">
+                    <v-icon left>local_drink</v-icon>
+                    {{ $vuetify.lang.t('$vuetify.idea.experiment') }}
+                  </v-chip>
+                </v-flex>
+              </v-layout>
+            </v-card-text>
+
             <v-list>
               <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
@@ -79,14 +106,14 @@
             <!-- end collaborator module-->
           </v-card>
         </v-flex>
-        <v-layout row wrap>
-          <v-flex xs12 md6>
+          <v-flex xs12 md3>
             <v-card
-              max-width="280"
+              max-width
               class="pb-5"
               elevation="3"
               style="margin:10px 5px 5px 5px"
               min-height="270"
+              v-if="viewAnalysis"
             >
               <v-card class="taitelcs primary white--text elevation-5">
                 <v-list-item>
@@ -102,25 +129,29 @@
                 <v-progress-circular size="50" color="omikti" indeterminate></v-progress-circular>
               </div>
               <v-card-text>
-                <v-list rounded>
+                <v-list>
                   <v-list-item v-for="(item, i) in canvas.list" :key="i">
                     <v-list-item-content>
                       <v-list-item-title>
-                        <v-btn @click="gotoCanvas(item.id)" color="primary" block>{{item.name}}</v-btn>
+                        {{item.name}}
                       </v-list-item-title>
                     </v-list-item-content>
+                    <v-list-item-icon>
+                      <v-btn small @click="gotoCanvas(item.id)" color="primary"><v-icon>search</v-icon></v-btn>
+                    </v-list-item-icon>
                   </v-list-item>
                 </v-list>
               </v-card-text>
             </v-card>
           </v-flex>
-          <v-flex xs12 md6>
+          <v-flex xs12 md3 v-if="viewAnalysis">
             <v-card
-              max-width="280"
+              max-width
               class="pb-5"
               elevation="3"
               style="margin:10px 5px 5px 5px"
               min-height="270"
+              v-if="viewExp2"
             >
               <v-card class="taitelcs primary white--text elevation-5">
                 <v-list-item>
@@ -137,30 +168,22 @@
               </div>
 
               <v-card-text>
-                <v-list rounded>
+                <v-list>
                   <v-list-item v-for="(item, i) in experiments.list" :key="i">
                     <v-list-item-content>
                       <v-list-item-title>
-                        <v-btn @click="gotoExp(item.id)" color="primary" block>{{item.name}}</v-btn>
+                        {{item.name}}
                       </v-list-item-title>
                     </v-list-item-content>
+                    <v-list-item-icon>
+                      <v-btn small @click="gotoExp(item.id)" color="primary"><v-icon>search</v-icon></v-btn>
+                    </v-list-item-icon>
                   </v-list-item>
                 </v-list>
               </v-card-text>
             </v-card>
           </v-flex>
-        </v-layout>
 
-        <v-flex md4>
-          <v-card>
-            <v-card-actions>
-              <v-btn
-                color="primary"
-                @click="gotoCompetitor()"
-              >{{ $vuetify.lang.t('$vuetify.idea.competitor') }}</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-flex>
       </v-layout>
 
       <ValuePropositionForm
@@ -171,7 +194,6 @@
         @close="dialogFormParent = false"
         @refresh="refreshParent"
       />
-
     </v-container>
     <v-container>
       <span v-html="error.body" v-if="status.error"></span>
@@ -221,7 +243,10 @@ export default {
       experiments: { total: 0, list: [] },
       loaderExp: false,
       canvas: { total: 0, list: [] },
-      loaderCan: false
+      loaderCan: false,
+      viewAnalysis: false,
+      viewExp: false,
+      viewExp2: false
     };
   },
   mounted: function() {
@@ -231,6 +256,14 @@ export default {
     this.loadCollaborator();
   },
   methods: {
+    viewBtnAna: function() {
+      this.viewAnalysis = !this.viewAnalysis;
+      this.viewExp = this.viewAnalysis;
+      this.viewExp2 = false;
+    },
+    viewBtnExp: function() {
+      this.viewExp2 = !this.viewExp2;
+    },
     getParentData: function() {
       this.loader = true;
       notif.reset(this);
