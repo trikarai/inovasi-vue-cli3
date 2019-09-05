@@ -85,6 +85,10 @@ import MentorProgramCollaboration from "./components/personnel/mentor/program/co
 import MentorTeamIdeaDetail from "./components/talent/team/idea/TalentTeamIdeaDetail";
 import MentorTeamIdeaCustomersegment from "./components/talent/team/idea/customersegment/TalentTeamIdeaCustomersegment";
 import MentorTeamIdeaCustomersegmentPersona from "./components/talent/team/idea/customersegment/persona/TalentTeamIdeaCustomersegmentPersona";
+import MentorTeamIdeaCustomersegmentPersonaValueproposition from "./components/talent/team/idea/customersegment/persona/valueproposition/TalentTeamIdeaCustomersegmentPersonaValueproposition";
+import MentorCompetitorDetail from "./components/talent/team/idea/customersegment/persona/valueproposition/competitor/CompetitorDetails";
+import MentorBusinessAnalysisCanvas from "./components/talent/team/idea/customersegment/persona/valueproposition/analysis/components/GridCanvas";
+import MentorExperimentDetail from "./components/talent/team/idea/customersegment/persona/valueproposition/experiment/ExperimentDetail";
 
 Vue.use(Router);
 
@@ -608,6 +612,26 @@ const routes = [
         path: "/mentor/program/:programId/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId",
         name: "Mentor Persona",
         component: MentorTeamIdeaCustomersegmentPersona
+      },
+      {
+        path: "/mentor/program/:programId/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId",
+        name: "Mentor Value Proposition",
+        component: MentorTeamIdeaCustomersegmentPersonaValueproposition
+      },
+      {
+        path: "/mentor/program/:programId/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/analysis/:formId",
+        name: "Mentor Canvas",
+        component: MentorBusinessAnalysisCanvas
+      },
+      {
+        path: "/mentor/program/:programId/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/experiment-detail/:experimentId",
+        name: "Mentor Experiment Detail",
+        component: MentorExperimentDetail
+      },
+      {
+        path: "/mentor/program/:programId/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId/vp/:valuepropositionId/competitor/:competitorId",
+        name: "Mentor Competitor Detail",
+        component: MentorCompetitorDetail
       },
     ]
   },
