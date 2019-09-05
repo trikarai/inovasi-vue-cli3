@@ -219,7 +219,7 @@ export default {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
     gotoTalentMenu: function() {
-      localStorage.removeItem("dashboard");
+      localStorage.setItem("dashboard", "talent");
       this.$router.push({ path: "/talent/dashboard" });
     },
     gotoCoordinatorMenu: function() {
