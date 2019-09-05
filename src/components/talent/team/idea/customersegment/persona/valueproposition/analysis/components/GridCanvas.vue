@@ -7,8 +7,23 @@
       <loader-dialog v-model="loader"></loader-dialog>
 
       <v-flex>
-        <h4>{{canvasName}}</h4>
-        <v-btn @click="isEdit = !isEdit" color="primary" v-if="isCanvas" v-show="!selectedDel">
+        <div style="display:flex;" class="mb-5">
+          <div>
+             <h4>{{canvasName}}</h4>
+          </div>
+          <div>
+            <v-scale-transition>
+              <template v-if="!selectedDel">
+                <v-btn v-if="!isEdit" x-small fab class="ml-4" @click="openCollaborator()">
+                  <v-icon>share</v-icon>
+                </v-btn>
+              </template>
+            </v-scale-transition>
+          </div>
+        </div>
+          
+
+        <v-btn small @click="isEdit = !isEdit" color="primary" v-if="isCanvas" v-show="!selectedDel">
           <span v-show="isEdit">
             <v-icon left>clear</v-icon>Cancel
           </span>
@@ -20,6 +35,7 @@
         <v-fade-transition>
           <template v-if="!isEdit">
             <v-btn
+              small
               dark
               @click="selectedDel = !selectedDel"
               color="warning"
@@ -34,7 +50,7 @@
         <v-expand-transition>
           <v-layout wrap v-if="isEdit">
             <v-flex>
-              <v-btn dark class="mt-3" @click.prevent="update" color="blue">
+              <v-btn small dark class="mt-3" @click.prevent="update" color="blue">
                 <v-icon left>save</v-icon>save
               </v-btn>
             </v-flex>
@@ -47,19 +63,13 @@
               <v-icon>warning</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}
               <br />
-              <v-btn small dark class="ma-2" color="red" @click="deleteCanvas">Yes</v-btn>
-              <v-btn text small class="ma-2 ml-0" @click="selectedDel = !selectedDel">Cancel</v-btn>
+              <v-btn x-small dark class="ma-2" color="red" @click="deleteCanvas">Yes</v-btn>
+              <v-btn text x-small class="ma-2 ml-0" @click="selectedDel = !selectedDel">Cancel</v-btn>
             </v-flex>
           </v-layout>
         </v-expand-transition>
 
-        <v-scale-transition>
-          <template v-if="!selectedDel">
-            <v-btn v-if="!isEdit" small fab class="ml-4" @click="openCollaborator()">
-              <v-icon>share</v-icon>
-            </v-btn>
-          </template>
-        </v-scale-transition>
+       
       </v-flex>
     </v-container>
     <v-form v-model="valid" ref="form2">
@@ -103,6 +113,7 @@
 
     <v-form v-model="valid" ref="form" v-if="!isCanvas">
       <v-btn
+        small
         class="ml-3"
         @click.prevent="submit"
         :class=" { 'primary white--text' : valid, disabled: !valid }"
