@@ -63,7 +63,7 @@
                     <v-treeview :items="vpTree(item)" />
                   </v-card-text>
                   <v-card-actions>
-                    <v-btn small>
+                    <v-btn small @click="gotoValueproposition(item)">
                       <v-icon>pageview</v-icon>
                     </v-btn>
                     <v-btn small color="primary" disabled>
@@ -75,12 +75,15 @@
 
                 <template v-if="item.businessCanvas">
                   <v-card-title>Business Canvas</v-card-title>
-                  <v-card-text>{{item.businessCanvas.form.name}}</v-card-text>
+                  <!-- <v-card-text>{{item.businessCanvas}}</v-card-text> -->
+                  <v-card-text>
+                    <v-treeview :items="canvasTree(item)" />
+                  </v-card-text>
                   <v-card-actions>
-                    <v-btn small>
+                    <v-btn small @click="gotoCanvas(item)">
                       <v-icon>pageview</v-icon>
                     </v-btn>
-                    <v-btn small color="primary">
+                    <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.businessCanvas.valueProposition.persona.customerSegment.idea.team.name}}
                     </v-btn>
@@ -89,12 +92,15 @@
 
                 <template v-if="item.competitor">
                   <v-card-title>Competitor</v-card-title>
-                  <v-card-text>{{item.competitor.name}}</v-card-text>
+                  <!-- <v-card-text>{{item.competitor.name}}</v-card-text> -->
+                  <v-card-text>
+                    <v-treeview :items="competitorTree(item)" />
+                  </v-card-text>
                   <v-card-actions>
-                    <v-btn small>
+                    <v-btn small @click="gotoCompetitor(item)">
                       <v-icon>pageview</v-icon>
                     </v-btn>
-                    <v-btn small color="primary">
+                    <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.competitor.valueProposition.persona.customerSegment.idea.team.name}}
                     </v-btn>
@@ -103,12 +109,15 @@
 
                 <template v-if="item.experiment">
                   <v-card-title>Experiment</v-card-title>
-                  <v-card-text>{{item.experiment.form.name}}</v-card-text>
+                  <!-- <v-card-text>{{item.experiment.form.name}}</v-card-text> -->
+                  <v-card-text>
+                    <v-treeview :items="expTree(item)" />
+                  </v-card-text>
                   <v-card-actions>
-                    <v-btn small>
+                    <v-btn small @click="gotoExp(item)">
                       <v-icon>pageview</v-icon>
                     </v-btn>
-                    <v-btn small color="primary">
+                    <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.experiment.valueProposition.persona.customerSegment.idea.team.name}}
                     </v-btn>
@@ -213,6 +222,83 @@ export default {
           item.persona.customerSegment.id +
           "/persona/" +
           item.persona.id
+      });
+    },
+    gotoValueproposition: function(item) {
+      this.$router.push({
+        path:
+          "/mentor/program/" +
+          this.$route.params.programId +
+          "/team/" +
+          item.valueProposition.persona.customerSegment.idea.team.id +
+          "/idea/" +
+          item.valueProposition.persona.customerSegment.idea.id +
+          "/customersegment/" +
+          item.valueProposition.persona.customerSegment.id +
+          "/persona/" +
+          item.valueProposition.persona.id +
+          "/vp/" +
+          item.valueProposition.id
+      });
+    },
+    gotoCanvas: function(item) {
+      this.$router.push({
+        path:
+          "/mentor/program/" +
+          this.$route.params.programId +
+          "/team/" +
+          item.businessCanvas.valueProposition.persona.customerSegment.idea.team
+            .id +
+          "/idea/" +
+          item.businessCanvas.valueProposition.persona.customerSegment.idea.id +
+          "/customersegment/" +
+          item.businessCanvas.valueProposition.persona.customerSegment.id +
+          "/persona/" +
+          item.businessCanvas.valueProposition.persona.id +
+          "/vp/" +
+          item.businessCanvas.valueProposition.id +
+          "/analysis/" +
+          item.businessCanvas.id
+      });
+    },
+    gotoExp: function(item) {
+      this.$router.push({
+        path:
+          "/mentor/program/" +
+          this.$route.params.programId +
+          "/team/" +
+          item.experiment.valueProposition.persona.customerSegment.idea.team
+            .id +
+          "/idea/" +
+          item.experiment.valueProposition.persona.customerSegment.idea.id +
+          "/customersegment/" +
+          item.experiment.valueProposition.persona.customerSegment.id +
+          "/persona/" +
+          item.experiment.valueProposition.persona.id +
+          "/vp/" +
+          item.experiment.valueProposition.id +
+          "/experiment-detail/" +
+          item.experiment.id
+      });
+    },
+    gotoCompetitor: function(item) {
+      this.$router.push({
+        path:
+          "/mentor/program/" +
+          this.$route.params.programId +
+          "/team/" +
+          item.competitor.valueProposition.persona.customerSegment.idea.team
+            .id +
+          "/idea/" +
+          item.competitor.valueProposition.persona.customerSegment.idea.id +
+          "/customersegment/" +
+          item.competitor.valueProposition.persona.customerSegment.id +
+          "/persona/" +
+          item.competitor.valueProposition.persona.id +
+          "/vp/" +
+          item.competitor.valueProposition.id +
+          "/competitor/" +
+          item.competitor.id
       });
     }
   }
