@@ -148,6 +148,7 @@ export default {
           authUser.valid_until = res.data.credentials.valid_until;
           this.$store.state.isLoggedIn = true;
           window.localStorage.setItem("lbUser", JSON.stringify(authUser));
+          window.localStorage.setItem("dashboard", "talent");
           this.$router.replace("/talent/dashboard");
         })
         .catch(error => {

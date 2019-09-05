@@ -8,98 +8,106 @@
           <v-row>
             <v-col v-for="(item, index) in props.items" :key="index" cols="12" sm="6" md="4" lg="3">
               <v-card>
-
                 <template v-if="item.idea">
-                  <v-card-text>Idea</v-card-text>
-                  <v-card-title>{{item.idea.name}}</v-card-title>
+                  <v-card-title>Idea</v-card-title>
+                  <v-card-text>{{item.idea.name}}</v-card-text>
                   <v-card-actions>
-                    <v-btn small>
+                    <v-btn small @click="gotoIdea(item)">
                       <v-icon>pageview</v-icon>
                     </v-btn>
-                    <v-btn small color="primary">
-                      <v-icon small left>group</v-icon> {{item.idea.team.name}}
+                    <v-btn small color="primary" disabled>
+                      <v-icon small left>group</v-icon>
+                      {{item.idea.team.name}}
                     </v-btn>
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.customerSegment">
-                  <v-card-text>Persona</v-card-text>
-                  <v-card-title>{{item.customerSegment.name}}</v-card-title>
+                  <v-card-title>Customer Segment</v-card-title>
+                  <!-- <v-card-title>{{item.customerSegment.name}}</v-card-title> -->
+                  <v-card-text>
+                    <v-treeview :items="csTree(item)" />
+                  </v-card-text>
                   <v-card-actions>
-                    <v-btn small>
+                    <v-btn small @click="gotoCS(item)">
                       <v-icon>pageview</v-icon>
                     </v-btn>
-                    <v-btn small color="primary">
-                      <v-icon small left>group</v-icon> {{item.customerSegment.idea.team.name}}
+                    <v-btn small color="primary" disabled>
+                      <v-icon small left>group</v-icon>
+                      {{item.customerSegment.idea.team.name}}
                     </v-btn>
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.persona">
-                  <v-card-text>Persona</v-card-text>
-                  <v-card-title>{{item.persona.name}}</v-card-title>
+                  <v-card-title>Persona</v-card-title>
+                  <v-card-text>{{item.persona.name}}</v-card-text>
                   <v-card-actions>
-                    <v-btn small>
+                    <v-btn small  @click="gotoPersona(item)">
                       <v-icon>pageview</v-icon>
                     </v-btn>
-                    <v-btn small color="primary">
-                      <v-icon small left>group</v-icon> {{item.persona.customerSegment.idea.team.name}}
+                    <v-btn small color="primary" disabled>
+                      <v-icon small left>group</v-icon>
+                      {{item.persona.customerSegment.idea.team.name}}
                     </v-btn>
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.valueProposition">
-                  <v-card-text>Value Proposition</v-card-text>
-                  <v-card-title>{{item.valueProposition.description}}</v-card-title>
+                  <v-card-title>Value Proposition</v-card-title>
+                  <v-card-text>{{item.valueProposition.description}}</v-card-text>
                   <v-card-actions>
                     <v-btn small>
                       <v-icon>pageview</v-icon>
                     </v-btn>
                     <v-btn small color="primary">
-                      <v-icon small left>group</v-icon> {{item.valueProposition.persona.customerSegment.idea.team.name}}
+                      <v-icon small left>group</v-icon>
+                      {{item.valueProposition.persona.customerSegment.idea.team.name}}
                     </v-btn>
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.businessCanvas">
-                  <v-card-text>Business Canvas</v-card-text>
-                  <v-card-title>{{item.businessCanvas.form.name}}</v-card-title>
+                  <v-card-title>Business Canvas</v-card-title>
+                  <v-card-text>{{item.businessCanvas.form.name}}</v-card-text>
                   <v-card-actions>
                     <v-btn small>
                       <v-icon>pageview</v-icon>
                     </v-btn>
                     <v-btn small color="primary">
-                      <v-icon small left>group</v-icon> {{item.businessCanvas.valueProposition.persona.customerSegment.idea.team.name}}
+                      <v-icon small left>group</v-icon>
+                      {{item.businessCanvas.valueProposition.persona.customerSegment.idea.team.name}}
                     </v-btn>
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.competitor">
-                  <v-card-text>Competitor</v-card-text>
-                  <v-card-title>{{item.competitor.name}}</v-card-title>
+                  <v-card-title>Competitor</v-card-title>
+                  <v-card-text>{{item.competitor.name}}</v-card-text>
                   <v-card-actions>
                     <v-btn small>
                       <v-icon>pageview</v-icon>
                     </v-btn>
                     <v-btn small color="primary">
-                      <v-icon small left>group</v-icon> {{item.competitor.valueProposition.persona.customerSegment.idea.team.name}}
+                      <v-icon small left>group</v-icon>
+                      {{item.competitor.valueProposition.persona.customerSegment.idea.team.name}}
                     </v-btn>
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.experiment">
-                  <v-card-text>Experiment</v-card-text>
-                  <v-card-title>{{item.experiment.form.name}}</v-card-title>
+                  <v-card-title>Experiment</v-card-title>
+                  <v-card-text>{{item.experiment.form.name}}</v-card-text>
                   <v-card-actions>
                     <v-btn small>
                       <v-icon>pageview</v-icon>
                     </v-btn>
-                    <v-btn small>
-                      <v-icon small left>group</v-icon> {{item.experiment.valueProposition.persona.customerSegment.idea.team.name}}
+                    <v-btn small color="primary">
+                      <v-icon small left>group</v-icon>
+                      {{item.experiment.valueProposition.persona.customerSegment.idea.team.name}}
                     </v-btn>
                   </v-card-actions>
                 </template>
-
               </v-card>
             </v-col>
           </v-row>
@@ -132,7 +140,23 @@ export default {
   mounted: function() {
     this.getDataList();
   },
+  computed: {},
   methods: {
+    csTree: function(item) {
+      var data = [
+        {
+          id: item.customerSegment.id,
+          name: item.customerSegment.name,
+          children: [
+            {
+              id: item.customerSegment.idea.id,
+              name: item.customerSegment.idea.name
+            }
+          ]
+        }
+      ];
+      return data;
+    },
     getDataList: function() {
       this.loader = true;
       notif.reset(this);
@@ -156,6 +180,45 @@ export default {
         .finally(() => {
           this.loader = false;
         });
+    },
+    gotoIdea: function(item) {
+      this.$router.push({
+        path:
+          "/mentor/program/" +
+          this.$route.params.programId +
+          "/team/" +
+          item.idea.team.id +
+          "/idea/" +
+          item.idea.id
+      });
+    },
+    gotoCS: function(item) {
+      this.$router.push({
+        path:
+          "/mentor/program/" +
+          this.$route.params.programId +
+          "/team/" +
+          item.customerSegment.idea.team.id +
+          "/idea/" +
+          item.customerSegment.idea.id +
+          "/customersegment/" +
+          item.customerSegment.id
+      });
+    },
+    gotoPersona: function(item) {
+      this.$router.push({
+        path:
+          "/mentor/program/" +
+          this.$route.params.programId +
+          "/team/" +
+          item.persona.customerSegment.idea.team.id +
+          "/idea/" +
+          item.persona.customerSegment.idea.id +
+          "/customersegment/" +
+          item.persona.customerSegment.id +
+          "/persona/" +
+          item.persona.id
+      });
     }
   }
 };

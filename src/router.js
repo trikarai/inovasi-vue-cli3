@@ -82,6 +82,10 @@ import MentorProgram from "./components/personnel/mentor/program/MentorProgram";
 import MentorProgramMentoring from "./components/personnel/mentor/program/mentoring/MentorProgramMentoring";
 import MentorProgramCollaboration from "./components/personnel/mentor/program/collaboration/MentorProgramCollaboration";
 
+import MentorTeamIdeaDetail from "./components/talent/team/idea/TalentTeamIdeaDetail";
+import MentorTeamIdeaCustomersegment from "./components/talent/team/idea/customersegment/TalentTeamIdeaCustomersegment";
+import MentorTeamIdeaCustomersegmentPersona from "./components/talent/team/idea/customersegment/persona/TalentTeamIdeaCustomersegmentPersona";
+
 Vue.use(Router);
 
 const routes = [
@@ -589,6 +593,21 @@ const routes = [
         path: "/mentor/program/:programId/collaboration",
         name: "Collaborations List",
         component: MentorProgramCollaboration
+      },
+      {
+        path: "/mentor/program/:programId/team/:teamId/idea/:ideaId",
+        name: "Mentor Idea",
+        component: MentorTeamIdeaDetail
+      },
+      {
+        path: "/mentor/program/:programId/team/:teamId/idea/:ideaId/customersegment/:customersegmentId",
+        name: "Mentor Customer Segment",
+        component: MentorTeamIdeaCustomersegment
+      },
+      {
+        path: "/mentor/program/:programId/team/:teamId/idea/:ideaId/customersegment/:customersegmentId/persona/:personaId",
+        name: "Mentor Persona",
+        component: MentorTeamIdeaCustomersegmentPersona
       },
     ]
   },

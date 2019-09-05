@@ -20,7 +20,7 @@
                     <h4 class="headline mb-0 white--text">{{parentData.name}}</h4>
                   </v-list-item-subtitle>
                 </v-list-item-content>
-                <v-list-item-action>
+                <v-list-item-action v-if="checkDashboard">
                   <div>
                     <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
                       <v-icon>share</v-icon>
@@ -55,7 +55,7 @@
             <!-- end collaborator module-->
           </v-card>
         </v-flex>
-        <v-flex xs12 md6>
+        <v-flex xs12 md6 v-if="checkDashboard">
           <v-card class="pb-5" elevation="3" style="margin:10px" min-height="270">
             <v-card class="taitelcs primary white--text elevation-5">
               <v-list-item>
@@ -149,10 +149,13 @@ import Notification from "@/components/Notification";
 import CustomerSegmentForm from "./CustomerSegmentForm";
 import PersonaForm from "./persona/PersonaForm";
 
+import { dashboardMixins } from "@/mixins/dashboardMixins";
+
 import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
+  mixins: [dashboardMixins],
   components: {
     CustomerSegmentForm,
     PersonaForm,
@@ -188,23 +191,37 @@ export default {
   },
   mounted: function() {
     this.getParentData();
-    this.getDataList();
-    this.loadCollaborator();
+    if (this.checkDashboard) {
+      this.getDataList();
+      this.loadCollaborator();
+    }
   },
   methods: {
     getParentData: function() {
       this.loader = true;
       notif.reset(this);
-      net
-        .getData(
-          this,
+      var parent_uri = "";
+      if (localStorage.getItem("dashboard") == "talent") {
+        parent_uri =
           "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId
-        )
+          this.$route.params.teamId +
+          "/ideas/" +
+          this.$route.params.ideaId +
+          "/customer-segments/" +
+          this.$route.params.customersegmentId;
+      } else if (localStorage.getItem("dashboard") == "mentor") {
+        parent_uri =
+          "/talent/as-programme-mentor/" +
+          this.$route.params.programId +
+          "/teams/" +
+          this.$route.params.teamId +
+          "/ideas/" +
+          this.$route.params.ideaId +
+          "/customer-segments/" +
+          this.$route.params.customersegmentId;
+      }
+      net
+        .getData(this, parent_uri)
         .then(res => {
           this.parentData = res.data.data;
         })
@@ -218,30 +235,30 @@ export default {
     getDataList: function() {
       this.loader = true;
       notif.reset(this);
-      net
-        .getData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas"
-        )
-        .then(res => {
-          if (res.data.data) {
-            this.data = res.data.data;
-          } else {
-            this.data = { total: 0, list: [] };
-          }
-        })
-        .catch(error => {
-          notif.showError(this, error);
-        })
-        .finally(() => {
-          this.loader = false;
-        });
+        net
+          .getData(
+            this,
+            "/talent/as-team-member/" +
+              this.$route.params.teamId +
+              "/ideas/" +
+              this.$route.params.ideaId +
+              "/customer-segments/" +
+              this.$route.params.customersegmentId +
+              "/personas"
+          )
+          .then(res => {
+            if (res.data.data) {
+              this.data = res.data.data;
+            } else {
+              this.data = { total: 0, list: [] };
+            }
+          })
+          .catch(error => {
+            notif.showError(this, error);
+          })
+          .finally(() => {
+            this.loader = false;
+          });
     },
     openDetail: function(id) {
       this.$router.push({
@@ -303,28 +320,6 @@ export default {
           this.refresh();
         });
     },
-    setMain: function(id) {
-      var app = this;
-      this.status.error = false;
-      this.status.success = false;
-      net
-        .putData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            id +
-            "/set_as_main_idea"
-        )
-        .then(res => {})
-        .catch(error => {
-          notif.showError(this, error);
-        })
-        .finally(() => {
-          this.selectedIndex = null;
-          this.refresh();
-        });
-    },
     refresh: function() {
       this.dialogForm = false;
       this.getDataList();
@@ -336,30 +331,30 @@ export default {
     loadCollaborator: function() {
       this.loader = true;
       notif.reset(this);
-      net
-        .getData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/collaborators"
-        )
-        .then(res => {
-          if (res.data.data) {
-            this.collaborators = res.data.data;
-          } else {
-            this.collaborators = { total: 0, list: [] };
-          }
-        })
-        .catch(error => {
-          notif.showError(this, error);
-        })
-        .finally(() => {
-          this.loader = false;
-        });
+        net
+          .getData(
+            this,
+            "/talent/as-team-member/" +
+              this.$route.params.teamId +
+              "/ideas/" +
+              this.$route.params.ideaId +
+              "/customer-segments/" +
+              this.$route.params.customersegmentId +
+              "/collaborators"
+          )
+          .then(res => {
+            if (res.data.data) {
+              this.collaborators = res.data.data;
+            } else {
+              this.collaborators = { total: 0, list: [] };
+            }
+          })
+          .catch(error => {
+            notif.showError(this, error);
+          })
+          .finally(() => {
+            this.loader = false;
+          });
     },
     openCollaborator: function() {
       this.collaboratorForm = true;
@@ -432,19 +427,19 @@ export default {
   z-index: 2;
 }
 .grsduasec {
-    background: #00667f;
-    width: 99px;
-    height: 11px;
-    position: relative;
-    left: 106px;
-    bottom: 24px;
+  background: #00667f;
+  width: 99px;
+  height: 11px;
+  position: relative;
+  left: 106px;
+  bottom: 24px;
 }
 .right-arrow {
-	border-color: transparent #fb7307;
-	border-style: solid;
-	border-width: 20px 0px 20px 25px;
-	height: 0px;
-	width: 0px;
+  border-color: transparent #fb7307;
+  border-style: solid;
+  border-width: 20px 0px 20px 25px;
+  height: 0px;
+  width: 0px;
   position: relative;
   right: 42px;
 }

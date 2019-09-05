@@ -26,91 +26,91 @@
       :mini-variant.sync="miniVariant"
     >
       <!-- <v-layout column justify-space-between fill-height> -->
-        <!-- list head-->
-        <v-list class="pa-1">
-          <v-list-item v-if="miniVariant" @click.stop="miniVariant = !miniVariant">
-            <v-list-item-action>
-              <v-icon>chevron_right</v-icon>
-            </v-list-item-action>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-avatar>
-              <img src="/img/avatar.png" />
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{user.data.name}}</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-btn icon @click.stop="miniVariant = !miniVariant">
-                <v-icon>chevron_left</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-        <!-- link router -->
-        <v-list>
-          <!--dashboar-->
-          <v-list-item ripple router to="/talent/dashboard">
-            <v-list-item-action>
-              <v-icon color="#676767">dashboard</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="grey--text">Dashboard</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <!-- profile-->
-          <v-list-group prepend-icon="account_circle" :value="group" no-action>
-            <template v-slot:activator>
-              <v-list-item ripple>
-                <v-list-item-title>Profile</v-list-item-title>
-              </v-list-item>
-            </template>
-            <template v-if="!miniVariant">
-              <v-list-item
-                ripple
-                v-for="link in linkProfile"
-                :key="link.text"
-                router
-                :to="link.route"
-              >
-                <v-list-item-title>{{link.text}}</v-list-item-title>
-                <v-list-item-action>
-                  <v-icon>{{link.icon}}</v-icon>
-                </v-list-item-action>
-              </v-list-item>
-            </template>
-          </v-list-group>
-          <!--sub list other-->
-          <v-list-item ripple v-for="link in links" :key="link.text" router :to="link.route">
-            <v-list-item-action>
-              <v-icon color="#676767">{{link.icon}}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="grey--text">{{link.text}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
+      <!-- list head-->
+      <v-list class="pa-1">
+        <v-list-item v-if="miniVariant" @click.stop="miniVariant = !miniVariant">
+          <v-list-item-action>
+            <v-icon>chevron_right</v-icon>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-avatar>
+            <img src="/img/avatar.png" />
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{user.data.name}}</v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-btn icon @click.stop="miniVariant = !miniVariant">
+              <v-icon>chevron_left</v-icon>
+            </v-btn>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
+      <!-- link router -->
+      <v-list>
+        <!--dashboar-->
+        <v-list-item ripple router to="/talent/dashboard">
+          <v-list-item-action>
+            <v-icon color="#676767">dashboard</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">Dashboard</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <!-- profile-->
+        <v-list-group prepend-icon="account_circle" :value="group" no-action>
+          <template v-slot:activator>
+            <v-list-item ripple>
+              <v-list-item-title>Profile</v-list-item-title>
+            </v-list-item>
+          </template>
+          <template v-if="!miniVariant">
+            <v-list-item
+              ripple
+              v-for="link in linkProfile"
+              :key="link.text"
+              router
+              :to="link.route"
+            >
+              <v-list-item-title>{{link.text}}</v-list-item-title>
+              <v-list-item-action>
+                <v-icon>{{link.icon}}</v-icon>
+              </v-list-item-action>
+            </v-list-item>
+          </template>
+        </v-list-group>
+        <!--sub list other-->
+        <v-list-item ripple v-for="link in links" :key="link.text" router :to="link.route">
+          <v-list-item-action>
+            <v-icon color="#676767">{{link.icon}}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">{{link.text}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
 
-        <v-spacer></v-spacer>
-        <v-divider></v-divider>
-        <v-list dense class="py-0">
-          <v-list-item v-if="checkProgramCoordinatoship" ripple router to="/coordinator/dashboard">
-            <v-list-item-action>
-              <v-icon color="#676767">pages</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="grey--text">Coordinator Menu</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item v-if="checkProgramMentorship" ripple router to="/mentor/dashboard">
-            <v-list-item-action>
-              <v-icon color="#676767">pages</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="grey--text">Mentor Menu</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
+      <v-spacer></v-spacer>
+      <v-divider></v-divider>
+      <v-list dense class="py-0">
+        <v-list-item v-if="checkProgramCoordinatoship" @click="gotoCoordinatorMenu()">
+          <v-list-item-action>
+            <v-icon color="#676767">pages</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">Coordinator Menu</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="checkProgramMentorship" @click="gotoMentorMenu()">
+          <v-list-item-action>
+            <v-icon color="#676767">pages</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">Mentor Menu</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
       <!-- </v-layout> -->
     </v-navigation-drawer>
 
@@ -143,28 +143,6 @@
           <v-list-item-content>Dark Theme</v-list-item-content>
           <v-list-item-action>
             <v-switch color="black" @change="switchTheme"></v-switch>
-          </v-list-item-action>
-        </v-list-item>
-        <v-list-item v-if="checkProgramCoordinatoship">
-          <v-list-item-avatar>
-            <v-icon>pages</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>Coordinator Menu</v-list-item-content>
-          <v-list-item-action>
-            <v-btn router to="/coordinator/dashboard" small text color="blue">
-              <v-icon small>forward</v-icon>
-            </v-btn>
-          </v-list-item-action>
-        </v-list-item>
-        <v-list-item v-if="checkProgramMentorship">
-          <v-list-item-avatar>
-            <v-icon>pages</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>Mentor Menu</v-list-item-content>
-          <v-list-item-action>
-            <v-btn router to="/mentor/dashboard" small text color="blue">
-              <v-icon small>forward</v-icon>
-            </v-btn>
           </v-list-item-action>
         </v-list-item>
       </v-list>
@@ -281,12 +259,21 @@ export default {
   methods: {
     logout: function() {
       var app = this;
-      localStorage.removeItem("lbUser");
+      // localStorage.removeItem("lbUser");
+      localStorage.clear();
       app.$router.replace({ path: "/login" });
       app.$store.state.isLoggedIn = false;
     },
     switchTheme: function() {
-         this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
+    gotoMentorMenu: function() {
+      localStorage.setItem("dashboard", "mentor")
+      this.$router.push({ path: "/mentor/dashboard" });
+    },
+    gotoCoordinatorMenu: function() {
+      localStorage.setItem("dashboard", "coordinator")
+      this.$router.push({ path: "/coordinator/dashboard" });
     },
     buildBreadcrumbs: function() {
       var payload = {
@@ -332,7 +319,7 @@ export default {
   background-color: #e2e2e2 !important;
 }
 .v-toolbar {
-  z-index:3 !important;
+  z-index: 3 !important;
 }
 </style>
 

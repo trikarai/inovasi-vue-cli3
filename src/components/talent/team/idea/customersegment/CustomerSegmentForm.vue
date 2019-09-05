@@ -22,7 +22,7 @@
                     required
                   ></v-text-field>
                   <v-textarea
-                    auto-grow="true"
+                    :auto-grow="true"
                     counter
                     label="Description"
                     v-model="params.description"
