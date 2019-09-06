@@ -114,6 +114,12 @@
                   </v-list-item-action>
                 </v-list-item>
               </template>
+              <template v-else>
+                <p
+                  class="text-center"
+                  style="margin-top:30px;"
+                >{{ $vuetify.lang.t('$vuetify.noDataText') }}</p>
+              </template>
             </v-list>
           </v-card>
         </v-flex>
