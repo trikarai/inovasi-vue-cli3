@@ -59,7 +59,7 @@ export const treeMixins = {
         },
         canvasTree: function (item) {
             var data = [{
-                id: item.businessCanvas.id,
+                id: item.businessCanvas.form.id,
                 name: item.businessCanvas.form.name,
                 children: [{
                     id: item.businessCanvas.valueProposition.id,

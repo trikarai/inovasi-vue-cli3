@@ -258,7 +258,7 @@ export default {
           "/vp/" +
           item.businessCanvas.valueProposition.id +
           "/analysis/" +
-          item.businessCanvas.id
+          item.businessCanvas.form.id
       });
     },
     gotoExp: function(item) {

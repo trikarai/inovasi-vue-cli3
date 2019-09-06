@@ -9,9 +9,9 @@
       <v-flex>
         <div style="display:flex;" class="mb-5">
           <div>
-             <h4>{{canvasName}}</h4>
+            <h4>{{canvasName}}</h4>
           </div>
-          <div>
+          <div v-if="checkDashboard">
             <v-scale-transition>
               <template v-if="!selectedDel">
                 <v-btn v-if="!isEdit" x-small fab class="ml-4" @click="openCollaborator()">
@@ -21,32 +21,36 @@
             </v-scale-transition>
           </div>
         </div>
-          
-
-        <v-btn small @click="isEdit = !isEdit" color="primary" v-if="isCanvas" v-show="!selectedDel">
-          <span v-show="isEdit">
-            <v-icon left>clear</v-icon>Cancel
-          </span>
-          <span v-show="!isEdit">
-            <v-icon left>edit</v-icon>edit
-          </span>
-        </v-btn>
-
-        <v-fade-transition>
-          <template v-if="!isEdit">
-            <v-btn
-              small
-              dark
-              @click="selectedDel = !selectedDel"
-              color="warning"
-              class="ml-2"
-              v-if="isCanvas"
-            >
-              <v-icon left>delete</v-icon>delete
-            </v-btn>
-          </template>
-        </v-fade-transition>
-
+        <template v-if="checkDashboard">
+          <v-btn
+            small
+            @click="isEdit = !isEdit"
+            color="primary"
+            v-if="isCanvas"
+            v-show="!selectedDel"
+          >
+            <span v-show="isEdit">
+              <v-icon left>clear</v-icon>Cancel
+            </span>
+            <span v-show="!isEdit">
+              <v-icon left>edit</v-icon>edit
+            </span>
+          </v-btn>
+          <v-fade-transition>
+            <template v-if="!isEdit">
+              <v-btn
+                small
+                dark
+                @click="selectedDel = !selectedDel"
+                color="warning"
+                class="ml-2"
+                v-if="isCanvas"
+              >
+                <v-icon left>delete</v-icon>delete
+              </v-btn>
+            </template>
+          </v-fade-transition>
+        </template>
         <v-expand-transition>
           <v-layout wrap v-if="isEdit">
             <v-flex>
@@ -56,7 +60,6 @@
             </v-flex>
           </v-layout>
         </v-expand-transition>
-
         <v-expand-transition>
           <v-layout class="mt-5 ml-3" wrap v-if="selectedDel">
             <v-flex>
@@ -68,8 +71,6 @@
             </v-flex>
           </v-layout>
         </v-expand-transition>
-
-       
       </v-flex>
     </v-container>
     <v-form v-model="valid" ref="form2">
@@ -160,6 +161,8 @@ import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 
+import { dashboardMixins } from "@/mixins/dashboardMixins";
+
 import FieldModul from "@/components/field/field";
 import FieldCanEditModul from "@/components/field/fieldCanEdit";
 
@@ -169,6 +172,7 @@ import FormCollaboration from "@/components/talent/team/components/CollaboratorF
 import BusinessForm from "./BusinessForm";
 
 export default {
+  mixins: [dashboardMixins],
   data: function() {
     return {
       valid: false,
@@ -206,7 +210,10 @@ export default {
   },
   mounted: function() {
     this.getCanvas();
-    this.loadCollaborator();
+    if (this.checkDashboard) {
+      this.loadCollaborator();
+    } else {
+    }
   },
   watch: {
     // isCanvas: "getCanvasForm"
@@ -252,11 +259,21 @@ export default {
     },
     getCanvas: function() {
       this.loader = true;
+      notif.reset(this);
+      var parent_uri = "";
+      if (localStorage.getItem("dashboard") == "talent") {
+        parent_uri =
+          "/talent/as-team-member/";
+      } else if (localStorage.getItem("dashboard") == "mentor") {
+        parent_uri =
+          "/talent/as-programme-mentor/" +
+          this.$route.params.programId +
+          "/teams/";
+      }
       net
-        // .getData(this, "/talent/forms/id/" + this.$route.params.formId)
         .getData(
           this,
-          "/talent/as-team-member/" +
+          parent_uri +
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
@@ -276,12 +293,14 @@ export default {
         })
         .catch(error => {
           if (error.status == 404) {
-            notif.showInfo(this, error, ["No Canvas Data, Please Sumbit"]);
+            notif.showInfo(this, error, ["No Canvas Data Found"]);
           } else {
             notif.showError(this, error);
           }
           this.isCanvas = false;
-          this.getCanvasForm();
+          if (this.checkDashboard) {
+            this.getCanvasForm();
+          }
         })
         .finally(() => {
           this.loader = false;
