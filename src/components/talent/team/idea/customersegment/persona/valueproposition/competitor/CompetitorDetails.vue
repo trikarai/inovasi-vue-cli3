@@ -6,13 +6,13 @@
 
     <loader-dialog v-model="loader2"></loader-dialog>
 
-    <v-btn @click="openEdit()" color="primary" class="mb-2">
+    <v-btn @click="openEdit()" color="primary" class="mb-2" v-if="checkDashboard">
       <v-icon small left>edit</v-icon>
       {{$vuetify.lang.t('$vuetify.action.edit')}}
     </v-btn>
 
     <v-scale-transition>
-      <v-btn small fab class="ml-4 mb-2" @click="openCollaborator()">
+      <v-btn small fab class="ml-4 mb-2" @click="openCollaborator()" v-if="checkDashboard">
         <v-icon>share</v-icon>
       </v-btn>
     </v-scale-transition>
@@ -168,11 +168,13 @@
 import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
+import { dashboardMixins } from "@/mixins/dashboardMixins";
 
 import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
+  mixins: [dashboardMixins],
   data() {
     return {
       valid: false,
@@ -216,7 +218,9 @@ export default {
   },
   mounted: function() {
     this.getSingleData();
-    this.loadCollaborator();
+    if (this.checkDashboard) {
+      this.loadCollaborator();
+    }
   },
   methods: {
     openEdit: function() {
@@ -290,10 +294,19 @@ export default {
     getSingleData: function() {
       this.loader2 = true;
       notif.reset(this);
+      var parent_uri = "";
+      if (localStorage.getItem("dashboard") == "talent") {
+        parent_uri = "/talent/as-team-member/";
+      } else if (localStorage.getItem("dashboard") == "mentor") {
+        parent_uri =
+          "/talent/as-programme-mentor/" +
+          this.$route.params.programId +
+          "/teams/";
+      }
       net
         .getData(
           this,
-          "/talent/as-team-member/" +
+          parent_uri +
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
