@@ -6,7 +6,17 @@
           <loader-dialog v-model="loader" />
           <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
-          <v-card elevation="0" width="550" style="top:50px" :loading="loader">
+          <v-card elevation="0" width="400" style="padding:0px 30px 20px 30px">
+            <v-card class="taitel primary white--text elevation-5">
+              <h3
+                v-if="edit"
+                class="headline mb-0 font-weight-light"
+              >{{ $vuetify.lang.t('$vuetify.action.edit') }} {{ $vuetify.lang.t('$vuetify.experiment.exp') }}</h3>
+              <h3
+                v-if="!edit"
+                class="headline mb-0 font-weight-light"
+              >{{ $vuetify.lang.t('$vuetify.action.add') }} {{ $vuetify.lang.t('$vuetify.experiment.exp') }}</h3>
+            </v-card>
             <v-card-text class="pt-4">
               <div>
                 <v-form v-model="valid" ref="form">
@@ -52,14 +62,20 @@
 
                   <v-layout justify-space-between>
                     <v-btn
+                      block
+                      class="mt-6"
                       v-if="!edit"
                       @click.prevent="submit"
-                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                      :class=" { 'primary white--text' : valid}"
+                      :disabled="!valid"
                     >{{ $vuetify.lang.t('$vuetify.action.add')}}</v-btn>
                     <v-btn
+                      block
+                      class="mt-6"
                       v-if="edit"
                       @click.prevent="submit"
-                      :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                      :class=" { 'primary white--text' : valid}"
+                      :disabled="!valid"
                     >{{ $vuetify.lang.t('$vuetify.action.update')}}</v-btn>
                   </v-layout>
                 </v-form>
@@ -266,4 +282,12 @@ export default {
 </script>
 <style scoped>
 @import "../../../../../../../css/modal.css";
+
+.taitel {
+  padding: 24px;
+  width: 90%;
+  margin: 0 auto;
+  bottom: 27px;
+  z-index: 2;
+}
 </style>

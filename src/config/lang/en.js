@@ -123,6 +123,9 @@ var _default = {
     mentor: "Mentor",
     coordinator: "Coordinator",
   },
+  experiment: {
+    exp: "Experiment"
+  },
   mentoring: {
     mentoringsession: "Mentoring Session",
     confirmationtoaccept: "Accept this session ?",

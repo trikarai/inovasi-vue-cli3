@@ -11,18 +11,18 @@
     </v-dialog>
 
     <v-btn @click="openExperimentForm" color="primary" class="mb-3">
-      <v-icon left>add</v-icon>Add
+      <v-icon left>add</v-icon>{{ $vuetify.lang.t('$vuetify.action.add') }} {{ $vuetify.lang.t('$vuetify.experiment.exp') }}
     </v-btn>
     <!-- {{experiments.list}} -->
     <v-layout>
       <v-flex>
         <v-data-table :headers="headers" :items="experiments.list" class="elevation-1">
           <template v-slot:item.action="{item}">
-            <v-btn @click="openEdit(item)" color="primary" small fab>
-              <v-icon>edit</v-icon>
+            <v-btn class="mr-2" @click="openEdit(item)" color="primary" small>
+              <v-icon left>edit</v-icon> Edit
             </v-btn>
-            <v-btn @click="gotoExp(item.id)" color="primary" small fab>
-              <v-icon>pageview</v-icon>
+            <v-btn @click="gotoExp(item.id)" color="primary" small>
+              <v-icon left>pageview</v-icon> View
             </v-btn>
           </template>
         </v-data-table>
