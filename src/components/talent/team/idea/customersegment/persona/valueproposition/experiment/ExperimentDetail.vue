@@ -4,11 +4,11 @@
     <form-collaboration v-model="collaboratorForm" @setUpCollaboration="setUpCollaboration"></form-collaboration>
     <loader-dialog v-model="loader" />
 
-    <v-btn color="primary" @click="openEdit()">
+    <v-btn color="primary" @click="openEdit()" v-if="checkDashboard">
       <v-icon left>edit</v-icon>edit
     </v-btn>
 
-    <v-btn small fab class="ml-3" @click="openCollaborator()">
+    <v-btn small fab class="ml-3" @click="openCollaborator()" v-if="checkDashboard">
       <v-icon>share</v-icon>
     </v-btn>
 
@@ -53,11 +53,13 @@ import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 
 import ExperimentForm from "./ExperimentForm";
+import { dashboardMixins } from "@/mixins/dashboardMixins";
 
 import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
+  mixins: [dashboardMixins],
   data: function() {
     return {
       loader: false,
@@ -86,15 +88,27 @@ export default {
   },
   mounted: function() {
     this.getExperiment();
-    this.loadCollaborator();
+    if (this.checkDashboard) {
+      this.loadCollaborator();
+    }
   },
   methods: {
     getExperiment: function() {
       this.loader = true;
+      notif.reset(this);
+      var parent_uri = "";
+      if (localStorage.getItem("dashboard") == "talent") {
+        parent_uri = "/talent/as-team-member/";
+      } else if (localStorage.getItem("dashboard") == "mentor") {
+        parent_uri =
+          "/talent/as-programme-mentor/" +
+          this.$route.params.programId +
+          "/teams/";
+      }
       net
         .getData(
           this,
-          "/talent/as-team-member/" +
+          parent_uri +
             this.$route.params.teamId +
             "/ideas/" +
             this.$route.params.ideaId +
