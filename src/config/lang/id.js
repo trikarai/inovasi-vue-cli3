@@ -143,6 +143,11 @@ var _default = {
   collaboration: {
     collaboration: "Kolaborasi",
     share: "Bagikan"
+  },
+  feedback: {
+    feedback : "Masukan",
+    post: "Kirim",
+    reply: "Balas"
   }
 };
 exports.default = _default;

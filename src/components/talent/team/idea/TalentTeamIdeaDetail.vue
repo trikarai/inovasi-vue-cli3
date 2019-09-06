@@ -51,6 +51,9 @@
               Initiator :
               <b>{{parentData.initiator.talent.name}}</b>
             </v-card-text>
+            <!-- start comment module-->
+            <base-comment v-bind:collaborators="collaborators" />
+            <!-- end comment module-->
             <!-- start collaborator module-->
             <base-collaboration
               v-if="collaborators.total != 0"
@@ -173,6 +176,7 @@ import CustomerSegmentForm from "./customersegment/CustomerSegmentForm";
 import IdeaForm from "./IdeaForm";
 
 import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
+import BaseComment from "@/components/talent/team/components/BaseComment";
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
@@ -181,6 +185,7 @@ export default {
     IdeaForm,
     CustomerSegmentForm,
     BaseCollaboration,
+    BaseComment,
     FormCollaboration,
     "notification-alert": Notification
   },
