@@ -138,6 +138,11 @@ var _default = {
   collaboration: {
     collaboration: "Collaboration",
     share: "Share"
+  },
+  feedback: {
+    feedback : "Feedback",
+    post: "Post",
+    reply: "Reply"
   }
 };
 exports.default = _default;
