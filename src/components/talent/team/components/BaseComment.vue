@@ -23,7 +23,7 @@
           <v-card-title class="headline">Mentor</v-card-title>
           <v-card-text>12 Agustus 2019</v-card-text>
           <v-card-text>Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit, an vim zril disputando voluptatibus, vix an salutandi sententiae.</v-card-text>
-          <v-card-actions><v-spacer/> <v-btn fab small><v-icon>reply</v-icon></v-btn> </v-card-actions>
+          <v-card-actions><v-spacer/> <v-btn fab small><v-icon small>reply</v-icon></v-btn> <v-btn color="warning" fab small><v-icon small>delete</v-icon></v-btn> </v-card-actions>
         </v-card>
       </v-timeline-item>
     </v-timeline>
