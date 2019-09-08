@@ -50,7 +50,13 @@
               <b>created time:</b>
               {{parentData.createdTime | moment("Do MMMM YYYY")}}
             </v-card-text>
-
+            <!-- start comment module-->
+            <base-comment
+              v-bind:comments="comments"
+              @postComment="postComment"
+              @replyComment="replyComment"
+            />
+            <!-- end comment module-->
             <!-- start collaborator module-->
             <base-collaboration
               v-if="collaborators.total != 0"
@@ -184,18 +190,22 @@ import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 import ValuePropositionForm from "./valueproposition/ValuePropositionForm";
 
+import { baseuriMixins } from "@/mixins/baseuriMixins";
 import { dashboardMixins } from "@/mixins/dashboardMixins";
+import { commentMixins } from "@/mixins/commentMixins";
 
 import FieldCanEditModul from "@/components/field/fieldCanEdit";
 import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
+import BaseComment from "@/components/talent/team/components/BaseComment";
 
 export default {
-  mixins: [dashboardMixins],
+  mixins: [dashboardMixins, commentMixins, baseuriMixins],
   components: {
     ValuePropositionForm,
     BaseCollaboration,
     FormCollaboration,
+    BaseComment,
     "fieldedit-modul": FieldCanEditModul,
     "notification-alert": Notification
   },
@@ -248,6 +258,7 @@ export default {
       this.getDataList();
       this.loadCollaborator();
     }
+    this.loadComment();
   },
   created: function() {
     bus.$on("getValue", (params, index) => {
@@ -324,26 +335,10 @@ export default {
       var parent_uri = "";
       if (localStorage.getItem("dashboard") == "talent") {
         parent_uri =
-          "/talent/as-team-member/" +
-          this.$route.params.teamId +
-          "/ideas/" +
-          this.$route.params.ideaId +
-          "/customer-segments/" +
-          this.$route.params.customersegmentId +
-          "/personas/" +
-          this.$route.params.personaId;
+          this.baseUriTalent.persona + "/" + this.$route.params.personaId;
       } else if (localStorage.getItem("dashboard") == "mentor") {
         parent_uri =
-          "/talent/as-programme-mentor/" +
-          this.$route.params.programId +
-          "/teams/" +
-          this.$route.params.teamId +
-          "/ideas/" +
-          this.$route.params.ideaId +
-          "/customer-segments/" +
-          this.$route.params.customersegmentId +
-          "/personas/" +
-          this.$route.params.personaId;
+          this.baseUriMentor.persona + "/" + this.$route.params.personaId;
       }
       net
         .getData(this, parent_uri)
@@ -360,18 +355,7 @@ export default {
     getDataList: function() {
       this.loader = true;
       net
-        .getData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions"
-        )
+        .getData(this, this.baseUriTalent.valueproposition)
         .then(res => {
           if (res.data.data) {
             this.data = res.data.data;
@@ -388,17 +372,7 @@ export default {
     },
     openDetail: function(id) {
       this.$router.push({
-        path:
-          "/talent/team/" +
-          this.$route.params.teamId +
-          "/idea/" +
-          this.$route.params.ideaId +
-          "/customersegment/" +
-          this.$route.params.customersegmentId +
-          "/personas/" +
-          this.$route.params.personaId +
-          "/value-propositions/" +
-          id
+        path: this.baseUriTalent.valueproposition + "/" + id
       });
     },
     openEditParent: function(data) {
@@ -430,19 +404,7 @@ export default {
     deleteData: function(id) {
       var app = this;
       net
-        .deleteData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            id
-        )
+        .deleteData(this, this.baseUriTalent.valueproposition + "/" + id)
         .then(res => {})
         .catch(error => {
           notif.showError(this, error);
@@ -501,13 +463,8 @@ export default {
       net
         .putData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
+          this.baseUriTalent.persona +
+            "/" +
             this.$route.params.personaId +
             "/update",
           this.params
@@ -528,13 +485,8 @@ export default {
       net
         .getData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
+          this.baseUriTalent.persona +
+            "/" +
             this.$route.params.personaId +
             "/collaborators"
         )
@@ -559,13 +511,8 @@ export default {
       net
         .putData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
+          this.baseUriTalent.persona +
+            "/" +
             this.$route.params.personaId +
             "/collaborators",
           params
@@ -586,13 +533,8 @@ export default {
       net
         .deleteData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
+          this.baseUriTalent.persona +
+            "/" +
             this.$route.params.personaId +
             "/collaborators/" +
             mentorId
@@ -606,6 +548,68 @@ export default {
         .finally(() => {
           this.loader = false;
         });
+    },
+    loadComment: function() {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .getData(
+          this,
+          this.baseUriTalent.persona +
+            "/" +
+            this.$route.params.personaId +
+            "/comments"
+        )
+        .then(res => {
+          if (res.data.data) {
+            this.comments = res.data.data;
+          } else {
+            this.comments = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    postComment: function(content) {
+      net
+        .putData(
+          this,
+          this.baseUriTalent.persona +
+            "/" +
+            this.$route.params.personaId +
+            "/comments",
+          content
+        )
+        .then(res => {
+          this.loadComment();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {});
+    },
+    replyComment: function(content, id) {
+      net
+        .putData(
+          this,
+          this.baseUriTalent.persona +
+            "/" +
+            this.$route.params.personaId +
+            "/comments/" +
+            id,
+          content
+        )
+        .then(res => {
+          this.loadComment();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {});
     }
   }
 };
