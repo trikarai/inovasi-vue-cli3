@@ -52,7 +52,7 @@
               <b>{{parentData.initiator.talent.name}}</b>
             </v-card-text>
             <!-- start comment module-->
-            <base-comment v-bind:collaborators="collaborators" />
+            <base-comment v-bind:comments="comments" />
             <!-- end comment module-->
             <!-- start collaborator module-->
             <base-collaboration
@@ -170,6 +170,7 @@ import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 
 import { dashboardMixins } from "@/mixins/dashboardMixins";
+import { commentMixins } from "@/mixins/commentMixins";
 
 import Notification from "@/components/Notification";
 import CustomerSegmentForm from "./customersegment/CustomerSegmentForm";
@@ -180,7 +181,7 @@ import BaseComment from "@/components/talent/team/components/BaseComment";
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 export default {
-  mixins: [dashboardMixins],
+  mixins: [dashboardMixins, commentMixins],
   components: {
     IdeaForm,
     CustomerSegmentForm,
@@ -230,7 +231,31 @@ export default {
       singleData: { id: "", name: "" },
       collaborators: { total: 0, list: [] },
       collaboratorForm: false,
-      mentorErrorCS: false
+      mentorErrorCS: false,
+      baseTalentUriIdea:
+        "/talent/as-team-member/" +
+        this.$route.params.teamId +
+        "/ideas/" +
+        this.$route.params.ideaId,
+      baseMentorUriIdea:
+        "/talent/as-programme-mentor/" +
+        this.$route.params.programId +
+        "/teams/" +
+        this.$route.params.teamId +
+        "/ideas/" +
+        this.$route.params.ideaId,
+      baseTalentUriCollaborator:
+        "/talent/as-team-member/" +
+        this.$route.params.teamId +
+        "/ideas/" +
+        this.$route.params.ideaId +
+        "/collaborators",
+      baseTalentUriComment:
+        "/talent/as-team-member/" +
+        this.$route.params.teamId +
+        "/ideas/" +
+        this.$route.params.ideaId +
+        "/comments"
     };
   },
   watch: {},
@@ -240,6 +265,7 @@ export default {
     if (this.checkDashboard) {
       this.getDataList();
       this.loadCollaborator();
+      // this.loadComment();
     }
   },
   methods: {
@@ -248,19 +274,9 @@ export default {
       notif.reset(this);
       var parent_uri = "";
       if (localStorage.getItem("dashboard") == "talent") {
-        parent_uri =
-          "/talent/as-team-member/" +
-          this.$route.params.teamId +
-          "/ideas/" +
-          this.$route.params.ideaId;
+        parent_uri = this.baseTalentUriIdea;
       } else if (localStorage.getItem("dashboard") == "mentor") {
-        parent_uri =
-          "/talent/as-programme-mentor/" +
-          this.$route.params.programId +
-          "/teams/" +
-          this.$route.params.teamId +
-          "/ideas/" +
-          this.$route.params.ideaId;
+        parent_uri = this.baseMentorUriIdea;
       }
       net
         .getData(this, parent_uri)
@@ -277,14 +293,7 @@ export default {
     getDataList: function() {
       this.loader = true;
       net
-        .getData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments"
-        )
+        .getData(this, this.baseTalentUriIdea + "/customer-segments")
         .then(res => {
           if (res.data.data) {
             this.data = res.data.data;
@@ -334,15 +343,7 @@ export default {
     },
     deleteData: function(id) {
       net
-        .deleteData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            id
-        )
+        .deleteData(this, this.baseTalentUriIdea + "/customer-segments/" + id)
         .then()
         .catch(error => {
           notif.showError(this, error);
@@ -364,14 +365,7 @@ export default {
       this.loader = true;
       notif.reset(this);
       net
-        .getData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/collaborators"
-        )
+        .getData(this, this.baseTalentUriCollaborator)
         .then(res => {
           if (res.data.data) {
             this.collaborators = res.data.data;
@@ -391,15 +385,7 @@ export default {
     },
     setUpCollaboration: function(params) {
       net
-        .putData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/collaborators",
-          params
-        )
+        .putData(this, this.baseTalentUriCollaborator, params)
         .then(res => {
           this.collaboratorForm = false;
           this.loadCollaborator();
@@ -415,17 +401,28 @@ export default {
       this.loader = true;
       notif.reset(this);
       net
-        .deleteData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/collaborators/" +
-            mentorId
-        )
+        .deleteData(this, this.baseTalentUriCollaborator + "/" + mentorId)
         .then(res => {
           this.loadCollaborator();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    loadComment: function() {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .getData(this, this.baseTalentUriComment)
+        .then(res => {
+          if (res.data.data) {
+            this.comments = res.data.data;
+          } else {
+            this.comments = { total: 0, list: [] };
+          }
         })
         .catch(error => {
           notif.showError(this, error);
