@@ -13,15 +13,15 @@
     </v-btn>
 
     <v-layout>
-      <v-card :loading="loader" class="mt-3">
-        <v-card-title>{{experiment.form.name}}</v-card-title>
-        <v-card-text
-          v-for="data in experiment.fields"
-          :key="data.id"
-        >{{data.field.name}} : {{data.value}}</v-card-text>
-      </v-card>
-    </v-layout>
-    <v-layout>
+      <v-flex md6>
+        <v-card :loading="loader" class="mt-3">
+          <v-card-title>{{experiment.form.name}}</v-card-title>
+          <v-card-text
+            v-for="data in experiment.fields"
+            :key="data.id"
+          >{{data.field.name}} : {{data.value}}</v-card-text>
+        </v-card>
+      </v-flex>
       <v-flex md6>
         <!-- start comment module-->
         <base-comment
@@ -30,6 +30,8 @@
           @replyComment="replyComment"
         />
       </v-flex>
+    </v-layout>
+    <v-layout>
       <v-flex md6>
         <!-- start collaborator module-->
         <base-collaboration
