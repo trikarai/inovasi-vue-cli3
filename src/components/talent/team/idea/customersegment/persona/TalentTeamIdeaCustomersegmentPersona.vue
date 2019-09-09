@@ -50,12 +50,14 @@
               <b>created time:</b>
               {{parentData.createdTime | moment("Do MMMM YYYY")}}
             </v-card-text>
-            <!-- start comment module-->
-            <base-comment
-              v-bind:comments="comments"
-              @postComment="postComment"
-              @replyComment="replyComment"
-            />
+            <template v-if="checkDashboard">
+              <!-- start comment module-->
+              <base-comment
+                v-bind:comments="comments"
+                @postComment="postComment"
+                @replyComment="replyComment"
+              />
+            </template>
             <!-- end comment module-->
             <!-- start collaborator module-->
             <base-collaboration
@@ -65,6 +67,14 @@
             />
             <!-- end collaborator module-->
           </v-card>
+        </v-flex>
+        <v-flex xs12 md6 v-if="!checkDashboard">
+          <!-- start comment module-->
+          <base-comment
+            v-bind:comments="comments"
+            @postComment="postComment"
+            @replyComment="replyComment"
+          />
         </v-flex>
         <v-flex xs12 md6 v-if="checkDashboard">
           <v-card class="pb-5" elevation="3" style="margin:10px" min-height="270">
@@ -264,6 +274,11 @@ export default {
     bus.$on("getValue", (params, index) => {
       this.params.fieldEntries.splice(index, 1, params);
     });
+    if (this.checkDashboard) {
+      this.comments_uri = this.baseUriTalent.persona;
+    } else {
+      this.comments_uri = this.baseUriMentor.persona;
+    }
   },
   methods: {
     gotoBusinessAnalysis: function(id) {
@@ -555,10 +570,7 @@ export default {
       net
         .getData(
           this,
-          this.baseUriTalent.persona +
-            "/" +
-            this.$route.params.personaId +
-            "/comments"
+          this.comments_uri + "/" + this.$route.params.personaId + "/comments"
         )
         .then(res => {
           if (res.data.data) {
@@ -578,10 +590,7 @@ export default {
       net
         .putData(
           this,
-          this.baseUriTalent.persona +
-            "/" +
-            this.$route.params.personaId +
-            "/comments",
+          this.comments_uri + "/" + this.$route.params.personaId + "/comments",
           content
         )
         .then(res => {
@@ -596,7 +605,7 @@ export default {
       net
         .putData(
           this,
-          this.baseUriTalent.persona +
+          this.comments_uri +
             "/" +
             this.$route.params.personaId +
             "/comments/" +
