@@ -231,6 +231,11 @@ export default {
     bus.$on("getValue", (params, index) => {
       this.params.fieldEntries.splice(index, 1, params);
     });
+    if (this.checkDashboard) {
+      this.comments_uri = this.baseUriTalent.canvas;
+    } else {
+      this.comments_uri = this.baseUriMentor.canvas;
+    }
   },
   methods: {
     submit: function() {
@@ -477,10 +482,7 @@ export default {
       net
         .getData(
           this,
-          this.baseUriTalent.canvas +
-            "/" +
-            this.$route.params.formId +
-            "/comments"
+          this.comments_uri + "/" + this.$route.params.formId + "/comments"
         )
         .then(res => {
           if (res.data.data) {
@@ -500,10 +502,7 @@ export default {
       net
         .putData(
           this,
-          this.baseUriTalent.canvas +
-            "/" +
-            this.$route.params.formId +
-            "/comments",
+          this.comments_uri + "/" + this.$route.params.formId + "/comments",
           content
         )
         .then(res => {
@@ -518,7 +517,7 @@ export default {
       net
         .putData(
           this,
-          this.baseUriTalent.canvas +
+          this.comments_uri +
             "/" +
             this.$route.params.formId +
             "/comments/" +
