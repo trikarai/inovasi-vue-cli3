@@ -16,9 +16,13 @@ var omikti = Object.freeze({
     accent3: '#ff1744',
     accent4: '#d50000'
 });
+var chat = Object.freeze({
+    base: '#007f9d',
+});
 export default {
 
     primary: "#00667f",
+    chat: chat,
     accent: "#e4e4e4",
     omikti: omikti,
     bmikti: "#00667f",

@@ -29,6 +29,17 @@
                       <v-icon>edit</v-icon>
                     </v-btn>
                   </div>
+                  <!-- start garis penghubung VP - analysis -->
+                  <v-scale-transition>
+                    <div v-if="viewAnalysis" class="grsduasec d-none d-md-flex d-lg-flex"></div>
+                  </v-scale-transition>
+                  <!-- end garis penghubung VP - analysis -->
+
+                  <!-- start panah kanan analysis -->
+                  <v-scale-transition>
+                    <span v-if="viewAnalysis" class="right-arrow d-none d-md-flex d-lg-flex"></span>
+                  </v-scale-transition>
+                  <!-- end panah kanan analysis -->
                 </v-list-item-action>
               </v-list-item>
             </v-card>
@@ -106,22 +117,31 @@
             <!-- end collaborator module-->
           </v-card>
         </v-flex>
+        <!-- Start Analysis card -->
         <v-flex xs12 md3>
+          <v-scale-transition>
           <v-card
             max-width
             class="pb-5"
             elevation="3"
-            style="margin:10px 5px 5px 5px"
+            style="margin:10px 5px 5px 5px;z-index:1;"
             min-height="270"
             v-if="viewAnalysis"
           >
             <v-card class="taitelcs primary white--text elevation-5">
-              <v-list-item>
+              <v-list-item>                
                 <v-list-item-content>
                   <h3
                     class="headline mb-0 font-weight-light white--text"
                   >{{ $vuetify.lang.t('$vuetify.idea.analysis') }}</h3>
                 </v-list-item-content>
+                <v-list-item-action>
+                  <!-- start garis penghubung analysis - exp -->
+                  <v-scale-transition>
+                    <div v-if="viewExp2" class="grsduasec2 d-none d-md-flex d-lg-flex"></div>
+                  </v-scale-transition>
+                  <!-- end garis penghubung analysis - exp -->
+                </v-list-item-action>
               </v-list-item>
             </v-card>
 
@@ -143,8 +163,13 @@
               </v-list>
             </v-card-text>
           </v-card>
+          </v-scale-transition>
         </v-flex>
+        <!-- end Analysis card -->
+
+        <!-- Start experiment card -->
         <v-flex xs12 md3 v-if="viewAnalysis">
+          <v-scale-transition>
           <v-card
             max-width
             class="pb-5"
@@ -155,11 +180,16 @@
           >
             <v-card class="taitelcs primary white--text elevation-5">
               <v-list-item>
+                <!-- start panah kanan exp -->
+                  <v-x-transition>
+                    <span class="right-arrow2 d-none d-md-flex d-lg-flex"></span>
+                  </v-x-transition>
+                  <!-- end panah kanan exp -->
                 <v-list-item-content>
                   <h3
                     class="headline mb-0 font-weight-light white--text"
                   >{{ $vuetify.lang.t('$vuetify.idea.experiment') }}</h3>
-                </v-list-item-content>
+                </v-list-item-content>               
               </v-list-item>
             </v-card>
 
@@ -182,7 +212,9 @@
               </v-list>
             </v-card-text>
           </v-card>
+          </v-scale-transition>
         </v-flex>
+        <!-- Start experiment card -->
       </v-layout>
 
       <ValuePropositionForm
@@ -526,5 +558,42 @@ export default {
   margin: 0 auto;
   bottom: 27px;
   z-index: 2;
+}
+.grsduasec {
+  background: #00667f;
+  width: 99px;
+  height: 11px;
+  position: relative;
+  left: 106px;
+  bottom: 35px;
+}
+.grsduasec2 {
+  background: #00667f;
+  width: 38px;
+  height: 11px;
+  position: relative;
+  left: 70px;
+}
+.right-arrow {
+  border-color: transparent #fb7307;
+  border-style: solid;
+  border-width: 20px 0px 20px 25px;
+  height: 0px;
+  width: 0px;
+  position: relative;
+  left: 106px;
+  bottom: 60px;
+  z-index: 90;
+}
+.right-arrow2 {
+  border-color: transparent #fb7307;
+  border-style: solid;
+  border-width: 20px 0px 20px 25px;
+  height: 0px;
+  width: 0px;
+  position: relative;
+  right: 41px;
+  bottom: 0px;
+  z-index: 90;
 }
 </style>

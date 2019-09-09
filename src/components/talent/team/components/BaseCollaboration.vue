@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-divider></v-divider>
+    <!-- <v-divider></v-divider> -->
     <v-card-title class="subtitle-1">{{ $vuetify.lang.t('$vuetify.collaboration.collaboration') }}</v-card-title>
     <v-data-table
       v-show="collaborators.list"

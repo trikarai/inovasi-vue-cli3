@@ -12,7 +12,7 @@
           <v-textarea
             v-model="params.content"
             class="mr-0"
-            rows="2"
+            rows="1"
             hide-details
             flat
             label="Leave a comment..."
@@ -21,6 +21,8 @@
           >
             <template v-slot:append>
               <v-btn
+                dark
+                small
                 @click="postComment"
                 class="mx-0"
                 color="omikti"
@@ -29,23 +31,24 @@
           </v-textarea>
         </v-timeline-item>
         <v-timeline-item v-for="comment in comments.list" :key="comment.id" color="primary" small>
-          <v-card class="elevation-3 pa-3">
+          <v-card class="elevation-3 pa-3 pb-4">
             <v-card-title class="subtitle-1">{{comment.member.talent.name}}</v-card-title>
             <v-card-text class="caption">
               <v-icon class="mb-1 mr-1" color="primary" small>calendar_today</v-icon>
               {{comment.submitTime}}
             </v-card-text>
             <v-card-text class="title">{{comment.content}}</v-card-text>
-            <v-card color="grey" v-if="comment.parent != null">
-              <blockquote class="blockquote caption">{{comment.parent.content}}</blockquote>
+            <v-card class="ml-4 mr-4 borderchat" style="background: #00BAE5;" v-if="comment.parent != null">
+              <blockquote style="color:#fff" class="blockquote caption">{{comment.parent.content}}</blockquote>
             </v-card>
             <v-card-actions>
               <v-spacer />
-              <v-btn small @click="replyAct(comment.id)" v-if="selectedComment == null">
-                <v-icon small>reply</v-icon>
+              <v-btn depressed style="margin-right:10px;" small @click="replyAct(comment.id)" v-if="selectedComment == null">
+                <v-icon left small>reply</v-icon> Reply
               </v-btn>
               <v-btn
                 color="warning"
+                style="margin-right:10px;"
                 small
                 @click="selectedComment = null"
                 v-if="selectedComment == comment.id"
@@ -66,9 +69,11 @@
                   label="Leave a reply..."
                   clearable
                 ></v-textarea>
-                <v-btn color="omikti" small @click="replyComment(comment.id)">
-                  <v-icon small>reply</v-icon>
+                <div class="mt-3" style="text-align: right;">
+                <v-btn right dark small @click="replyComment(comment.id)">
+                  <v-icon left small>reply</v-icon> Reply
                 </v-btn>
+                </div>
               </v-card-text>
             </v-scale-transition>
           </v-card>
@@ -112,4 +117,9 @@ export default {
 };
 </script>
 <style scoped>
+.borderchat {
+  border-left-width: 5px;
+  border-left-color: #02819e !important;
+  border-left-style: solid;
+}
 </style>

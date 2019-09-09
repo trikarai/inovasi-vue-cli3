@@ -58,7 +58,7 @@
       v-model="competitorForm"
       width="450"
     >
-      <v-card>
+      <v-card style="padding:0px 30px 30px 30px;" class="mt-5">
         <v-card class="taitel primary white--text elevation-5">
           <template v-if="!view">
             <h3
@@ -119,21 +119,23 @@
             </v-card-actions>
             <v-card-actions v-if="!view">
               <v-btn
+                block
                 v-if="!edit"
                 @click="submit"
                 :class=" { 'primary white--text' : valid}"
                 :disabled="!valid"
               >
-                <v-icon>add</v-icon>
+                <!-- <v-icon>add</v-icon> -->
                 {{ $vuetify.lang.t('$vuetify.action.add') }}
               </v-btn>
               <v-btn
+                block
                 v-if="edit"
                 @click="update"
                 :class=" { 'primary white--text' : valid}"
                 :disabled="!valid"
               >
-                <v-icon>edit</v-icon>
+                <!-- <v-icon>edit</v-icon> -->
                 {{ $vuetify.lang.t('$vuetify.action.edit') }}
               </v-btn>
             </v-card-actions>
