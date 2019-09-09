@@ -138,7 +138,12 @@
     <v-container>
       <v-layout>
         <v-flex md6>
-          <!-- Feedback Placeholder -->
+          <!-- start comment module-->
+          <base-comment
+            v-bind:comments="comments"
+            @postComment="postComment"
+            @replyComment="replyComment"
+          />
         </v-flex>
         <v-flex md6>
           <!-- start collaborator module-->
@@ -161,7 +166,9 @@ import net from "@/config/httpclient";
 import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 
+import { baseuriMixins } from "@/mixins/baseuriMixins";
 import { dashboardMixins } from "@/mixins/dashboardMixins";
+import { commentMixins } from "@/mixins/commentMixins";
 
 import FieldModul from "@/components/field/field";
 import FieldCanEditModul from "@/components/field/fieldCanEdit";
@@ -170,9 +177,10 @@ import BaseCollaboration from "@/components/talent/team/components/BaseCollabora
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
 
 import BusinessForm from "./BusinessForm";
+import BaseComment from "@/components/talent/team/components/BaseComment";
 
 export default {
-  mixins: [dashboardMixins],
+  mixins: [dashboardMixins, commentMixins, baseuriMixins],
   data: function() {
     return {
       valid: false,
@@ -204,6 +212,7 @@ export default {
     BaseCollaboration,
     FormCollaboration,
     BusinessForm,
+    BaseComment,
     "notification-alert": Notification,
     "field-modul": FieldModul,
     "fieldcanedit-modul": FieldCanEditModul
@@ -212,8 +221,8 @@ export default {
     this.getCanvas();
     if (this.checkDashboard) {
       this.loadCollaborator();
-    } else {
     }
+    this.loadComment();
   },
   watch: {
     // isCanvas: "getCanvasForm"
@@ -262,8 +271,7 @@ export default {
       notif.reset(this);
       var parent_uri = "";
       if (localStorage.getItem("dashboard") == "talent") {
-        parent_uri =
-          "/talent/as-team-member/";
+        parent_uri = "/talent/as-team-member/";
       } else if (localStorage.getItem("dashboard") == "mentor") {
         parent_uri =
           "/talent/as-programme-mentor/" +
@@ -332,21 +340,7 @@ export default {
       this.loader = true;
       notif.reset(this);
       net
-        .patchData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId +
-            "/business-canvases",
-          this.params
-        )
+        .patchData(this, this.baseUriTalent.canvas, this.params)
         .then(res => {
           notif.showSuccess(this, res, ["Data Canvas Saved"]);
           this.isCanvas = true;
@@ -365,21 +359,7 @@ export default {
       this.loader = true;
       notif.reset(this);
       net
-        .patchData(
-          this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId +
-            "/business-canvases",
-          this.params
-        )
+        .patchData(this, this.baseUriTalent.canvas, this.params)
         .then(res => {
           notif.showSuccess(this, res, ["Data Canvas Updated"]);
           this.isCanvas = true;
@@ -398,18 +378,7 @@ export default {
       net
         .deleteData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId +
-            "/business-canvases/" +
-            this.$route.params.formId
+          this.baseUriTalent.canvas + "/" + +this.$route.params.formId
         )
         .then(res => {
           notif.showInfo(this, res, ["Canvas Data Deleted"]);
@@ -438,17 +407,8 @@ export default {
       net
         .getData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId +
-            "/business-canvases/" +
+          this.baseUriTalent.canvas +
+            "/" +
             this.$route.params.formId +
             "/collaborators"
         )
@@ -473,17 +433,8 @@ export default {
       net
         .putData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId +
-            "/business-canvases/" +
+          this.baseUriTalent.canvas +
+            "/" +
             this.$route.params.formId +
             "/collaborators",
           params
@@ -504,17 +455,8 @@ export default {
       net
         .deleteData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId +
-            "/business-canvases/" +
+          this.baseUriTalent.canvas +
+            "/" +
             this.$route.params.formId +
             "/collaborators/" +
             mentorId
@@ -528,6 +470,68 @@ export default {
         .finally(() => {
           this.loader = false;
         });
+    },
+    loadComment: function() {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .getData(
+          this,
+          this.baseUriTalent.canvas +
+            "/" +
+            this.$route.params.formId +
+            "/comments"
+        )
+        .then(res => {
+          if (res.data.data) {
+            this.comments = res.data.data;
+          } else {
+            this.comments = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    postComment: function(content) {
+      net
+        .putData(
+          this,
+          this.baseUriTalent.canvas +
+            "/" +
+            this.$route.params.formId +
+            "/comments",
+          content
+        )
+        .then(res => {
+          this.loadComment();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {});
+    },
+    replyComment: function(content, id) {
+      net
+        .putData(
+          this,
+          this.baseUriTalent.canvas +
+            "/" +
+            this.$route.params.formId +
+            "/comments/" +
+            id,
+          content
+        )
+        .then(res => {
+          this.loadComment();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {});
     }
   }
 };
