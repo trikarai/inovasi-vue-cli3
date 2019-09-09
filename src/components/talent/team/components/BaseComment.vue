@@ -2,17 +2,18 @@
   <div>
     <v-container style="height:450px;overflow:auto;">
       <!-- {{comments.list}} -->
-      <v-divider></v-divider>
+      <!-- <v-divider></v-divider> -->
       <v-card-title class="subtitle-1">{{ $vuetify.lang.t('$vuetify.feedback.feedback') }}</v-card-title>
       <v-timeline class="pr-5" dense clipped>
         <v-timeline-item fill-dot color="omikti" large>
           <template v-slot:icon>
             <v-icon class="mt-1" style="color:#fff;">add_comment</v-icon>
           </template>
-          <v-form v-model="valid" ref="form">
+          <v-form id="beskomen" v-model="valid" ref="form">
             <v-textarea
+              class="mt-10"
               v-model="params.content"
-              rows="3"
+              rows="2"
               solo
               label="Leave a comment..."
               :rules="rules"
@@ -150,5 +151,12 @@ export default {
   border-left-width: 5px;
   border-left-color: #02819e !important;
   border-left-style: solid;
+}
+
+</style>
+<style>
+#beskomen .v-input__slot {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
 }
 </style>

@@ -100,7 +100,8 @@ var _default = {
     programParticipation: "Partisipasi Program",
     writeHere: "tulis disini...",
     listMember: "Daftar Anggota",
-    addMember: "Tambah Anggota"
+    addMember: "Tambah Anggota",
+    noProgram: "Program Anda belum diterima oleh Program Koordinator Anda atau Anda belum mendaftar program"
   },
   program:{
     program: "Program",

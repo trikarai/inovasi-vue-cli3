@@ -99,7 +99,8 @@ var _default = {
     programParticipation: "Program Participation",
     writeHere: "write here...",
     listMember: "List Member",
-    addMember: "Add Member"
+    addMember: "Add Member",
+    noProgram: "Your Program hasnt accepted by your Coordinator Program or U havent register a program"
   },
   program:{
     program: "Program",

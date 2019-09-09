@@ -11,7 +11,8 @@
         <v-container>
           <v-form ref="form" v-model="valid">
             <v-flex>
-              <v-select
+              <template v-if="program.total == 0">{{$vuetify.lang.t('$vuetify.team.noProgram')}}</template>
+              <v-select v-else
                 :loading="programLoader"
                 :disabled="programDisable"
                 v-model="collaboratorParams.programmeId"
@@ -20,7 +21,7 @@
                 item-value="programme.id"
                 :rules="rules"
                 :label="$vuetify.lang.t('$vuetify.team.programParticipation')"
-              ></v-select>
+              ></v-select>        
             </v-flex>
             <v-flex>
               <v-autocomplete
