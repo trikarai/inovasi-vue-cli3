@@ -18,11 +18,14 @@
       <v-flex>
         <v-data-table :headers="headers" :items="experiments.list" class="elevation-1">
           <template v-slot:item.action="{item}">
-            <v-btn class="mr-2" @click="openEdit(item)" color="primary" small>
-              <v-icon left>edit</v-icon> Edit
+            <v-btn class="mr-2" @click="openEdit(item)" color="grey lighten-4" small>
+              <v-icon small left>edit</v-icon> Edit
             </v-btn>
-            <v-btn @click="gotoExp(item.id)" color="primary" small>
+            <v-btn class="mr-2" @click="gotoExp(item.id)" color="primary" small>
               <v-icon left>pageview</v-icon> View
+            </v-btn>
+            <v-btn dark color="omikti" small>
+              <v-icon small left>delete</v-icon> delete
             </v-btn>
           </template>
         </v-data-table>
