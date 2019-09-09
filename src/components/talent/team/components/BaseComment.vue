@@ -114,13 +114,13 @@ export default {
     };
   },
   created: function() {
-    this.params.content = "";
   },
   watch: {
     comments: function() {
       this.params.content = "";
       this.reply.content = "";
       this.selectedComment = null;
+      this.$refs.form.resetValidation();
     }
   },
   methods: {
