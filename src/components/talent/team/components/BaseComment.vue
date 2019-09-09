@@ -30,7 +30,8 @@
         </v-timeline-item>
         <v-timeline-item v-for="comment in comments.list" :key="comment.id" color="primary" small>
           <v-card class="elevation-3 pa-3">
-            <v-card-title class="subtitle-1">{{comment.member.talent.name}}</v-card-title>
+            <v-card-title class="subtitle-1" v-if="comment.member">{{comment.member.talent.name}}</v-card-title>
+            <v-card-title class="subtitle-1" v-if="comment.mentor">{{comment.mentor.talent.name}}</v-card-title>
             <v-card-text class="caption">
               <v-icon class="mb-1 mr-1" color="primary" small>calendar_today</v-icon>
               {{comment.submitTime}}
