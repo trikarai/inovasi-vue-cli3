@@ -16,7 +16,6 @@
               solo
               label="Leave a comment..."
               :rules="rules"
-              clearable
             >
               <template v-slot:append>
                 <v-btn
@@ -79,7 +78,6 @@
                     rows="2"
                     label="Leave a reply..."
                     :rules="rules"
-                    clearable
                   ></v-textarea>
                   <div class="mt-3" style="text-align: right;">
                     <v-btn :disabled="!valid2" right dark small @click="replyComment(comment.id)">
