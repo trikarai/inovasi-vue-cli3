@@ -52,7 +52,7 @@
               <b>{{parentData.initiator.talent.name}}</b>
             </v-card-text>
             <!-- start comment module-->
-            <base-comment v-bind:comments="comments" />
+            <!-- <base-comment v-bind:comments="comments" /> -->
             <!-- end comment module-->
             <!-- start collaborator module-->
             <base-collaboration
