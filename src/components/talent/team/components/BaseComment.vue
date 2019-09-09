@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container style="height:450px;overflow:auto;">
-      <!-- {{comments.list}} -->
+      <!-- {{comments}} -->
       <v-divider></v-divider>
       <v-card-title class="subtitle-1">{{ $vuetify.lang.t('$vuetify.feedback.feedback') }}</v-card-title>
       <v-timeline class="pr-5" dense clipped>
@@ -29,6 +29,7 @@
             </v-textarea>
           </v-form>
         </v-timeline-item>
+        <v-timeline-item v-if="comments.total === 0">{{ $vuetify.lang.t('$vuetify.noCommentText') }}</v-timeline-item>
         <v-timeline-item v-for="comment in comments.list" :key="comment.id" color="primary" small>
           <v-card class="elevation-3 pa-3">
             <v-card-title class="subtitle-1" v-if="comment.member">{{comment.member.talent.name}}</v-card-title>
@@ -113,8 +114,7 @@ export default {
       ]
     };
   },
-  created: function() {
-  },
+  created: function() {},
   watch: {
     comments: function() {
       this.params.content = "";

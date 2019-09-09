@@ -32,6 +32,8 @@ var _default = {
     itemsSelected: '{0} dipilih'
   },
   noDataText: 'Tidak ada data tersedia',
+  noCommentText: 'Tidak ada komentar',
+
   carousel: {
     prev: 'Visual sebelumnya',
     next: 'Visual selanjutnya'

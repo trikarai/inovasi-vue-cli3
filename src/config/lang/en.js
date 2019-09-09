@@ -32,6 +32,7 @@ var _default = {
     itemsSelected: '{0} selected'
   },
   noDataText: 'No data available',
+  noCommentText: 'No comment yet',
   carousel: {
     prev: 'Previous visual',
     next: 'Next visual'
