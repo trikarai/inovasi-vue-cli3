@@ -28,7 +28,18 @@ export const baseuriMixins = {
                     this.$route.params.personaId +
                     "/value-propositions/" +
                     this.$route.params.valuepropositionId +
-                    "/business-canvases"
+                    "/business-canvases",
+                experiment: "/talent/as-team-member/" +
+                    this.$route.params.teamId +
+                    "/ideas/" +
+                    this.$route.params.ideaId +
+                    "/customer-segments/" +
+                    this.$route.params.customersegmentId +
+                    "/personas/" +
+                    this.$route.params.personaId +
+                    "/value-propositions/" +
+                    this.$route.params.valuepropositionId +
+                    "/experiments"
             },
             baseUriMentor: {
                 persona: "/talent/as-programme-mentor/" +

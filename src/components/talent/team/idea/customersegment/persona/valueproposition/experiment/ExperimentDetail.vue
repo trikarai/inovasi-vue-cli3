@@ -23,7 +23,12 @@
     </v-layout>
     <v-layout>
       <v-flex md6>
-        <!-- Feedback Placeholder -->
+        <!-- start comment module-->
+        <base-comment
+          v-bind:comments="comments"
+          @postComment="postComment"
+          @replyComment="replyComment"
+        />
       </v-flex>
       <v-flex md6>
         <!-- start collaborator module-->
@@ -53,13 +58,16 @@ import notif from "@/config/alerthandling";
 import Notification from "@/components/Notification";
 
 import ExperimentForm from "./ExperimentForm";
+import { baseuriMixins } from "@/mixins/baseuriMixins";
 import { dashboardMixins } from "@/mixins/dashboardMixins";
+import { commentMixins } from "@/mixins/commentMixins";
 
 import BaseCollaboration from "@/components/talent/team/components/BaseCollaboration";
 import FormCollaboration from "@/components/talent/team/components/CollaboratorForm";
+import BaseComment from "@/components/talent/team/components/BaseComment";
 
 export default {
-  mixins: [dashboardMixins],
+  mixins: [dashboardMixins, commentMixins, baseuriMixins],
   data: function() {
     return {
       loader: false,
@@ -84,13 +92,15 @@ export default {
     Notification,
     BaseCollaboration,
     FormCollaboration,
-    ExperimentForm
+    ExperimentForm,
+    BaseComment
   },
   mounted: function() {
     this.getExperiment();
     if (this.checkDashboard) {
       this.loadCollaborator();
     }
+    this.loadComment();
   },
   methods: {
     getExperiment: function() {
@@ -144,17 +154,8 @@ export default {
       net
         .getData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId +
-            "/experiments/" +
+          this.baseUriTalent.experiment +
+            "/" +
             this.$route.params.experimentId +
             "/collaborators"
         )
@@ -179,17 +180,8 @@ export default {
       net
         .putData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId +
-            "/experiments/" +
+          this.baseUriTalent.experiment +
+            "/" +
             this.$route.params.experimentId +
             "/collaborators",
           params
@@ -210,17 +202,8 @@ export default {
       net
         .deleteData(
           this,
-          "/talent/as-team-member/" +
-            this.$route.params.teamId +
-            "/ideas/" +
-            this.$route.params.ideaId +
-            "/customer-segments/" +
-            this.$route.params.customersegmentId +
-            "/personas/" +
-            this.$route.params.personaId +
-            "/value-propositions/" +
-            this.$route.params.valuepropositionId +
-            "/experiments/" +
+          this.baseUriTalent.experiment +
+            "/" +
             this.$route.params.experimentId +
             "/collaborators/" +
             mentorId
@@ -238,6 +221,68 @@ export default {
     refresh: function() {
       this.dialogForm = false;
       this.getExperiment();
+    },
+    loadComment: function() {
+      this.loader = true;
+      notif.reset(this);
+      net
+        .getData(
+          this,
+          this.baseUriTalent.experiment +
+            "/" +
+            this.$route.params.experimentId +
+            "/comments"
+        )
+        .then(res => {
+          if (res.data.data) {
+            this.comments = res.data.data;
+          } else {
+            this.comments = { total: 0, list: [] };
+          }
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.loader = false;
+        });
+    },
+    postComment: function(content) {
+      net
+        .putData(
+          this,
+          this.baseUriTalent.experiment +
+            "/" +
+            this.$route.params.experimentId +
+            "/comments",
+          content
+        )
+        .then(res => {
+          this.loadComment();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {});
+    },
+    replyComment: function(content, id) {
+      net
+        .putData(
+          this,
+          this.baseUriTalent.experiment +
+            "/" +
+            this.$route.params.experimentId +
+            "/comments/" +
+            id,
+          content
+        )
+        .then(res => {
+          this.loadComment();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {});
     }
   }
 };
