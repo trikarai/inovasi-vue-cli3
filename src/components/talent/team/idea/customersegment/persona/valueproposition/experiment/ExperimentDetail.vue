@@ -95,6 +95,13 @@ export default {
     ExperimentForm,
     BaseComment
   },
+  created: function() {
+    if (this.checkDashboard) {
+      this.comments_uri = this.baseUriTalent.experiment;
+    } else {
+      this.comments_uri = this.baseUriMentor.experiment;
+    }
+  },
   mounted: function() {
     this.getExperiment();
     if (this.checkDashboard) {
@@ -228,7 +235,7 @@ export default {
       net
         .getData(
           this,
-          this.baseUriTalent.experiment +
+          this.comments_uri +
             "/" +
             this.$route.params.experimentId +
             "/comments"
@@ -251,7 +258,7 @@ export default {
       net
         .putData(
           this,
-          this.baseUriTalent.experiment +
+          this.comments_uri +
             "/" +
             this.$route.params.experimentId +
             "/comments",
@@ -269,7 +276,7 @@ export default {
       net
         .putData(
           this,
-          this.baseUriTalent.experiment +
+          this.comments_uri +
             "/" +
             this.$route.params.experimentId +
             "/comments/" +
