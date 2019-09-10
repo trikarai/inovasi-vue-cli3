@@ -121,7 +121,7 @@
                   <v-icon left small>how_to_vote</v-icon>
                   <v-list-item-title>Register a Program</v-list-item-title>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item @click="openMentoring">
                   <v-icon left small>insert_invitation</v-icon>
                   <v-list-item-title>Propose a Mentoring</v-list-item-title>
                 </v-list-item>
@@ -334,7 +334,11 @@
             >Create or Join Team First</v-alert>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" :disabled="valuepropositionId == ''" @click="gotoCanvasList">Canvas List</v-btn>
+            <v-btn
+              color="primary"
+              :disabled="valuepropositionId == ''"
+              @click="gotoCanvasList"
+            >Canvas List</v-btn>
           </v-card-actions>
           <!-- <v-card-text>
             <v-layout row>
@@ -370,7 +374,11 @@
             >Create or Join Team First</v-alert>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" :disabled="valuepropositionId == ''" @click="gotoExpList">Experment Form List</v-btn>
+            <v-btn
+              color="primary"
+              :disabled="valuepropositionId == ''"
+              @click="gotoExpList"
+            >Experment Form List</v-btn>
           </v-card-actions>
           <!-- <v-card-text>
             <v-layout row>
@@ -387,6 +395,57 @@
         </v-card>
       </v-timeline-item>
     </v-timeline>
+
+    <v-dialog v-model="formMentoring" persistent content-class="operplow" max-width="450">
+      <v-form v-model="valid" ref="form">
+        <v-card style="padding:0px 30px 30px 30px;">
+          <v-card class="taitel2 primary white--text elevation-5">
+            <v-btn
+              style="float:right;left: 20px;bottom: 20px;"
+              small
+              fab
+              color="white"
+              text
+              @click="formMentoring = false"
+            >
+              <v-icon small>close</v-icon>
+            </v-btn>
+            <h3 class="headline mb-0 font-weight-light">Propose Mentoring</h3>
+          </v-card>
+
+          <v-card-text class="ma-0 pa-0">
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <!-- {{program.list}} -->
+                <v-flex xs12 sm12 md12>
+                  <v-select
+                    v-model="programId"
+                    :items="program.list"
+                    :no-data-text="$vuetify.lang.t('$vuetify.noDataText')"
+                    :loading="loader"
+                    item-text="programme.name"
+                    item-value="programme.id"
+                    :label="$vuetify.lang.t('$vuetify.team.programParticipation')"
+                    hint="Select Program"
+                    persistent-hint
+                    outlined
+                  ></v-select>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              @click="gotoMentoringEvent"
+              color="primary"
+              :disabled="programId == ''"
+              block
+            >{{$vuetify.lang.t('$vuetify.mentoring.propose')}}</v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-form>
+    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -397,6 +456,8 @@ import Notification from "@/components/Notification";
 export default {
   props: ["teamId"],
   data: () => ({
+    valid: false,
+    formMentoring: false,
     status: {
       success: false,
       error: false,
@@ -425,6 +486,7 @@ export default {
       { title: "Team List", icon: "view_list", to: "/talent/team" }
     ],
     program: { total: 0, list: [] },
+    programId: "",
     idea: { total: 0, list: [] },
     ideaId: "",
     customersegment: { total: 0, list: [] },
@@ -784,6 +846,14 @@ export default {
           this.valuepropositionId +
           "/experiment/" +
           id
+      });
+    },
+    openMentoring: function() {
+      this.formMentoring = true;
+    },
+    gotoMentoringEvent: function() {
+      this.$router.push({
+        path: "/talent/team/" + this.teamId + "/participation/" + this.programId + "/mentoring-event"
       });
     }
   }
