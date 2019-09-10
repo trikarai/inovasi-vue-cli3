@@ -10,7 +10,6 @@
           v-model="teamId"
           :items="team.list"
           :no-data-text="$vuetify.lang.t('$vuetify.noDataText')"
-          :loading="loader"
           item-text="team.name"
           item-value="team.id"
           :label="$vuetify.lang.t('$vuetify.team.team')"

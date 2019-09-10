@@ -103,7 +103,7 @@ var _default = {
     writeHere: "tulis disini...",
     listMember: "Daftar Anggota",
     addMember: "Tambah Anggota",
-    noProgram: "Program Anda belum diterima oleh Program Koordinator Anda atau Anda belum mendaftar program"
+    noProgram: "Program Anda belum diterima oleh Program Koordinator atau Anda belum mendaftar program"
   },
   program:{
     program: "Program",

@@ -101,7 +101,7 @@ var _default = {
     writeHere: "write here...",
     listMember: "List Member",
     addMember: "Add Member",
-    noProgram: "Your Program hasnt accepted by your Coordinator Program or U havent register a program"
+    noProgram: "Your Program hasn't accepted by your Coordinator Program or you haven't register a program"
   },
   program:{
     program: "Program",

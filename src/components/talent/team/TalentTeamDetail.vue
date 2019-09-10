@@ -47,6 +47,7 @@
                   </v-list-item>
                 </v-card>
 
+                <v-layout class="ml-3 mr-3" column>
                 <v-list-item
                   style="padding-left:26px;padding-right:26px"
                   :three-line="true"
@@ -57,6 +58,7 @@
                     <span class="grey--text font-weight-light">{{params.team.vision}}</span>
                   </v-list-item-content>
                 </v-list-item>
+                
                 <v-flex v-if="edit" class="ml-5 mr-5">
                   <v-tooltip max-width="250" right>
                     <template v-slot:activator="{ on }">
@@ -172,13 +174,16 @@
                 </v-flex>
 
                 <v-flex v-if="edit">
-                  <v-btn
-                    class="ml-5"
+                  <v-btn                    
+                    style="width: 92%;"
+                    class="ma-5"
                     @click.prevent="validateTeam"
                     :class=" { 'primary white--text' : valid}"
                     :disabled="!valid"
-                  >{{ $vuetify.lang.t('$vuetify.action.update')}} {{ $vuetify.lang.t('$vuetify.team.team')}}</v-btn>
+                  >{{ $vuetify.lang.t('$vuetify.action.update')}} {{ $vuetify.lang.t('$vuetify.team.team')}}
+                  </v-btn>
                 </v-flex>
+                </v-layout>
               </v-card>
             </v-form>
           </v-flex>

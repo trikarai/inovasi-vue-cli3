@@ -2,44 +2,73 @@
   <v-container>
     <notification ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
     <form-collaboration v-model="collaboratorForm" @setUpCollaboration="setUpCollaboration"></form-collaboration>
+    
     <loader-dialog v-model="loader" />
 
-    <v-btn color="primary" @click="openEdit()" v-if="checkDashboard">
+    <!-- <v-btn color="primary" @click="openEdit()" v-if="checkDashboard">
       <v-icon left>edit</v-icon>edit
     </v-btn>
 
     <v-btn small fab class="ml-3" @click="openCollaborator()" v-if="checkDashboard">
       <v-icon>share</v-icon>
-    </v-btn>
+    </v-btn> -->
 
-    <v-layout>
+    <v-layout row>
       <v-flex md6>
-        <v-card :loading="loader" class="mt-3">
-          <v-card-title>{{experiment.form.name}}</v-card-title>
-          <v-card-text
+        <v-card elevation="3" class="mt-3 ml-2 mr-1 pb-5"><v-card class="taitel primary white--text elevation-5">
+              <v-list-item three-line>
+                <v-list-item-content>
+                  <v-list-item-title
+                    class="font-weight-light white--text body-2"
+                  >{{ $vuetify.lang.t('$vuetify.idea.experiment') }}</v-list-item-title>
+
+                  <v-list-item-subtitle>
+                    <h4 class="headline mb-0 white--text">{{experiment.form.name}}</h4>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+                <v-list-item-action v-if="checkDashboard">
+                  <div>
+                    <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
+                      <v-icon>share</v-icon>
+                    </v-btn>
+                    <v-btn small fab @click="openEdit()" class="ml-2 mt-1">
+                      <v-icon>edit</v-icon>
+                    </v-btn>
+                  </div>
+                  <div class="grsduasec d-none d-md-flex d-lg-flex"></div>
+                </v-list-item-action>
+              </v-list-item>
+            </v-card>
+
+          <v-list-item 
             v-for="data in experiment.fields"
-            :key="data.id"
-          >{{data.field.name}} : {{data.value}}</v-card-text>
+            :key="data.id" 
+            style="padding-left:26px;padding-right:26px" 
+            :three-line="true">
+              <v-list-item-content>
+                <v-list-item-title>{{data.field.name}}</v-list-item-title>
+                <span class="grey--text font-weight-light">{{data.value}}</span>
+              </v-list-item-content>
+            </v-list-item>
+
         </v-card>
       </v-flex>
       <v-flex md6>
         <!-- start comment module-->
-        <base-comment
-          v-bind:comments="comments"
-          @postComment="postComment"
-          @replyComment="replyComment"
-        />
-      </v-flex>
-    </v-layout>
-    <v-layout>
-      <v-flex md6>
-        <!-- start collaborator module-->
-        <base-collaboration
-          v-if="collaborators.total != 0"
-          v-bind:collaborators="collaborators"
-          @removeCollaborator="removeCollaborator"
-        />
-        <!-- end collaborator module-->
+        <v-card class="mt-3 mr-2 ml-1">
+          <base-comment
+            v-bind:comments="comments"
+            @postComment="postComment"
+            @replyComment="replyComment"
+          />
+        </v-card>
+        <v-card class="mt-2 mr-2 ml-1">
+          <base-collaboration
+            v-if="collaborators.total != 0"
+            v-bind:collaborators="collaborators"
+            @removeCollaborator="removeCollaborator"
+          />
+        </v-card>
       </v-flex>
     </v-layout>
 
@@ -296,3 +325,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.taitel {
+  padding: 14px;
+  width: 90%;
+  margin: 0 auto;
+  bottom: 27px;
+  z-index: 2;
+}
+</style>

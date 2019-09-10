@@ -1,10 +1,10 @@
 <template>
   <nav>
-    <v-app-bar text app color="primary">
-      <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title class="text-uppercase white--text">
-        <span class="font-weight-light">START</span>
-        <span class>Mikti</span>
+    <v-app-bar text app color="grey lighten-4">
+      <v-app-bar-nav-icon class="black--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title class="text-uppercase black--text">
+        <span class="font-weight-light">Mentor</span>
+        <!-- <span class>Mikti</span> -->
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn text @click="rightDrawer =! rightDrawer">
@@ -12,8 +12,8 @@
       </v-btn>
     </v-app-bar>
 
-    <div>
-      <v-breadcrumbs :items="items" divider=">" style="visibility:hidden"></v-breadcrumbs>
+    <div class="mb-5">
+      <v-breadcrumbs :items="items" divider=">" style="display:none"></v-breadcrumbs>
     </div>
 
     <v-navigation-drawer app v-model="drawer" :mini-variant.sync="miniVariant">
@@ -26,7 +26,7 @@
         </v-list-item>
         <v-list-item>
           <v-list-item-avatar>
-            <img src="https://randomuser.me/api/portraits/men/85.jpg" />
+            <img src="/img/avatar2.png" />
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{user.data.name}}</v-list-item-title>

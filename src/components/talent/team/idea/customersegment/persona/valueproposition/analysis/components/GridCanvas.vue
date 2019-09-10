@@ -139,19 +139,23 @@
       <v-layout>
         <v-flex md6>
           <!-- start comment module-->
+          <v-card class="mr-1">
           <base-comment
             v-bind:comments="comments"
             @postComment="postComment"
             @replyComment="replyComment"
           />
+          </v-card>
         </v-flex>
         <v-flex md6>
           <!-- start collaborator module-->
+          <v-card class="ml-1">
           <base-collaboration
             v-if="collaborators.total != 0"
             v-bind:collaborators="collaborators"
             @removeCollaborator="removeCollaborator"
           />
+          </v-card>
           <!-- end collaborator module-->
         </v-flex>
       </v-layout>

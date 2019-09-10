@@ -17,22 +17,22 @@
     <!-- {{experiments.list}} -->
     <v-layout>
       <v-flex>
-        <v-data-table :headers="headers" :items="experiments.list" class="elevation-1">
+        <v-data-table :headers="headers" :items="experiments.list" class="elevation-3">
           <template v-slot:item.action="{item}">
-            <v-btn class="mr-2" @click="openEdit(item)" color="grey lighten-4" small>
+            <v-btn class="mr-2 mt-1 mb-1" @click="openEdit(item)" color="grey lighten-4" small>
               <v-icon small left>edit</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>
-            <v-btn class="mr-2" @click="gotoExp(item.id)" color="primary" small>
+            <v-btn class="mr-2 mt-2 mb-2" @click="gotoExp(item.id)" color="primary" small>
               <v-icon left>pageview</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.view') }}
             </v-btn>
-            <v-btn dark color="omikti" small @click="deleteAct(item.id)">
+            <v-btn class=" mt-2 mb-2" dark color="omikti" small @click="deleteAct(item.id)">
               <v-icon small left>delete</v-icon>
               {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
             <v-expand-transition>
-              <div v-show="item.id == selectedIndex">
+              <div class="mt-2 mb-2" v-show="item.id == selectedIndex">
                 <div>
                   <v-icon>warning</v-icon>
                   <span>{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>

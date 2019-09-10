@@ -147,7 +147,7 @@
                 border="left"
                 type="warning"
                 v-if="program.total == 0"
-              >Selected Team are not joining any program</v-alert>
+              >{{$vuetify.lang.t('$vuetify.team.noProgram')}}</v-alert>
             </template>
           </v-card-text>
         </v-card>
@@ -420,14 +420,15 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <!-- {{program.list}} -->
-                <v-flex xs12 sm12 md12>
+                <v-flex v-if="program.total == 0">{{$vuetify.lang.t('$vuetify.team.noProgram')}}</v-flex>
+                <v-flex v-else xs12 sm12 md12>
                   <v-select
                     v-model="programId"
                     :items="program.list"
                     :no-data-text="$vuetify.lang.t('$vuetify.noDataText')"
                     :loading="loader"
                     item-text="programme.name"
-                    item-value="programme.id"
+                    item-value="id"
                     :label="$vuetify.lang.t('$vuetify.team.programParticipation')"
                     hint="Select Program"
                     persistent-hint
