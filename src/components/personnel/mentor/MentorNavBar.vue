@@ -157,11 +157,6 @@ export default {
           icon: "local_library",
           text: "Program",
           route: "/mentor/program"
-        },
-        {
-          icon: "chat",
-          text: "Feedback",
-          route: "/mentor/feedback"
         }
       ],
       items: [
