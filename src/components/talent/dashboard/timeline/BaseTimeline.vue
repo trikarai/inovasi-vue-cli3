@@ -16,9 +16,7 @@
     <v-timeline :reverse="reverse" :dense="dense">
       <v-timeline-item color="primary" icon="person" large>
         <template v-slot:opposite>
-          <span class="subtitle-2 font-weight-bold">
-            Rayu Investor dengan Profil Anda
-          </span>
+          <span class="subtitle-2 font-weight-bold">Rayu Investor dengan Profil Anda</span>
         </template>
         <v-card>
           <v-card-title class="title">
@@ -59,9 +57,7 @@
       </v-timeline-item>
       <v-timeline-item color="primary" icon="group" large>
         <template v-slot:opposite>
-          <span class="subtitle-2 font-weight-bold">
-            Buatlah Tim yang Solid
-          </span>
+          <span class="subtitle-2 font-weight-bold">Buatlah Tim yang Solid</span>
         </template>
         <v-card>
           <v-card-title class="title">
@@ -100,9 +96,7 @@
       </v-timeline-item>
       <v-timeline-item color="primary" icon="local_library" large>
         <template v-slot:opposite>
-          <span class="subtitle-2 font-weight-bold">
-            Bergabung pada Program Inkubasi
-          </span>
+          <span class="subtitle-2 font-weight-bold">Bergabung pada Program Inkubasi</span>
         </template>
         <v-card>
           <v-card-title class="title">
@@ -157,13 +151,19 @@
       </v-timeline-item>
       <v-timeline-item color="primary" icon="wb_incandescent" large>
         <template v-slot:opposite>
-          <span class="subtitle-2 font-weight-bold">
-            Tuliskan ide terbaik anda
-          </span>
+          <span class="subtitle-2 font-weight-bold">Tuliskan ide terbaik anda</span>
         </template>
         <v-card>
           <v-card-title class="title">
-            <v-btn dark color="omikti" class="mr-2" fab x-small @click="openIdea" :disabled="teamId == ''">
+            <v-btn
+              dark
+              color="omikti"
+              class="mr-2"
+              fab
+              x-small
+              @click="openIdea"
+              :disabled="teamId == ''"
+            >
               <v-icon small>edit</v-icon>
             </v-btn>
             {{ $vuetify.lang.t('$vuetify.idea.idea')}}
@@ -206,9 +206,7 @@
       </v-timeline-item>
       <v-timeline-item color="primary" ref="customersegment" icon="person_pin" large>
         <template v-slot:opposite>
-          <span class="subtitle-2 font-weight-bold">
-            Tuliskan siapa pengguna produk/jasa anda
-          </span>
+          <span class="subtitle-2 font-weight-bold">Tuliskan siapa pengguna produk/jasa anda</span>
         </template>
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.customersegment')}}</v-card-title>
@@ -239,11 +237,9 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-      <v-timeline-item color="primary" ref="persona"  icon="sentiment_very_satisfied" large>
+      <v-timeline-item color="primary" ref="persona" icon="sentiment_very_satisfied" large>
         <template v-slot:opposite>
-          <span class="subtitle-2 font-weight-bold">
-            Kenali lebih dalam siapa pelanggan anda
-          </span>
+          <span class="subtitle-2 font-weight-bold">Kenali lebih dalam siapa pelanggan anda</span>
         </template>
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.persona')}}</v-card-title>
@@ -273,15 +269,14 @@
               :label="$vuetify.lang.t('$vuetify.idea.persona')"
               outlined
               prepend-icon="visibility"
+              @click:prepend="gotoPersonaDetail"
             ></v-select>
           </v-card-text>
         </v-card>
       </v-timeline-item>
       <v-timeline-item color="primary" ref="valueproposition" icon="table_chart" large>
         <template v-slot:opposite>
-          <span class="subtitle-2 font-weight-bold">
-            Rayu pelanggan anda dengan value proposition
-          </span>
+          <span class="subtitle-2 font-weight-bold">Rayu pelanggan anda dengan value proposition</span>
         </template>
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.valueproposition')}}</v-card-title>
@@ -311,15 +306,14 @@
               :label="$vuetify.lang.t('$vuetify.idea.valueproposition')"
               outlined
               prepend-icon="visibility"
+              @click:prepend="gotoValuepropositionDetail"
             ></v-select>
           </v-card-text>
         </v-card>
       </v-timeline-item>
       <v-timeline-item color="primary" ref="analysis" icon="show_chart" large>
         <template v-slot:opposite>
-          <span class="subtitle-2 font-weight-bold">
-            Buatlah Hipotesa Untuk Bisnis Anda
-          </span>
+          <span class="subtitle-2 font-weight-bold">Buatlah Hipotesa Untuk Bisnis Anda</span>
         </template>
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.analysis')}}</v-card-title>
@@ -339,7 +333,10 @@
               v-if="teamId == ''"
             >Create or Join Team First</v-alert>
           </v-card-text>
-          <v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" :disabled="valuepropositionId == ''" @click="gotoCanvasList">Canvas List</v-btn>
+          </v-card-actions>
+          <!-- <v-card-text>
             <v-layout row>
               <template v-for="canvas in canvas.list">
                 <v-flex :key="canvas.id" md2 class="mr-1 ml-1">
@@ -350,14 +347,12 @@
                 </v-flex>
               </template>
             </v-layout>
-          </v-card-text>
+          </v-card-text>-->
         </v-card>
       </v-timeline-item>
       <v-timeline-item color="primary" icon="beenhere" large>
         <template v-slot:opposite>
-          <span class="subtitle-2 font-weight-bold">
-            Validasi Ide Anda
-          </span>
+          <span class="subtitle-2 font-weight-bold">Validasi Ide Anda</span>
         </template>
         <v-card>
           <v-card-title class="title">{{ $vuetify.lang.t('$vuetify.idea.experiment')}}</v-card-title>
@@ -374,7 +369,10 @@
               v-if="teamId == ''"
             >Create or Join Team First</v-alert>
           </v-card-text>
-          <v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" :disabled="valuepropositionId == ''" @click="gotoExpList">Experment Form List</v-btn>
+          </v-card-actions>
+          <!-- <v-card-text>
             <v-layout row>
               <template v-for="exp in experiments.list">
                 <v-flex :key="exp.id" md2 class="mr-1 ml-1">
@@ -385,7 +383,7 @@
                 </v-flex>
               </template>
             </v-layout>
-          </v-card-text>
+          </v-card-text>-->
         </v-card>
       </v-timeline-item>
     </v-timeline>
@@ -463,8 +461,8 @@ export default {
       this.getValueproposition();
     },
     valuepropositionId: function() {
-      this.getBusinessCanvas();
-      this.getExperiments();
+      // this.getBusinessCanvas();
+      // this.getExperiments();
       this.$vuetify.goTo(this.$refs.analysis, {
         duration: 500,
         offset: 10,
@@ -493,6 +491,66 @@ export default {
           this.ideaId +
           "/customersegment/" +
           this.customersegmentId
+      });
+    },
+    gotoPersonaDetail: function() {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          localStorage.teamId +
+          "/idea/" +
+          this.ideaId +
+          "/customersegment/" +
+          this.customersegmentId +
+          "/persona/" +
+          this.personaId
+      });
+    },
+    gotoValuepropositionDetail: function() {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          localStorage.teamId +
+          "/idea/" +
+          this.ideaId +
+          "/customersegment/" +
+          this.customersegmentId +
+          "/persona/" +
+          this.personaId +
+          "/vp/" +
+          this.valuepropositionId
+      });
+    },
+    gotoCanvasList: function() {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          localStorage.teamId +
+          "/idea/" +
+          this.ideaId +
+          "/customersegment/" +
+          this.customersegmentId +
+          "/persona/" +
+          this.personaId +
+          "/vp/" +
+          this.valuepropositionId +
+          "/analysis"
+      });
+    },
+    gotoExpList: function() {
+      this.$router.push({
+        path:
+          "/talent/team/" +
+          localStorage.teamId +
+          "/idea/" +
+          this.ideaId +
+          "/customersegment/" +
+          this.customersegmentId +
+          "/persona/" +
+          this.personaId +
+          "/vp/" +
+          this.valuepropositionId +
+          "/experiment"
       });
     },
     getProgramList: function() {
@@ -711,7 +769,7 @@ export default {
           this.loader = false;
         });
     },
-    gotoExp: function(id){
+    gotoExp: function(id) {
       this.$router.push({
         path:
           "/talent/team/" +
@@ -724,9 +782,10 @@ export default {
           this.personaId +
           "/vp/" +
           this.valuepropositionId +
-          "/experiment/" + id
+          "/experiment/" +
+          id
       });
-    },
+    }
   }
 };
 </script>

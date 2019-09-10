@@ -102,13 +102,13 @@ export default {
               this.teamId = localStorage.teamId;
             } else {
               this.teamId = this.team.list[0].team.id;
+              localStorage.setItem("teamId", this.team.list[0].team.id);
             }
           } else {
             this.team = { total: 0, list: [] };
           }
         })
         .catch(error => {
-          
           this.error = error;
           notif.showError(this, error);
         })
