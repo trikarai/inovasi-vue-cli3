@@ -11,7 +11,8 @@
     </v-dialog>
 
     <v-btn @click="openExperimentForm" color="primary" class="mb-3">
-      <v-icon left>add</v-icon>{{ $vuetify.lang.t('$vuetify.action.add') }} {{ $vuetify.lang.t('$vuetify.experiment.exp') }}
+      <v-icon left>add</v-icon>
+      {{ $vuetify.lang.t('$vuetify.action.add') }} {{ $vuetify.lang.t('$vuetify.experiment.exp') }}
     </v-btn>
     <!-- {{experiments.list}} -->
     <v-layout>
@@ -19,14 +20,33 @@
         <v-data-table :headers="headers" :items="experiments.list" class="elevation-1">
           <template v-slot:item.action="{item}">
             <v-btn class="mr-2" @click="openEdit(item)" color="grey lighten-4" small>
-              <v-icon small left>edit</v-icon> Edit
+              <v-icon small left>edit</v-icon>
+              {{ $vuetify.lang.t('$vuetify.action.edit') }}
             </v-btn>
             <v-btn class="mr-2" @click="gotoExp(item.id)" color="primary" small>
-              <v-icon left>pageview</v-icon> View
+              <v-icon left>pageview</v-icon>
+              {{ $vuetify.lang.t('$vuetify.action.view') }}
             </v-btn>
-            <v-btn dark color="omikti" small>
-              <v-icon small left>delete</v-icon> delete
+            <v-btn dark color="omikti" small @click="deleteAct(item.id)">
+              <v-icon small left>delete</v-icon>
+              {{ $vuetify.lang.t('$vuetify.action.delete') }}
             </v-btn>
+            <v-expand-transition>
+              <div v-show="item.id == selectedIndex">
+                <div>
+                  <v-icon>warning</v-icon>
+                  <span>{{ $vuetify.lang.t('$vuetify.action.confirmationtodelete') }}</span>
+                </div>
+                <v-btn small dark @click="deleteData(item.id)" color="red" class="ma-2">
+                  <v-icon></v-icon>
+                  {{ $vuetify.lang.t('$vuetify.action.yes') }}
+                </v-btn>
+                <v-btn small text @click="deleteAct(null)">
+                  <v-icon></v-icon>
+                  {{ $vuetify.lang.t('$vuetify.action.cancel') }}
+                </v-btn>
+              </div>
+            </v-expand-transition>
           </template>
         </v-data-table>
       </v-flex>
@@ -157,6 +177,41 @@ export default {
     refresh: function() {
       this.dialogForm = false;
       this.getExperiments();
+    },
+    deleteAct: function(id) {
+      if (this.selectedIndex == id) {
+        this.selectedIndex = null;
+      } else {
+        this.selectedIndex = id;
+      }
+    },
+    deleteData: function(id) {
+      net
+        .deleteData(
+          this,
+          "/talent/as-team-member/" +
+            this.$route.params.teamId +
+            "/ideas/" +
+            this.$route.params.ideaId +
+            "/customer-segments/" +
+            this.$route.params.customersegmentId +
+            "/personas/" +
+            this.$route.params.personaId +
+            "/value-propositions/" +
+            this.$route.params.valuepropositionId +
+            "/experiments/" +
+            id
+        )
+        .then(res => {
+          this.refresh();
+        })
+        .catch(error => {
+          notif.showError(this, error);
+        })
+        .finally(() => {
+          this.selectedIndex = null;
+          this.refresh();
+        });
     }
   }
 };
