@@ -129,7 +129,10 @@
             </v-menu>
             {{ $vuetify.lang.t('$vuetify.program.programParticipation')}}
           </v-card-title>
-          <v-card-text>
+          <v-card-text v-if="loaderProgram">
+            <v-progress-circular size="70" width="7" color="omikti" indeterminate></v-progress-circular>
+          </v-card-text>
+          <v-card-text v-if="!loaderProgram">
             <p v-show="dense">Bergabung pada Program Inkubasi</p>
             <p>Program Inkubasi akan sangat bermanfaat untuk membantu startup terutama pada tahap awal. Maka bergabunglah pada program yang tersedia dan sesuai dengan startup anda untuk mempercepat pertumbuhan startup anda.</p>
             <v-alert
@@ -470,6 +473,7 @@ export default {
     loaderCs: false,
     loaderPersona: false,
     loaderVp: false,
+    loaderProgram: false,
     reverse: false,
     dense: false,
     items: [
@@ -502,8 +506,10 @@ export default {
     Notification
   },
   watch: {
-    teamId: "getProgramList",
-    teamId: "getIdea",
+    teamId: function() {
+      this.getProgramList();
+      this.getIdea();
+    },
     ideaId: function() {
       sessionStorage.ideaId = this.ideaId;
       sessionStorage.removeItem("customersegmentId");
@@ -616,7 +622,7 @@ export default {
       });
     },
     getProgramList: function() {
-      this.loader = true;
+      this.loaderProgram = true;
       net
         .getData(
           this,
@@ -635,7 +641,7 @@ export default {
           notif.showError(this, error);
         })
         .finally(() => {
-          this.loader = false;
+          this.loaderProgram = false;
         });
     },
     getIdea: function() {
@@ -853,7 +859,12 @@ export default {
     },
     gotoMentoringEvent: function() {
       this.$router.push({
-        path: "/talent/team/" + this.teamId + "/participation/" + this.programId + "/mentoring-event"
+        path:
+          "/talent/team/" +
+          this.teamId +
+          "/participation/" +
+          this.programId +
+          "/mentoring-event"
       });
     }
   }
