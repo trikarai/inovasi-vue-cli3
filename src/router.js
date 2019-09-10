@@ -462,82 +462,98 @@ const routes = [
       {
         name: "Manage Program",
         path: "/administrator/program",
-        component: AdministratorManageProgram
+        component: AdministratorManageProgram,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "View Program Phase",
         path: "/administrator/program/:programId/phase-plan",
-        component: AdministratorManageProgramPhase
+        component: AdministratorManageProgramPhase,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "View Program Mentoring",
         path: "/administrator/program/:programId/mentoring",
-        component: AdministratorManageProgramMentoring
+        component: AdministratorManageProgramMentoring,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "View Program Registration",
         path: "/administrator/program/:programId/registration",
-        component: AdministratorManageProgramRegistration
+        component: AdministratorManageProgramRegistration,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "View Program Mentor",
         path: "/administrator/program/:programId/mentor",
-        component: AdministratorManageProgramMentor
+        component: AdministratorManageProgramMentor,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "View Program Coordinator",
         path: "/administrator/program/:programId/coordinator",
-        component: AdministratorManageProgramCoordinator
+        component: AdministratorManageProgramCoordinator,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "Coordinator Search",
         path: "/administrator/program/:programId/coordinator/search",
-        component: AdministratorManageProgramTalentSearch
+        component: AdministratorManageProgramTalentSearch,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "Mentor Search",
         path: "/administrator/program/:programId/mentor/search",
-        component: AdministratorManageProgramTalentSearch
+        component: AdministratorManageProgramTalentSearch,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "Manage Curriculum",
         path: "/administrator/curriculum",
-        component: AdministratorManageCurriculum
+        component: AdministratorManageCurriculum,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "Manage Curriculum Phase",
         path: "/administrator/curriculum/:curriculumId/phase-plan",
-        component: AdministratorCurriculumPhase
+        component: AdministratorCurriculumPhase,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "Manage Region",
         path: "/administrator/region",
-        component: AdministratorManageRegion
+        component: AdministratorManageRegion,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "Manage Track",
         path: "/administrator/track",
-        component: AdministratorManageTrack
+        component: AdministratorManageTrack,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "Manage Skill",
         path: "/administrator/track/:trackId/skill-reference",
-        component: AdministratorTrackManageSkill
+        component: AdministratorTrackManageSkill,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "Manage Form",
         path: "/administrator/form",
-        component: AdministratorManageForm
+        component: AdministratorManageForm,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "Manage Form Field",
         path: "/administrator/form/:formId/field",
-        component: AdministratorManageFormField
+        component: AdministratorManageFormField,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
       {
         name: "Manage Form Section",
         path: "/administrator/form/:formId/section",
-        component: AdministratorManageFormSection
+        component: AdministratorManageFormSection,
+        meta: { requiresAuth: true, talentAuth: false, adminAuth: true }
       },
     ]
   },
