@@ -13,7 +13,6 @@
           :label="$vuetify.lang.t('$vuetify.program.program')"
           outlined
           class="pr-3"
-          @change="changeTeam"
         ></v-select>
       </v-flex>
       <v-flex md6>
