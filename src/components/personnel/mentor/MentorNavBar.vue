@@ -52,7 +52,7 @@
         <!-- profile-->
         <v-list-group prepend-icon="account_circle" value="true" no-action>
           <template v-slot:activator>
-            <v-list-item>
+            <v-list-item class="pl-0">
               <v-list-item-title>Profile</v-list-item-title>
             </v-list-item>
           </template>

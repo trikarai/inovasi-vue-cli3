@@ -44,7 +44,12 @@
         <v-layout hidden-sm-and-down>
           <v-flex md12>
             <v-data-table :headers="headers" :items="mentoring.list" class="elevation-1">
-              <template v-slot:item.time="{item}">{{ item.startTime }} - {{ item.endTime }}</template>
+              <template v-slot:item.time="{item}">
+                <div class="mt-2 mb-2">
+                <v-icon left>today</v-icon><span class="font-weight-bold" style="color:#00667f">{{ item.startTime | moment('DD MMMM YYYY')}}</span><br>
+                <v-icon left>schedule</v-icon><span class="font-weight-bold" style="color:#00667f">{{ item.startTime | moment('H:mm')}} - {{ item.endTime | moment('H:mm') }}</span>
+                </div>
+              </template>
               <template v-slot:item.status="{item}">
                 <v-chip :color="colorStatus(item.status)" text-color="white">
                   <v-avatar left>
@@ -61,6 +66,7 @@
                 </v-btn> -->
 
                 <v-btn class="ma-1"
+                  dark
                   @click="openFormMentoring(item.id, 'accept')"
                   small
                   color="green"
@@ -71,6 +77,7 @@
                 </v-btn>
 
                 <v-btn class="ma-1"
+                  dark
                   @click="openFormMentoring(item.id, 'offer')"
                   small
                   color="warning"
@@ -81,6 +88,7 @@
                 </v-btn>
 
                 <v-btn class="ma-1"
+                  dark
                   @click="openFormMentoring(item.id, 'reject')"
                   small
                   color="red"
@@ -95,30 +103,30 @@
         </v-layout>
 
         <v-layout hidden-md-and-up>
-          <v-carousel height="250px" :cycle="false">
+          <v-carousel :show-arrows="false" height="250px" :cycle="false">
             <v-carousel-item v-for="data in mentoring.list" :key="data.id">
               <v-card height="100%" class="pl-4">
                 <v-card-title>{{data.startTime}}</v-card-title>
                 <v-card-text>
-                  <v-chip :color="colorStatus(data.status)" text-color="white">{{ data.status }}</v-chip>
+                  <v-chip small :color="colorStatus(data.status)" text-color="white">{{ data.status }}</v-chip>
                 </v-card-text>
 
-                <v-card-actions>
-                  <v-spacer></v-spacer>
+                <v-card-actions class="mt-10">
+                  <!-- <v-spacer></v-spacer> -->
                   <!-- <v-btn small fab @click="openDetail(data.id)">
                     <v-icon small>pageview</v-icon>
                   </v-btn>-->
 
-                  <v-btn @click="openFormMentoring(data.id, 'accept')" small fab color="green">
-                    <v-icon small>done</v-icon>
+                  <v-btn small @click="openFormMentoring(data.id, 'accept')" small color="green">
+                    <v-icon small left>done</v-icon> accept
                   </v-btn>
 
-                  <v-btn @click="openFormMentoring(data.id, 'offer')" small fab color="warning">
-                    <v-icon small>history</v-icon>
+                  <v-btn small @click="openFormMentoring(data.id, 'offer')" small color="warning">
+                    <v-icon small left>history</v-icon> reschedule
                   </v-btn>
 
-                  <v-btn @click="openFormMentoring(data.id, 'reject')" small fab color="red">
-                    <v-icon small>cancel</v-icon>
+                  <v-btn small @click="openFormMentoring(data.id, 'reject')" small color="red">
+                    <v-icon small left>cancel</v-icon> reject
                   </v-btn>
                 </v-card-actions>
               </v-card>

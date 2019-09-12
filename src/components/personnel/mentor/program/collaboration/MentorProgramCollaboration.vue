@@ -7,120 +7,148 @@
         <template v-slot:default="props">
           <v-row>
             <v-col v-for="(item, index) in props.items" :key="index" cols="12" sm="6" md="4" lg="3">
-              <v-card>
+              <v-card class="mdashcard">
                 <template v-if="item.idea">
                   <v-card-title>Idea</v-card-title>
-                  <v-card-text>{{item.idea.name}}</v-card-text>
-                  <v-card-actions>
-                    <v-btn small @click="gotoIdea(item)">
-                      <v-icon>pageview</v-icon>
+                  <v-card-text>
+                      <span class="caption">Team Name</span><br>
+                      <span class="font-weight-bold">{{item.idea.team.name}}</span>
+                  </v-card-text>
+                  <v-card-text class="pt-0 pb-0 subtitle-2 font-weight-light">{{item.idea.name}}</v-card-text>
+                  <v-card-actions class="mt-3">
+                    <v-btn text small @click="gotoIdea(item)">
+                      <v-icon left>pageview</v-icon> view
                     </v-btn>
-                    <v-btn small color="primary" disabled>
+                    <!-- <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.idea.team.name}}
-                    </v-btn>
+                    </v-btn> -->
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.customerSegment">
                   <v-card-title>Customer Segment</v-card-title>
+                  <v-card-text class="pb-0">
+                      <span class="caption">Team Name</span><br>
+                      <span class="font-weight-bold">{{item.customerSegment.idea.team.name}}</span>
+                  </v-card-text>
                   <!-- <v-card-title>{{item.customerSegment.name}}</v-card-title> -->
-                  <v-card-text>
+                  <v-card-text class="pt-0 pb-0 subtitle-2 font-weight-light">
                     <v-treeview :items="csTree(item)" />
                   </v-card-text>
                   <v-card-actions>
-                    <v-btn small @click="gotoCS(item)">
-                      <v-icon>pageview</v-icon>
+                    <v-btn text small @click="gotoCS(item)">
+                      <v-icon left>pageview</v-icon> view
                     </v-btn>
-                    <v-btn small color="primary" disabled>
+                    <!-- <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.customerSegment.idea.team.name}}
-                    </v-btn>
+                    </v-btn> -->
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.persona">
                   <v-card-title>Persona</v-card-title>
+                  <v-card-text class="pb-0">
+                      <span class="caption">Team Name</span><br>
+                      <span class="font-weight-bold">{{item.persona.customerSegment.idea.team.name}}</span>
+                  </v-card-text>
                   <!-- <v-card-text>{{item.persona.name}}</v-card-text> -->
-                  <v-card-text>
+                  <v-card-text class="pt-0 pb-0 subtitle-2 font-weight-light">
                     <v-treeview :items="personaTree(item)" />
                   </v-card-text>
                   <v-card-actions>
-                    <v-btn small @click="gotoPersona(item)">
-                      <v-icon>pageview</v-icon>
+                    <v-btn text small @click="gotoPersona(item)">
+                      <v-icon left>pageview</v-icon> view
                     </v-btn>
-                    <v-btn small color="primary" disabled>
+                    <!-- <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.persona.customerSegment.idea.team.name}}
-                    </v-btn>
+                    </v-btn> -->
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.valueProposition">
                   <v-card-title>Value Proposition</v-card-title>
+                  <v-card-text class="pb-0">
+                      <span class="caption">Team Name</span><br>
+                      <span class="font-weight-bold">{{item.valueProposition.persona.customerSegment.idea.team.name}}</span>
+                  </v-card-text>
                   <!-- <v-card-text>{{item.valueProposition.description}}</v-card-text> -->
-                  <v-card-text>
+                  <v-card-text class="pt-0 pb-0 subtitle-2 font-weight-light">
                     <v-treeview :items="vpTree(item)" />
                   </v-card-text>
                   <v-card-actions>
-                    <v-btn small @click="gotoValueproposition(item)">
-                      <v-icon>pageview</v-icon>
+                    <v-btn text small @click="gotoValueproposition(item)">
+                      <v-icon left>pageview</v-icon> View
                     </v-btn>
-                    <v-btn small color="primary" disabled>
+                    <!-- <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.valueProposition.persona.customerSegment.idea.team.name}}
-                    </v-btn>
+                    </v-btn> -->
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.businessCanvas">
                   <v-card-title>Business Canvas</v-card-title>
+                  <v-card-text class="pb-0">
+                      <span class="caption">Team Name</span><br>
+                      <span class="font-weight-bold">{{item.businessCanvas.valueProposition.persona.customerSegment.idea.team.name}}</span>
+                  </v-card-text>
                   <!-- <v-card-text>{{item.businessCanvas}}</v-card-text> -->
-                  <v-card-text>
+                  <v-card-text class="pt-0 pb-0 subtitle-2 font-weight-light">
                     <v-treeview :items="canvasTree(item)" />
                   </v-card-text>
                   <v-card-actions>
-                    <v-btn small @click="gotoCanvas(item)">
-                      <v-icon>pageview</v-icon>
+                    <v-btn text small @click="gotoCanvas(item)">
+                      <v-icon left>pageview</v-icon> view
                     </v-btn>
-                    <v-btn small color="primary" disabled>
+                    <!-- <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.businessCanvas.valueProposition.persona.customerSegment.idea.team.name}}
-                    </v-btn>
+                    </v-btn> -->
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.competitor">
                   <v-card-title>Competitor</v-card-title>
+                  <v-card-text class="pb-0">
+                      <span class="caption">Team Name</span><br>
+                      <span class="font-weight-bold">{{item.competitor.valueProposition.persona.customerSegment.idea.team.name}}</span>
+                  </v-card-text>
                   <!-- <v-card-text>{{item.competitor.name}}</v-card-text> -->
-                  <v-card-text>
+                  <v-card-text class="pt-0 pb-0 subtitle-2 font-weight-light">
                     <v-treeview :items="competitorTree(item)" />
                   </v-card-text>
                   <v-card-actions>
-                    <v-btn small @click="gotoCompetitor(item)">
-                      <v-icon>pageview</v-icon>
+                    <v-btn text small @click="gotoCompetitor(item)">
+                      <v-icon left>pageview</v-icon> view
                     </v-btn>
-                    <v-btn small color="primary" disabled>
+                    <!-- <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.competitor.valueProposition.persona.customerSegment.idea.team.name}}
-                    </v-btn>
+                    </v-btn> -->
                   </v-card-actions>
                 </template>
 
                 <template v-if="item.experiment">
                   <v-card-title>Experiment</v-card-title>
+                  <v-card-text class="pb-0">
+                      <span class="caption">Team Name</span><br>
+                      <span class="font-weight-bold">{{item.experiment.valueProposition.persona.customerSegment.idea.team.name}}</span>
+                  </v-card-text>
                   <!-- <v-card-text>{{item.experiment.form.name}}</v-card-text> -->
-                  <v-card-text>
+                  <v-card-text class="pt-0 pb-0 subtitle-2 font-weight-light">
                     <v-treeview :items="expTree(item)" />
                   </v-card-text>
                   <v-card-actions>
-                    <v-btn small @click="gotoExp(item)">
-                      <v-icon>pageview</v-icon>
+                    <v-btn text small @click="gotoExp(item)">
+                      <v-icon left>pageview</v-icon> view
                     </v-btn>
-                    <v-btn small color="primary" disabled>
+                    <!-- <v-btn small color="primary" disabled>
                       <v-icon small left>group</v-icon>
                       {{item.experiment.valueProposition.persona.customerSegment.idea.team.name}}
-                    </v-btn>
+                    </v-btn> -->
                   </v-card-actions>
                 </template>
               </v-card>
@@ -305,4 +333,8 @@ export default {
 };
 </script>
 <style scoped>
+.mdashcard {
+  border-top: solid;
+  border-top-color: #00667f !important;
+}
 </style>

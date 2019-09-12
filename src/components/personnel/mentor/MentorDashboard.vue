@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout>
-      <v-flex xs12 md5>
+      <v-flex xs12 sm12 md5>
         <v-select
           :items="user.data.programmeMentorships"
           item-text="programme.name"
@@ -10,19 +10,17 @@
           v-model="mentorship"
           :label="$vuetify.lang.t('$vuetify.program.program')"
           outlined
-          class="pr-3"
           return-object
         ></v-select>
       </v-flex>
-      <v-flex md6></v-flex>
     </v-layout>
     <v-layout row>
       <v-flex md3>
-        <v-card height="130" elevation="3" class="ml-3 mt-5">
+        <v-card height="130" elevation="3" class="ml-3 mt-5 mr-3">
           <v-list>
             <v-list-item>
               <v-list-item-content>
-                <v-card elevation="5" class="mntrcard pa-7 text-center" dark color="primary">
+                <v-card elevation="5" class="colacard pa-5 text-center" dark color="primary">
                   <v-icon large>chat_bubble_outline</v-icon>
                 </v-card>
               </v-list-item-content>
@@ -40,12 +38,12 @@
           </v-list>
         </v-card>
       </v-flex>
-      <v-flex md3>
-        <v-card elevation="3" height="130" class="ml-3 mt-5">
+      <v-flex xs12 md3>
+        <v-card elevation="3" height="130" class="ml-3 mt-5 mr-3">
           <v-list>
             <v-list-item>
               <v-list-item-content>
-                <v-card elevation="5" class="colacard pa-7 text-center" dark color="primary">
+                <v-card elevation="5" class="colacard pa-5 text-center" dark color="primary">
                   <v-icon large>share</v-icon>
                 </v-card>
               </v-list-item-content>
@@ -105,7 +103,7 @@ export default {
 <style scoped>
 .mntrcard {
   position: absolute;
-  bottom: -4px;
+  bottom: 2px;
   left: 33px;
 }
 .colacard {
