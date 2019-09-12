@@ -4,14 +4,7 @@
       <v-container>
         <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
 
-        <v-dialog v-model="loader" hide-overlay persistent width="300">
-          <v-card color="primary" dark>
-            <v-card-text>
-              {{ $vuetify.lang.t('$vuetify.info.standby') }}
-              <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
+        <loader-dialog v-model="loader"></loader-dialog>
 
         <v-flex xs12 md4>
           <v-combobox
@@ -103,15 +96,24 @@
         </v-layout>
 
         <v-layout hidden-md-and-up>
-          <v-carousel :show-arrows="false" height="250px" :cycle="false">
+          <v-carousel :show-arrows="false" height="400px" :cycle="false">
             <v-carousel-item v-for="data in mentoring.list" :key="data.id">
               <v-card height="100%" class="pl-4">
-                <v-card-title>{{data.startTime}}</v-card-title>
+                <v-card-title>
+                  Mentoring <v-chip class="ml-3" small :color="colorStatus(data.status)" text-color="white">{{ data.status }}</v-chip>
+                </v-card-title>
+                <v-card-subtitle>
+                  <span class="font-weight-thin ml-3"><v-icon left>today</v-icon>{{ data.startTime | moment('DD MMMM YYYY')}}</span>
+                  <br>
+                  <span class="font-weight-bold ml-3"><v-icon left>schedule</v-icon>{{ data.startTime | moment('H:mm')}} - {{ data.endTime | moment('H:mm') }}</span>
+                </v-card-subtitle>
+
                 <v-card-text>
-                  <v-chip small :color="colorStatus(data.status)" text-color="white">{{ data.status }}</v-chip>
+                  <span class="caption font-weight-light">Team Name:</span><br>
+                  <span class="title">{{data.participant.team.name}}</span><br>                
                 </v-card-text>
 
-                <v-card-actions class="mt-10">
+                <v-card-actions class="">
                   <!-- <v-spacer></v-spacer> -->
                   <!-- <v-btn small fab @click="openDetail(data.id)">
                     <v-icon small>pageview</v-icon>
@@ -124,11 +126,12 @@
                   <v-btn small @click="openFormMentoring(data.id, 'offer')" small color="warning">
                     <v-icon small left>history</v-icon> reschedule
                   </v-btn>
-
-                  <v-btn small @click="openFormMentoring(data.id, 'reject')" small color="red">
-                    <v-icon small left>cancel</v-icon> reject
-                  </v-btn>
+                
+                 
                 </v-card-actions>
+                 <v-btn class="ml-2" small @click="openFormMentoring(data.id, 'reject')" small color="red">
+                    <v-icon small left>cancel</v-icon> reject
+                 </v-btn>
               </v-card>
             </v-carousel-item>
           </v-carousel>
@@ -138,17 +141,32 @@
         <v-dialog v-model="dialogForm" hide-overlay persistent width="400">
           <v-form ref="form">
             <v-card>
-              {{status.mentoring}}
-              <v-card-title>{{singleData.participant.team.name}}</v-card-title>
+              <v-card-text class="text-end mb-0 pb-0">
+                <v-btn @click="closeFormMentoring" text dark x-small fab color="grey">
+                  <v-icon>close</v-icon>
+                </v-btn>
+              </v-card-text>
+              <!-- {{status.mentoring}} -->
+              <v-card-title class="mt-0 pt-0">{{singleData.participant.team.name}}</v-card-title>
+              <v-chip class="ml-4" x-small>{{singleData.status}}</v-chip>
               <v-card-text>
-                {{singleData.status}}
-                {{singleData.startTime}}
-                {{singleData.endTime}}
-                {{singleData.media}}
-                {{singleData.note}}
+                <span class="font-weight-bold"><v-icon left>today</v-icon>{{ singleData.startTime | moment('DD MMMM YYYY')}}</span>
+                  <br>
+                <span class="font-weight-bold"><v-icon left>schedule</v-icon>{{ singleData.startTime | moment('H:mm')}} - {{ singleData.endTime | moment('H:mm') }}</span>
+                <v-row>
+                  <v-col>
+                    <span class="font-weight-bold">Media :</span> <br>
+                    {{singleData.media}}
+                  </v-col>
+                  <v-col>
+                    <span class="font-weight-bold">Note  :</span> <br>
+                    {{singleData.note}}
+                  </v-col>
+                </v-row>
               </v-card-text>
 
               <v-card-text v-if="type == 'offer'">
+                <h5>Reschedule</h5>
                 <v-layout wrap>
                   <v-flex xs12 sm12 md6>
                     <v-menu
@@ -227,8 +245,9 @@
                 />
               </v-card-text>
               <v-card-actions>
-                {{params}}
+                <!-- {{params}} -->
                 <v-btn
+                  block
                   color="green"
                   v-if="type == 'accept'"
                   @click="acceptMentoring(singleData.id)"
@@ -236,11 +255,12 @@
                   <v-icon>check</v-icon>Accept
                 </v-btn>
 
-                <v-btn color="red" v-if="type == 'reject'" @click="rejectMentoring(singleData.id)">
+                <v-btn block dark color="red" v-if="type == 'reject'" @click="rejectMentoring(singleData.id)">
                   <v-icon>close</v-icon>Reject
                 </v-btn>
 
                 <v-btn
+                  block
                   color="warning"
                   v-if="type == 'offer'"
                   @click="offerMentoring(singleData.id)"
@@ -248,10 +268,7 @@
                   <v-icon>history</v-icon>Offer
                 </v-btn>
 
-                <v-spacer></v-spacer>
-                <v-btn @click="closeFormMentoring" small fab color="red">
-                  <v-icon>close</v-icon>
-                </v-btn>
+                
               </v-card-actions>
             </v-card>
           </v-form>

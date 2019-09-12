@@ -70,11 +70,13 @@
         </v-flex>
         <v-flex xs12 md6 v-if="!checkDashboard">
           <!-- start comment module-->
+          <v-card  style="margin:10px">
           <base-comment
             v-bind:comments="comments"
             @postComment="postComment"
             @replyComment="replyComment"
           />
+          </v-card>
         </v-flex>
         <v-flex xs12 md6 v-if="checkDashboard">
           <v-card class="pb-5" elevation="3" style="margin:10px" min-height="270">

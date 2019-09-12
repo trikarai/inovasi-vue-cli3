@@ -73,38 +73,44 @@
             <v-list>
               <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-title>Customer Jobs</v-list-item-title>
-                  <v-list-item-subtitle>{{parentData.customerJobs}}</v-list-item-subtitle>
+                  <v-list-item-title class="font-weight-bold">Customer Jobs</v-list-item-title>
+                  <span v-show="parentData.customerJobs" class="subtitle-2 font-weight-light">{{parentData.customerJobs}}</span>
+                  <span v-show="!parentData.customerJobs" class="caption font-weight-light">no data</span>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-title>Gain</v-list-item-title>
-                  <v-list-item-subtitle>{{parentData.gains}}</v-list-item-subtitle>
+                  <v-list-item-title class="font-weight-bold">Gain</v-list-item-title>
+                  <span v-show="parentData.gains" class="subtitle-2 font-weight-light">{{parentData.gains}}</span>
+                  <span v-show="!parentData.gains" class="caption font-weight-light">no data</span>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-title>Gain Creators</v-list-item-title>
-                  <v-list-item-subtitle>{{parentData.gainCreators}}</v-list-item-subtitle>
+                  <v-list-item-title class="font-weight-bold">Gain Creators</v-list-item-title>
+                  <span v-show="parentData.gainCreators" class="subtitle-2 font-weight-light">{{parentData.gainCreators}}</span>
+                  <span v-show="!parentData.gainCreators" class="caption font-weight-light">no data</span>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-title>Pain</v-list-item-title>
-                  <v-list-item-subtitle>{{parentData.pains}}</v-list-item-subtitle>
+                  <v-list-item-title class="font-weight-bold">Pain</v-list-item-title>
+                  <span v-show="parentData.pains" class="subtitle-2 font-weight-light">{{parentData.pains}}</span>
+                  <span v-show="!parentData.pains" class="caption font-weight-light">no data</span>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-title>Pain Relievers</v-list-item-title>
-                  <v-list-item-subtitle>{{parentData.painRelievers}}</v-list-item-subtitle>
+                  <v-list-item-title class="font-weight-bold">Pain Relievers</v-list-item-title>
+                  <span v-show="parentData.painRelievers" class="subtitle-2 font-weight-light">{{parentData.painRelievers}}</span>
+                  <span v-show="!parentData.painRelievers" class="caption font-weight-light">no data</span>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item style="padding-left:26px;padding-right:26px" :three-line="true">
                 <v-list-item-content>
-                  <v-list-item-title>Products And Services</v-list-item-title>
-                  <v-list-item-subtitle>{{parentData.productsAndServices}}</v-list-item-subtitle>
+                  <v-list-item-title class="font-weight-bold">Products And Services</v-list-item-title>
+                  <span v-show="parentData.productsAndServices" class="subtitle-2 font-weight-light">{{parentData.productsAndServices}}</span>
+                  <span v-show="!parentData.productsAndServices" class="caption font-weight-light">no data</span>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
