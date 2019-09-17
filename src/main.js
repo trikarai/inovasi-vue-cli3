@@ -23,17 +23,13 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret, faAddressBook } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
+//vuetify
+import vuetify from './plugins/vuetify';
+
 library.add(faUserSecret, faAddressBook)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('loader-dialog', LoaderDialog);
-
-//Translation 
-import en from '@/config/lang/en';
-import id from '@/config/lang/id';
-
-import customcolors from "@/components/css/customcolor"
-// import colors from 'vuetify/lib/util/colors'
 
 // Vue.prototype.$axios = axios;
 Vue.use(UUID);
@@ -48,34 +44,13 @@ Vue.use(require('vue-moment'), {
     moment
 })
 
-const opts = {
-  lang: {
-    locales: { en, id },
-    current: 'en'
-  },
-  theme: {
-    dark: false,
-    themes: {
-      light: {
-        primary: customcolors.primary,
-        accent: customcolors.accent,
-        omikti: customcolors.omikti,
-        bmikti: customcolors.bmikti
-      },
-      dark: {
-        primary: customcolors.primary,
-      },
-    }
-  }
-}
-Vue.use(Vuetify)
 
 Vue.config.productionTip = false;
 
 export const app = new Vue({
   router,
   store,
-  vuetify: new Vuetify(opts),
+  vuetify,
   render: h => h(App)
 }).$mount("#app");
 
