@@ -10,7 +10,6 @@ global.jQuery = jQuery;
 global.$ = jQuery;
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css"; // Ensure you are using css-loader
 import VueVisible from "vue-visible";
 import UUID from 'vue-uuid';
