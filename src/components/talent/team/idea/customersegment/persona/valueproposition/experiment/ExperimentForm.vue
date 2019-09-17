@@ -6,7 +6,7 @@
           <loader-dialog v-model="loader" />
           <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
-          <v-card elevation="0" width="400" style="padding:0px 30px 20px 30px">
+          <v-card elevation="0" width="700" style="padding:0px 30px 20px 30px">
             <v-card class="taitel primary white--text elevation-5">
               <h3
                 v-if="edit"
@@ -52,6 +52,7 @@
                       <field-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></field-modul>
                     </template>
                   </div>
+                  <!-- {{params}} -->
                   <!--start render edit exp-->
                   <div v-if="edit">
                     <template v-for="(field, index) in experimentData.fields">
@@ -96,7 +97,10 @@ import notification from "@/components/Notification";
 import FieldModul from "@/components/field/field";
 import FieldCanEditModul from "@/components/field/fieldCanEdit";
 
+import { baseuriMixins } from "@/mixins/baseuriMixins";
+
 export default {
+  mixins: [baseuriMixins],
   props: ["id", "edit", "view", "data", "formId", "formDate"],
   data: function() {
     return {
@@ -209,6 +213,7 @@ export default {
         )
         .then(res => {
           this.experimentData = res.data.data;
+          this.setFormJSONTemplate(res.data.data);
         })
         .catch(error => {
           notif.showError(this, error);

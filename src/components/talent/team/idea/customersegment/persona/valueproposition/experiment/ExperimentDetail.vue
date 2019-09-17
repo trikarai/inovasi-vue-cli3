@@ -2,7 +2,7 @@
   <v-container>
     <notification ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
     <form-collaboration v-model="collaboratorForm" @setUpCollaboration="setUpCollaboration"></form-collaboration>
-    
+
     <loader-dialog v-model="loader" />
 
     <!-- <v-btn color="primary" @click="openEdit()" v-if="checkDashboard">
@@ -11,46 +11,72 @@
 
     <v-btn small fab class="ml-3" @click="openCollaborator()" v-if="checkDashboard">
       <v-icon>share</v-icon>
-    </v-btn> -->
+    </v-btn>-->
 
     <v-layout row>
       <v-flex md6>
-        <v-card elevation="3" class="mt-3 ml-2 mr-1 pb-5"><v-card class="taitel primary white--text elevation-5">
-              <v-list-item three-line>
-                <v-list-item-content>
-                  <v-list-item-title
-                    class="font-weight-light white--text body-2"
-                  >{{ $vuetify.lang.t('$vuetify.idea.experiment') }}</v-list-item-title>
-
-                  <v-list-item-subtitle>
-                    <h4 class="headline mb-0 white--text">{{experiment.form.name}}</h4>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-action v-if="checkDashboard">
-                  <div>
-                    <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
-                      <v-icon>share</v-icon>
-                    </v-btn>
-                    <v-btn small fab @click="openEdit()" class="ml-2 mt-1">
-                      <v-icon>edit</v-icon>
-                    </v-btn>
-                  </div>
-                  <div class="grsduasec d-none d-md-flex d-lg-flex"></div>
-                </v-list-item-action>
-              </v-list-item>
-            </v-card>
-
-          <v-list-item 
-            v-for="data in experiment.fields"
-            :key="data.id" 
-            style="padding-left:26px;padding-right:26px" 
-            :three-line="true">
+        <v-card elevation="3" class="mt-3 ml-2 mr-1 pb-5">
+          <v-card class="taitel primary white--text elevation-5">
+            <v-list-item three-line>
               <v-list-item-content>
-                <v-list-item-title>{{data.field.name}}</v-list-item-title>
-                <span class="grey--text font-weight-light">{{data.value}}</span>
-              </v-list-item-content>
-            </v-list-item>
+                <v-list-item-title
+                  class="font-weight-light white--text body-2"
+                >{{ $vuetify.lang.t('$vuetify.idea.experiment') }}</v-list-item-title>
 
+                <v-list-item-subtitle>
+                  <h4 class="headline mb-0 white--text">{{experiment.form.name}}</h4>
+                </v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action v-if="checkDashboard">
+                <div>
+                  <v-btn small fab class="ml-2 mt-1" @click="openCollaborator()">
+                    <v-icon>share</v-icon>
+                  </v-btn>
+                  <v-btn small fab @click="openEdit()" class="ml-2 mt-1">
+                    <v-icon>edit</v-icon>
+                  </v-btn>
+                </div>
+                <div class="grsduasec d-none d-md-flex d-lg-flex"></div>
+              </v-list-item-action>
+            </v-list-item>
+          </v-card>
+
+          <!-- {{experiment}} -->
+
+          <v-list-item
+            v-for="data in experiment.fields"
+            :key="data.id"
+            style="padding-left:26px;padding-right:26px"
+            :three-line="true"
+          >
+            <v-list-item-content>
+              <v-list-item-title>{{data.field.name}}</v-list-item-title>
+              <span class="grey--text font-weight-light" v-if="data.value">{{data.value}}</span>
+              <span class="grey--text font-weight-light" v-if="data.attachedFiles">
+                <template v-for="file in data.attachedFiles">
+                  <!-- {{file.fileInfo.filePath}} -->
+                  <v-row align="center" justify="center" :key="file.id">
+                    <v-img
+                      :src="storageUri + file.fileInfo.filePath"
+                      lazy-src="https://picsum.photos/id/11/10/6"
+                      aspect-ratio="1"
+                      class="grey lighten-2"
+                      max-width="500"
+                      contain
+                      max-height="300"
+                      @click="openImageDialog(file.fileInfo.filePath)"
+                    ></v-img>
+                  </v-row>
+                </template>
+              </span>
+              <span class="grey--text font-weight-light" v-if="data.selectedOptions">
+                <template v-for="opt in data.selectedOptions">
+                  {{opt.option.name}}
+                  <template v-if="data.selectedOptions.length > 1">,</template>
+                </template>
+              </span>
+            </v-list-item-content>
+          </v-list-item>
         </v-card>
       </v-flex>
       <v-flex md6>
@@ -81,6 +107,26 @@
       @close="dialogForm = false"
       @refresh="refresh"
     ></experiment-form>
+
+    <v-dialog v-model="imageDialog">
+      <v-card>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn fab small color="red" @click="imageDialog = false">
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-card-actions>
+        <v-card-text>
+          <v-img
+            class="grey lighten-2"
+            :src="storageUri + imageDialogPath"
+            lazy-src="https://picsum.photos/id/11/10/6"
+            aspect-ratio="1"
+            contain
+          ></v-img>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -116,7 +162,9 @@ export default {
       edit: false,
       singleData: "",
       formId: "",
-      formDate: ""
+      formDate: "",
+      imageDialog: "",
+      imageDialogPath: ""
     };
   },
   components: {
@@ -141,6 +189,10 @@ export default {
     this.loadComment();
   },
   methods: {
+    openImageDialog: function(path) {
+      this.imageDialog = true;
+      this.imageDialogPath = path;
+    },
     getExperiment: function() {
       this.loader = true;
       notif.reset(this);

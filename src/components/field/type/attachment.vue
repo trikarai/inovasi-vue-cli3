@@ -1,10 +1,12 @@
 <template>
-  <div>
+  <v-container>
+    <v-divider />
+
+    {{field.name}}
     <!-- https://jsfiddle.net/meyubaraj/fLbe7r72/ -->
     <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
       <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
-      {{response}}
-      <!-- <v-progress-linear v-if="progressShow" color="red" v-model="valueDeterminate"></v-progress-linear> -->
+      <!-- {{response}} -->
       <v-expand-x-transition>
         <v-progress-circular
           v-if="progressShow"
@@ -17,7 +19,7 @@
       </v-expand-x-transition>
       <v-expand-transition>
         <template v-if="!progressShow">
-          <img :src="imageUrl" height="150" v-if="imageUrl" />
+          <v-img :src="imageUrl" contain max-height="150" v-if="imageUrl" />
         </template>
       </v-expand-transition>
       <template v-if="!uploaded">
@@ -27,7 +29,7 @@
           :disabled="progressShow"
           small
           fab
-          color="red"
+          color="warning"
         >
           <v-icon>cloud_upload</v-icon>
         </v-btn>
@@ -46,7 +48,7 @@
       </select>
       <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked" />
     </v-flex>
-  </div>
+  </v-container>
 </template>
 <script>
 import bus from "@/bus";
@@ -141,13 +143,11 @@ export default {
           }
         )
         .then(res => {
-          
           this.value[0] = res.data.data.fileInfo.id;
           this.fileInfo = res.data.data.fileInfo;
           this.uploaded = true;
         })
         .catch(error => {
-          
           notif.showError(this, error);
           this.uploaded = false;
         })

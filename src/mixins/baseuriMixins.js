@@ -1,6 +1,8 @@
 export const baseuriMixins = {
     data() {
         return {
+            // storageUri: "http://103.23.22.223/start.mikti.id/storage/app",
+            storageUri: "http://localhost/start.mikti.id/storage/app",
             baseUriTalent: {
                 idea: "/talent/as-team-member/" +
                     this.$route.params.teamId +
