@@ -6,23 +6,24 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, .5);
-  display: table;
+  /* display: table; */
   transition: opacity .3s ease;
 }
 
 .modal-wrapper {
+  padding-top:70px;
   display: flex;
   align-items: center;
   justify-content: center;
   /* vertical-align: middle; */
-  height: 100%;
+  height: calc(100% - 70px);
   overflow-y: auto !important;
 }
 
 .modal-container {
   display: inline-block;
   width: auto;
-  /* height: inherit; */
+  height: inherit;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: rgba(0, 0, 0, 0);

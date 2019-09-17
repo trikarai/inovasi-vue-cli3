@@ -1,7 +1,7 @@
 <template>
   <v-dialog content-class="seraidea" width="400" v-model="show">
     <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-    <v-card style="padding:0px 30px 20px 30px" class="mt-7" elevation="0" width="400">
+    <v-card style="padding:0px 30px 20px 30px;" class="mt-7" elevation="0" width="400">
       <v-card class="taitel2 primary white--text elevation-5">
               <h3
                 class="headline mb-0 font-weight-light"

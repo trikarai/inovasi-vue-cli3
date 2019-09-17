@@ -4,7 +4,7 @@
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
           <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status" />
-          <v-card elevation="0" width="450" style="padding:0px 30px 20px 30px;margin-top:730px">
+          <v-card elevation="0" width="450" style="padding:0px 30px 20px 30px;margin-top:8px">
             <v-card class="taitel primary white--text elevation-5">
               <h3
                 v-if="edit"
@@ -250,6 +250,6 @@ export default {
   z-index: 2;
 }
 .modal-mask {
-  display: inherit !important;
+  /* display: inherit !important; */
 }
 </style>

@@ -4,7 +4,7 @@
       <div class="modal-wrapper" @click="$emit('close')">
         <div class="modal-container" @click.stop>
           <notification-alert ref="notif" v-bind:err_msg="err_msg" v-bind:status="status"/>
-          <v-card elevation="0" width="400" style="padding:0px 30px 20px 30px">
+          <v-card elevation="0" width="400" style="padding:0px 30px 20px 30px;margin-top:8px;">
             <v-card class="taitel primary white--text elevation-5 mb-0">
               <h3 v-if="edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.edit') }} Customer Segment</h3>
               <h3 v-if="!edit" class="headline mb-0 font-weight-light">{{ $vuetify.lang.t('$vuetify.action.add') }} Customer Segment</h3>    

@@ -6,7 +6,7 @@
           <loader-dialog v-model="loader" />
           <notification-alert v-bind:err_msg="err_msg" v-bind:status="status" />
 
-          <v-card elevation="0" width="700" style="padding:0px 30px 20px 30px">
+          <v-card elevation="0" width="450" style="padding:0px 30px 20px 30px;margin-top:8px;">
             <v-card class="taitel primary white--text elevation-5">
               <h3
                 v-if="edit"
@@ -294,5 +294,11 @@ export default {
   margin: 0 auto;
   bottom: 27px;
   z-index: 2;
+  /* margin-top: 10px auto !important; */
+
+
+}
+.modal-mask {
+  /* display: inherit !important; */
 }
 </style>
