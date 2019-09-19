@@ -157,7 +157,7 @@ export default {
             this.$route.params.personaId +
             "/value-propositions/" +
             this.$route.params.valuepropositionId +
-            "/experiments?experiment_template_id=" +
+            "/experiments?formIds[]=" +
             this.$route.params.formId
         )
         .then(res => {
