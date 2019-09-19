@@ -13,6 +13,7 @@
       </v-radio-group>
     </v-flex>
     <v-flex xs12 sm12 v-else>
+      {{field.name}}
       <v-select
         v-model="value"
         :label="field.name"
@@ -50,7 +51,7 @@ export default {
   },
   watch: {
     value: function() {
-      var params = ""
+      var params = "";
       if (this.field.minValue === 1) {
         var arr = new Array(this.value);
         params = { id: this.field.id, value: arr };

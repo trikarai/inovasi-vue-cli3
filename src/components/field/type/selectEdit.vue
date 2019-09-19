@@ -51,7 +51,7 @@ export default {
   watch: {
     value: function() {
       var params = "";
-      if (this.field.minValue === 1) {
+      if (this.field.field.minValue === 1) {
         var arr = new Array(this.value);
         params = { id: this.field.field.id, value: arr };
       } else {
