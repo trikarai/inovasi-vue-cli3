@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-layout>
     <!-- {{field}} -->
     <v-flex xs12 sm12 v-if="field.field.minValue === 1">
      {{field.field.name}}
@@ -14,7 +14,6 @@
       </v-radio-group>
     </v-flex>
     <v-flex xs12 sm12 v-else>
-      {{field.field.name}}
       <v-select
         v-model="value"
         :label="field.field.name"
@@ -25,7 +24,7 @@
         multiple
       ></v-select>
     </v-flex>
-  </div>
+  </v-layout>
 </template>
 <script>
 import bus from "@/bus";
@@ -37,15 +36,6 @@ export default {
     return {
       clearable: true,
       value: ""
-      // rules: [
-      //   v => !!v || "This field is required",
-      //   v =>
-      //     v.length >= this.field.minValue ||
-      //     "Min " + this.field.minValue + " characters",
-      //   v =>
-      //     v.length <= this.field.maxValue ||
-      //     "Max " + this.field.maxValue + " characters"
-      // ]
     };
   },
   watch: {
