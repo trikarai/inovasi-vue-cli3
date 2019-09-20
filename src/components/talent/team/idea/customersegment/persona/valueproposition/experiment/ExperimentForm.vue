@@ -19,6 +19,7 @@
             </v-card>
             <v-card-text class="pt-4">
               <div>
+                <!-- {{params}} -->
                 <v-form v-model="valid" ref="form">
                   <v-flex xs12>
                     <v-menu
@@ -52,7 +53,6 @@
                       <field-modul v-bind:index="index" v-bind:fields="field" :key="field.id"></field-modul>
                     </template>
                   </div>
-                  <!-- {{params}} -->
                   <!--start render edit exp-->
                   <div v-if="edit">
                     <template v-for="(field, index) in experimentData.fields">
@@ -295,10 +295,5 @@ export default {
   bottom: 27px;
   z-index: 2;
   /* margin-top: 10px auto !important; */
-
-
-}
-.modal-mask {
-  /* display: inherit !important; */
 }
 </style>
