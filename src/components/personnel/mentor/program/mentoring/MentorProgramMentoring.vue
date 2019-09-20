@@ -138,7 +138,7 @@
         </v-layout>
 
         <!-- dialog form mentoring -->
-        <v-dialog v-model="dialogForm" hide-overlay persistent width="400">
+        <v-dialog v-model="dialogForm" persistent width="400">
           <v-form ref="form">
             <v-card>
               <v-card-text class="text-end mb-0 pb-0">
@@ -233,7 +233,8 @@
                   hint="Note"
                   label="Note"
                   counter="100"
-                  maxlength="100"
+                  maxlength="100"  
+                  rows="2"               
                 />
                 <v-textarea
                   v-if="singleData.status !== 'proposed'"
@@ -248,15 +249,18 @@
                 <!-- {{params}} -->
                 <v-btn
                   block
+                  dark
                   color="green"
                   v-if="type == 'accept'"
                   @click="acceptMentoring(singleData.id)"
                 >
-                  <v-icon>check</v-icon>Accept
+                  <!-- <v-icon>check</v-icon> -->
+                  Accept
                 </v-btn>
 
                 <v-btn block dark color="red" v-if="type == 'reject'" @click="rejectMentoring(singleData.id)">
-                  <v-icon>close</v-icon>Reject
+                  <!-- <v-icon>close</v-icon> -->
+                  Reject
                 </v-btn>
 
                 <v-btn
@@ -265,7 +269,8 @@
                   v-if="type == 'offer'"
                   @click="offerMentoring(singleData.id)"
                 >
-                  <v-icon>history</v-icon>Offer
+                  <!-- <v-icon>history</v-icon> -->
+                  Offer
                 </v-btn>
 
                 
